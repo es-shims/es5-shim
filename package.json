@@ -1,0 +1,25 @@
+{
+    "name": "es5-shim",
+    "description": "ES5 as implementable on previous engines",
+    "version": "0.0.0",
+    "homepage": "http://github.com/kriskowal/es5-shim/",
+    "author": "Kris Kowal <kris@cixar.com> (http://github.com/kriskowal/)",
+    "bugs": {
+        "mail": "kris@cixar.com",
+        "web": "http://github.com/kriskowal/es5-shim/issues"
+    },
+    "licenses": [
+        {
+            "type": "MIT",
+            "url": "http://github.com/kriskowal/es5-shim/raw/master/LICENSE"
+        }
+    ],
+    "main": "es5-shim.js",
+    "repository": {
+        "type": "git",
+        "url": "http://github.com/kriskowal/es5-shim.git"
+    },
+    "engines": {
+        "node": ">=0.2.0"
+    }
+}

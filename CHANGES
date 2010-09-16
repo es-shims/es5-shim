@@ -1,0 +1,10 @@
+
+0.0.1
+
+ - fixed Object.create(null), in so far as that's possible
+ - reworked Rhino Object.freeze(Function) bug detector and patcher
+
+0.0.0
+
+ - forked from narwhal-lib
+

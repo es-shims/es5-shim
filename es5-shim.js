@@ -8,6 +8,8 @@
     MIT License. http://github.com/280north/narwhal/blob/master/README.md
 */
 
+(function () {
+
 /**
  * Brings an environment as close to ECMAScript 5 compliance
  * as is possible with the facilities of erstwhile engines.
@@ -253,11 +255,18 @@ if (!Object.getOwnPropertyNames) {
 // ES5 15.2.3.5 
 if (!Object.create) {
     Object.create = function(prototype, properties) {
-        if (typeof prototype != "object" || prototype === null)
-            throw new TypeError("typeof prototype["+(typeof prototype)+"] != 'object'");
-        function Type() {};
-        Type.prototype = prototype;
-        var object = new Type();
+        var object;
+        if (prototype === null) {
+            object = {};
+            if (object.__proto__)
+                object.__proto__ = null;
+        } else {
+            if (typeof prototype != "object")
+                throw new TypeError("typeof prototype["+(typeof prototype)+"] != 'object'");
+            function Type() {};
+            Type.prototype = prototype;
+            object = new Type();
+        }
         if (typeof properties !== "undefined")
             Object.defineProperties(object, properties);
         return object;
@@ -314,6 +323,9 @@ if (!Object.defineProperties) {
 // ES5 15.2.3.8
 if (!Object.seal) {
     Object.seal = function (object) {
+        // this is misleading and breaks feature-detection, but
+        // allows "securable" code to "gracefully" degrade to working
+        // but insecure code.
         return object;
     };
 }
@@ -321,24 +333,34 @@ if (!Object.seal) {
 // ES5 15.2.3.9
 if (!Object.freeze) {
     Object.freeze = function (object) {
+        // this is misleading and breaks feature-detection, but
+        // allows "securable" code to "gracefully" degrade to working
+        // but insecure code.
         return object;
     };
-//} else if (require("./engine").engine.indexOf("rhino") >= 0) {
-//    // TODO feature-detect
-//    // XXX workaround for a Rhino bug.
-//    var freeze = Object.freeze;
-//    Object.freeze = function (object) {
-//        if (typeof object == "function") {
-//            return object;
-//        } else {
-//            return freeze(object);
-//        }
-//    };
+}
+
+// detect a Rhino bug and patch it
+try {
+    Object.freeze(function () {});
+} catch (exception) {
+    Object.freeze = (function (freeze) {
+        return function (object) {
+            if (typeof object == "function") {
+                return object;
+            } else {
+                return freeze(object);
+            }
+        };
+    })(Object.freeze);
 }
 
 // ES5 15.2.3.10
 if (!Object.preventExtensions) {
     Object.preventExtensions = function (object) {
+        // this is misleading and breaks feature-detection, but
+        // allows "securable" code to "gracefully" degrade to working
+        // but insecure code.
         return object;
     };
 }
@@ -690,3 +712,4 @@ if (!String.prototype.trim) {
     };
 }
 
+})();

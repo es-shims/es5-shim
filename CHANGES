@@ -1,4 +1,10 @@
 
+0.0.2
+
+Per kangax's recommendations:
+ - faster Object.create(null)
+ - fixed a function-scope function declaration statement in Object.create
+
 0.0.1
 
  - fixed Object.create(null), in so far as that's possible

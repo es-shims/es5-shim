@@ -257,13 +257,11 @@ if (!Object.create) {
     Object.create = function(prototype, properties) {
         var object;
         if (prototype === null) {
-            object = {};
-            if (object.__proto__)
-                object.__proto__ = null;
+            object = {"__proto__": null};
         } else {
             if (typeof prototype != "object")
                 throw new TypeError("typeof prototype["+(typeof prototype)+"] != 'object'");
-            function Type() {};
+            var Type = function () {};
             Type.prototype = prototype;
             object = new Type();
         }

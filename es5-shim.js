@@ -33,6 +33,9 @@
 
 /*whatsupdoc*/
 
+// this is often accessed, so avoid multiple dereference costs universally
+var has = Object.prototype.hasOwnProperty;
+
 //
 // Array
 // =====
@@ -196,7 +199,7 @@ if (!Array.prototype.indexOf) {
         if (i < 0)
             i += length;
         for (; i < length; i++) {
-            if (!Object.prototype.hasOwnProperty.call(this, i))
+            if (!has.call(this, i))
                 continue;
             if (value === this[i])
                 return i;
@@ -216,7 +219,7 @@ if (!Array.prototype.lastIndexOf) {
             i += length;
         i = Math.min(i, length - 1);
         for (; i >= 0; i--) {
-            if (!Object.prototype.hasOwnProperty.call(this, i))
+            if (!has.call(this, i))
                 continue;
             if (value === this[i])
                 return i;
@@ -274,7 +277,6 @@ if (!Object.create) {
 // ES5 15.2.3.6
 if (!Object.defineProperty) {
     Object.defineProperty = function(object, property, descriptor) {
-        var has = Object.prototype.hasOwnProperty;
         if (typeof descriptor == "object" && object.__defineGetter__) {
             if (has.call(descriptor, "value")) {
                 if (!object.__lookupGetter__(property) && !object.__lookupSetter__(property))
@@ -311,7 +313,7 @@ if (!Object.defineProperty) {
 if (!Object.defineProperties) {
     Object.defineProperties = function(object, properties) {
         for (var property in properties) {
-            if (Object.prototype.hasOwnProperty.call(properties, property))
+            if (has.call(properties, property))
                 Object.defineProperty(object, property, properties[property]);
         }
         return object;
@@ -385,16 +387,51 @@ if (!Object.isExtensible) {
 }
 
 // ES5 15.2.3.14
+// http://whattheheadsaid.com/2010/10/a-safer-object-keys-compatibility-implementation
 if (!Object.keys) {
+
+    var hasDontEnumBug = true,
+        dontEnums = [
+            'toString',
+            'toLocaleString',
+            'valueOf',
+            'hasOwnProperty',
+            'isPrototypeOf',
+            'propertyIsEnumerable',
+            'constructor'
+        ],
+        dontEnumsLength = dontEnums.length;
+
+    for (var key in {"toString": null})
+        hasDontEnumBug = false;
+
     Object.keys = function (object) {
+
+        if (
+            typeof object !== "object" && typeof object !== "function"
+            || object === null
+        )
+            throw new TypeError("Object.keys called on a non-object");
+
         var keys = [];
         for (var name in object) {
-            if (Object.prototype.hasOwnProperty.call(object, name)) {
+            if (has.call(object, name)) {
                 keys.push(name);
             }
         }
+
+        if (hasDontEnumBug) {
+            for (var i = 0, ii = dontEnumLength; i < ii; i++) {
+                var dontEnum = dontEnums[i];
+                if (has.call(o, dontEnum)) {
+                    keys.push(dontEnum);
+                }
+            }
+        }
+
         return keys;
     };
+
 }
 
 //

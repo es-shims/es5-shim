@@ -421,9 +421,9 @@ if (!Object.keys) {
         }
 
         if (hasDontEnumBug) {
-            for (var i = 0, ii = dontEnumLength; i < ii; i++) {
+            for (var i = 0, ii = dontEnumsLength; i < ii; i++) {
                 var dontEnum = dontEnums[i];
-                if (has.call(o, dontEnum)) {
+                if (has.call(object, dontEnum)) {
                     keys.push(dontEnum);
                 }
             }

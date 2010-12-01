@@ -235,8 +235,11 @@ if (!Array.prototype.lastIndexOf) {
 
 // ES5 15.2.3.2
 if (!Object.getPrototypeOf) {
+    // https://github.com/kriskowal/es5-shim/issues#issue/2
+    // http://ejohn.org/blog/objectgetprototypeof/
+    // recommended by fschaefer on github
     Object.getPrototypeOf = function (object) {
-        return object.__proto__;
+        return object.__proto__ || object.constructor.prototype;
         // or undefined if not available in this engine
     };
 }

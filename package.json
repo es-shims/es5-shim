@@ -1,7 +1,7 @@
 {
     "name": "es5-shim",
     "description": "ES5 as implementable on previous engines",
-    "version": "0.0.3",
+    "version": "0.0.4",
     "homepage": "http://github.com/kriskowal/es5-shim/",
     "contributors": [
         "Kris Kowal <kris@cixar.com> (http://github.com/kriskowal/)",

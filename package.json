@@ -5,7 +5,8 @@
     "homepage": "http://github.com/kriskowal/es5-shim/",
     "contributors": [
         "Kris Kowal <kris@cixar.com> (http://github.com/kriskowal/)",
-        "Sami Samhuri <sami.samhuri@gmail.com> (http://samhuri.net/)"
+        "Sami Samhuri <sami.samhuri@gmail.com> (http://samhuri.net/)",
+        "fschaefer on Github"
     ],
     "bugs": {
         "mail": "kris@cixar.com",

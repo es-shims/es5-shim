@@ -1,7 +1,8 @@
 
 // -- kriskowal Kris Kowal Copyright (C) 2009-2010 MIT License
-// -- tlrobinson Tom Robinson
-// -- dantman Daniel Friesen
+// -- tlrobinson Tom Robinson Copyright (C) 2009-2010 MIT License (Narwhal Project)
+// -- dantman Daniel Friesen Copyright(C) 2010 XXX No License Specified
+// -- fschaefer XXX Copyright (C) 2010 XXX No License Specified
 
 /*!
     Copyright (c) 2009, 280 North Inc. http://280north.com/

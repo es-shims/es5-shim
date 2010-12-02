@@ -8,7 +8,7 @@
     MIT License. http://github.com/280north/narwhal/blob/master/README.md
 */
 
-(function () {
+(function (undefined) {
 
 /**
  * Brings an environment as close to ECMAScript 5 compliance
@@ -247,7 +247,15 @@ if (!Object.getPrototypeOf) {
 // ES5 15.2.3.3
 if (!Object.getOwnPropertyDescriptor) {
     Object.getOwnPropertyDescriptor = function (object) {
-        return {}; // XXX
+        if (typeof object !== "object" && typeof object !== "function" || object === null)
+            throw new TypeError("Object.getOwnPropertyDescriptor called on a non-object");
+
+        return has.call(object, property) ? {
+            value: object[property],
+            enumerable: true,
+            configurable: true,
+            writeable: true
+        } : undefined;
     };
 }
 

@@ -1,4 +1,3 @@
-
 // -- kriskowal Kris Kowal Copyright (C) 2009-2010 MIT License
 // -- tlrobinson Tom Robinson Copyright (C) 2009-2010 MIT License (Narwhal Project)
 // -- dantman Daniel Friesen Copyright(C) 2010 XXX No License Specified
@@ -85,7 +84,7 @@ if (!Array.prototype.filter) {
     Array.prototype.filter = function (block /*, thisp */) {
         var values = [];
         var thisp = arguments[1];
-        for (var i = 0; i < this.length; i++)
+        for (var i = 0, len = this.length; i < len; i++)
             if (block.call(thisp, this[i]))
                 values.push(this[i]);
         return values;
@@ -96,7 +95,7 @@ if (!Array.prototype.filter) {
 if (!Array.prototype.every) {
     Array.prototype.every = function (block /*, thisp */) {
         var thisp = arguments[1];
-        for (var i = 0; i < this.length; i++)
+        for (var i = 0, len = this.length; i < len; i++)
             if (!block.call(thisp, this[i]))
                 return false;
         return true;
@@ -107,7 +106,7 @@ if (!Array.prototype.every) {
 if (!Array.prototype.some) {
     Array.prototype.some = function (block /*, thisp */) {
         var thisp = arguments[1];
-        for (var i = 0; i < this.length; i++)
+        for (var i = 0, len = this.length; i < len; i++)
             if (block.call(thisp, this[i]))
                 return true;
         return false;
@@ -179,10 +178,10 @@ if (!Array.prototype.reduceRight) {
             } while (true);
         }
 
-        for (; i >= 0; i--) {
+        do {
             if (i in this)
                 rv = fun.call(null, rv, this[i], i, this);
-        }
+        } while (i--);
 
         return rv;
     };

@@ -1,4 +1,9 @@
 
+1.0.0
+ - fixed Date.toISODate, using UTC accessors, as in
+   http://code.google.com/p/v8/source/browse/trunk/src/date.js?r=6120#986
+   (arian)
+
 0.0.4
  - Revised Object.getPrototypeOf to work in more cases
    in response to http://ejohn.org/blog/objectgetprototypeof/

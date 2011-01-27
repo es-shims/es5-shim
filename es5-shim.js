@@ -457,12 +457,12 @@ if (!Object.keys) {
 if (!Date.prototype.toISOString) {
     Date.prototype.toISOString = function() {
         return (
-            this.getFullYear() + "-" +
-            (this.getMonth() + 1) + "-" +
-            this.getDate() + "T" +
-            this.getHours() + ":" +
-            this.getMinutes() + ":" +
-            this.getSeconds() + "Z"
+            this.getUTCFullYear() + "-" +
+            (this.getUTCMonth() + 1) + "-" +
+            this.getUTCDate() + "T" +
+            this.getUTCHours() + ":" +
+            this.getUTCMinutes() + ":" +
+            this.getUTCSeconds() + "Z"
         ); 
     }
 }

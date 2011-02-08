@@ -1,4 +1,3 @@
-
 // -- kriskowal Kris Kowal Copyright (C) 2009-2010 MIT License
 // -- tlrobinson Tom Robinson Copyright (C) 2009-2010 MIT License (Narwhal Project)
 // -- dantman Daniel Friesen Copyright(C) 2010 XXX No License Specified
@@ -247,7 +246,7 @@ if (!Object.getPrototypeOf) {
 
 // ES5 15.2.3.3
 if (!Object.getOwnPropertyDescriptor) {
-    Object.getOwnPropertyDescriptor = function (object) {
+    Object.getOwnPropertyDescriptor = function (object, property) {
         if (typeof object !== "object" && typeof object !== "function" || object === null)
             throw new TypeError("Object.getOwnPropertyDescriptor called on a non-object");
 

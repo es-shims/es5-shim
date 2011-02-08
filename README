@@ -102,7 +102,15 @@ SHIMS THAT FAIL SILENTLY
     
     Providing a getter or setter with "get" or "set" on a
     descriptor will silently fail on engines that lack
-    "__defineGetter__" and "__defineSetter__".
+    "__defineGetter__" and "__defineSetter__", which include
+    all versions of IE up to version 8 so far.
+
+    IE 8 provides a version of this method but it only works
+    on DOM objects.  Thus, the shim will not get installed
+    and attempts to set "value" properties will fail
+    silently on non-DOM objects.
+
+    https://github.com/kriskowal/es5-shim/issues#issue/5
 
 /!\ Object.defineProperties
 

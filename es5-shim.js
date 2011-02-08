@@ -51,7 +51,7 @@ if (!Array.isArray) {
 // ES5 15.4.4.18
 if (!Array.prototype.forEach) {
     Array.prototype.forEach =  function(block, thisObject) {
-        var len = this.length >>> 0;
+        var len = +this.length;
         for (var i = 0; i < len; i++) {
             if (i in this) {
                 block.call(thisObject, this[i], i, this);
@@ -64,7 +64,7 @@ if (!Array.prototype.forEach) {
 // https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Objects/Array/map
 if (!Array.prototype.map) {
     Array.prototype.map = function(fun /*, thisp*/) {
-        var len = this.length >>> 0;
+        var len = +this.length;
         if (typeof fun != "function")
           throw new TypeError();
 
@@ -117,7 +117,7 @@ if (!Array.prototype.some) {
 // https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Objects/Array/reduce
 if (!Array.prototype.reduce) {
     Array.prototype.reduce = function(fun /*, initial*/) {
-        var len = this.length >>> 0;
+        var len = +this.length;
         if (typeof fun != "function")
             throw new TypeError();
 
@@ -154,7 +154,7 @@ if (!Array.prototype.reduce) {
 // https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Objects/Array/reduceRight
 if (!Array.prototype.reduceRight) {
     Array.prototype.reduceRight = function(fun /*, initial*/) {
-        var len = this.length >>> 0;
+        var len = +this.length;
         if (typeof fun != "function")
             throw new TypeError();
 

@@ -1,4 +1,136 @@
 
-Provides compatibility shims so that legacy JavaScript engines
-behave as closely as possible to ES5.
+Provides compatibility shims so that legacy JavaScript
+engines behave as closely as possible to ES5.
+
+This package requires quite a bit more attention and
+testing.  It is not likely to behave as advertised in a
+large cross-section of browsers.
+
+"As closely as possible to ES5" is not very close.  Many of
+these shims are intended only to allow code to be written to
+ES5 without causing run-time errors in older engines.  In
+many cases, this means that these shims cause many ES5
+methods to silently fail.  Decide carefully whether this is
+what you want.
+
+
+SAFE SHIMS
+----------
+
+Array.isArray
+Array.prototype.forEach
+Array.prototype.map
+Array.prototype.filter
+Array.prototype.every
+Array.prototype.some
+Array.prototype.reduce
+Array.prototype.reduceRight
+Array.prototype.lastIndexOf
+Object.keys
+Date.now
+Date.parse (for ISO parsing)
+Date.prototype.toISOString
+Date.prototype.toJSON
+Function.prototype.bind
+String.prototype.trim
+
+
+DUBIOUS SHIMS
+-------------
+
+/?\ Object.create
+
+    For the case of simply "begetting" an object that
+    inherits prototypically from another, this should work
+    fine across legacy engines.
+
+    /!\ Object.create(null) will work only in browsers that
+    support prototype assignment.  This creates an object
+    that does not have any properties inherited from
+    Object.prototype.  It will silently fail otherwise.
+
+    /!\ The second argument is passed to
+    Object.defineProperties which will probably fail
+    silently.
+
+/!\ Object.getOwnPropertyNames
+
+    This method uses Object.keys, so it will not be accurate
+    on legacy engines.
+
+Object.isSealed
+
+    Returns "false" in all legacy engines for all objects,
+    which is conveniently guaranteed to be accurate.
+
+Object.isFrozen
+
+    Returns "false" in all legacy engines for all objects,
+    which is conveniently guaranteed to be accurate.
+
+
+SHIMS THAT FAIL SILENTLY
+------------------------
+
+/?\ Object.getPrototypeOf
+
+    This will return "undefined" in some cases.  It uses
+    __proto__ if it's available.  Failing that, it uses
+    constructor.prototype, which depends on the constructor
+    property of the object's prototype having not been
+    replaced.  If your object was created like this, it
+    won't work:
+
+        function Foo() {
+        }
+        Foo.prototype = {};
+
+    Because the prototype reassignment destroys the
+    constructor property.
+
+/!\ Object.getOwnPropertyDescriptor
+    
+    The behavior of this shim does not conform to ES5.  It
+    should probably not be used at this time, until its
+    behavior has been reviewed and been confirmed to be
+    useful in legacy engines.
+
+/!\ Object.defineProperty
+
+    This method will silently fail to set "writable",
+    "enumerable", and "configurable" properties.
+    
+    Providing a getter or setter with "get" or "set" on a
+    descriptor will silently fail on engines that lack
+    "__defineGetter__" and "__defineSetter__".
+
+/!\ Object.defineProperties
+
+    This uses the Object.defineProperty shim
+
+Object.seal
+
+    Silently fails on all legacy engines.  This should be
+    fine unless you are depending on the safty and security
+    provisions of this method, which you cannot possibly
+    obtain in legacy engines.
+
+Object.freeze
+
+    Silently fails on all legacy engines.  This should be
+    fine unless you are depending on the safty and security
+    provisions of this method, which you cannot possibly
+    obtain in legacy engines.
+
+Object.preventExtensions
+
+    Silently fails on all legacy engines.  This should be
+    fine unless you are depending on the safty and security
+    provisions of this method, which you cannot possibly
+    obtain in legacy engines.
+
+/!\ Object.isExtensible
+
+    Returns "true". This is probably wildly innacurate.
+    This method should be reviewed before it's used.
 

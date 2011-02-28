@@ -163,7 +163,7 @@ describe('Array.prototype.some ( callbackFn [ , thisArg ] )', function () {
     });
 });
 
-describe('Array.prototype.reduce ( callbackFn [ , thisArg ] )', function () {
+describe('Array.prototype.reduce ( callbackFn [ , initialValue ] )', function () {
 
     it('should be defined', function () {
         assert([]).should(respondTo, 'reduce');
@@ -186,6 +186,20 @@ describe('Array.prototype.reduce ( callbackFn [ , thisArg ] )', function () {
         });
 
         assert(loopCount).should(eql, 2);
+    });
+
+    it('should set default value to 0', function () {
+
+        [42].reduce(function (prevValue) {
+            assert(prevValue).should(eql, 0);
+        });
+    });
+
+    it('should accept default value', function () {
+
+        [42].reduce(function (prevValue) {
+            assert(prevValue).should(eql, 24);
+        }, 24);
     });
 
     it('should apply a function against an accumulator and each value of the array (from left-to-right) as to reduce it to a single value', function () {

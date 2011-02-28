@@ -69,3 +69,29 @@ describe('Array.prototype.map ( callbackFn [ , thisArg ] )', function () {
     });
 });
 
+describe('Array.prototype.filter ( callbackFn [ , thisArg ] )', function () {
+
+    it('should be defined', function () {
+        assert([]).should(respondTo, 'filter');
+    });
+
+    it('should pass three arguments: the value of the element, the index of the element, and the Array object being traversed', function () {
+        var testArray = [42];
+
+        testArray.filter(function (element, index, array) {
+            assert(element).should(eql, 42);
+            assert(index).should(eql, 0);
+            assert(array).should(eql, testArray);
+        });
+    });
+
+    it('should create a new array with all elements that pass the test implemented by the provided function', function () {
+
+        var testArray = [2, 3, 4].filter(function (element, index, array) {
+            return element > 3;
+        });
+
+        assert(testArray).should(beSimilarTo, [4]);
+    });
+});
+

@@ -247,3 +247,26 @@ describe('Array.prototype.reduceRight ( callbackFn [ , initialValue ] )', functi
         assert(testArray).should(eql, 6);
     });
 });
+
+
+describe('Array.prototype.indexOf ( searchElement [ , fromIndex ] )', function () {
+
+    it('should be defined', function () {
+        assert([]).should(respondTo, 'indexOf');
+    });
+
+    it('should return the first index at which a given element can be found in the array, or -1 if it is not present', function () {
+        var testArray = [1, 1, 2, 3, 3, 4];
+
+        assert(testArray.indexOf(1)).should(eql, 0);
+        assert(testArray.indexOf(4)).should(eql, 5);
+        assert(testArray.indexOf(9)).should(eql, -1);
+    });
+
+    it('should search from passed index', function () {
+        var testArray = [1, 1, 2, 3, 3, 4];
+
+        assert(testArray.indexOf(3, 4)).should(eql, 4);
+        assert(testArray.indexOf(1, 0)).should(eql, 0);
+    });
+});

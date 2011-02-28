@@ -129,3 +129,37 @@ describe('Array.prototype.every ( callbackFn [ , thisArg ] )', function () {
     });
 });
 
+describe('Array.prototype.some ( callbackFn [ , thisArg ] )', function () {
+
+    it('should be defined', function () {
+        assert([]).should(respondTo, 'some');
+    });
+
+    it('should pass three arguments: the value of the element, the index of the element, and the Array object being traversed', function () {
+        var testArray = [42];
+
+        testArray.some(function (element, index, array) {
+            assert(element).should(eql, 42);
+            assert(index).should(eql, 0);
+            assert(array).should(eql, testArray);
+        });
+    });
+
+    it('should return true if some element in the array passes the test implemented by the provided function', function () {
+
+        var bigThanFive = function (element) {
+            return element > 5;
+        };
+
+        assert(
+            [1, 2, 3, 9].some(bigThanFive)
+
+        ).should(be);
+
+        assert(
+            [1, 2, 3, 4].some(bigThanFive)
+
+        ).shouldNot(be);
+    });
+});
+

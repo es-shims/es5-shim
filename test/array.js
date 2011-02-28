@@ -43,3 +43,29 @@ describe('Array.prototype.forEach ( callbackFn [ , thisArg ] )', function () {
     });
 });
 
+describe('Array.prototype.map ( callbackFn [ , thisArg ] )', function () {
+
+    it('should be defined', function () {
+        assert([]).should(respondTo, 'map');
+    });
+
+    it('should pass three arguments: the value of the element, the index of the element, and the Array object being traversed', function () {
+        var testArray = [42];
+
+        testArray.map(function (element, index, array) {
+            assert(element).should(eql, 42);
+            assert(index).should(eql, 0);
+            assert(array).should(eql, testArray);
+        });
+    });
+
+    it('should create a new array with the results of calling a provided function on every element in this array', function () {
+
+        var testArray = [2, 3, 4].map(function (element, index, array) {
+            return element - 1;
+        });
+
+        assert(testArray).should(beSimilarTo, [1, 2, 3]);
+    });
+});
+

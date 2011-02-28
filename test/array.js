@@ -95,3 +95,37 @@ describe('Array.prototype.filter ( callbackFn [ , thisArg ] )', function () {
     });
 });
 
+describe('Array.prototype.every ( callbackFn [ , thisArg ] )', function () {
+
+    it('should be defined', function () {
+        assert([]).should(respondTo, 'every');
+    });
+
+    it('should pass three arguments: the value of the element, the index of the element, and the Array object being traversed', function () {
+        var testArray = [42];
+
+        testArray.every(function (element, index, array) {
+            assert(element).should(eql, 42);
+            assert(index).should(eql, 0);
+            assert(array).should(eql, testArray);
+        });
+    });
+
+    it('should tests whether all elements in the array pass the test implemented by the provided function', function () {
+
+        var bigThanFive = function (element) {
+            return element > 5;
+        };
+
+        assert(
+            [6, 7, 8, 9].every(bigThanFive)
+
+        ).should(be);
+
+        assert(
+            [3, 4, 5, 6].every(bigThanFive)
+
+        ).shouldNot(be);
+    });
+});
+

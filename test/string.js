@@ -1,10 +1,10 @@
-describe('String#trim', function () {
+describe('String.prototype.trim ( )', function () {
 
     it('should be defined', function () {
         assert('Some text').should(respondTo, 'trim');
     });
 
-    it('should remove spaces at end and start of string', function () {
+    it('should remove whitespace from both ends of the string', function () {
 
         var strings = ['Some text', '  Some text', 'Some text  ', '  Some text  '];
 

@@ -163,3 +163,38 @@ describe('Array.prototype.some ( callbackFn [ , thisArg ] )', function () {
     });
 });
 
+describe('Array.prototype.reduce ( callbackFn [ , thisArg ] )', function () {
+
+    it('should be defined', function () {
+        assert([]).should(respondTo, 'reduce');
+    });
+
+    it('should pass four arguments: the previous value (or value from the previous call to callbackFn), the current value, the current index, and the Array object being traversed', function () {
+        var loopCount = 1,
+            testArray = [41, 42];
+
+        testArray.reduce(function (prevElement, element, index, array) {
+
+            if (loopCount === 1) {
+                assert(prevElement).should(eql, 41)
+                assert(element).should(eql, 42);
+                assert(index).should(eql, 1);
+                assert(array).should(eql, testArray);
+            }
+
+            loopCount += 1;
+        });
+
+        assert(loopCount).should(eql, 2);
+    });
+
+    it('should apply a function against an accumulator and each value of the array (from left-to-right) as to reduce it to a single value', function () {
+
+        var testArray = [0, 1, 2, 3].reduce(function (prevElement, element) {
+            return prevElement + element;
+        });
+
+        assert(testArray).should(eql, 6);
+    });
+});
+

@@ -51,7 +51,7 @@ if (!Function.prototype.bind) {
         // 2. If IsCallable(Target) is false, throw a TypeError exception.
         // XXX this gets pretty close, for all intents and purposes, letting 
         // some duck-types slide
-        if (typeof target.apply != "function" || typeof target.call != "function")
+        if (typeof target.apply !== "function" || typeof target.call !== "function")
             return new TypeError();
         // 3. Let A be a new (possibly empty) internal list of all of the
         //   argument values provided after thisArg (arg1, arg2 etc), in order.
@@ -118,7 +118,7 @@ if (!Function.prototype.bind) {
         };
         bound.length = (
             // 14. If the [[Class]] internal property of Target is "Function", then
-            typeof target == "function" ?
+            typeof target === "function" ?
             // a. Let L be the length property of Target minus the length of A.
             // b. Set the length own property of F to either 0 or L, whichever is larger.
             Math.max(target.length - args.length, 0) :
@@ -160,7 +160,7 @@ var owns = Function.prototype.call.bind(Object.prototype.hasOwnProperty);
 // ES5 15.4.3.2 
 if (!Array.isArray) {
     Array.isArray = function(obj) {
-        return Object.prototype.toString.call(obj) == "[object Array]";
+        return Object.prototype.toString.call(obj) === "[object Array]";
     };
 }
 
@@ -181,7 +181,7 @@ if (!Array.prototype.forEach) {
 if (!Array.prototype.map) {
     Array.prototype.map = function(fun /*, thisp*/) {
         var len = +this.length;
-        if (typeof fun != "function")
+        if (typeof fun !== "function")
           throw new TypeError();
 
         var res = new Array(len);
@@ -234,11 +234,11 @@ if (!Array.prototype.some) {
 if (!Array.prototype.reduce) {
     Array.prototype.reduce = function(fun /*, initial*/) {
         var len = +this.length;
-        if (typeof fun != "function")
+        if (typeof fun !== "function")
             throw new TypeError();
 
         // no value to return if no initial value and an empty array
-        if (len == 0 && arguments.length == 1)
+        if (len === 0 && arguments.length === 1)
             throw new TypeError();
 
         var i = 0;
@@ -271,11 +271,11 @@ if (!Array.prototype.reduce) {
 if (!Array.prototype.reduceRight) {
     Array.prototype.reduceRight = function(fun /*, initial*/) {
         var len = +this.length;
-        if (typeof fun != "function")
+        if (typeof fun !== "function")
             throw new TypeError();
 
         // no value to return if no initial value, empty array
-        if (len == 0 && arguments.length == 1)
+        if (len === 0 && arguments.length === 1)
             throw new TypeError();
 
         var i = len - 1;
@@ -389,7 +389,7 @@ if (!Object.create) {
         if (prototype === null) {
             object = {"__proto__": null};
         } else {
-            if (typeof prototype != "object")
+            if (typeof prototype !== "object")
                 throw new TypeError("typeof prototype["+(typeof prototype)+"] != 'object'");
             var Type = function () {};
             Type.prototype = prototype;
@@ -473,7 +473,7 @@ try {
 } catch (exception) {
     Object.freeze = (function (freeze) {
         return function (object) {
-            if (typeof object == "function") {
+            if (typeof object === "function") {
                 return object;
             } else {
                 return freeze(object);
@@ -604,7 +604,7 @@ if (!Date.prototype.toJSON) {
         // 4. Let toISO be the result of calling the [[Get]] internal method of
         // O with argument "toISOString".
         // 5. If IsCallable(toISO) is false, throw a TypeError exception.
-        if (typeof this.toISOString != "function")
+        if (typeof this.toISOString !== "function")
             throw new TypeError();
         // 6. Return the result of calling the [[Call]] internal method of
         // toISO with O as the this value and an empty argument list.

@@ -116,16 +116,6 @@ if (!Function.prototype.bind) {
             }
 
         };
-        // 5. Set the [[TargetFunction]] internal property of F to Target.
-        // extra:
-        bound.bound = target;
-        // 6. Set the [[BoundThis]] internal property of F to the value of
-        // thisArg.
-        // extra:
-        bound.boundTo = that;
-        // 7. Set the [[BoundArgs]] internal property of F to A.
-        // extra:
-        bound.boundArgs = args;
         bound.length = (
             // 14. If the [[Class]] internal property of Target is "Function", then
             typeof target == "function" ?

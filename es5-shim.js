@@ -1,3 +1,4 @@
+// vim:set ts=4 sts=4 sw=4 st:
 // -- kriskowal Kris Kowal Copyright (C) 2009-2010 MIT License
 // -- tlrobinson Tom Robinson Copyright (C) 2009-2010 MIT License (Narwhal Project)
 // -- dantman Daniel Friesen Copyright(C) 2010 XXX No License Specified

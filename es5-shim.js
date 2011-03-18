@@ -42,9 +42,9 @@
 
 // ES-5 15.3.4.5
 // http://www.ecma-international.org/publications/files/drafts/tc39-2009-025.pdf
-var slice = Array.prototype.slice;
 
 if (!Function.prototype.bind) {
+    var slice = Array.prototype.slice;
     Function.prototype.bind = function bind(that) { // .length is 1
         // 1. Let Target be the this value.
         var target = this;

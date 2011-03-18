@@ -147,9 +147,23 @@ if (!Function.prototype.bind) {
     };
 }
 
-// this is often accessed, so avoid multiple dereference costs universally
-var owns = Function.prototype.call.bind(Object.prototype.hasOwnProperty);
+// Shortcut to an often accessed properties, in order to avoid multiple
+// dereference that costs universally.
+// _Please note: Shortcuts are defined after `Function.prototype.bind` as we
+// us it in defining shortcuts.
+var call = Function.prototype.call;
+var prototypeOfArray = Array.prototype;
+var prototypeOfObject = Object.prototype;
+var owns = call.bind(prototypeOfObject.hasOwnProperty);
 
+var defineGetter, defineSetter, lookupGetter, lookupSetter, supportsAccessors;
+// If JS engine supports accessors creating shortcuts.
+if ((supportsAccessors = owns(prototypeOfObject, '__defineGetter__'))) {
+    defineGetter = call.bind(prototypeOfObject.__defineGetter__);
+    defineSetter = call.bind(prototypeOfObject.__defineSetter__);
+    lookupGetter = call.bind(prototypeOfObject.__lookupGetter__);
+    lookupSetter = call.bind(prototypeOfObject.__lookupSetter__);
+}
 
 
 //

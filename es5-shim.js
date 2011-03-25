@@ -193,13 +193,12 @@ if (!Array.prototype.forEach) {
 // ES5 15.4.4.19
 // https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Objects/Array/map
 if (!Array.prototype.map) {
-    Array.prototype.map = function map(fun /*, thisp*/) {
+    Array.prototype.map = function map(fun, thisp) {
         var len = +this.length;
         if (typeof fun !== "function")
           throw new TypeError();
 
         var res = new Array(len);
-        var thisp = arguments[1];
         for (var i = 0; i < len; i++) {
             if (i in this)
                 res[i] = fun.call(thisp, this[i], i, this);
@@ -211,9 +210,8 @@ if (!Array.prototype.map) {
 
 // ES5 15.4.4.20
 if (!Array.prototype.filter) {
-    Array.prototype.filter = function filter(block /*, thisp */) {
+    Array.prototype.filter = function filter(block, thisp) {
         var values = [];
-        var thisp = arguments[1];
         for (var i = 0; i < this.length; i++)
             if (block.call(thisp, this[i]))
                 values.push(this[i]);
@@ -223,8 +221,7 @@ if (!Array.prototype.filter) {
 
 // ES5 15.4.4.16
 if (!Array.prototype.every) {
-    Array.prototype.every = function every(block /*, thisp */) {
-        var thisp = arguments[1];
+    Array.prototype.every = function every(block, thisp) {
         for (var i = 0; i < this.length; i++)
             if (!block.call(thisp, this[i]))
                 return false;
@@ -234,8 +231,7 @@ if (!Array.prototype.every) {
 
 // ES5 15.4.4.17
 if (!Array.prototype.some) {
-    Array.prototype.some = function some(block /*, thisp */) {
-        var thisp = arguments[1];
+    Array.prototype.some = function some(block, thisp) {
         for (var i = 0; i < this.length; i++)
             if (block.call(thisp, this[i]))
                 return true;
@@ -246,7 +242,7 @@ if (!Array.prototype.some) {
 // ES5 15.4.4.21
 // https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Objects/Array/reduce
 if (!Array.prototype.reduce) {
-    Array.prototype.reduce = function reduce(fun /*, initial*/) {
+    Array.prototype.reduce = function reduce(fun, initial) {
         var len = +this.length;
         if (typeof fun !== "function")
             throw new TypeError();
@@ -257,7 +253,7 @@ if (!Array.prototype.reduce) {
 
         var i = 0;
         if (arguments.length >= 2) {
-            var rv = arguments[1];
+            var rv = initial;
         } else {
             do {
                 if (i in this) {
@@ -283,7 +279,7 @@ if (!Array.prototype.reduce) {
 // ES5 15.4.4.22
 // https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Objects/Array/reduceRight
 if (!Array.prototype.reduceRight) {
-    Array.prototype.reduceRight = function reduceRight(fun /*, initial*/) {
+    Array.prototype.reduceRight = function reduceRight(fun, initial) {
         var len = +this.length;
         if (typeof fun !== "function")
             throw new TypeError();
@@ -294,7 +290,7 @@ if (!Array.prototype.reduceRight) {
 
         var i = len - 1;
         if (arguments.length >= 2) {
-            var rv = arguments[1];
+            var rv = initial;
         } else {
             do {
                 if (i in this) {
@@ -319,11 +315,11 @@ if (!Array.prototype.reduceRight) {
 
 // ES5 15.4.4.14
 if (!Array.prototype.indexOf) {
-    Array.prototype.indexOf = function indexOf(value /*, fromIndex */ ) {
+    Array.prototype.indexOf = function indexOf(value, fromIndex) {
         var length = this.length;
         if (!length)
             return -1;
-        var i = arguments[1] || 0;
+        var i = fromIndex || 0;
         if (i >= length)
             return -1;
         if (i < 0)
@@ -340,11 +336,11 @@ if (!Array.prototype.indexOf) {
 
 // ES5 15.4.4.15
 if (!Array.prototype.lastIndexOf) {
-    Array.prototype.lastIndexOf = function lastIndexOf(value /*, fromIndex */) {
+    Array.prototype.lastIndexOf = function lastIndexOf(value, fromIndex) {
         var length = this.length;
         if (!length)
             return -1;
-        var i = arguments[1] || length;
+        var i = fromIndex || length;
         if (i < 0)
             i += length;
         i = Math.min(i, length - 1);

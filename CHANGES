@@ -1,3 +1,16 @@
+1.1.0
+ - Added support for accessor properties where possible (which is all browsers
+   except IE).
+ - Stop exposing bound function's (that are returned by
+   `Function.prototype.bind`) internal properties (`bound, boundTo, boundArgs`)
+   as in some cases (when using facade objects for example) capabilities of the
+   enclosed functions will be leaked.
+ - `Object.create` now explicitly sets `__proto__` property to guarantee
+   correct behavior of `Object.getPrototypeOf`'s on all objects created using
+   `Object.create`.
+ - Switched to `===` from `==` where possible as it's slightly faster on older
+   browsers that are target of this lib.
+ - Added names to all anonymous functions to have a better stack traces.
 
 1.0.0
  - fixed Date.toISODate, using UTC accessors, as in

@@ -1,3 +1,7 @@
+1.2.0
+ - Making script loadable as AMD module.
+ - Adding `indexOf` to the list of safe shims.
+
 1.1.0
  - Added support for accessor properties where possible (which is all browsers
    except IE).

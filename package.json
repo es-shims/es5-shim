@@ -23,6 +23,9 @@
     "devDependencies": {
       "uglify-js": ">= 0.0.5"
     },
+    "scripts": {
+      "minify": "uglifyjs -o es5-shim.min.js es5-shim.js"
+    },
     "repository": {
         "type": "git",
         "url": "http://github.com/kriskowal/es5-shim.git"

@@ -1,0 +1,3 @@
+#!/bin/sh
+uglifyjs -o es5-shim.min.js es5-shim.js
+git add es5-shim.min.js

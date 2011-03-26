@@ -25,6 +25,7 @@ Array.prototype.every
 Array.prototype.some
 Array.prototype.reduce
 Array.prototype.reduceRight
+Array.prototype.indexOf
 Array.prototype.lastIndexOf
 Object.keys
 Date.now
@@ -68,6 +69,9 @@ DUBIOUS SHIMS
 
     Because the prototype reassignment destroys the
     constructor property.
+
+    This will work for all objects that were created using
+    `Object.create` implemented with this library.
 
 /!\ Object.getOwnPropertyNames
 

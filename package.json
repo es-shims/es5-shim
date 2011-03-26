@@ -20,6 +20,9 @@
         }
     ],
     "main": "es5-shim.js",
+    "devDependencies": {
+      "uglify-js": ">= 0.0.5"
+    },
     "repository": {
         "type": "git",
         "url": "http://github.com/kriskowal/es5-shim.git"

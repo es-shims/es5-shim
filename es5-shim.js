@@ -10,7 +10,7 @@
     MIT License. http://github.com/280north/narwhal/blob/master/README.md
 */
 
-(function (undefined) {
+(typeof define === "function" ? define : function($) { $(); })(function(require, exports, module, undefined) {
 
 /**
  * Brings an environment as close to ECMAScript 5 compliance
@@ -835,4 +835,4 @@ if (!String.prototype.trim) {
     };
 }
 
-})();
+});

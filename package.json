@@ -24,7 +24,7 @@
       "uglify-js": ">= 0.0.5"
     },
     "scripts": {
-      "minify": "uglifyjs -o es5-shim.min.js es5-shim.js"
+      "minify": "uglifyjs -o es5-shim.min.js -nc es5-shim.js"
     },
     "repository": {
         "type": "git",

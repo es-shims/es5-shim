@@ -533,7 +533,11 @@ if (!Object.defineProperty) {
                 // defined on object itself.
                 delete object[property];
                 object[property] = descriptor.value;
-            } else {
+
+                // Setting original `__proto__` back now.
+				// Somehow this actually does something, despite JSHint and any common sense.
+				object.prototype;
+               } else {
                 object[property] = descriptor.value;
             }
         } else {

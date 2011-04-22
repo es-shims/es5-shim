@@ -524,6 +524,8 @@ if (!Object.defineProperty) {
             if (supportsAccessors && (lookupGetter(object, property) ||
                                       lookupSetter(object, property)))
             {
+                var prototype = object[PROTO];
+
                 // As accessors are supported only on engines implementing
                 // `__proto__` we can safely override `__proto__` while defining
                 // a property to make sure that we don't hit an inherited
@@ -534,10 +536,9 @@ if (!Object.defineProperty) {
                 delete object[property];
                 object[property] = descriptor.value;
 
-                // Setting original `__proto__` back now.
-				// Somehow this actually does something, despite JSHint and any common sense.
-				object.prototype;
-               } else {
+                // Set the original `__proto__` back now.
+                object[PROTO] = prototype;
+            } else {
                 object[property] = descriptor.value;
             }
         } else {

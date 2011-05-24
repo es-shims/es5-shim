@@ -67,7 +67,7 @@ if (!Function.prototype.bind) {
         //   15.3.4.5.3.
         // 13. The [[Scope]] internal property of F is unused and need not
         //   exist.
-        var bound = function bound() {
+        function bound() {
 
             if (this instanceof bound) {
                 // 15.3.4.5.2 [[Construct]]
@@ -115,7 +115,7 @@ if (!Function.prototype.bind) {
 
             }
 
-        };
+        }
         bound.length = (
             // 14. If the [[Class]] internal property of Target is "Function", then
             typeof target === "function" ?

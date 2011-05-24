@@ -124,7 +124,7 @@ if (!Function.prototype.bind) {
             Math.max(target.length - args.length, 0) :
             // 15. Else set the length own property of F to 0.
             0
-        )
+        );
         // 16. The length own property of F is given attributes as specified in
         //   15.3.5.1.
         // TODO
@@ -292,9 +292,9 @@ if (!Array.prototype.reduceRight) {
         if (len === 0 && arguments.length === 1)
             throw new TypeError();
 
-        var i = len - 1;
+        var rv, i = len - 1;
         if (arguments.length >= 2) {
-            var rv = arguments[1];
+            rv = arguments[1];
         } else {
             do {
                 if (i in this) {

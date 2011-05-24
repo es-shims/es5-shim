@@ -67,7 +67,7 @@ if (!Function.prototype.bind) {
         //   15.3.4.5.3.
         // 13. The [[Scope]] internal property of F is unused and need not
         //   exist.
-        var bound = function bound() {
+        function bound() {
 
             if (this instanceof bound) {
                 // 15.3.4.5.2 [[Construct]]
@@ -115,7 +115,7 @@ if (!Function.prototype.bind) {
 
             }
 
-        };
+        }
         bound.length = (
             // 14. If the [[Class]] internal property of Target is "Function", then
             typeof target === "function" ?
@@ -124,7 +124,7 @@ if (!Function.prototype.bind) {
             Math.max(target.length - args.length, 0) :
             // 15. Else set the length own property of F to 0.
             0
-        )
+        );
         // 16. The length own property of F is given attributes as specified in
         //   15.3.5.1.
         // TODO
@@ -292,9 +292,9 @@ if (!Array.prototype.reduceRight) {
         if (len === 0 && arguments.length === 1)
             throw new TypeError();
 
-        var i = len - 1;
+        var rv, i = len - 1;
         if (arguments.length >= 2) {
-            var rv = arguments[1];
+            rv = arguments[1];
         } else {
             do {
                 if (i in this) {

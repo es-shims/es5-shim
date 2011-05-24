@@ -1,3 +1,9 @@
+1.2.1
+ - Adding few fixes to make jshint happy.
+ - Fix for issue #12, function expressions can cause scoping issues in IE.
+ - NPM will minify on install or when `npm run-script install` is executed.
+ - Adding .gitignore to avoid publishing dev dependencies.
+
 1.2.0
  - Making script loadable as AMD module.
  - Adding `indexOf` to the list of safe shims.

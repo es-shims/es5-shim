@@ -1,7 +1,7 @@
 {
     "name": "es5-shim",
     "description": "ES5 as implementable on previous engines",
-    "version": "1.2.0",
+    "version": "1.2.1",
     "homepage": "http://github.com/kriskowal/es5-shim/",
     "contributors": [
         "Kris Kowal <kris@cixar.com> (http://github.com/kriskowal/)",
@@ -20,6 +20,12 @@
         }
     ],
     "main": "es5-shim.js",
+    "devDependencies": {
+      "uglify-js": ">= 0.0.5"
+    },
+    "scripts": {
+      "install": "uglifyjs -o es5-shim.min.js -nc es5-shim.js"
+    },
     "repository": {
         "type": "git",
         "url": "http://github.com/kriskowal/es5-shim.git"

@@ -248,7 +248,7 @@ if (!Array.prototype.some) {
 if (!Array.prototype.reduce) {
     Array.prototype.reduce = function reduce(fun /*, initial*/) {
         var len = +this.length;
-        if (typeof fun !== "function")
+        if (typeof fun !== "function" || fun instanceof RegExp)
             throw new TypeError();
 
         // no value to return if no initial value and an empty array
@@ -279,6 +279,7 @@ if (!Array.prototype.reduce) {
         return rv;
     };
 }
+
 
 // ES5 15.4.4.22
 // https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Objects/Array/reduceRight
@@ -329,7 +330,7 @@ if (!Array.prototype.indexOf) {
         if (i < 0)
             i += length;
         for (; i < length; i++) {
-            if (!owns(this, i))
+            if (!(i in this))
                 continue;
             if (value === this[i])
                 return i;
@@ -349,7 +350,7 @@ if (!Array.prototype.lastIndexOf) {
             i += length;
         i = Math.min(i, length - 1);
         for (; i >= 0; i--) {
-            if (!owns(this, i))
+            if (!(i in this))
                 continue;
             if (value === this[i])
                 return i;

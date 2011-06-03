@@ -1,3 +1,8 @@
+1.2.2
+ - Changed reduce to follow the letter of the spec with regard to having and
+   owning properties.
+ - Fixed a bug where RegExps pass as Functions in some engines in reduce.
+
 1.2.1
  - Adding few fixes to make jshint happy.
  - Fix for issue #12, function expressions can cause scoping issues in IE.

@@ -10,7 +10,18 @@
     MIT License. http://github.com/280north/narwhal/blob/master/README.md
 */
 
-(typeof define === "function" ? define : function($) { $(); })(function(require, exports, module, undefined) {
+(function (definition) {
+    // RequireJS
+    if (typeof define === "function") {
+        define(function () {
+            definition();
+        });
+    // CommonJS and <script>
+    } else {
+        definition();
+    }
+
+})(function (undefined) {
 
 /**
  * Brings an environment as close to ECMAScript 5 compliance

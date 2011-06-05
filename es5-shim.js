@@ -397,11 +397,11 @@ if (!Object.getOwnPropertyDescriptor) {
         if (!owns(object, property))
             return undefined;
 
-        var despriptor, getter, setter;
+        var descriptor, getter, setter;
 
         // If object has a property then it's for sure both `enumerable` and
         // `configurable`.
-        despriptor =  { enumerable: true, configurable: true };
+        descriptor =  { enumerable: true, configurable: true };
 
         // If JS engine supports accessor properties then property may be a
         // getter or setter.

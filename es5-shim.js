@@ -248,7 +248,21 @@ if (!Array.prototype.some) {
 if (!Array.prototype.reduce) {
     Array.prototype.reduce = function reduce(fun /*, initial*/) {
         var len = +this.length;
-        if (typeof fun !== "function" || fun instanceof RegExp)
+        // Whether to include (... || fun instanceof RegExp)
+        // in the following expression to trap cases where
+        // the provided function was actually a regular
+        // expression literal, which in V8 and
+        // JavaScriptCore is a typeof "function".  Only in
+        // V8 are regular expression literals permitted as
+        // reduce parameters, so it is desirable in the
+        // general case for the shim to match the more
+        // strict and common behavior of rejecting regular
+        // expressions.  However, the only case where the
+        // shim is applied is IE's Trident (and perhaps very
+        // old revisions of other engines).  In Trident,
+        // regular expressions are a typeof "object", so the
+        // following guard alone is sufficient.
+        if (typeof fun !== "function")
             throw new TypeError();
 
         // no value to return if no initial value and an empty array

@@ -10,7 +10,18 @@
     MIT License. http://github.com/280north/narwhal/blob/master/README.md
 */
 
-(typeof define === "function" ? define : function($) { $(); })(function(require, exports, module, undefined) {
+(function (definition) {
+    // RequireJS
+    if (typeof define === "function") {
+        define(function () {
+            definition();
+        });
+    // CommonJS and <script>
+    } else {
+        definition();
+    }
+
+})(function (undefined) {
 
 /**
  * Brings an environment as close to ECMAScript 5 compliance
@@ -400,11 +411,11 @@ if (!Object.getOwnPropertyDescriptor) {
         if (!owns(object, property))
             return undefined;
 
-        var despriptor, getter, setter;
+        var descriptor, getter, setter;
 
         // If object has a property then it's for sure both `enumerable` and
         // `configurable`.
-        despriptor =  { enumerable: true, configurable: true };
+        descriptor =  { enumerable: true, configurable: true };
 
         // If JS engine supports accessor properties then property may be a
         // getter or setter.

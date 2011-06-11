@@ -492,7 +492,7 @@ if (!Object.defineProperty) {
     Object.defineProperty = function defineProperty(object, property, descriptor) {
         if (typeof object !== "object" && typeof object !== "function")
             throw new TypeError(ERR_NON_OBJECT_TARGET + object);
-        if (typeof object !== "object" || object === null)
+        if (typeof descriptor !== "object" || descriptor === null)
             throw new TypeError(ERR_NON_OBJECT_DESCRIPTOR + descriptor);
 
         // If it's a data property.

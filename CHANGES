@@ -1,3 +1,10 @@
+
+1.2.4
+ - Fixed a descriptor bug in Object.defineProperty (raynos)
+
+1.2.3
+ - Cleaned up RequireJS and <script> boilerplate
+
 1.2.2
  - Changed reduce to follow the letter of the spec with regard to having and
    owning properties.

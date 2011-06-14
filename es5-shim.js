@@ -462,7 +462,7 @@ if (!Object.getOwnPropertyNames) {
 if (!Object.create) {
     Object.create = function create(prototype, properties) {
         var object;
-        if (prototype === null) {
+        if (prototype === null || prototype === undefined) {
             object = { "__proto__": null };
         } else {
             if (typeof prototype !== "object")

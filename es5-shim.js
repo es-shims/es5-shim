@@ -293,9 +293,9 @@ if (!Array.prototype.reduce) {
             throw new TypeError();
         }
 
-        var i = 0;
+        var i = 0, rv;
         if (arguments.length >= 2) {
-            var rv = arguments[1];
+            rv = arguments[1];
         } else {
             do {
                 if (i in this) {

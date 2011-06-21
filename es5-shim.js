@@ -21,7 +21,7 @@
         definition();
     }
 
-})(function (undefined) {
+}(function (undefined) {
 
 /**
  * Brings an environment as close to ECMAScript 5 compliance
@@ -62,8 +62,9 @@ if (!Function.prototype.bind) {
         // 2. If IsCallable(Target) is false, throw a TypeError exception.
         // XXX this gets pretty close, for all intents and purposes, letting
         // some duck-types slide
-        if (typeof target.apply !== "function" || typeof target.call !== "function")
+        if (typeof target.apply !== "function" || typeof target.call !== "function") {
             return new TypeError();
+        }
         // 3. Let A be a new (possibly empty) internal list of all of the
         //   argument values provided after thisArg (arg1, arg2 etc), in order.
         var args = slice.call(arguments);
@@ -206,14 +207,16 @@ if (!Array.prototype.forEach) {
 if (!Array.prototype.map) {
     Array.prototype.map = function map(fun /*, thisp*/) {
         var len = +this.length;
-        if (typeof fun !== "function")
+        if (typeof fun !== "function") {
           throw new TypeError();
+        }
 
         var res = new Array(len);
         var thisp = arguments[1];
         for (var i = 0; i < len; i++) {
-            if (i in this)
+            if (i in this) {
                 res[i] = fun.call(thisp, this[i], i, this);
+            }
         }
 
         return res;
@@ -225,9 +228,11 @@ if (!Array.prototype.filter) {
     Array.prototype.filter = function filter(block /*, thisp */) {
         var values = [];
         var thisp = arguments[1];
-        for (var i = 0; i < this.length; i++)
-            if (block.call(thisp, this[i]))
+        for (var i = 0; i < this.length; i++) {
+            if (block.call(thisp, this[i])) {
                 values.push(this[i]);
+            }
+        }
         return values;
     };
 }
@@ -236,9 +241,11 @@ if (!Array.prototype.filter) {
 if (!Array.prototype.every) {
     Array.prototype.every = function every(block /*, thisp */) {
         var thisp = arguments[1];
-        for (var i = 0; i < this.length; i++)
-            if (!block.call(thisp, this[i]))
+        for (var i = 0; i < this.length; i++) {
+            if (!block.call(thisp, this[i])) {
                 return false;
+            }
+        }
         return true;
     };
 }
@@ -247,9 +254,11 @@ if (!Array.prototype.every) {
 if (!Array.prototype.some) {
     Array.prototype.some = function some(block /*, thisp */) {
         var thisp = arguments[1];
-        for (var i = 0; i < this.length; i++)
-            if (block.call(thisp, this[i]))
+        for (var i = 0; i < this.length; i++) {
+            if (block.call(thisp, this[i])) {
                 return true;
+            }
+        }
         return false;
     };
 }
@@ -273,12 +282,14 @@ if (!Array.prototype.reduce) {
         // old revisions of other engines).  In Trident,
         // regular expressions are a typeof "object", so the
         // following guard alone is sufficient.
-        if (typeof fun !== "function")
+        if (typeof fun !== "function") {
             throw new TypeError();
+        }
 
         // no value to return if no initial value and an empty array
-        if (len === 0 && arguments.length === 1)
+        if (len === 0 && arguments.length === 1) {
             throw new TypeError();
+        }
 
         var i = 0;
         if (arguments.length >= 2) {
@@ -291,14 +302,16 @@ if (!Array.prototype.reduce) {
                 }
 
                 // if array contains no values, no initial value to return
-                if (++i >= len)
+                if (++i >= len) {
                     throw new TypeError();
+                }
             } while (true);
         }
 
         for (; i < len; i++) {
-            if (i in this)
+            if (i in this) {
                 rv = fun.call(null, rv, this[i], i, this);
+            }
         }
 
         return rv;
@@ -311,12 +324,14 @@ if (!Array.prototype.reduce) {
 if (!Array.prototype.reduceRight) {
     Array.prototype.reduceRight = function reduceRight(fun /*, initial*/) {
         var len = +this.length;
-        if (typeof fun !== "function")
+        if (typeof fun !== "function") {
             throw new TypeError();
+        }
 
         // no value to return if no initial value, empty array
-        if (len === 0 && arguments.length === 1)
+        if (len === 0 && arguments.length === 1) {
             throw new TypeError();
+        }
 
         var rv, i = len - 1;
         if (arguments.length >= 2) {
@@ -329,14 +344,16 @@ if (!Array.prototype.reduceRight) {
                 }
 
                 // if array contains no values, no initial value to return
-                if (--i < 0)
+                if (--i < 0) {
                     throw new TypeError();
+                }
             } while (true);
         }
 
         for (; i >= 0; i--) {
-            if (i in this)
+            if (i in this) {
                 rv = fun.call(null, rv, this[i], i, this);
+            }
         }
 
         return rv;
@@ -347,18 +364,23 @@ if (!Array.prototype.reduceRight) {
 if (!Array.prototype.indexOf) {
     Array.prototype.indexOf = function indexOf(value /*, fromIndex */ ) {
         var length = this.length;
-        if (!length)
+        if (!length) {
             return -1;
+        }
         var i = arguments[1] || 0;
-        if (i >= length)
+        if (i >= length) {
             return -1;
-        if (i < 0)
+        }
+        if (i < 0) {
             i += length;
+        }
         for (; i < length; i++) {
-            if (!(i in this))
+            if (!(i in this)) {
                 continue;
-            if (value === this[i])
+            }
+            if (value === this[i]) {
                 return i;
+            }
         }
         return -1;
     };
@@ -368,17 +390,21 @@ if (!Array.prototype.indexOf) {
 if (!Array.prototype.lastIndexOf) {
     Array.prototype.lastIndexOf = function lastIndexOf(value /*, fromIndex */) {
         var length = this.length;
-        if (!length)
+        if (!length) {
             return -1;
+        }
         var i = arguments[1] || length;
-        if (i < 0)
+        if (i < 0) {
             i += length;
+        }
         i = Math.min(i, length - 1);
         for (; i >= 0; i--) {
-            if (!(i in this))
+            if (!(i in this)) {
                 continue;
-            if (value === this[i])
+            }
+            if (value === this[i]) {
                 return i;
+            }
         }
         return -1;
     };
@@ -405,17 +431,17 @@ if (!Object.getOwnPropertyDescriptor) {
     var ERR_NON_OBJECT = "Object.getOwnPropertyDescriptor called on a " +
                          "non-object: ";
     Object.getOwnPropertyDescriptor = function getOwnPropertyDescriptor(object, property) {
-        if ((typeof object !== "object" && typeof object !== "function") || object === null)
+        if ((typeof object !== "object" && typeof object !== "function") || object === null) {
             throw new TypeError(ERR_NON_OBJECT + object);
+        }
         // If object does not owns property return undefined immediately.
-        if (!owns(object, property))
+        if (!owns(object, property)) {
             return undefined;
-
-        var descriptor, getter, setter;
+        }
 
         // If object has a property then it's for sure both `enumerable` and
         // `configurable`.
-        descriptor =  { enumerable: true, configurable: true };
+        var descriptor =  { enumerable: true, configurable: true };
 
         // If JS engine supports accessor properties then property may be a
         // getter or setter.
@@ -861,4 +887,4 @@ if (!String.prototype.trim) {
     };
 }
 
-});
+}));

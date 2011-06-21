@@ -166,7 +166,6 @@ if (!Function.prototype.bind) {
 // _Please note: Shortcuts are defined after `Function.prototype.bind` as we
 // us it in defining shortcuts.
 var call = Function.prototype.call;
-var prototypeOfArray = Array.prototype;
 var prototypeOfObject = Object.prototype;
 var owns = call.bind(prototypeOfObject.hasOwnProperty);
 
@@ -616,7 +615,7 @@ if (!Object.freeze) {
 try {
     Object.freeze(function () {});
 } catch (exception) {
-    Object.freeze = (function freeze(freezeObject) {
+    Object.freeze = (function freezeFactory(freezeObject) {
         return function freeze(object) {
             if (typeof object === "function") {
                 return object;

@@ -44,7 +44,7 @@
  * @module
  */
 
-    var PROTO = "__proto__";
+var PROTO = "__proto__";
 
 /*whatsupdoc*/
 
@@ -209,7 +209,7 @@ if (!Array.prototype.map) {
     Array.prototype.map = function map(fun /*, thisp*/) {
         var len = +this.length;
         if (typeof fun !== "function") {
-          throw new TypeError();
+            throw new TypeError();
         }
 
         var res = new Array(len);
@@ -462,8 +462,12 @@ if (!Object.getOwnPropertyDescriptor) {
             object[PROTO] = prototype;
 
             if (getter || setter) {
-                if (getter) { descriptor.get = getter; }
-                if (setter) { descriptor.set = setter; }
+                if (getter) {
+                    descriptor.get = getter;
+                }
+                if (setter) {
+                    descriptor.set = setter;
+                }
 
                 // If it was accessor property we're done and return here
                 // in order to avoid adding `value` to the descriptor.
@@ -494,7 +498,7 @@ if (!Object.create) {
             object[PROTO] = null;
         } else {
             if (typeof prototype !== "object") {
-                throw new TypeError("typeof prototype["+(typeof prototype)+"] != 'object'");
+                throw new TypeError("typeof prototype[" + (typeof prototype) + "] != 'object'");
             }
             var Type = function () {};
             Type.prototype = prototype;
@@ -773,10 +777,10 @@ if (!Date.prototype.toJSON) {
 if (isNaN(Date.parse("T00:00"))) {
     // XXX global assignment won't work in embeddings that use
     // an alternate object for the context.
-    Date = (function(NativeDate) {
+    Date = (function (NativeDate) {
 
         // Date.length === 7
-        var Date = function(Y, M, D, h, m, s, ms) {
+        var Date = function (Y, M, D, h, m, s, ms) {
             var length = arguments.length;
             if (this instanceof NativeDate) {
                 var date = length === 1 && String(Y) === Y ? // isString(Y)

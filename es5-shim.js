@@ -11,13 +11,13 @@
 */
 
 (function (definition) {
-    // RequireJS
-    if (typeof define === "function") {
-        define(function () {
+    if (typeof define === "function" && define.amd) {
+        // AMD loaders, e.g. RequireJS
+        define("es5-shim", [], function () {
             definition();
         });
-    // CommonJS and <script>
     } else {
+        // CommonJS and <script>
         definition();
     }
 

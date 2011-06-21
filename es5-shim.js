@@ -463,8 +463,8 @@ if (!Object.getOwnPropertyDescriptor) {
             object[PROTO] = prototype;
 
             if (getter || setter) {
-                if (getter) descriptor.get = getter;
-                if (setter) descriptor.set = setter;
+                if (getter) { descriptor.get = getter; }
+                if (setter) { descriptor.set = setter; }
 
                 // If it was accessor property we're done and return here
                 // in order to avoid adding `value` to the descriptor.
@@ -494,8 +494,9 @@ if (!Object.create) {
             object = { };
             object[PROTO] = null;
         } else {
-            if (typeof prototype !== "object")
+            if (typeof prototype !== "object") {
                 throw new TypeError("typeof prototype["+(typeof prototype)+"] != 'object'");
+            }
             var Type = function () {};
             Type.prototype = prototype;
             object = new Type();
@@ -505,8 +506,9 @@ if (!Object.create) {
             // objects created using `Object.create`
             object[PROTO] = prototype;
         }
-        if (typeof properties !== "undefined")
+        if (typeof properties !== "undefined") {
             Object.defineProperties(object, properties);
+        }
         return object;
     };
 }
@@ -514,15 +516,17 @@ if (!Object.create) {
 // ES5 15.2.3.6
 if (!Object.defineProperty) {
     var ERR_NON_OBJECT_DESCRIPTOR = "Property description must be an object: ";
-    var ERR_NON_OBJECT_TARGET = "Object.defineProperty called on non-object: "
+    var ERR_NON_OBJECT_TARGET = "Object.defineProperty called on non-object: ";
     var ERR_ACCESSORS_NOT_SUPPORTED = "getters & setters can not be defined " +
                                       "on this javascript engine";
 
     Object.defineProperty = function defineProperty(object, property, descriptor) {
-        if (typeof object !== "object" && typeof object !== "function")
+        if (typeof object !== "object" && typeof object !== "function") {
             throw new TypeError(ERR_NON_OBJECT_TARGET + object);
-        if (typeof descriptor !== "object" || descriptor === null)
+        }
+        if (typeof descriptor !== "object" || descriptor === null) {
             throw new TypeError(ERR_NON_OBJECT_DESCRIPTOR + descriptor);
+        }
 
         // If it's a data property.
         if (owns(descriptor, "value")) {
@@ -560,13 +564,16 @@ if (!Object.defineProperty) {
                 object[property] = descriptor.value;
             }
         } else {
-            if (!supportsAccessors)
+            if (!supportsAccessors) {
                 throw new TypeError(ERR_ACCESSORS_NOT_SUPPORTED);
+            }
             // If we got that far then getters and setters can be defined !!
-            if (owns(descriptor, "get"))
+            if (owns(descriptor, "get")) {
                 defineGetter(object, property, descriptor.get);
-            if (owns(descriptor, "set"))
+            }
+            if (owns(descriptor, "set")) {
                 defineSetter(object, property, descriptor.set);
+            }
         }
 
         return object;
@@ -577,8 +584,9 @@ if (!Object.defineProperty) {
 if (!Object.defineProperties) {
     Object.defineProperties = function defineProperties(object, properties) {
         for (var property in properties) {
-            if (owns(properties, property))
+            if (owns(properties, property)) {
                 Object.defineProperty(object, property, properties[property]);
+            }
         }
         return object;
     };
@@ -616,7 +624,7 @@ try {
                 return freezeObject(object);
             }
         };
-    })(Object.freeze);
+    }(Object.freeze));
 }
 
 // ES5 15.2.3.10
@@ -666,16 +674,15 @@ if (!Object.keys) {
         ],
         dontEnumsLength = dontEnums.length;
 
-    for (var key in {"toString": null})
+    for (var key in {"toString": null}) {
         hasDontEnumBug = false;
+    }
 
     Object.keys = function keys(object) {
 
-        if (
-            typeof object !== "object" && typeof object !== "function"
-            || object === null
-        )
+        if (typeof object !== "object" && typeof object !== "function" || object === null) {
             throw new TypeError("Object.keys called on a non-object");
+        }
 
         var keys = [];
         for (var name in object) {
@@ -716,7 +723,7 @@ if (!Date.prototype.toISOString) {
             this.getUTCMinutes() + ":" +
             this.getUTCSeconds() + "Z"
         );
-    }
+    };
 }
 
 // ES5 15.9.4.4
@@ -741,8 +748,9 @@ if (!Date.prototype.toJSON) {
         // 4. Let toISO be the result of calling the [[Get]] internal method of
         // O with argument "toISOString".
         // 5. If IsCallable(toISO) is false, throw a TypeError exception.
-        if (typeof this.toISOString !== "function")
+        if (typeof this.toISOString !== "function") {
             throw new TypeError();
+        }
         // 6. Return the result of calling the [[Call]] internal method of
         // toISO with O as the this value and an empty argument list.
         return this.toISOString();
@@ -822,8 +830,9 @@ if (isNaN(Date.parse("T00:00"))) {
         "$");
 
         // Copy any custom methods a 3rd party library may have added
-        for (var key in NativeDate)
+        for (var key in NativeDate) {
             Date[key] = NativeDate[key];
+        }
 
         // Copy "native" methods explicitly; they may be non-enumerable
         Date.now = NativeDate.now;
@@ -844,8 +853,9 @@ if (isNaN(Date.parse("T00:00"))) {
                 // parse numerics
                 for (var i = 0; i < 10; i++) {
                     // skip + or - for the timezone offset
-                    if (i === 7)
+                    if (i === 7) {
                         continue;
+                    }
                     // Note: parseInt would read 0-prefix numbers as
                     // octal.  Number constructor or unary + work better
                     // here:
@@ -853,18 +863,21 @@ if (isNaN(Date.parse("T00:00"))) {
                     // match[1] is the month. Months are 0-11 in JavaScript
                     // Date objects, but 1-12 in ISO notation, so we
                     // decrement.
-                    if (i === 1)
+                    if (i === 1) {
                         match[i]--;
+                    }
                 }
                 // if no year-month-date is provided, return a milisecond
                 // quantity instead of a UTC date number value.
-                if (timeOnly)
+                if (timeOnly) {
                     return ((match[3] * 60 + match[4]) * 60 + match[5]) * 1000 + match[6];
+                }
 
                 // account for an explicit time zone offset if provided
                 var offset = (match[8] * 60 + match[9]) * 60 * 1000;
-                if (match[6] === "-")
+                if (match[6] === "-") {
                     offset = -offset;
+                }
 
                 return NativeDate.UTC.apply(this, match.slice(0, 7)) + offset;
             }
@@ -872,7 +885,7 @@ if (isNaN(Date.parse("T00:00"))) {
         };
 
         return Date;
-    })(Date);
+    }(Date));
 }
 
 //

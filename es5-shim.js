@@ -44,6 +44,8 @@
  * @module
  */
 
+    var PROTO = "__proto__";
+
 /*whatsupdoc*/
 
 //
@@ -421,7 +423,7 @@ if (!Object.getPrototypeOf) {
     // http://ejohn.org/blog/objectgetprototypeof/
     // recommended by fschaefer on github
     Object.getPrototypeOf = function getPrototypeOf(object) {
-        return object.__proto__ || object.constructor.prototype;
+        return object[PROTO] || object.constructor.prototype;
         // or undefined if not available in this engine
     };
 }
@@ -451,14 +453,14 @@ if (!Object.getOwnPropertyDescriptor) {
             // inherited getter. To avoid misbehavior we temporary remove
             // `__proto__` so that `__lookupGetter__` will return getter only
             // if it's owned by an object.
-            var prototype = object.__proto__;
-            object.__proto__ = prototypeOfObject;
+            var prototype = object[PROTO];
+            object[PROTO] = prototypeOfObject;
 
             var getter = lookupGetter(object, property);
             var setter = lookupSetter(object, property);
 
             // Once we have getter and setter we can put values back.
-            object.__proto__ = prototype;
+            object[PROTO] = prototype;
 
             if (getter || setter) {
                 if (getter) descriptor.get = getter;
@@ -489,7 +491,8 @@ if (!Object.create) {
     Object.create = function create(prototype, properties) {
         var object;
         if (prototype === null) {
-            object = { "__proto__": null };
+            object = { };
+            object[PROTO] = null;
         } else {
             if (typeof prototype !== "object")
                 throw new TypeError("typeof prototype["+(typeof prototype)+"] != 'object'");
@@ -500,7 +503,7 @@ if (!Object.create) {
             // neither `__proto__`, but this manually setting `__proto__` will
             // guarantee that `Object.getPrototypeOf` will work as expected with
             // objects created using `Object.create`
-            object.__proto__ = prototype;
+            object[PROTO] = prototype;
         }
         if (typeof properties !== "undefined")
             Object.defineProperties(object, properties);
@@ -545,8 +548,8 @@ if (!Object.defineProperty) {
                 // `__proto__` we can safely override `__proto__` while defining
                 // a property to make sure that we don't hit an inherited
                 // accessor.
-                var prototype = object.__proto__;
-                object.__proto__ = prototypeOfObject;
+                var prototype = object[PROTO];
+                object[PROTO] = prototypeOfObject;
                 // Deleting a property anyway since getter / setter may be
                 // defined on object itself.
                 delete object[property];

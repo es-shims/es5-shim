@@ -21,7 +21,7 @@
         definition();
     }
 
-})(function (undefined) {
+}(function (undefined) {
 
 /**
  * Brings an environment as close to ECMAScript 5 compliance
@@ -44,6 +44,8 @@
  * @module
  */
 
+var PROTO = "__proto__";
+
 /*whatsupdoc*/
 
 //
@@ -62,8 +64,9 @@ if (!Function.prototype.bind) {
         // 2. If IsCallable(Target) is false, throw a TypeError exception.
         // XXX this gets pretty close, for all intents and purposes, letting
         // some duck-types slide
-        if (typeof target.apply !== "function" || typeof target.call !== "function")
+        if (typeof target.apply !== "function" || typeof target.call !== "function") {
             return new TypeError();
+        }
         // 3. Let A be a new (possibly empty) internal list of all of the
         //   argument values provided after thisArg (arg1, arg2 etc), in order.
         var args = slice.call(arguments);
@@ -163,7 +166,6 @@ if (!Function.prototype.bind) {
 // _Please note: Shortcuts are defined after `Function.prototype.bind` as we
 // us it in defining shortcuts.
 var call = Function.prototype.call;
-var prototypeOfArray = Array.prototype;
 var prototypeOfObject = Object.prototype;
 var owns = call.bind(prototypeOfObject.hasOwnProperty);
 
@@ -206,14 +208,16 @@ if (!Array.prototype.forEach) {
 if (!Array.prototype.map) {
     Array.prototype.map = function map(fun /*, thisp*/) {
         var len = +this.length;
-        if (typeof fun !== "function")
-          throw new TypeError();
+        if (typeof fun !== "function") {
+            throw new TypeError();
+        }
 
         var res = new Array(len);
         var thisp = arguments[1];
         for (var i = 0; i < len; i++) {
-            if (i in this)
+            if (i in this) {
                 res[i] = fun.call(thisp, this[i], i, this);
+            }
         }
 
         return res;
@@ -225,9 +229,11 @@ if (!Array.prototype.filter) {
     Array.prototype.filter = function filter(block /*, thisp */) {
         var values = [];
         var thisp = arguments[1];
-        for (var i = 0; i < this.length; i++)
-            if (block.call(thisp, this[i]))
+        for (var i = 0; i < this.length; i++) {
+            if (block.call(thisp, this[i])) {
                 values.push(this[i]);
+            }
+        }
         return values;
     };
 }
@@ -236,9 +242,11 @@ if (!Array.prototype.filter) {
 if (!Array.prototype.every) {
     Array.prototype.every = function every(block /*, thisp */) {
         var thisp = arguments[1];
-        for (var i = 0; i < this.length; i++)
-            if (!block.call(thisp, this[i]))
+        for (var i = 0; i < this.length; i++) {
+            if (!block.call(thisp, this[i])) {
                 return false;
+            }
+        }
         return true;
     };
 }
@@ -247,9 +255,11 @@ if (!Array.prototype.every) {
 if (!Array.prototype.some) {
     Array.prototype.some = function some(block /*, thisp */) {
         var thisp = arguments[1];
-        for (var i = 0; i < this.length; i++)
-            if (block.call(thisp, this[i]))
+        for (var i = 0; i < this.length; i++) {
+            if (block.call(thisp, this[i])) {
                 return true;
+            }
+        }
         return false;
     };
 }
@@ -273,16 +283,18 @@ if (!Array.prototype.reduce) {
         // old revisions of other engines).  In Trident,
         // regular expressions are a typeof "object", so the
         // following guard alone is sufficient.
-        if (typeof fun !== "function")
+        if (typeof fun !== "function") {
             throw new TypeError();
+        }
 
         // no value to return if no initial value and an empty array
-        if (len === 0 && arguments.length === 1)
+        if (len === 0 && arguments.length === 1) {
             throw new TypeError();
+        }
 
-        var i = 0;
+        var i = 0, rv;
         if (arguments.length >= 2) {
-            var rv = arguments[1];
+            rv = arguments[1];
         } else {
             do {
                 if (i in this) {
@@ -291,14 +303,16 @@ if (!Array.prototype.reduce) {
                 }
 
                 // if array contains no values, no initial value to return
-                if (++i >= len)
+                if (++i >= len) {
                     throw new TypeError();
+                }
             } while (true);
         }
 
         for (; i < len; i++) {
-            if (i in this)
+            if (i in this) {
                 rv = fun.call(null, rv, this[i], i, this);
+            }
         }
 
         return rv;
@@ -311,12 +325,14 @@ if (!Array.prototype.reduce) {
 if (!Array.prototype.reduceRight) {
     Array.prototype.reduceRight = function reduceRight(fun /*, initial*/) {
         var len = +this.length;
-        if (typeof fun !== "function")
+        if (typeof fun !== "function") {
             throw new TypeError();
+        }
 
         // no value to return if no initial value, empty array
-        if (len === 0 && arguments.length === 1)
+        if (len === 0 && arguments.length === 1) {
             throw new TypeError();
+        }
 
         var rv, i = len - 1;
         if (arguments.length >= 2) {
@@ -329,14 +345,16 @@ if (!Array.prototype.reduceRight) {
                 }
 
                 // if array contains no values, no initial value to return
-                if (--i < 0)
+                if (--i < 0) {
                     throw new TypeError();
+                }
             } while (true);
         }
 
         for (; i >= 0; i--) {
-            if (i in this)
+            if (i in this) {
                 rv = fun.call(null, rv, this[i], i, this);
+            }
         }
 
         return rv;
@@ -347,18 +365,23 @@ if (!Array.prototype.reduceRight) {
 if (!Array.prototype.indexOf) {
     Array.prototype.indexOf = function indexOf(value /*, fromIndex */ ) {
         var length = this.length;
-        if (!length)
+        if (!length) {
             return -1;
+        }
         var i = arguments[1] || 0;
-        if (i >= length)
+        if (i >= length) {
             return -1;
-        if (i < 0)
+        }
+        if (i < 0) {
             i += length;
+        }
         for (; i < length; i++) {
-            if (!(i in this))
+            if (!(i in this)) {
                 continue;
-            if (value === this[i])
+            }
+            if (value === this[i]) {
                 return i;
+            }
         }
         return -1;
     };
@@ -368,17 +391,21 @@ if (!Array.prototype.indexOf) {
 if (!Array.prototype.lastIndexOf) {
     Array.prototype.lastIndexOf = function lastIndexOf(value /*, fromIndex */) {
         var length = this.length;
-        if (!length)
+        if (!length) {
             return -1;
+        }
         var i = arguments[1] || length;
-        if (i < 0)
+        if (i < 0) {
             i += length;
+        }
         i = Math.min(i, length - 1);
         for (; i >= 0; i--) {
-            if (!(i in this))
+            if (!(i in this)) {
                 continue;
-            if (value === this[i])
+            }
+            if (value === this[i]) {
                 return i;
+            }
         }
         return -1;
     };
@@ -395,7 +422,7 @@ if (!Object.getPrototypeOf) {
     // http://ejohn.org/blog/objectgetprototypeof/
     // recommended by fschaefer on github
     Object.getPrototypeOf = function getPrototypeOf(object) {
-        return object.__proto__ || object.constructor.prototype;
+        return object[PROTO] || object.constructor.prototype;
         // or undefined if not available in this engine
     };
 }
@@ -405,17 +432,17 @@ if (!Object.getOwnPropertyDescriptor) {
     var ERR_NON_OBJECT = "Object.getOwnPropertyDescriptor called on a " +
                          "non-object: ";
     Object.getOwnPropertyDescriptor = function getOwnPropertyDescriptor(object, property) {
-        if ((typeof object !== "object" && typeof object !== "function") || object === null)
+        if ((typeof object !== "object" && typeof object !== "function") || object === null) {
             throw new TypeError(ERR_NON_OBJECT + object);
+        }
         // If object does not owns property return undefined immediately.
-        if (!owns(object, property))
+        if (!owns(object, property)) {
             return undefined;
-
-        var descriptor, getter, setter;
+        }
 
         // If object has a property then it's for sure both `enumerable` and
         // `configurable`.
-        descriptor =  { enumerable: true, configurable: true };
+        var descriptor =  { enumerable: true, configurable: true };
 
         // If JS engine supports accessor properties then property may be a
         // getter or setter.
@@ -425,18 +452,22 @@ if (!Object.getOwnPropertyDescriptor) {
             // inherited getter. To avoid misbehavior we temporary remove
             // `__proto__` so that `__lookupGetter__` will return getter only
             // if it's owned by an object.
-            var prototype = object.__proto__;
-            object.__proto__ = prototypeOfObject;
+            var prototype = object[PROTO];
+            object[PROTO] = prototypeOfObject;
 
             var getter = lookupGetter(object, property);
             var setter = lookupSetter(object, property);
 
             // Once we have getter and setter we can put values back.
-            object.__proto__ = prototype;
+            object[PROTO] = prototype;
 
             if (getter || setter) {
-                if (getter) descriptor.get = getter;
-                if (setter) descriptor.set = setter;
+                if (getter) {
+                    descriptor.get = getter;
+                }
+                if (setter) {
+                    descriptor.set = setter;
+                }
 
                 // If it was accessor property we're done and return here
                 // in order to avoid adding `value` to the descriptor.
@@ -463,10 +494,12 @@ if (!Object.create) {
     Object.create = function create(prototype, properties) {
         var object;
         if (prototype === null) {
-            object = { "__proto__": null };
+            object = { };
+            object[PROTO] = null;
         } else {
-            if (typeof prototype !== "object")
-                throw new TypeError("typeof prototype["+(typeof prototype)+"] != 'object'");
+            if (typeof prototype !== "object") {
+                throw new TypeError("typeof prototype[" + (typeof prototype) + "] != 'object'");
+            }
             var Type = function () {};
             Type.prototype = prototype;
             object = new Type();
@@ -474,10 +507,11 @@ if (!Object.create) {
             // neither `__proto__`, but this manually setting `__proto__` will
             // guarantee that `Object.getPrototypeOf` will work as expected with
             // objects created using `Object.create`
-            object.__proto__ = prototype;
+            object[PROTO] = prototype;
         }
-        if (typeof properties !== "undefined")
+        if (typeof properties !== "undefined") {
             Object.defineProperties(object, properties);
+        }
         return object;
     };
 }
@@ -485,15 +519,17 @@ if (!Object.create) {
 // ES5 15.2.3.6
 if (!Object.defineProperty) {
     var ERR_NON_OBJECT_DESCRIPTOR = "Property description must be an object: ";
-    var ERR_NON_OBJECT_TARGET = "Object.defineProperty called on non-object: "
+    var ERR_NON_OBJECT_TARGET = "Object.defineProperty called on non-object: ";
     var ERR_ACCESSORS_NOT_SUPPORTED = "getters & setters can not be defined " +
                                       "on this javascript engine";
 
     Object.defineProperty = function defineProperty(object, property, descriptor) {
-        if (typeof object !== "object" && typeof object !== "function")
+        if (typeof object !== "object" && typeof object !== "function") {
             throw new TypeError(ERR_NON_OBJECT_TARGET + object);
-        if (typeof descriptor !== "object" || descriptor === null)
+        }
+        if (typeof descriptor !== "object" || descriptor === null) {
             throw new TypeError(ERR_NON_OBJECT_DESCRIPTOR + descriptor);
+        }
 
         // If it's a data property.
         if (owns(descriptor, "value")) {
@@ -519,8 +555,8 @@ if (!Object.defineProperty) {
                 // `__proto__` we can safely override `__proto__` while defining
                 // a property to make sure that we don't hit an inherited
                 // accessor.
-                var prototype = object.__proto__;
-                object.__proto__ = prototypeOfObject;
+                var prototype = object[PROTO];
+                object[PROTO] = prototypeOfObject;
                 // Deleting a property anyway since getter / setter may be
                 // defined on object itself.
                 delete object[property];
@@ -531,13 +567,16 @@ if (!Object.defineProperty) {
                 object[property] = descriptor.value;
             }
         } else {
-            if (!supportsAccessors)
+            if (!supportsAccessors) {
                 throw new TypeError(ERR_ACCESSORS_NOT_SUPPORTED);
+            }
             // If we got that far then getters and setters can be defined !!
-            if (owns(descriptor, "get"))
+            if (owns(descriptor, "get")) {
                 defineGetter(object, property, descriptor.get);
-            if (owns(descriptor, "set"))
+            }
+            if (owns(descriptor, "set")) {
                 defineSetter(object, property, descriptor.set);
+            }
         }
 
         return object;
@@ -548,8 +587,9 @@ if (!Object.defineProperty) {
 if (!Object.defineProperties) {
     Object.defineProperties = function defineProperties(object, properties) {
         for (var property in properties) {
-            if (owns(properties, property))
+            if (owns(properties, property)) {
                 Object.defineProperty(object, property, properties[property]);
+            }
         }
         return object;
     };
@@ -579,7 +619,7 @@ if (!Object.freeze) {
 try {
     Object.freeze(function () {});
 } catch (exception) {
-    Object.freeze = (function freeze(freezeObject) {
+    Object.freeze = (function freezeFactory(freezeObject) {
         return function freeze(object) {
             if (typeof object === "function") {
                 return object;
@@ -587,7 +627,7 @@ try {
                 return freezeObject(object);
             }
         };
-    })(Object.freeze);
+    }(Object.freeze));
 }
 
 // ES5 15.2.3.10
@@ -637,21 +677,20 @@ if (!Object.keys) {
         ],
         dontEnumsLength = dontEnums.length;
 
-    for (var key in {"toString": null})
+    for (var key in {"toString": null}) {
         hasDontEnumBug = false;
+    }
 
     Object.keys = function keys(object) {
 
-        if (
-            typeof object !== "object" && typeof object !== "function"
-            || object === null
-        )
+        if (typeof object !== "object" && typeof object !== "function" || object === null) {
             throw new TypeError("Object.keys called on a non-object");
+        }
 
-        var keys = [];
+        var theKeys = [];
         for (var name in object) {
             if (owns(object, name)) {
-                keys.push(name);
+                theKeys.push(name);
             }
         }
 
@@ -659,12 +698,12 @@ if (!Object.keys) {
             for (var i = 0, ii = dontEnumsLength; i < ii; i++) {
                 var dontEnum = dontEnums[i];
                 if (owns(object, dontEnum)) {
-                    keys.push(dontEnum);
+                    theKeys.push(dontEnum);
                 }
             }
         }
 
-        return keys;
+        return theKeys;
     };
 
 }
@@ -687,7 +726,7 @@ if (!Date.prototype.toISOString) {
             this.getUTCMinutes() + ":" +
             this.getUTCSeconds() + "Z"
         );
-    }
+    };
 }
 
 // ES5 15.9.4.4
@@ -712,8 +751,9 @@ if (!Date.prototype.toJSON) {
         // 4. Let toISO be the result of calling the [[Get]] internal method of
         // O with argument "toISOString".
         // 5. If IsCallable(toISO) is false, throw a TypeError exception.
-        if (typeof this.toISOString !== "function")
+        if (typeof this.toISOString !== "function") {
             throw new TypeError();
+        }
         // 6. Return the result of calling the [[Call]] internal method of
         // toISO with O as the this value and an empty argument list.
         return this.toISOString();
@@ -737,10 +777,10 @@ if (!Date.prototype.toJSON) {
 if (isNaN(Date.parse("T00:00"))) {
     // XXX global assignment won't work in embeddings that use
     // an alternate object for the context.
-    Date = (function(NativeDate) {
+    Date = (function (NativeDate) {
 
         // Date.length === 7
-        var Date = function(Y, M, D, h, m, s, ms) {
+        var Date = function (Y, M, D, h, m, s, ms) {
             var length = arguments.length;
             if (this instanceof NativeDate) {
                 var date = length === 1 && String(Y) === Y ? // isString(Y)
@@ -793,8 +833,9 @@ if (isNaN(Date.parse("T00:00"))) {
         "$");
 
         // Copy any custom methods a 3rd party library may have added
-        for (var key in NativeDate)
+        for (var key in NativeDate) {
             Date[key] = NativeDate[key];
+        }
 
         // Copy "native" methods explicitly; they may be non-enumerable
         Date.now = NativeDate.now;
@@ -815,8 +856,9 @@ if (isNaN(Date.parse("T00:00"))) {
                 // parse numerics
                 for (var i = 0; i < 10; i++) {
                     // skip + or - for the timezone offset
-                    if (i === 7)
+                    if (i === 7) {
                         continue;
+                    }
                     // Note: parseInt would read 0-prefix numbers as
                     // octal.  Number constructor or unary + work better
                     // here:
@@ -824,18 +866,21 @@ if (isNaN(Date.parse("T00:00"))) {
                     // match[1] is the month. Months are 0-11 in JavaScript
                     // Date objects, but 1-12 in ISO notation, so we
                     // decrement.
-                    if (i === 1)
+                    if (i === 1) {
                         match[i]--;
+                    }
                 }
                 // if no year-month-date is provided, return a milisecond
                 // quantity instead of a UTC date number value.
-                if (timeOnly)
+                if (timeOnly) {
                     return ((match[3] * 60 + match[4]) * 60 + match[5]) * 1000 + match[6];
+                }
 
                 // account for an explicit time zone offset if provided
                 var offset = (match[8] * 60 + match[9]) * 60 * 1000;
-                if (match[6] === "-")
+                if (match[6] === "-") {
                     offset = -offset;
+                }
 
                 return NativeDate.UTC.apply(this, match.slice(0, 7)) + offset;
             }
@@ -843,7 +888,7 @@ if (isNaN(Date.parse("T00:00"))) {
         };
 
         return Date;
-    })(Date);
+    }(Date));
 }
 
 //
@@ -861,4 +906,4 @@ if (!String.prototype.trim) {
     };
 }
 
-});
+}));

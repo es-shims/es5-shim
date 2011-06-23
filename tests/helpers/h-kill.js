@@ -24,7 +24,6 @@ HLP.kill(Function, [
 HLP.kill(Array, [
 	'forEach', 'some', 'every', 
 	'indexOf', 'lastIndexOf', 
-	//'concat', 
 	'map', 'filter', 
 	'reduce', 'reduceRight'
 ]);

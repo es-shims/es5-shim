@@ -29,7 +29,7 @@ describe('Function', function() {
 				context = this;
 			}.bind();
 			testSubject.func();
-			expect(context == window || context === undefined).toBe(true);
+			expect(context).toBe(function() {return this}.call());
 		});
 		it('binds properly without a context, and still supplies bound arguments', function() {
 			var a, context;
@@ -39,7 +39,7 @@ describe('Function', function() {
 			}.bind(undefined, 1,2,3);
 			testSubject.func(1,2,3);
 			expect(a).toEqual([1,2,3,1,2,3]);
-			expect(context == window || context === undefined).toBe(true);
+			expect(context).toBe(function() {return this}.call());
 		});
 		it('binds a context properly', function() {
 			testSubject.func = func.bind(actual);
@@ -59,7 +59,7 @@ describe('Function', function() {
 				return this;
 			}.bind();
 			var context = testSubject.func();
-			expect(context == window || context === undefined).toBe(true);
+			expect(context).toBe(function() {return this}.call());
 		});
 		it('returns properly without binding a context, and still supplies bound arguments', function() {
 			var context;
@@ -68,7 +68,7 @@ describe('Function', function() {
 				return Array.prototype.slice.call(arguments);
 			}.bind(undefined, 1,2,3);
 			actual = testSubject.func(1,2,3);
-			expect(context == window || context === undefined).toBe(true);
+			expect(context).toBe(function() {return this}.call());
 			expect(actual).toEqual([1,2,3,1,2,3]);
 		});
 		it('returns properly while binding a context properly', function() {

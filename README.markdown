@@ -34,13 +34,13 @@ SAFE SHIMS
 * Array.prototype.forEach
 * Array.prototype.indexOf
 * Array.prototype.lastIndexOf
+* Array.prototype.map
 * Array.prototype.some
 * Function.prototype.bind
 
 ### Untested ###
 
 * Array.isArray
-* Array.prototype.map
 * Array.prototype.reduce
 * Array.prototype.reduceRight
 * Object.keys

@@ -38,6 +38,11 @@ describe('Array', function() {
 			expect(i).toBe(3);
 		});
 		
+		it('should set the right context when given none', function() {
+			var context;
+			[1].forEach(function() {context = this;});
+			expect(context).toBe(function() {return this}.call());
+		});
 		it('should iterate all', function() {
 			testSubject.forEach(function(obj, index) {
 				actual[index] = obj;
@@ -95,6 +100,11 @@ describe('Array', function() {
 			});
 			expect(arr).toEqual([1,2,3,4,5,6]);
 			expect(i).toBe(3);
+		});
+		it('should set the right context when given none', function() {
+			var context;
+			[1].some(function() {context = this;});
+			expect(context).toBe(function() {return this}.call());
 		});
 		
 		it('should return false if it runs to the end', function() {
@@ -185,6 +195,11 @@ describe('Array', function() {
 			});
 			expect(arr).toEqual([1,2,3,4,5,6]);
 			expect(i).toBe(3);
+		});
+		it('should set the right context when given none', function() {
+			var context;
+			[1].every(function() {context = this;});
+			expect(context).toBe(function() {return this}.call());
 		});
 		
 		it('should return true if the array is empty', function() {
@@ -524,6 +539,11 @@ describe('Array', function() {
 				}, passedValues);
 				expect(passedValues).toExactlyMatch(testSubject);
 			});
+			it('should set the right context when given none', function() {
+				var context;
+				[1].filter(function() {context = this;});
+				expect(context).toBe(function() {return this}.call());
+			});
 			it('should remove only the values for which the callback returns false', function() {
 				var result = testSubject.filter(callback);
 				expect(result).toExactlyMatch(filteredArray);
@@ -569,6 +589,11 @@ describe('Array', function() {
 				delete testSubject.length;
 				expect(passedValues).toExactlyMatch(testSubject);
 			});
+			it('should set the right context when given none', function() {
+				var context;
+				Array.prototype.filter.call(createArrayLikeFromArray([1], undefined, function() {context = this;}));
+				expect(context).toBe(function() {return this}.call());
+			});
 			it('should pass the right context to the filter', function() {
 				var passedValues = {};
 				testSubject = createArrayLikeFromArray([1,2,3,4]);
@@ -588,6 +613,122 @@ describe('Array', function() {
 				var copy = createArrayLikeFromArray(testSubject);
 				Array.prototype.filter.call(testSubject, callback);
 				expect(testSubject).toExactlyMatch(copy);
+			});
+		});
+	});
+	describe('map', function() {
+		var callback;
+		beforeEach(function() {
+			var i = 0;
+			callback = function() {
+				return i++;
+			};
+		});
+		describe('Array object', function() {
+			it('should call callback with the right parameters', function() {
+				var callback = jasmine.createSpy('callback'),
+					array = [1];
+				array.map(callback);
+				expect(callback).toHaveBeenCalledWith(1, 0, array);
+			});
+			it('should set the context correctly', function() {
+				var context = {};
+				testSubject.map(function(o,i) {
+					this[i] = o;
+				}, context);
+				expect(context).toExactlyMatch(testSubject);
+			});
+			it('should set the right context when given none', function() {
+				var context;
+				[1].map(function() {context = this;});
+				expect(context).toBe(function() {return this}.call());
+			});
+			it('should not change the array it is called on', function() {
+				var copy = testSubject.slice();
+				testSubject.map(callback);
+				expect(testSubject).toExactlyMatch(copy);
+			});
+			it('should only run for the number of objects in the array when it started', function() {
+				var arr = [1,2,3],
+					i = 0;
+				arr.map(function(o) {
+					arr.push(o+3);
+					i++;
+					return o;
+				});
+				expect(arr).toExactlyMatch([1,2,3,4,5,6]);
+				expect(i).toBe(3);
+			});
+			it('should properly translate the values as according to the callback', function() {
+				var result = testSubject.map(callback),
+					expected = [0,0,1,2,3,4,5,6];
+				delete expected[1];
+				expect(result).toExactlyMatch(expected);
+			});
+			it('should skip non-existing values', function() {
+				var array = [1,2,3,4], 
+					i = 0;
+				delete array[2];
+				array.map(function() {
+					i++;
+				});
+				expect(i).toBe(3);
+			});
+		});
+		describe('Array-like', function() {
+			beforeEach(function() {
+				testSubject = createArrayLikeFromArray(testSubject);
+			});
+			it('should call callback with the right parameters', function() {
+				var callback = jasmine.createSpy('callback'),
+					array = createArrayLikeFromArray([1]);
+				Array.prototype.map.call(array, callback);
+				expect(callback).toHaveBeenCalledWith(1, 0, array);
+			});
+			it('should set the context correctly', function() {
+				var context = {};
+				Array.prototype.map.call(testSubject, function(o,i) {
+					this[i] = o;
+				}, context);
+				delete testSubject.length;
+				expect(context).toExactlyMatch(testSubject);
+			});
+			it('should set the right context when given none', function() {
+				var context;
+				Array.prototype.map.call(createArrayLikeFromArray([1]), function() {context = this;});
+				expect(context).toBe(function() {return this}.call());
+			});
+			it('should not change the array it is called on', function() {
+				var copy = createArrayLikeFromArray(testSubject);
+				Array.prototype.map.call(testSubject, callback);
+				expect(testSubject).toExactlyMatch(copy);
+			});
+			it('should only run for the number of objects in the array when it started', function() {
+				var arr = createArrayLikeFromArray([1,2,3]),
+					i = 0;
+				Array.prototype.map.call(arr, function(o) {
+					Array.prototype.push.call(arr, o+3);
+					i++;
+					return o;
+				});
+				delete arr.length;
+				expect(arr).toExactlyMatch([1,2,3,4,5,6]);
+				expect(i).toBe(3);
+			});
+			it('should properly translate the values as according to the callback', function() {
+				var result = Array.prototype.map.call(testSubject, callback),
+					expected = [0,0,1,2,3,4,5,6];
+				delete expected[1];
+				expect(result).toExactlyMatch(expected);
+			});
+			it('should skip non-existing values', function() {
+				var array = createArrayLikeFromArray([1,2,3,4]), 
+					i = 0;
+				delete array[2];
+				Array.prototype.map.call(array, function() {
+					i++;
+				});
+				expect(i).toBe(3);
 			});
 		});
 	});

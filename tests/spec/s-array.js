@@ -4,9 +4,9 @@ describe('Array', function() {
 		testSubject = [2, 3, undefined, true, 'hej', null, false, 0];
 		delete testSubject[1];
 	});
-	var createArrayLikeFromArray = function(arr) {
+	function createArrayLikeFromArray(arr) {
 		var o = {};
-		arr.forEach(function(e, i) {
+		Array.prototype.forEach.call(arr, function(e, i) {
 			o[i]=e;
 		});
 		o.length = arr.length;
@@ -27,6 +27,17 @@ describe('Array', function() {
 			array.forEach(callback);
 			expect(callback).toHaveBeenCalledWith('1', 0, array);
 		});
+		it('should not affect elements added to the array after it has begun', function() {
+			var arr = [1,2,3],
+				i = 0;
+			arr.forEach(function(a) {
+				i++;
+				arr.push(a+3);
+			});
+			expect(arr).toEqual([1,2,3,4,5,6]);
+			expect(i).toBe(3);
+		});
+		
 		it('should iterate all', function() {
 			testSubject.forEach(function(obj, index) {
 				actual[index] = obj;
@@ -34,7 +45,7 @@ describe('Array', function() {
 			expect(actual).toExactlyMatch(expected);
 		});
 		it('should iterate all using a context', function() {
-			o = { a: actual };
+			var o = { a: actual };
 	
 			testSubject.forEach(function(obj, index) {
 				this.a[index] = obj;
@@ -50,8 +61,8 @@ describe('Array', function() {
 			expect(actual).toExactlyMatch(expected);
 		});
 		it('should iterate all in an array-like object using a context', function() {
-			var ts = createArrayLikeFromArray(testSubject);
-			o = { a: actual };
+			var ts = createArrayLikeFromArray(testSubject),
+				o = { a: actual };
 			
 			Array.prototype.forEach.call(ts, function(obj, index) {
 				this.a[index] = obj;
@@ -73,6 +84,17 @@ describe('Array', function() {
 			var array = ['1'];
 			array.some(callback);
 			expect(callback).toHaveBeenCalledWith('1', 0, array);
+		});
+		it('should not affect elements added to the array after it has begun', function() {
+			var arr = [1,2,3],
+				i = 0;
+			arr.some(function(a) {
+				i++;
+				arr.push(a+3);
+				return i > 3;
+			});
+			expect(arr).toEqual([1,2,3,4,5,6]);
+			expect(i).toBe(3);
 		});
 		
 		it('should return false if it runs to the end', function() {
@@ -152,6 +174,17 @@ describe('Array', function() {
 			var array = ['1'];
 			array.every(callback);
 			expect(callback).toHaveBeenCalledWith('1', 0, array);
+		});
+		it('should not affect elements added to the array after it has begun', function() {
+			var arr = [1,2,3],
+				i = 0;
+			arr.every(function(a) {
+				i++;
+				arr.push(a+3);
+				return i <= 3;
+			});
+			expect(arr).toEqual([1,2,3,4,5,6]);
+			expect(i).toBe(3);
 		});
 		
 		it('should return true if the array is empty', function() {
@@ -433,6 +466,128 @@ describe('Array', function() {
 			});
 			it('should work with fromIndex being negative and greater than the length', function() {
 				expect(lastIndexOf.call(testAL, 2, -20)).toEqual(-1);
+			});
+		});
+	});
+	
+	describe('filter', function() {
+		var filteredArray,
+			callback;
+		
+		beforeEach(function() {
+			testSubject = [2, 3, undefined, true, 'hej', 3, null, false, 0];
+			delete testSubject[1];
+			filteredArray = [2, undefined, 'hej', null, false, 0];
+			callback = function callback(o, i, arr) {
+				return (
+					i != 3 && i != 5
+				);
+			}
+		});
+		describe('Array object', function() {
+			it('should call the callback with the proper arguments', function() {
+				var callback = jasmine.createSpy('callback'),
+					arr = ['1'];
+				arr.filter(callback);
+				expect(callback).toHaveBeenCalledWith('1', 0, arr);
+			});
+			it('should not affect elements added to the array after it has begun', function() {
+				var arr = [1,2,3],
+					i = 0;
+				arr.filter(function(a) {
+					i++;
+					if(i <= 4) {
+						arr.push(a+3);
+					}
+					return true;
+				});
+				expect(arr).toEqual([1,2,3,4,5,6]);
+				expect(i).toBe(3);
+			});
+			it('should skip non-set values', function() {
+				var passedValues = {};
+				testSubject = [1,2,3,4];
+				delete testSubject[1];
+				testSubject.filter(function(o, i) {
+					passedValues[i] = o;
+					return true;
+				});
+				expect(passedValues).toExactlyMatch(testSubject);
+			});
+			it('should pass the right context to the filter', function() {
+				var passedValues = {};
+				testSubject = [1,2,3,4];
+				delete testSubject[1];
+				testSubject.filter(function(o, i) {
+					this[i] = o;
+					return true;
+				}, passedValues);
+				expect(passedValues).toExactlyMatch(testSubject);
+			});
+			it('should remove only the values for which the callback returns false', function() {
+				var result = testSubject.filter(callback);
+				expect(result).toExactlyMatch(filteredArray);
+			});
+			it('should leave the original array untouched', function() {
+				var copy = testSubject.slice();
+				testSubject.filter(callback);
+				expect(testSubject).toExactlyMatch(copy);
+			});
+		});
+		describe('Array like', function() {
+			beforeEach(function() {
+				testSubject = createArrayLikeFromArray(testSubject);
+			});
+			it('should call the callback with the proper arguments', function() {
+				var callback = jasmine.createSpy('callback'),
+					arr = createArrayLikeFromArray(['1']);
+				Array.prototype.filter.call(arr, callback);
+				expect(callback).toHaveBeenCalledWith('1', 0, arr);
+			});
+			it('should not affect elements added to the array after it has begun', function() {
+				var arr = createArrayLikeFromArray([1,2,3]),
+					i = 0;
+				Array.prototype.filter.call(arr, function(a) {
+					i++;
+					if(i <= 4) {
+						arr[i+2] = a+3;
+					}
+					return true;
+				});
+				delete arr.length;
+				expect(arr).toExactlyMatch([1,2,3,4,5,6]);
+				expect(i).toBe(3);
+			});
+			it('should skip non-set values', function() {
+				var passedValues = {};
+				testSubject = createArrayLikeFromArray([1,2,3,4]);
+				delete testSubject[1];
+				Array.prototype.filter.call(testSubject, function(o, i) {
+					passedValues[i] = o;
+					return true;
+				});
+				delete testSubject.length;
+				expect(passedValues).toExactlyMatch(testSubject);
+			});
+			it('should pass the right context to the filter', function() {
+				var passedValues = {};
+				testSubject = createArrayLikeFromArray([1,2,3,4]);
+				delete testSubject[1];
+				Array.prototype.filter.call(testSubject, function(o, i) {
+					this[i] = o;
+					return true;
+				}, passedValues);
+				delete testSubject.length;
+				expect(passedValues).toExactlyMatch(testSubject);
+			});
+			it('should remove only the values for which the callback returns false', function() {
+				var result = Array.prototype.filter.call(testSubject, callback);
+				expect(result).toExactlyMatch(filteredArray);
+			});
+			it('should leave the original array untouched', function() {
+				var copy = createArrayLikeFromArray(testSubject);
+				Array.prototype.filter.call(testSubject, callback);
+				expect(testSubject).toExactlyMatch(copy);
 			});
 		});
 	});

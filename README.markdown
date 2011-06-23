@@ -29,10 +29,11 @@ SAFE SHIMS
 
 ### Complete tests ###
 
+* Array.prototype.every
+* Array.prototype.filter
 * Array.prototype.forEach
 * Array.prototype.indexOf
 * Array.prototype.lastIndexOf
-* Array.prototype.every
 * Array.prototype.some
 * Function.prototype.bind
 
@@ -40,7 +41,6 @@ SAFE SHIMS
 
 * Array.isArray
 * Array.prototype.map
-* Array.prototype.filter
 * Array.prototype.reduce
 * Array.prototype.reduceRight
 * Object.keys

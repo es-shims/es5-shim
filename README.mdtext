@@ -13,20 +13,35 @@ many cases, this means that these shims cause many ES5
 methods to silently fail.  Decide carefully whether this is
 what you want.
 
+TESTS
+-----
+
+The tests are written with the Jasmine BDD test framework.
+To run the tests, navigate to <root-folder>/tests/. 
+
+In order to run against the shim-code, the tests attempt to kill the current 
+implementation of the missing methods. This happens in <root-folder>/tests/helpers/h-kill.js.
+So in order to run the tests against the build-in methods, invalidate that file somehow
+(comment-out, delete the file, delete the script-tag, etc.).
 
 SAFE SHIMS
 ----------
 
-* Array.isArray
+### Complete tests ###
+
 * Array.prototype.forEach
-* Array.prototype.map
-* Array.prototype.filter
-* Array.prototype.every
-* Array.prototype.some
-* Array.prototype.reduce
-* Array.prototype.reduceRight
 * Array.prototype.indexOf
 * Array.prototype.lastIndexOf
+* Array.prototype.every
+* Array.prototype.some
+
+### Untested ###
+
+* Array.isArray
+* Array.prototype.map
+* Array.prototype.filter
+* Array.prototype.reduce
+* Array.prototype.reduceRight
 * Object.keys
 * Date.now
 * Date.parse (for ISO parsing)

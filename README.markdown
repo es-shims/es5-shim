@@ -34,6 +34,7 @@ SAFE SHIMS
 * Array.prototype.lastIndexOf
 * Array.prototype.every
 * Array.prototype.some
+* Function.prototype.bind
 
 ### Untested ###
 
@@ -47,7 +48,6 @@ SAFE SHIMS
 * Date.parse (for ISO parsing)
 * Date.prototype.toISOString
 * Date.prototype.toJSON
-* Function.prototype.bind
 * String.prototype.trim
 
 

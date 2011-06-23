@@ -62,6 +62,13 @@ describe('Array', function() {
 			numberOfRuns = 0;
 		});
 		
+		it('should pass the correct values along to the callback', function() {
+			var callback = jasmine.createSpy('callback');
+			var array = ['1'];
+			array.some(callback);
+			expect(callback).toHaveBeenCalledWith('1', 0, array);
+		});
+		
 		it('should return false if it runs to the end', function() {
 			actual = testSubject.some(function() {});
 			expect(actual).toBeFalsy();
@@ -74,7 +81,7 @@ describe('Array', function() {
 			actual = [].some(function() { return true; });
 			expect(actual).toBeFalsy();
 		});
-	
+		
 		it('should stop after 3 elements', function() {
 			testSubject.some(function(obj, index) {
 				actual[index] = obj;
@@ -132,6 +139,13 @@ describe('Array', function() {
 			expected = {0:2, 2: undefined, 3:true };
 			actual = {};
 			numberOfRuns = 0;
+		});
+		
+		it('should pass the correct values along to the callback', function() {
+			var callback = jasmine.createSpy('callback');
+			var array = ['1'];
+			array.every(callback);
+			expect(callback).toHaveBeenCalledWith('1', 0, array);
 		});
 		
 		it('should return true if the array is empty', function() {

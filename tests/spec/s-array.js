@@ -21,6 +21,12 @@ describe('Array', function() {
 			expected = {0:2, 2: undefined, 3:true, 4: 'hej', 5:null, 6:false, 7:0 };
 			actual = {};
 		});
+		it('should pass the right parameters', function() {
+			var callback = jasmine.createSpy('callback'),
+				array = ['1'];
+			array.forEach(callback);
+			expect(callback).toHaveBeenCalledWith('1', 0, array);
+		});
 		it('should iterate all', function() {
 			testSubject.forEach(function(obj, index) {
 				actual[index] = obj;

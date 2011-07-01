@@ -734,7 +734,7 @@ if (!Date.prototype.toJSON) {
 // Date.parse
 // based on work shared by Daniel Friesen (dantman)
 // http://gist.github.com/303249
-if (isNaN(Date.parse("T00:00"))) {
+if (isNaN(Date.parse("2011-06-15T21:40:05+06:00"))) {
     // XXX global assignment won't work in embeddings that use
     // an alternate object for the context.
     Date = (function(NativeDate) {

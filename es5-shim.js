@@ -482,14 +482,59 @@ if (!Object.create) {
     };
 }
 
+// Patch for WebKit and IE8 standard mode
+// 
+// by hax <hax.github.com>
+//
+// related issue: https://github.com/kriskowal/es5-shim/issues#issue/5
+//
+// IE8 Reference:
+//     http://msdn.microsoft.com/en-us/library/dd282900.aspx
+//     http://msdn.microsoft.com/en-us/library/dd229916.aspx
+//
+// WebKit Bugs:
+//     https://bugs.webkit.org/show_bug.cgi?id=36423
+
+void function(global) {
+	"use strict"
+	
+	if (!Object.defineProperty) return // fallback to es5-shim
+	
+	var supportsDPNative = testDP()
+	var supportsDPDOM = testDP(global.document.createElement('div'))
+	
+	if (!supportsDPDOM || !supportsDPNative) Object.__defineProperty__ = Object.defineProperty
+	
+	function testDP(o) {
+		if (o == null) o = {}
+		var key = {}
+		try {
+			Object.defineProperty(o, 'test', {get: function(){return key}})
+			return o.test === key
+		} catch(e) {
+			return false
+		}
+	}
+
+}(this)
+
 // ES5 15.2.3.6
-if (!Object.defineProperty) {
+if (!Object.defineProperty || Object.__defineProperty__) {
     var ERR_NON_OBJECT_DESCRIPTOR = "Property description must be an object: ";
     var ERR_NON_OBJECT_TARGET = "Object.defineProperty called on non-object: "
     var ERR_ACCESSORS_NOT_SUPPORTED = "getters & setters can not be defined " +
                                       "on this javascript engine";
 
     Object.defineProperty = function defineProperty(object, property, descriptor) {
+		if (Object.__defineProperty__) {
+			try {
+				// TODO: should check descriptor first?
+				return Object.__defineProperty__(object, property, descriptor)
+			} catch(e) {
+				//console.log('failed:', property, descriptor)
+			}
+		}
+		
         if (typeof object !== "object" && typeof object !== "function")
             throw new TypeError(ERR_NON_OBJECT_TARGET + object);
         if (typeof descriptor !== "object" || descriptor === null)
@@ -526,7 +571,7 @@ if (!Object.defineProperty) {
                 delete object[property];
                 object[property] = descriptor.value;
                 // Setting original `__proto__` back now.
-                object.__proto__ = prototype;
+                object.__proto__ = object.prototype;
             } else {
                 object[property] = descriptor.value;
             }
@@ -645,8 +690,10 @@ if (!Object.keys) {
         if (
             typeof object !== "object" && typeof object !== "function"
             || object === null
-        )
+        ) {
+			//console.info('failed to get keys of:', object)
             throw new TypeError("Object.keys called on a non-object");
+		}
 
         var keys = [];
         for (var name in object) {

@@ -511,13 +511,6 @@ if (!Object.getOwnPropertyDescriptor || Object.__getOwnPropertyDescriptor__) {
     };
 }
 
-// ES5 15.2.3.4
-if (!Object.getOwnPropertyNames) {
-    Object.getOwnPropertyNames = function getOwnPropertyNames(object) {
-        return Object.keys(object);
-    };
-}
-
 // ES5 15.2.3.5
 if (!Object.create) {
     Object.create = function create(prototype, properties) {
@@ -702,8 +695,15 @@ if (!Object.isExtensible) {
 }
 
 // ES5 15.2.3.14
-// http://whattheheadsaid.com/2010/10/a-safer-object-keys-compatibility-implementation
 if (!Object.keys) {
+    Object.keys = function keys(object) {
+        return Object.getOwnPropertyNames(object);
+    };
+}
+
+// ES5 15.2.3.4
+// http://whattheheadsaid.com/2010/10/a-safer-object-keys-compatibility-implementation
+if (!Object.getOwnPropertyNames) {
 
     var hasDontEnumBug = true,
         dontEnums = [
@@ -720,7 +720,7 @@ if (!Object.keys) {
     for (var key in {"toString": null})
         hasDontEnumBug = false;
 
-    Object.keys = function keys(object) {
+    Object.getOwnPropertyNames = function getOwnPropertyNames(object) {
 
         if (
             typeof object !== "object" && typeof object !== "function"

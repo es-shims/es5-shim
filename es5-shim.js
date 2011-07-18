@@ -400,11 +400,71 @@ if (!Object.getPrototypeOf) {
     };
 }
 
+// Patch for WebKit and IE8 standard mode
+// 
+// by hax <hax.github.com>
+//
+// related issue: https://github.com/kriskowal/es5-shim/issues#issue/5
+//
+// IE8 Reference:
+//     http://msdn.microsoft.com/en-us/library/dd282900.aspx
+//     http://msdn.microsoft.com/en-us/library/dd229916.aspx
+//
+// WebKit Bugs:
+//     https://bugs.webkit.org/show_bug.cgi?id=36423
+
+void function(global) {
+	"use strict"
+	
+	if (!Object.defineProperty) return // fallback to es5-shim
+	
+	var supportsDPNative = testDP()
+	var supportsDPDOM = testDP(global.document.createElement('div'))
+	var supportsGOPDNative = testGOPD()
+	var supportsGOPDDOM = testGOPD(global.document.createElement('div'))
+	
+	if (!supportsDPDOM || !supportsDPNative)
+		Object.__defineProperty__ = Object.defineProperty
+	if (!supportsGOPDDOM || !supportsGOPDNative)
+		Object.__getOwnPropertyDescriptor__ = Object.getOwnPropertyDescriptor
+	
+	function testDP(o) {
+		if (o == null) o = {}
+		var key = {}
+		try {
+			Object.defineProperty(o, 'test', {get: function(){return key}})
+			return o.test === key
+		} catch(e) {
+			return false
+		}
+	}
+	
+	function testGOPD(o) {
+		if (o == null) o = {}
+		var key = {}
+		o.test = key
+		try {
+			var pd = Object.getOwnPropertyDescriptor(o, 'test')
+			return pd.value === key
+		} catch(e) {
+			return false
+		}
+	}
+
+}(this)
+
 // ES5 15.2.3.3
-if (!Object.getOwnPropertyDescriptor) {
+if (!Object.getOwnPropertyDescriptor || Object.__getOwnPropertyDescriptor__) {
     var ERR_NON_OBJECT = "Object.getOwnPropertyDescriptor called on a " +
                          "non-object: ";
     Object.getOwnPropertyDescriptor = function getOwnPropertyDescriptor(object, property) {
+		if (Object.__getOwnPropertyDescriptor__) {
+			try {
+				return Object.__getOwnPropertyDescriptor__(object, property)
+			} catch(e) {
+				//console.log('failed:', property)
+			}
+		}
         if ((typeof object !== "object" && typeof object !== "function") || object === null)
             throw new TypeError(ERR_NON_OBJECT + object);
         // If object does not owns property return undefined immediately.
@@ -463,60 +523,34 @@ if (!Object.create) {
     Object.create = function create(prototype, properties) {
         var object;
         if (prototype === null) {
-            object = { "__proto__": null };
+            object = {};
         } else {
             if (typeof prototype !== "object")
                 throw new TypeError("typeof prototype["+(typeof prototype)+"] != 'object'");
             var Type = function () {};
             Type.prototype = prototype;
             object = new Type();
-            // IE has no built-in implementation of `Object.getPrototypeOf`
-            // neither `__proto__`, but this manually setting `__proto__` will
-            // guarantee that `Object.getPrototypeOf` will work as expected with
-            // objects created using `Object.create`
-            object.__proto__ = prototype;
         }
+		// IE has no built-in implementation of `Object.getPrototypeOf`
+		// neither `__proto__`, but this manually setting `__proto__` will
+		// guarantee that `Object.getPrototypeOf` will work as expected with
+		// objects created using `Object.create`
+		//object.__proto__ = prototype;
+		//console.info(Object.defineProperty)
+		//try {
+		Object.defineProperty(object, '__proto__', {
+			value: prototype,
+			enumerable: false,
+			writable: false,
+			configurable: false
+		})
+		//}catch(e) {alert(e)}
+		
         if (typeof properties !== "undefined")
             Object.defineProperties(object, properties);
         return object;
     };
 }
-
-// Patch for WebKit and IE8 standard mode
-// 
-// by hax <hax.github.com>
-//
-// related issue: https://github.com/kriskowal/es5-shim/issues#issue/5
-//
-// IE8 Reference:
-//     http://msdn.microsoft.com/en-us/library/dd282900.aspx
-//     http://msdn.microsoft.com/en-us/library/dd229916.aspx
-//
-// WebKit Bugs:
-//     https://bugs.webkit.org/show_bug.cgi?id=36423
-
-void function(global) {
-	"use strict"
-	
-	if (!Object.defineProperty) return // fallback to es5-shim
-	
-	var supportsDPNative = testDP()
-	var supportsDPDOM = testDP(global.document.createElement('div'))
-	
-	if (!supportsDPDOM || !supportsDPNative) Object.__defineProperty__ = Object.defineProperty
-	
-	function testDP(o) {
-		if (o == null) o = {}
-		var key = {}
-		try {
-			Object.defineProperty(o, 'test', {get: function(){return key}})
-			return o.test === key
-		} catch(e) {
-			return false
-		}
-	}
-
-}(this)
 
 // ES5 15.2.3.6
 if (!Object.defineProperty || Object.__defineProperty__) {
@@ -533,7 +567,7 @@ if (!Object.defineProperty || Object.__defineProperty__) {
 			} catch(e) {
 				//console.log('failed:', property, descriptor)
 			}
-		}
+		}		
 		
         if (typeof object !== "object" && typeof object !== "function")
             throw new TypeError(ERR_NON_OBJECT_TARGET + object);
@@ -541,6 +575,7 @@ if (!Object.defineProperty || Object.__defineProperty__) {
             throw new TypeError(ERR_NON_OBJECT_DESCRIPTOR + descriptor);
 
         // If it's a data property.
+		
         if (owns(descriptor, "value")) {
             // fail silently if "writable", "enumerable", or "configurable"
             // are requested but not supported

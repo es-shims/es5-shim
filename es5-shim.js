@@ -420,11 +420,13 @@ void function(global) {
 	
 	var supportsDPNative = testDP()
 	var supportsDPDOM = testDP(global.document.createElement('div'))
-	var supportsGOPDNative = testGOPD()
-	var supportsGOPDDOM = testGOPD(global.document.createElement('div'))
 	
 	if (!supportsDPDOM || !supportsDPNative)
 		Object.__defineProperty__ = Object.defineProperty
+	
+	if (!Object.getOwnPropertyDescriptor) /*what happened?*/ return 
+	var supportsGOPDNative = testGOPD()
+	var supportsGOPDDOM = testGOPD(global.document.createElement('div'))
 	if (!supportsGOPDDOM || !supportsGOPDNative)
 		Object.__getOwnPropertyDescriptor__ = Object.getOwnPropertyDescriptor
 	
@@ -468,7 +470,7 @@ if (!Object.getOwnPropertyDescriptor || Object.__getOwnPropertyDescriptor__) {
         if ((typeof object !== "object" && typeof object !== "function") || object === null)
             throw new TypeError(ERR_NON_OBJECT + object);
         // If object does not owns property return undefined immediately.
-        if (!owns(object, property))
+        if (property == '__proto__' && !owns(object, property))
             return undefined;
 
         var descriptor, getter, setter;
@@ -528,16 +530,7 @@ if (!Object.create) {
 		// neither `__proto__`, but this manually setting `__proto__` will
 		// guarantee that `Object.getPrototypeOf` will work as expected with
 		// objects created using `Object.create`
-		//object.__proto__ = prototype;
-		//console.info(Object.defineProperty)
-		//try {
-		Object.defineProperty(object, '__proto__', {
-			value: prototype,
-			enumerable: false,
-			writable: false,
-			configurable: false
-		})
-		//}catch(e) {alert(e)}
+		object.__proto__ = prototype;
 		
         if (typeof properties !== "undefined")
             Object.defineProperties(object, properties);
@@ -697,7 +690,13 @@ if (!Object.isExtensible) {
 // ES5 15.2.3.14
 if (!Object.keys) {
     Object.keys = function keys(object) {
-        return Object.getOwnPropertyNames(object);
+		var keys = []
+        var names = Object.getOwnPropertyNames(object);
+		for (var i = 0; i < names.length; i++) {
+			if (Object.getOwnPropertyDescriptor(object, names[i]).enumerable)
+				keys.push(names[i])
+		}
+		return keys
     };
 }
 
@@ -732,7 +731,7 @@ if (!Object.getOwnPropertyNames) {
 
         var keys = [];
         for (var name in object) {
-            if (owns(object, name)) {
+            if (name !== '__proto__' && owns(object, name)) {
                 keys.push(name);
             }
         }

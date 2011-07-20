@@ -395,7 +395,7 @@ if (!Object.getPrototypeOf) {
     // http://ejohn.org/blog/objectgetprototypeof/
     // recommended by fschaefer on github
     Object.getPrototypeOf = function getPrototypeOf(object) {
-        return object.__proto__ || object.constructor.prototype;
+        return object.constructor.prototype;
         // or undefined if not available in this engine
     };
 }

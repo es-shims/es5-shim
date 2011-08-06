@@ -356,18 +356,19 @@ if (!Array.prototype.reduceRight) {
 // ES5 15.4.4.14
 if (!Array.prototype.indexOf) {
     Array.prototype.indexOf = function indexOf(value /*, fromIndex */ ) {
-        var length = this.length;
+        var obj = Object(this);
+        var length = obj.length >>> 0;
         if (!length)
             return -1;
-        var i = arguments[1] || 0;
+        var i = Math.floor(arguments[1]) || 0;
         if (i >= length)
             return -1;
         if (i < 0)
-            i += length;
+            i = Math.max(0, length - Math.abs(i));
         for (; i < length; i++) {
-            if (!(i in this))
+            if (!(i in obj))
                 continue;
-            if (value === this[i])
+            if (value === obj[i])
                 return i;
         }
         return -1;
@@ -377,17 +378,19 @@ if (!Array.prototype.indexOf) {
 // ES5 15.4.4.15
 if (!Array.prototype.lastIndexOf) {
     Array.prototype.lastIndexOf = function lastIndexOf(value /*, fromIndex */) {
-        var length = this.length;
+        var obj = Object(this)
+        var length = obj.length >>> 0;
         if (!length)
             return -1;
-        var i = arguments[1] || length;
+        var i = Math.floor(arguments[1]) || length;
         if (i < 0)
-            i += length;
-        i = Math.min(i, length - 1);
+            i = length - Math.abs(i);
+        else
+            i = Math.min(i, length - 1);
         for (; i >= 0; i--) {
-            if (!(i in this))
+            if (!(i in obj))
                 continue;
-            if (value === this[i])
+            if (value === obj[i])
                 return i;
         }
         return -1;

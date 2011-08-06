@@ -868,7 +868,7 @@ if (isNaN(Date.parse("T00:00"))) {
 if (!String.prototype.trim) {
     // http://blog.stevenlevithan.com/archives/faster-trim-javascript
     var whitespace = "[\x09\x0A\-\x0D\x20\xA0\u1680\u180E\u2000-\u200A"
-                   + "\u202F\u205F\u3000\u2028\u2029]"
+                   + "\u202F\u205F\u3000\u2028\u2029\uFEFF]"
 
     var trimBeginRegexp = new RegExp("^" + whitespace + "*");
     var trimEndRegexp = new RegExp(whitespace + "*$");

@@ -192,10 +192,11 @@ if (!Array.isArray) {
 // ES5 15.4.4.18
 if (!Array.prototype.forEach) {
     Array.prototype.forEach =  function forEach(block, thisObject) {
-        var len = +this.length;
+        var obj = Object(this);
+        var len = obj.length >>> 0;
         for (var i = 0; i < len; i++) {
-            if (i in this) {
-                block.call(thisObject, this[i], i, this);
+            if (i in obj) {
+                block.call(thisObject, obj[i], i, obj);
             }
         }
     };
@@ -205,15 +206,16 @@ if (!Array.prototype.forEach) {
 // https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Objects/Array/map
 if (!Array.prototype.map) {
     Array.prototype.map = function map(fun /*, thisp*/) {
-        var len = +this.length;
+        var obj = Object(this);
+        var len = obj.length >>> 0;
         if (typeof fun !== "function")
           throw new TypeError();
 
         var res = new Array(len);
         var thisp = arguments[1];
         for (var i = 0; i < len; i++) {
-            if (i in this)
-                res[i] = fun.call(thisp, this[i], i, this);
+            if (i in obj)
+                res[i] = fun.call(thisp, obj[i], i, obj);
         }
 
         return res;
@@ -225,9 +227,11 @@ if (!Array.prototype.filter) {
     Array.prototype.filter = function filter(block /*, thisp */) {
         var values = [];
         var thisp = arguments[1];
-        for (var i = 0; i < this.length; i++)
-            if (block.call(thisp, this[i]))
-                values.push(this[i]);
+        var obj = Object(this);
+        var len = obj.length >>> 0;
+        for (var i = 0; i < len; i++)
+            if (i in obj && block.call(thisp, obj[i]))
+                values.push(obj[i]);
         return values;
     };
 }
@@ -236,8 +240,10 @@ if (!Array.prototype.filter) {
 if (!Array.prototype.every) {
     Array.prototype.every = function every(block /*, thisp */) {
         var thisp = arguments[1];
-        for (var i = 0; i < this.length; i++)
-            if (!block.call(thisp, this[i]))
+        var obj = Object(this);
+        var len = obj.length >>> 0;
+        for (var i = 0; i < len; i++)
+            if (i in obj && !block.call(thisp, obj[i]))
                 return false;
         return true;
     };
@@ -247,8 +253,10 @@ if (!Array.prototype.every) {
 if (!Array.prototype.some) {
     Array.prototype.some = function some(block /*, thisp */) {
         var thisp = arguments[1];
-        for (var i = 0; i < this.length; i++)
-            if (block.call(thisp, this[i]))
+        var obj = Object(this);
+        var len = obj.length >>> 0;
+        for (var i = 0; i < len; i++)
+            if (i in obj && block.call(thisp, obj[i]))
                 return true;
         return false;
     };
@@ -258,7 +266,8 @@ if (!Array.prototype.some) {
 // https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Objects/Array/reduce
 if (!Array.prototype.reduce) {
     Array.prototype.reduce = function reduce(fun /*, initial*/) {
-        var len = +this.length;
+        var obj = Object(this);
+        var len = obj.length >>> 0;
         // Whether to include (... || fun instanceof RegExp)
         // in the following expression to trap cases where
         // the provided function was actually a regular
@@ -285,8 +294,8 @@ if (!Array.prototype.reduce) {
             var rv = arguments[1];
         } else {
             do {
-                if (i in this) {
-                    rv = this[i++];
+                if (i in obj) {
+                    rv = obj[i++];
                     break;
                 }
 
@@ -297,8 +306,8 @@ if (!Array.prototype.reduce) {
         }
 
         for (; i < len; i++) {
-            if (i in this)
-                rv = fun.call(null, rv, this[i], i, this);
+            if (i in obj)
+                rv = fun.call(null, rv, obj[i], i, obj);
         }
 
         return rv;
@@ -310,7 +319,8 @@ if (!Array.prototype.reduce) {
 // https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Objects/Array/reduceRight
 if (!Array.prototype.reduceRight) {
     Array.prototype.reduceRight = function reduceRight(fun /*, initial*/) {
-        var len = +this.length;
+        var obj = Object(obj);
+        var len = obj.length >>> 0;
         if (typeof fun !== "function")
             throw new TypeError();
 
@@ -323,8 +333,8 @@ if (!Array.prototype.reduceRight) {
             rv = arguments[1];
         } else {
             do {
-                if (i in this) {
-                    rv = this[i--];
+                if (i in obj) {
+                    rv = obj[i--];
                     break;
                 }
 
@@ -335,8 +345,8 @@ if (!Array.prototype.reduceRight) {
         }
 
         for (; i >= 0; i--) {
-            if (i in this)
-                rv = fun.call(null, rv, this[i], i, this);
+            if (i in obj)
+                rv = fun.call(null, rv, obj[i], i, obj);
         }
 
         return rv;
@@ -346,18 +356,19 @@ if (!Array.prototype.reduceRight) {
 // ES5 15.4.4.14
 if (!Array.prototype.indexOf) {
     Array.prototype.indexOf = function indexOf(value /*, fromIndex */ ) {
-        var length = this.length;
+        var obj = Object(this);
+        var length = obj.length >>> 0;
         if (!length)
             return -1;
-        var i = arguments[1] || 0;
+        var i = Math.floor(arguments[1]) || 0;
         if (i >= length)
             return -1;
         if (i < 0)
-            i += length;
+            i = Math.max(0, length - Math.abs(i));
         for (; i < length; i++) {
-            if (!(i in this))
+            if (!(i in obj))
                 continue;
-            if (value === this[i])
+            if (value === obj[i])
                 return i;
         }
         return -1;
@@ -367,17 +378,19 @@ if (!Array.prototype.indexOf) {
 // ES5 15.4.4.15
 if (!Array.prototype.lastIndexOf) {
     Array.prototype.lastIndexOf = function lastIndexOf(value /*, fromIndex */) {
-        var length = this.length;
+        var obj = Object(this)
+        var length = obj.length >>> 0;
         if (!length)
             return -1;
-        var i = arguments[1] || length;
+        var i = arguments.length > 1? Math.floor(arguments[1]) || 0 : length;
         if (i < 0)
-            i += length;
-        i = Math.min(i, length - 1);
+            i = length - Math.abs(i);
+        else
+            i = Math.min(i, length - 1);
         for (; i >= 0; i--) {
-            if (!(i in this))
+            if (!(i in obj))
                 continue;
-            if (value === this[i])
+            if (value === obj[i])
                 return i;
         }
         return -1;
@@ -854,8 +867,11 @@ if (isNaN(Date.parse("T00:00"))) {
 // ES5 15.5.4.20
 if (!String.prototype.trim) {
     // http://blog.stevenlevithan.com/archives/faster-trim-javascript
-    var trimBeginRegexp = /^\s\s*/;
-    var trimEndRegexp = /\s\s*$/;
+    var whitespace = "[\x09\x0A\-\x0D\x20\xA0\u1680\u180E\u2000-\u200A"
+                   + "\u202F\u205F\u3000\u2028\u2029\uFEFF]"
+
+    var trimBeginRegexp = new RegExp("^" + whitespace + "*");
+    var trimEndRegexp = new RegExp(whitespace + "*$");
     String.prototype.trim = function trim() {
         return String(this).replace(trimBeginRegexp, '').replace(trimEndRegexp, '');
     };

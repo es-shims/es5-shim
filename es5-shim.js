@@ -382,7 +382,7 @@ if (!Array.prototype.lastIndexOf) {
         var length = obj.length >>> 0;
         if (!length)
             return -1;
-        var i = Math.floor(arguments[1]) || length;
+        var i = arguments.length > 1? Math.floor(arguments[1]) || 0 : length;
         if (i < 0)
             i = length - Math.abs(i);
         else

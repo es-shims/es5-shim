@@ -369,10 +369,10 @@ if (!Array.prototype.reduceRight) {
             } while (true);
         }
 
-        for (; i >= 0; i--) {
-            if (i in self)
+        do {
+            if (i in this)
                 result = fun.call(null, result, self[i], i, self);
-        }
+        } while (i--);
 
         return result;
     };

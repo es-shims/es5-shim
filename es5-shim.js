@@ -235,10 +235,16 @@ if (!Array.prototype.filter) {
 // ES5 15.4.4.16
 if (!Array.prototype.every) {
     Array.prototype.every = function every(block /*, thisp */) {
+        if (this === void 0 || this === null)
+            throw new TypeError();
+        var self = Object(this);
+        var length = self.length >>> 0;
+        if (typeof fun !== "function")
+            throw new TypeError();
         var thisp = arguments[1];
-        for (var i = 0; i < this.length; i++)
-            if (!block.call(thisp, this[i]))
-                return false;
+        for (var i = 0; i < length; i++) {
+            if (i in self && !fun.call(thisp, self[i], i, self)) return false;
+        }
         return true;
     };
 }
@@ -246,22 +252,19 @@ if (!Array.prototype.every) {
 // ES5 15.4.4.17
 // https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Array/some
 if (!Array.prototype.some) {
-	Array.prototype.some = function (fun/*, thisp */) {
-		"use strict";
-
-		if (this === void 0 || this === null) throw new TypeError();
-
-		var t = Object(this);
-		var len = t.length >>> 0;
-		if (typeof fun !== "function") throw new TypeError();
-
-		var thisp = arguments[1];
-		for (var i = 0; i < len; i++) {
-			if (i in t && fun.call(thisp, t[i], i, t)) return true;
-		}
-
-		return false;
-	};
+    Array.prototype.some = function (fun/*, thisp */) {
+        if (this === void 0 || this === null)
+            throw new TypeError();
+        var self = Object(this);
+        var length = self.length >>> 0;
+        if (typeof fun !== "function")
+            throw new TypeError();
+        var thisp = arguments[1];
+        for (var i = 0; i < length; i++) {
+            if (i in self && fun.call(thisp, self[i], i, self)) return true;
+        }
+        return false;
+    };
 }
 
 // ES5 15.4.4.21

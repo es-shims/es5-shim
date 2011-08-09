@@ -526,7 +526,7 @@ if (!Object.defineProperty) {
                 delete object[property];
                 object[property] = descriptor.value;
                 // Setting original `__proto__` back now.
-                object.prototype;
+                object.__proto__ = prototype;
             } else {
                 object[property] = descriptor.value;
             }

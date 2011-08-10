@@ -21,7 +21,7 @@
         definition();
     }
 
-})(function (undefined) {
+})(function () {
 
 /**
  * Brings an environment as close to ECMAScript 5 compliance
@@ -55,14 +55,12 @@
 // http://www.ecma-international.org/publications/files/drafts/tc39-2009-025.pdf
 
 if (!Function.prototype.bind) {
-    var slice = Array.prototype.slice;
+    var slice = Array.prototype.slice, toString = Object.prototype.toString;
     Function.prototype.bind = function bind(that) { // .length is 1
         // 1. Let Target be the this value.
         var target = this;
         // 2. If IsCallable(Target) is false, throw a TypeError exception.
-        // XXX this gets pretty close, for all intents and purposes, letting
-        // some duck-types slide
-        if (typeof target.apply !== "function" || typeof target.call !== "function")
+        if (typeof target != "function")
             return new TypeError();
         // 3. Let A be a new (possibly empty) internal list of all of the
         //   argument values provided after thisArg (arg1, arg2 etc), in order.
@@ -127,15 +125,14 @@ if (!Function.prototype.bind) {
             }
 
         }
-        bound.length = (
+        bound.length =
             // 14. If the [[Class]] internal property of Target is "Function", then
-            typeof target === "function" ?
+            toString.call(target) == '[object Function]'
             // a. Let L be the length property of Target minus the length of A.
             // b. Set the length own property of F to either 0 or L, whichever is larger.
-            Math.max(target.length - args.length, 0) :
+            ? Math.max(target.length - args.length, 0)
             // 15. Else set the length own property of F to 0.
-            0
-        );
+            : 0;
         // 16. The length own property of F is given attributes as specified in
         //   15.3.5.1.
         // TODO
@@ -206,7 +203,7 @@ if (!Array.prototype.forEach) {
 if (!Array.prototype.map) {
     Array.prototype.map = function map(fun /*, thisp*/) {
         var len = +this.length;
-        if (typeof fun !== "function")
+        if (typeof fun != "function")
           throw new TypeError();
 
         var res = new Array(len);
@@ -286,7 +283,7 @@ if (!Array.prototype.reduce) {
         // old revisions of other engines).  In Trident,
         // regular expressions are a typeof "object", so the
         // following guard alone is sufficient.
-        if (typeof fun !== "function")
+        if (typeof fun != "function")
             throw new TypeError();
 
         // no value to return if no initial value and an empty array
@@ -324,7 +321,7 @@ if (!Array.prototype.reduce) {
 if (!Array.prototype.reduceRight) {
     Array.prototype.reduceRight = function reduceRight(fun /*, initial*/) {
         var len = +this.length;
-        if (typeof fun !== "function")
+        if (typeof fun != "function")
             throw new TypeError();
 
         // no value to return if no initial value, empty array
@@ -418,11 +415,11 @@ if (!Object.getOwnPropertyDescriptor) {
     var ERR_NON_OBJECT = "Object.getOwnPropertyDescriptor called on a " +
                          "non-object: ";
     Object.getOwnPropertyDescriptor = function getOwnPropertyDescriptor(object, property) {
-        if ((typeof object !== "object" && typeof object !== "function") || object === null)
+        if ((typeof object != "object" && typeof object != "function") || object === null)
             throw new TypeError(ERR_NON_OBJECT + object);
         // If object does not owns property return undefined immediately.
         if (!owns(object, property))
-            return undefined;
+            return;
 
         var descriptor, getter, setter;
 
@@ -478,7 +475,7 @@ if (!Object.create) {
         if (prototype === null) {
             object = { "__proto__": null };
         } else {
-            if (typeof prototype !== "object")
+            if (typeof prototype != "object")
                 throw new TypeError("typeof prototype["+(typeof prototype)+"] != 'object'");
             var Type = function () {};
             Type.prototype = prototype;
@@ -489,7 +486,7 @@ if (!Object.create) {
             // objects created using `Object.create`
             object.__proto__ = prototype;
         }
-        if (typeof properties !== "undefined")
+        if (properties !== void 0)
             Object.defineProperties(object, properties);
         return object;
     };
@@ -503,9 +500,9 @@ if (!Object.defineProperty) {
                                       "on this javascript engine";
 
     Object.defineProperty = function defineProperty(object, property, descriptor) {
-        if (typeof object !== "object" && typeof object !== "function")
+        if (typeof object != "object" && typeof object != "function")
             throw new TypeError(ERR_NON_OBJECT_TARGET + object);
-        if (typeof descriptor !== "object" || descriptor === null)
+        if (typeof descriptor != "object" || descriptor === null)
             throw new TypeError(ERR_NON_OBJECT_DESCRIPTOR + descriptor);
 
         // If it's a data property.
@@ -594,7 +591,7 @@ try {
 } catch (exception) {
     Object.freeze = (function freeze(freezeObject) {
         return function freeze(object) {
-            if (typeof object === "function") {
+            if (typeof object == "function") {
                 return object;
             } else {
                 return freezeObject(object);
@@ -656,8 +653,8 @@ if (!Object.keys) {
     Object.keys = function keys(object) {
 
         if (
-            typeof object !== "object" && typeof object !== "function"
-            || object === null
+            typeof object != "object" && typeof object != "function"
+            || object == null
         )
             throw new TypeError("Object.keys called on a non-object");
 
@@ -725,7 +722,7 @@ if (!Date.prototype.toJSON) {
         // 4. Let toISO be the result of calling the [[Get]] internal method of
         // O with argument "toISOString".
         // 5. If IsCallable(toISO) is false, throw a TypeError exception.
-        if (typeof this.toISOString !== "function")
+        if (typeof this.toISOString != "function")
             throw new TypeError();
         // 6. Return the result of calling the [[Call]] internal method of
         // toISO with O as the this value and an empty argument list.
@@ -824,7 +821,7 @@ if (isNaN(Date.parse("2011-06-15T21:40:05+06:00"))) {
                 match.shift(); // kill match[0], the full match
                 // recognize times without dates before normalizing the
                 // numeric values, for later use
-                var timeOnly = match[0] === undefined;
+                var timeOnly = match[0] === void 0;
                 // parse numerics
                 for (var i = 0; i < 10; i++) {
                     // skip + or - for the timezone offset

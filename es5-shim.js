@@ -729,17 +729,22 @@ if (!Object.keys) {
 // ES5 15.9.5.43
 // Format a Date object as a string according to a subset of the ISO-8601 standard.
 // Useful in Atom, among other things.
+// https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Date
 if (!Date.prototype.toISOString) {
     Date.prototype.toISOString = function toISOString() {
         return (
             this.getUTCFullYear() + "-" +
-            (this.getUTCMonth() + 1) + "-" +
-            this.getUTCDate() + "T" +
-            this.getUTCHours() + ":" +
-            this.getUTCMinutes() + ":" +
-            this.getUTCSeconds() + "Z"
+            pad(this.getUTCMonth() + 1) + "-" +
+            pad(this.getUTCDate()) + "T" +
+            pad(this.getUTCHours()) + ":" +
+            pad(this.getUTCMinutes()) + ":" +
+            pad(this.getUTCSeconds()) + "Z"
         );
     }
+}
+
+function pad(n) {
+  return n < 10 ? '0' + n : n;
 }
 
 // ES5 15.9.4.4

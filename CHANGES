@@ -1,4 +1,7 @@
 
+1.2.5
+ - Fixed a bug for padding it Date..toISOString (tadfisher issue #33)
+
 1.2.4
  - Fixed a descriptor bug in Object.defineProperty (raynos)
 

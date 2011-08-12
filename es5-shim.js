@@ -730,19 +730,23 @@ if (!Object.keys) {
 // https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Date
 if (!Date.prototype.toISOString) {
     Date.prototype.toISOString = function toISOString() {
-        return (
-            this.getUTCFullYear() + "-" +
-            pad(this.getUTCMonth() + 1) + "-" +
-            pad(this.getUTCDate()) + "T" +
-            pad(this.getUTCHours()) + ":" +
-            pad(this.getUTCMinutes()) + ":" +
-            pad(this.getUTCSeconds()) + "Z"
-        );
+        var result, length, value;
+        if (!isFinite(this)) {
+          throw new RangeError;
+        }
+        // The date time string format is specified in 15.9.1.15.
+        result = [this.getUTCFullYear(), this.getUTCMonth() + 1, this.getUTCDate(), this.getUTCHours(), this.getUTCMinutes(), this.getUTCSeconds()];
+        length = result.length;
+        while (length--) {
+            value = result[length];
+            // Months, dates, hours, minutes, and seconds should have two digits.
+            if (value < 10) {
+                result[length] = '0' + value;
+            }
+        }
+        // Milliseconds should have three digits.
+        return result.slice(0, 3).join('-') + 'T' + result.slice(3).join(':') + '.' + ('000' + value.getUTCMilliseconds()).slice(-3) + 'Z';
     }
-}
-
-function pad(n) {
-  return n < 10 ? '0' + n : n;
 }
 
 // ES5 15.9.4.4
@@ -859,7 +863,7 @@ if (isNaN(Date.parse("2011-06-15T21:40:05+06:00"))) {
             if (match) {
                 match.shift(); // kill match[0], the full match
                 // parse months, days, hours, minutes, seconds, and milliseconds
-                for (var i = 1; i < 7; i++) {
+                for (var i = 0; i++ < 6;) {
                     // provide default values if necessary
                     match[i] = +(match[i] || (i < 3 ? 1 : 0));
                     // match[1] is the month. Months are 0-11 in JavaScript

@@ -66,7 +66,7 @@ if (!Function.prototype.bind) {
             return new TypeError();
         // 3. Let A be a new (possibly empty) internal list of all of the
         //   argument values provided after thisArg (arg1, arg2 etc), in order.
-        var args = slice.call(arguments);
+        var args = slice.call(arguments, 1);
         // 4. Let F be a new native ECMAScript object.
         // 9. Set the [[Prototype]] internal property of F to the standard
         //   built-in Function prototype object as specified in 15.3.3.1.
@@ -118,8 +118,8 @@ if (!Function.prototype.bind) {
                 //   as the arguments.
 
                 // equiv: target.call(this, ...boundArgs, ...args)
-                return target.call.apply(
-                    target,
+                return target.apply(
+					that,
                     args.concat(slice.call(arguments))
                 );
 

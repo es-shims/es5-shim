@@ -1,4 +1,7 @@
 
+1.2.6
+ - Revised Date.parse to match ES 5.1 (kitcambridge)
+
 1.2.5
  - Fixed a bug for padding it Date..toISOString (tadfisher issue #33)
 

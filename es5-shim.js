@@ -865,7 +865,7 @@ if (isNaN(Date.parse("2011-06-15T21:40:05+06:00"))) {
             if (match) {
                 match.shift(); // kill match[0], the full match
                 // parse months, days, hours, minutes, seconds, and milliseconds
-                for (var i = 0; i++ < 6;) {
+                for (var i = 1; i < 7; i++) {
                     // provide default values if necessary
                     match[i] = +(match[i] || (i < 3 ? 1 : 0));
                     // match[1] is the month. Months are 0-11 in JavaScript

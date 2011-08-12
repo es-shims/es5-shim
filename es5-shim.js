@@ -4,6 +4,7 @@
 // -- dantman Daniel Friesen Copyright(C) 2010 XXX No License Specified
 // -- fschaefer Florian Schäfer Copyright (C) 2010 MIT License
 // -- Irakli Gozalishvili Copyright (C) 2010 MIT License
+// -- kitcambridge Kit Cambridge Copyright (C) 2011 MIT License
 
 /*!
     Copyright (c) 2009, 280 North Inc. http://280north.com/
@@ -725,9 +726,8 @@ if (!Object.keys) {
 //
 
 // ES5 15.9.5.43
-// Format a Date object as a string according to a subset of the ISO-8601 standard.
-// Useful in Atom, among other things.
-// https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Date
+// Format a Date object as a string according to a simplified subset of the ISO 8601
+// standard as defined in 15.9.1.15.
 if (!Date.prototype.toISOString) {
     Date.prototype.toISOString = function toISOString() {
         var result, length, value;

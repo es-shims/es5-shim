@@ -37,6 +37,12 @@ SAFE SHIMS
 * Array.prototype.map
 * Array.prototype.some
 * Function.prototype.bind
+    * /!\ Caveat: the bound function's length is always 0.
+    * /!\ Caveat: the bound function has a prototype property.
+    * /!\ Caveat: bound functions do not try too hard to keep you
+      from manipulating their ``arguments`` and ``caller`` properties.
+    * /!\ Caveat: bound functions don't have checks in ``call`` and
+      ``apply`` to avoid executing as a constructor.
 
 ### Untested ###
 

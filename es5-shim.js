@@ -56,7 +56,7 @@
 
 if (!Function.prototype.bind) {
     var slice = Array.prototype.slice;
-    Function.prototype.bind = function bind(that) { // .length is 1
+    Function.prototype.bind = function bind() { // .length is 1
         // 1. Let Target be the this value.
         var target = this;
         // 2. If IsCallable(Target) is false, throw a TypeError exception.
@@ -66,7 +66,9 @@ if (!Function.prototype.bind) {
             return new TypeError();
         // 3. Let A be a new (possibly empty) internal list of all of the
         //   argument values provided after thisArg (arg1, arg2 etc), in order.
-        var args = slice.call(arguments);
+        // XXX slicedArgs will stand in for "A" if used
+        var args = slice.call(arguments); // for normal call
+        var slicedArgs; // memoize later if used as constructor
         // 4. Let F be a new native ECMAScript object.
         // 9. Set the [[Prototype]] internal property of F to the standard
         //   built-in Function prototype object as specified in 15.3.3.1.
@@ -96,7 +98,12 @@ if (!Function.prototype.bind) {
                 //   values as the list ExtraArgs in the same order.
 
                 var self = Object.create(target.prototype);
-                return target.apply(self, args.concat(slice.call(arguments))) || self;
+                if (!slicedArgs) // memoize slice
+                    slicedArgs = args.slice(1);
+                return target.apply(
+                    self,
+                    slicedArgs.concat(slice.call(arguments))
+                 ) || self;
 
             } else {
                 // 15.3.4.5.1 [[Call]]
@@ -125,21 +132,10 @@ if (!Function.prototype.bind) {
 
             }
 
-        }
-        // XXX this will have no effect if length is not writable.
-        // It will throw an exception if this is strict mode.
-        try {
-            bound.length = (
-                // 14. If the [[Class]] internal property of Target is "Function", then
-                typeof target == "function" ?
-                // a. Let L be the length property of Target minus the length of A.
-                // b. Set the length own property of F to either 0 or L, whichever is larger.
-                Math.max(target.length - args.length, 0) :
-                // 15. Else set the length own property of F to 0.
-                0
-            );
-        } catch (exception) {
-        }
+        };
+
+        // XXX bound.length is never writable, so don't even try
+        //
         // 16. The length own property of F is given attributes as specified in
         //   15.3.5.1.
         // TODO

@@ -1,4 +1,8 @@
 
+1.2.7
+ - Fixed problems with Function.prototype.bind when called as a constructor.
+   (@jdalton #36)
+
 1.2.6
  - Revised Date.parse to match ES 5.1 (kitcambridge)
 

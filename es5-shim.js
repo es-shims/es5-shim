@@ -180,7 +180,6 @@ if ((supportsAccessors = owns(prototypeOfObject, '__defineGetter__'))) {
     lookupSetter = call.bind(prototypeOfObject.__lookupSetter__);
 }
 
-
 //
 // Array
 // =====
@@ -339,7 +338,6 @@ if (!Array.prototype.reduce) {
         return result;
     };
 }
-
 
 // ES5 15.4.4.22
 // https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Objects/Array/reduceRight
@@ -822,33 +820,27 @@ if (isNaN(Date.parse("2011-06-15T21:40:05+06:00"))) {
             return NativeDate.apply(this, arguments);
         };
 
-        // 15.9.1.15 Date Time String Format
+        // 15.9.1.15 Date Time String Format. This pattern does not implement
+        // extended years ((15.9.1.15.1), as `Date.UTC` cannot parse them.
         var isoDateExpression = new RegExp("^" +
-            "(?:" + // optional year-month-day
-                "(" + // year capture
-                    "(?:[+-]\\d\\d)?" + // 15.9.1.15.1 Extended years
-                    "\\d\\d\\d\\d" + // four-digit year
-                ")" +
-                "(?:-" + // optional month-day
-                    "(\\d\\d)" + // month capture
-                    "(?:-" + // optional day
-                        "(\\d\\d)" + // day capture
-                    ")?" +
+            "(\d{4})" + // four-digit year capture
+            "(?:-(\d{2})" + // optional month capture
+            "(?:-(\d{2})" + // optional day capture
+            "(?:" + // capture hours:minutes:seconds.milliseconds
+                "T(\d{2})" + // hours capture
+                ":(\d{2})" + // minutes capture
+                "(?:" + // optional :seconds.milliseconds
+                    ":(\d{2})" + // seconds capture
+                    "(?:\.(\d{3}))?" + // milliseconds capture
                 ")?" +
-            ")?" +
-            "(?:T" + // hour:minute:second.subsecond
-                "(\\d\\d)" + // hour capture
-                ":(\\d\\d)" + // minute capture
-                "(?::" + // optional :second.subsecond
-                    "(\\d\\d)" + // second capture
-                    "(?:\\.(\\d\\d\\d))?" + // milisecond capture
-                ")?" +
-            ")?" +
-            "(?:" + // time zone
+            "(?:" + // capture UTC offset component
                 "Z|" + // UTC capture
-                "([+-])(\\d\\d):(\\d\\d)" + // timezone offset
-                // capture sign, hour, minute
-            ")?" +
+                "(?:" + // offset specifier +/-hours:minutes
+                    "([-+])" + // sign capture
+                    "(\d{2})" + // hours offset capture
+                    ":(\d{2})" + // minutes offest capture
+                ")" +
+            ")?)?)?)?" +
         "$");
 
         // Copy any custom methods a 3rd party library may have added
@@ -861,42 +853,39 @@ if (isNaN(Date.parse("2011-06-15T21:40:05+06:00"))) {
         Date.prototype = NativeDate.prototype;
         Date.prototype.constructor = Date;
 
-        // Upgrade Date.parse to handle the ISO dates we use
-        // TODO review specification to ascertain whether it is
-        // necessary to implement partial ISO date strings.
+        // Upgrade Date.parse to handle simplified ISO 8601 strings
         Date.parse = function parse(string) {
             var match = isoDateExpression.exec(string);
             if (match) {
                 match.shift(); // kill match[0], the full match
-                // recognize times without dates before normalizing the
-                // numeric values, for later use
-                var timeOnly = match[0] === undefined;
-                // parse numerics
-                for (var i = 0; i < 10; i++) {
-                    // skip + or - for the timezone offset
-                    if (i == 7)
-                        continue;
-                    // Note: parseInt would read 0-prefix numbers as
-                    // octal.  Number constructor or unary + work better
-                    // here:
+                // parse months, days, hours, minutes, seconds, and milliseconds
+                for (var i = 1; i < 7; i++) {
+                    // provide default values if necessary
                     match[i] = +(match[i] || (i < 3 ? 1 : 0));
                     // match[1] is the month. Months are 0-11 in JavaScript
-                    // Date objects, but 1-12 in ISO notation, so we
+                    // `Date` objects, but 1-12 in ISO notation, so we
                     // decrement.
                     if (i == 1)
                         match[i]--;
                 }
-                // if no year-month-date is provided, return a milisecond
-                // quantity instead of a UTC date number value.
-                if (timeOnly)
-                    return ((match[3] * 60 + match[4]) * 60 + match[5]) * 1000 + match[6];
 
-                // account for an explicit time zone offset if provided
-                var offset = (match[8] * 60 + match[9]) * 60 * 1000;
-                if (match[6] == "-")
-                    offset = -offset;
+                // parse the UTC offset component
+                var minutesOffset = +match.pop(), hourOffset = +match.pop(), sign = match.pop();
 
-                return NativeDate.UTC.apply(this, match.slice(0, 7)) + offset;
+                // compute the explicit time zone offset if specified
+                var offset = 0;
+                if (sign) {
+                    // detect invalid offsets and return early
+                    if (hourOffset > 23 || minuteOffset > 59)
+                        return NaN;
+
+                    // express the provided time zone offset in minutes. The offset is
+                    // negative for time zones west of UTC; positive otherwise.
+                    offset = (hourOffset * 60 + minuteOffset) * 6e4 * (sign == "+" ? -1 : 1);
+                }
+
+                // compute a new UTC date value, accounting for the optional offset
+                return NativeDate.UTC.apply(this, match) + offset;
             }
             return NativeDate.parse.apply(this, arguments);
         };

@@ -56,7 +56,7 @@
 
 if (!Function.prototype.bind) {
     var slice = Array.prototype.slice;
-    Function.prototype.bind = function bind() { // .length is 1
+    Function.prototype.bind = function bind(that) { // .length is 1
         // 1. Let Target be the this value.
         var target = this;
         // 2. If IsCallable(Target) is false, throw a TypeError exception.
@@ -67,8 +67,7 @@ if (!Function.prototype.bind) {
         // 3. Let A be a new (possibly empty) internal list of all of the
         //   argument values provided after thisArg (arg1, arg2 etc), in order.
         // XXX slicedArgs will stand in for "A" if used
-        var args = slice.call(arguments); // for normal call
-        var slicedArgs; // memoize later if used as constructor
+        var args = slice.call(arguments, 1); // for normal call
         // 4. Let F be a new native ECMAScript object.
         // 9. Set the [[Prototype]] internal property of F to the standard
         //   built-in Function prototype object as specified in 15.3.3.1.
@@ -98,11 +97,9 @@ if (!Function.prototype.bind) {
                 //   values as the list ExtraArgs in the same order.
 
                 var self = Object.create(target.prototype);
-                if (!slicedArgs) // memoize slice
-                    slicedArgs = args.slice(1);
                 return target.apply(
                     self,
-                    slicedArgs.concat(slice.call(arguments))
+                    args.concat(slice.call(arguments))
                  ) || self;
 
             } else {
@@ -125,8 +122,8 @@ if (!Function.prototype.bind) {
                 //   as the arguments.
 
                 // equiv: target.call(this, ...boundArgs, ...args)
-                return target.call.apply(
-                    target,
+                return target.apply(
+                    that,
                     args.concat(slice.call(arguments))
                 );
 

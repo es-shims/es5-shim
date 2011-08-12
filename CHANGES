@@ -1,5 +1,9 @@
 
-1.2.7
+1.2.8
+ - Actually fixed problems with Function.prototype.bind, and regressions
+   from 1.2.7 (@bryanforbes, @jdalton #36)
+
+1.2.7 - REGRESSED
  - Fixed problems with Function.prototype.bind when called as a constructor.
    (@jdalton #36)
 

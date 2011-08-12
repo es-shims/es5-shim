@@ -85,5 +85,21 @@ describe('Function', function() {
 			expect(ret).toBe(actual);
 			expect(ret).not.toBe(testSubject);
 		});
+		it('passes the correct arguments as a constructor', function() {
+			var ret, expected = { name: "Correct" };
+			testSubject.func = function(arg) {
+				return arg;
+			}.bind({ name: "Incorrect" });
+			ret = new testSubject.func(expected);
+			expect(ret).toBe(expected);
+		});
+		it('returns the return value of the bound function when called as a constructor', function () {
+			var oracle = [1, 2, 3];
+			var subject = function () {
+				return oracle;
+			}.bind(null);
+			var result = new subject;
+			expect(result).toBe(oracle);
+		});
 	});
 });

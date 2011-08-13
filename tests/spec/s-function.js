@@ -101,5 +101,37 @@ describe('Function', function() {
 			var result = new subject;
 			expect(result).toBe(oracle);
 		});
+		it('returns the correct value if constructor returns primative', function() {
+			var oracle = [1, 2, 3];
+			var subject = function () {
+				return oracle;
+			}.bind(null);
+			var result = new subject;
+			expect(result).toBe(oracle);
+
+			oracle = {};
+			result = new subject;
+			expect(result).toBe(oracle);
+
+			oracle = function(){};
+			result = new subject;
+			expect(result).toBe(oracle);
+
+			oracle = "asdf";
+			result = new subject;
+			expect(result).not.toBe(oracle);
+
+			oracle = null;
+			result = new subject;
+			expect(result).not.toBe(oracle);
+
+			oracle = true;
+			result = new subject;
+			expect(result).not.toBe(oracle);
+
+			oracle = 1;
+			result = new subject;
+			expect(result).not.toBe(oracle);
+		});
 	});
 });

@@ -1,5 +1,6 @@
 
 Next
+ - Fixed three bugs in array methods revealed by Jasmine tests.
  - Cleaned up Function.prototype.bind with more fixes and tests from
    @bryanforbes.
 

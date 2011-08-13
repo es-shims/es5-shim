@@ -591,7 +591,7 @@ describe('Array', function() {
 			});
 			it('should set the right context when given none', function() {
 				var context;
-				Array.prototype.filter.call(createArrayLikeFromArray([1], undefined, function() {context = this;}));
+				Array.prototype.filter.call(createArrayLikeFromArray([1]), function() {context = this;}, undefined);
 				expect(context).toBe(function() {return this}.call());
 			});
 			it('should pass the right context to the filter', function() {
@@ -828,7 +828,14 @@ describe('Array', function() {
 					};
 					return b;
 				});
-				expect(arr).toEqual([1,2,3,4,5]);
+				expect(arr).toEqual({
+					0: 1,
+					1: 2,
+					2: 3,
+					3: 4,
+					4: 5,
+					length: 3
+				});
 				expect(i).toBe(2);
 			});
 			it('should work as expected for empty arrays', function() {
@@ -969,7 +976,14 @@ describe('Array', function() {
 					};
 					return b;
 				});
-				expect(arr).toEqual([1,2,3,6,5]);
+				expect(arr).toEqual({
+					0: 1,
+					1: 2,
+					2: 3,
+					3: 6,
+					4: 5,
+					length: 3 // does not get updated on property assignment
+				});
 				expect(i).toBe(2);
 			});
 			it('should work as expected for empty arrays', function() {

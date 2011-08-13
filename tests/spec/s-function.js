@@ -101,7 +101,7 @@ describe('Function', function() {
 			var result = new subject;
 			expect(result).toBe(oracle);
 		});
-		it('returns the correct value if constructor returns primative', function() {
+		it('returns the correct value if constructor returns primitive', function() {
 			var oracle = [1, 2, 3];
 			var subject = function () {
 				return oracle;

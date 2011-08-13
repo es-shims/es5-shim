@@ -55,9 +55,6 @@
 // http://www.ecma-international.org/publications/files/drafts/tc39-2009-025.pdf
 
 if (!Function.prototype.bind) {
-    var slice = Array.prototype.slice,
-        toString = Object.prototype.toString,
-        klassRE = /(Object|Function)\]$/;
     Function.prototype.bind = function bind(that) { // .length is 1
         // 1. Let Target be the this value.
         var target = this;
@@ -98,18 +95,15 @@ if (!Function.prototype.bind) {
                 //   list boundArgs in the same order followed by the same
                 //   values as the list ExtraArgs in the same order.
 
-                var self = Object.create(target.prototype),
-                    result = target.apply(
-                        self, args.concat(slice.call(arguments))
-                    ),
-                    klass = toString.call(result);
-
-                if(result !== null){
-                    if(Array.isArray(result) || klass.match(klassRE)){
-                        return result;
-                    }
-                }
+                var self = Object.create(target.prototype);
+                var result = target.apply(
+                    self,
+                    args.concat(slice.call(arguments))
+                );
+                if (result !== null && Object(result) === result)
+                    return result;
                 return self;
+
             } else {
                 // 15.3.4.5.1 [[Call]]
                 // When the [[Call]] internal method of a function object, F,
@@ -170,6 +164,8 @@ if (!Function.prototype.bind) {
 var call = Function.prototype.call;
 var prototypeOfArray = Array.prototype;
 var prototypeOfObject = Object.prototype;
+var slice = prototypeOfArray.slice;
+var toString = prototypeOfObject.toString;
 var owns = call.bind(prototypeOfObject.hasOwnProperty);
 
 var defineGetter, defineSetter, lookupGetter, lookupSetter, supportsAccessors;

@@ -56,7 +56,8 @@
 
 if (!Function.prototype.bind) {
     var slice = Array.prototype.slice,
-        toString = Object.prototype.toString;
+        toString = Object.prototype.toString,
+        klassRE = /(Object|Function)\]$/;
     Function.prototype.bind = function bind(that) { // .length is 1
         // 1. Let Target be the this value.
         var target = this;
@@ -98,12 +99,17 @@ if (!Function.prototype.bind) {
                 //   values as the list ExtraArgs in the same order.
 
                 var self = Object.create(target.prototype),
-                    ret = target.apply(
+                    result = target.apply(
                         self, args.concat(slice.call(arguments))
                     ),
-                    cls = toString.call(ret);
+                    klass = toString.call(result);
 
-                return ret !== null && (Array.isArray(ret) || cls == "[object Object]" || cls == "[object Function]") ?  ret : self;
+                if(result !== null){
+                    if(Array.isArray(result) || klass.match(klassRE)){
+                        return result;
+                    }
+                }
+                return self;
             } else {
                 // 15.3.4.5.1 [[Call]]
                 // When the [[Call]] internal method of a function object, F,

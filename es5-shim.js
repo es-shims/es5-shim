@@ -4,13 +4,25 @@
 // -- dantman Daniel Friesen Copyright(C) 2010 XXX No License Specified
 // -- fschaefer Florian Schäfer Copyright (C) 2010 MIT License
 // -- Irakli Gozalishvili Copyright (C) 2010 MIT License
+// -- kitcambridge Kit Cambridge Copyright (C) 2011 MIT License
 
 /*!
     Copyright (c) 2009, 280 North Inc. http://280north.com/
     MIT License. http://github.com/280north/narwhal/blob/master/README.md
 */
 
-(function () {
+(function (definition) {
+    // RequireJS
+    if (typeof define == "function") {
+        define(function () {
+            definition();
+        });
+    // CommonJS and <script>
+    } else {
+        definition();
+    }
+
+})(function () {
 
 /**
  * Brings an environment as close to ECMAScript 5 compliance
@@ -54,7 +66,8 @@ if (!Function.prototype.bind) {
             return new TypeError();
         // 3. Let A be a new (possibly empty) internal list of all of the
         //   argument values provided after thisArg (arg1, arg2 etc), in order.
-        var args = slice.call(arguments);
+        // XXX slicedArgs will stand in for "A" if used
+        var args = slice.call(arguments, 1); // for normal call
         // 4. Let F be a new native ECMAScript object.
         // 9. Set the [[Prototype]] internal property of F to the standard
         //   built-in Function prototype object as specified in 15.3.3.1.
@@ -66,7 +79,7 @@ if (!Function.prototype.bind) {
         //   15.3.4.5.3.
         // 13. The [[Scope]] internal property of F is unused and need not
         //   exist.
-        var bound = function bound() {
+        var bound = function () {
 
             if (this instanceof bound) {
                 // 15.3.4.5.2 [[Construct]]
@@ -84,7 +97,12 @@ if (!Function.prototype.bind) {
                 //   values as the list ExtraArgs in the same order.
 
                 var self = Object.create(target.prototype);
-                target.apply(self, args.concat(slice.call(arguments)));
+                var result = target.apply(
+                    self,
+                    args.concat(slice.call(arguments))
+                );
+                if (result !== null && Object(result) === result)
+                    return result;
                 return self;
 
             } else {
@@ -107,22 +125,16 @@ if (!Function.prototype.bind) {
                 //   as the arguments.
 
                 // equiv: target.call(this, ...boundArgs, ...args)
-                return target.call.apply(
-                    target,
+                return target.apply(
+                    that,
                     args.concat(slice.call(arguments))
                 );
 
             }
 
         };
-        bound.length =
-            // 14. If the [[Class]] internal property of Target is "Function", then
-            toString.call(target) == "[object Function]" ?
-            // a. Let L be the length property of Target minus the length of A.
-            // b. Set the length own property of F to either 0 or L, whichever is larger.
-            Math.max(target.length - args.length, 0) :
-            // 15. Else set the length own property of F to 0.
-            0;
+        // XXX bound.length is never writable, so don't even try
+        //
         // 16. The length own property of F is given attributes as specified in
         //   15.3.5.1.
         // TODO
@@ -152,6 +164,8 @@ if (!Function.prototype.bind) {
 var call = Function.prototype.call;
 var prototypeOfArray = Array.prototype;
 var prototypeOfObject = Object.prototype;
+var slice = prototypeOfArray.slice;
+var toString = prototypeOfObject.toString;
 var owns = call.bind(prototypeOfObject.hasOwnProperty);
 
 var defineGetter, defineSetter, lookupGetter, lookupSetter, supportsAccessors;
@@ -163,7 +177,6 @@ if ((supportsAccessors = owns(prototypeOfObject, '__defineGetter__'))) {
     lookupSetter = call.bind(prototypeOfObject.__lookupSetter__);
 }
 
-
 //
 // Array
 // =====
@@ -172,18 +185,31 @@ if ((supportsAccessors = owns(prototypeOfObject, '__defineGetter__'))) {
 // ES5 15.4.3.2
 if (!Array.isArray) {
     Array.isArray = function isArray(obj) {
-        return Object.prototype.toString.call(obj) === "[object Array]";
+        return Object.prototype.toString.call(obj) == "[object Array]";
     };
 }
 
 // ES5 15.4.4.18
+// https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/array/foreach
 if (!Array.prototype.forEach) {
-    Array.prototype.forEach =  function forEach(block, thisObject) {
-        var len = +this.length;
-        for (var i = 0; i < len; i++) {
-            if (i in this) {
-                block.call(thisObject, this[i], i, this);
+    Array.prototype.forEach = function forEach(fun /*, thisp*/) {
+        var self = Object(this),
+            thisp = arguments[1],
+            i = 0,
+            length = self.length >>> 0;
+
+        // If no callback function or if callback is not a callable function
+        if (!fun || !fun.call) {
+            throw new TypeError();
+        }
+
+        while (i < length) {
+            if (i in self) {
+                // Invoke the callback function with call, passing arguments:
+                // context, property value, property key, thisArg object context
+                fun.call(thisp, self[i], i, self);
             }
+            i++;
         }
     };
 }
@@ -192,51 +218,69 @@ if (!Array.prototype.forEach) {
 // https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Objects/Array/map
 if (!Array.prototype.map) {
     Array.prototype.map = function map(fun /*, thisp*/) {
-        var len = +this.length;
+        var self = Object(this);
+        var length = self.length >>> 0;
         if (typeof fun != "function")
-          throw new TypeError();
-
-        var res = new Array(len);
+            throw new TypeError();
+        var result = new Array(length);
         var thisp = arguments[1];
-        for (var i = 0; i < len; i++) {
-            if (i in this)
-                res[i] = fun.call(thisp, this[i], i, this);
+        for (var i = 0; i < length; i++) {
+            if (i in self)
+                result[i] = fun.call(thisp, self[i], i, self);
         }
-
-        return res;
+        return result;
     };
 }
 
 // ES5 15.4.4.20
 if (!Array.prototype.filter) {
-    Array.prototype.filter = function filter(block /*, thisp */) {
-        var values = [];
+    Array.prototype.filter = function filter(fun /*, thisp */) {
+        var self = Object(this);
+        var length = self.length >>> 0;
+        if (typeof fun != "function")
+            throw new TypeError();
+        var result = [];
         var thisp = arguments[1];
-        for (var i = 0; i < this.length; i++)
-            if (block.call(thisp, this[i]))
-                values.push(this[i]);
-        return values;
+        for (var i = 0; i < length; i++)
+            if (i in self && fun.call(thisp, self[i], i, self))
+                result.push(self[i]);
+        return result;
     };
 }
 
 // ES5 15.4.4.16
 if (!Array.prototype.every) {
-    Array.prototype.every = function every(block /*, thisp */) {
+    Array.prototype.every = function every(fun /*, thisp */) {
+        if (this === void 0 || this === null)
+            throw new TypeError();
+        if (typeof fun !== "function")
+            throw new TypeError();
+        var self = Object(this);
+        var length = self.length >>> 0;
         var thisp = arguments[1];
-        for (var i = 0; i < this.length; i++)
-            if (!block.call(thisp, this[i]))
+        for (var i = 0; i < length; i++) {
+            if (i in self && !fun.call(thisp, self[i], i, self))
                 return false;
+        }
         return true;
     };
 }
 
 // ES5 15.4.4.17
+// https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Array/some
 if (!Array.prototype.some) {
-    Array.prototype.some = function some(block /*, thisp */) {
+    Array.prototype.some = function some(fun /*, thisp */) {
+        if (this === void 0 || this === null)
+            throw new TypeError();
+        if (typeof fun !== "function")
+            throw new TypeError();
+        var self = Object(this);
+        var length = self.length >>> 0;
         var thisp = arguments[1];
-        for (var i = 0; i < this.length; i++)
-            if (block.call(thisp, this[i]))
+        for (var i = 0; i < length; i++) {
+            if (i in self && fun.call(thisp, self[i], i, self))
                 return true;
+        }
         return false;
     };
 }
@@ -245,36 +289,41 @@ if (!Array.prototype.some) {
 // https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Objects/Array/reduce
 if (!Array.prototype.reduce) {
     Array.prototype.reduce = function reduce(fun /*, initial*/) {
-        var len = +this.length;
-        if (typeof fun != "function")
+        var self = Object(this);
+        var length = self.length >>> 0;
+        // We diverge from the spec right here by testing that fun.[[Class]] is
+        // "Function" instead of IsCallable(fun) as specified in 15.4.4.21 step 4
+        // TODO: explain why this decision was made
+        if (Object.prototype.toString.call(fun) != "[object Function]")
             throw new TypeError();
 
         // no value to return if no initial value and an empty array
-        if (len === 0 && arguments.length === 1)
+        if (!length && arguments.length == 1)
             throw new TypeError();
 
         var i = 0;
+        var result;
         if (arguments.length >= 2) {
-            var rv = arguments[1];
+            result = arguments[1];
         } else {
             do {
-                if (i in this) {
-                    rv = this[i++];
+                if (i in self) {
+                    result = self[i++];
                     break;
                 }
 
                 // if array contains no values, no initial value to return
-                if (++i >= len)
+                if (++i >= length)
                     throw new TypeError();
             } while (true);
         }
 
-        for (; i < len; i++) {
-            if (i in this)
-                rv = fun.call(null, rv, this[i], i, this);
+        for (; i < length; i++) {
+            if (i in self)
+                result = fun.call(null, result, self[i], i, self);
         }
 
-        return rv;
+        return result;
     };
 }
 
@@ -282,21 +331,24 @@ if (!Array.prototype.reduce) {
 // https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Objects/Array/reduceRight
 if (!Array.prototype.reduceRight) {
     Array.prototype.reduceRight = function reduceRight(fun /*, initial*/) {
-        var len = +this.length;
-        if (typeof fun != "function")
+        var self = Object(this);
+        var length = self.length >>> 0;
+        // We diverge from the spec right here by testing that fun.[[Class]] is
+        // "Function" instead of IsCallable(fun) as specified in 15.4.4.22 step 4
+        // TODO: explain why this decision was made
+        if (Object.prototype.toString.call(fun) != "[object Function]")
             throw new TypeError();
-
         // no value to return if no initial value, empty array
-        if (len === 0 && arguments.length === 1)
+        if (!length && arguments.length == 1)
             throw new TypeError();
 
-        var i = len - 1;
+        var result, i = length - 1;
         if (arguments.length >= 2) {
-            var rv = arguments[1];
+            result = arguments[1];
         } else {
             do {
-                if (i in this) {
-                    rv = this[i--];
+                if (i in self) {
+                    result = self[i--];
                     break;
                 }
 
@@ -306,50 +358,55 @@ if (!Array.prototype.reduceRight) {
             } while (true);
         }
 
-        for (; i >= 0; i--) {
+        do {
             if (i in this)
-                rv = fun.call(null, rv, this[i], i, this);
-        }
+                result = fun.call(null, result, self[i], i, self);
+        } while (i--);
 
-        return rv;
+        return result;
     };
 }
 
 // ES5 15.4.4.14
+// https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Array/indexOf
 if (!Array.prototype.indexOf) {
-    Array.prototype.indexOf = function indexOf(value /*, fromIndex */ ) {
-        var length = this.length;
+    Array.prototype.indexOf = function indexOf(sought /*, fromIndex */ ) {
+        if (this === void 0 || this === null)
+            throw new TypeError();
+        var self = Object(this);
+        var length = self.length >>> 0;
         if (!length)
             return -1;
-        var i = arguments[1] || 0;
-        if (i >= length)
-            return -1;
-        if (i < 0)
-            i += length;
+        var i = 0;
+        if (arguments.length > 1)
+            i = toInteger(arguments[1]);
+        // handle negative indicies
+        i = i >= 0 ? i : length - Math.abs(i);
         for (; i < length; i++) {
-            if (!owns(this, i))
-                continue;
-            if (value === this[i])
+            if (i in self && self[i] === sought) {
                 return i;
+            }
         }
         return -1;
-    };
+    }
 }
 
 // ES5 15.4.4.15
 if (!Array.prototype.lastIndexOf) {
-    Array.prototype.lastIndexOf = function lastIndexOf(value /*, fromIndex */) {
-        var length = this.length;
+    Array.prototype.lastIndexOf = function lastIndexOf(sought /*, fromIndex */) {
+        if (this === void 0 || this === null)
+            throw new TypeError();
+        var self = Object(this);
+        var length = self.length >>> 0;
         if (!length)
             return -1;
-        var i = arguments[1] || length;
-        if (i < 0)
-            i += length;
-        i = Math.min(i, length - 1);
+        var i = length - 1;
+        if (arguments.length > 1)
+            i = toInteger(arguments[1]);
+        // handle negative indicies
+        i = i >= 0 ? i : length - Math.abs(i);
         for (; i >= 0; i--) {
-            if (!owns(this, i))
-                continue;
-            if (value === this[i])
+            if (i in self && sought === self[i])
                 return i;
         }
         return -1;
@@ -383,11 +440,11 @@ if (!Object.getOwnPropertyDescriptor) {
         if (!owns(object, property))
             return;
 
-        var despriptor, getter, setter;
+        var descriptor, getter, setter;
 
         // If object has a property then it's for sure both `enumerable` and
         // `configurable`.
-        despriptor =  { enumerable: true, configurable: true };
+        descriptor =  { enumerable: true, configurable: true };
 
         // If JS engine supports accessor properties then property may be a
         // getter or setter.
@@ -455,7 +512,15 @@ if (!Object.create) {
 }
 
 // ES5 15.2.3.6
-if (!Object.defineProperty) {
+var oldDefineProperty = Object.defineProperty;
+var defineProperty = !!oldDefineProperty;
+if (defineProperty) {
+    // detect IE 8's DOM-only implementation of defineProperty;
+    var subject = {};
+    Object.defineProperty(subject, "", {});
+    defineProperty = "" in subject;
+}
+if (!defineProperty) {
     var ERR_NON_OBJECT_DESCRIPTOR = "Property description must be an object: ";
     var ERR_NON_OBJECT_TARGET = "Object.defineProperty called on non-object: "
     var ERR_ACCESSORS_NOT_SUPPORTED = "getters & setters can not be defined " +
@@ -466,6 +531,10 @@ if (!Object.defineProperty) {
             throw new TypeError(ERR_NON_OBJECT_TARGET + object);
         if ((typeof descriptor != "object" && typeof descriptor != "function") || descriptor === null)
             throw new TypeError(ERR_NON_OBJECT_DESCRIPTOR + descriptor);
+        // make a valiant attempt to use the real defineProperty
+        // for I8's DOM elements.
+        if (oldDefineProperty && object.nodeType)
+            return oldDefineProperty(object, property, descriptor);
 
         // If it's a data property.
         if (owns(descriptor, "value")) {
@@ -644,18 +713,28 @@ if (!Object.keys) {
 //
 
 // ES5 15.9.5.43
-// Format a Date object as a string according to a subset of the ISO-8601 standard.
-// Useful in Atom, among other things.
+// Format a Date object as a string according to a simplified subset of the ISO 8601
+// standard as defined in 15.9.1.15.
 if (!Date.prototype.toISOString) {
     Date.prototype.toISOString = function toISOString() {
-        return (
-            this.getUTCFullYear() + "-" +
-            (this.getUTCMonth() + 1) + "-" +
-            this.getUTCDate() + "T" +
-            this.getUTCHours() + ":" +
-            this.getUTCMinutes() + ":" +
-            this.getUTCSeconds() + "Z"
-        );
+        var result, length, value;
+        if (!isFinite(this))
+            throw new RangeError;
+
+        // the date time string format is specified in 15.9.1.15.
+        result = [this.getUTCFullYear(), this.getUTCMonth() + 1, this.getUTCDate(),
+            this.getUTCHours(), this.getUTCMinutes(), this.getUTCSeconds()];
+
+        length = result.length;
+        while (length--) {
+            value = result[length];
+            // pad months, days, hours, minutes, and seconds to have two digits.
+            if (value < 10)
+                result[length] = '0' + value;
+        }
+        // pad milliseconds to have three digits.
+        return result.slice(0, 3).join('-') + 'T' + result.slice(3).join(':') + '.' +
+            ('000' + this.getUTCMilliseconds()).slice(-3) + 'Z';
     }
 }
 
@@ -685,7 +764,7 @@ if (!Date.prototype.toJSON) {
             throw new TypeError();
         // 6. Return the result of calling the [[Call]] internal method of
         // toISO with O as the this value and an empty argument list.
-        return this.toISOString();
+        return this.toISOString.call(this);
 
         // NOTE 1 The argument is ignored.
 
@@ -703,7 +782,7 @@ if (!Date.prototype.toJSON) {
 // Date.parse
 // based on work shared by Daniel Friesen (dantman)
 // http://gist.github.com/303249
-if (isNaN(Date.parse("T00:00"))) {
+if (isNaN(Date.parse("2011-06-15T21:40:05+06:00"))) {
     // XXX global assignment won't work in embeddings that use
     // an alternate object for the context.
     Date = (function(NativeDate) {
@@ -712,7 +791,7 @@ if (isNaN(Date.parse("T00:00"))) {
         var Date = function(Y, M, D, h, m, s, ms) {
             var length = arguments.length;
             if (this instanceof NativeDate) {
-                var date = length === 1 && String(Y) === Y ? // isString(Y)
+                var date = length == 1 && String(Y) === Y ? // isString(Y)
                     // We explicitly pass it through parse:
                     new NativeDate(Date.parse(Y)) :
                     // We have to manually make calls depending on argument
@@ -732,33 +811,27 @@ if (isNaN(Date.parse("T00:00"))) {
             return NativeDate.apply(this, arguments);
         };
 
-        // 15.9.1.15 Date Time String Format
+        // 15.9.1.15 Date Time String Format. This pattern does not implement
+        // extended years (15.9.1.15.1), as `Date.UTC` cannot parse them.
         var isoDateExpression = new RegExp("^" +
-            "(?:" + // optional year-month-day
-                "(" + // year capture
-                    "(?:[+-]\\d\\d)?" + // 15.9.1.15.1 Extended years
-                    "\\d\\d\\d\\d" + // four-digit year
-                ")" +
-                "(?:-" + // optional month-day
-                    "(\\d\\d)" + // month capture
-                    "(?:-" + // optional day
-                        "(\\d\\d)" + // day capture
-                    ")?" +
+            "(\d{4})" + // four-digit year capture
+            "(?:-(\d{2})" + // optional month capture
+            "(?:-(\d{2})" + // optional day capture
+            "(?:" + // capture hours:minutes:seconds.milliseconds
+                "T(\d{2})" + // hours capture
+                ":(\d{2})" + // minutes capture
+                "(?:" + // optional :seconds.milliseconds
+                    ":(\d{2})" + // seconds capture
+                    "(?:\.(\d{3}))?" + // milliseconds capture
                 ")?" +
-            ")?" +
-            "(?:T" + // hour:minute:second.subsecond
-                "(\\d\\d)" + // hour capture
-                ":(\\d\\d)" + // minute capture
-                "(?::" + // optional :second.subsecond
-                    "(\\d\\d)" + // second capture
-                    "(?:\\.(\\d\\d\\d))?" + // milisecond capture
-                ")?" +
-            ")?" +
-            "(?:" + // time zone
+            "(?:" + // capture UTC offset component
                 "Z|" + // UTC capture
-                "([+-])(\\d\\d):(\\d\\d)" + // timezone offset
-                // capture sign, hour, minute
-            ")?" +
+                "(?:" + // offset specifier +/-hours:minutes
+                    "([-+])" + // sign capture
+                    "(\d{2})" + // hours offset capture
+                    ":(\d{2})" + // minutes offest capture
+                ")" +
+            ")?)?)?)?" +
         "$");
 
         // Copy any custom methods a 3rd party library may have added
@@ -771,42 +844,39 @@ if (isNaN(Date.parse("T00:00"))) {
         Date.prototype = NativeDate.prototype;
         Date.prototype.constructor = Date;
 
-        // Upgrade Date.parse to handle the ISO dates we use
-        // TODO review specification to ascertain whether it is
-        // necessary to implement partial ISO date strings.
+        // Upgrade Date.parse to handle simplified ISO 8601 strings
         Date.parse = function parse(string) {
             var match = isoDateExpression.exec(string);
             if (match) {
                 match.shift(); // kill match[0], the full match
-                // recognize times without dates before normalizing the
-                // numeric values, for later use
-                var timeOnly = match[0] === void 0;
-                // parse numerics
-                for (var i = 0; i < 10; i++) {
-                    // skip + or - for the timezone offset
-                    if (i === 7)
-                        continue;
-                    // Note: parseInt would read 0-prefix numbers as
-                    // octal.  Number constructor or unary + work better
-                    // here:
+                // parse months, days, hours, minutes, seconds, and milliseconds
+                for (var i = 1; i < 7; i++) {
+                    // provide default values if necessary
                     match[i] = +(match[i] || (i < 3 ? 1 : 0));
                     // match[1] is the month. Months are 0-11 in JavaScript
-                    // Date objects, but 1-12 in ISO notation, so we
+                    // `Date` objects, but 1-12 in ISO notation, so we
                     // decrement.
-                    if (i === 1)
+                    if (i == 1)
                         match[i]--;
                 }
-                // if no year-month-date is provided, return a milisecond
-                // quantity instead of a UTC date number value.
-                if (timeOnly)
-                    return ((match[3] * 60 + match[4]) * 60 + match[5]) * 1000 + match[6];
 
-                // account for an explicit time zone offset if provided
-                var offset = (match[8] * 60 + match[9]) * 60 * 1000;
-                if (match[6] === "-")
-                    offset = -offset;
+                // parse the UTC offset component
+                var minutesOffset = +match.pop(), hourOffset = +match.pop(), sign = match.pop();
 
-                return NativeDate.UTC.apply(this, match.slice(0, 7)) + offset;
+                // compute the explicit time zone offset if specified
+                var offset = 0;
+                if (sign) {
+                    // detect invalid offsets and return early
+                    if (hourOffset > 23 || minuteOffset > 59)
+                        return NaN;
+
+                    // express the provided time zone offset in minutes. The offset is
+                    // negative for time zones west of UTC; positive otherwise.
+                    offset = (hourOffset * 60 + minuteOffset) * 6e4 * (sign == "+" ? -1 : 1);
+                }
+
+                // compute a new UTC date value, accounting for the optional offset
+                return NativeDate.UTC.apply(this, match) + offset;
             }
             return NativeDate.parse.apply(this, arguments);
         };
@@ -823,11 +893,29 @@ if (isNaN(Date.parse("T00:00"))) {
 // ES5 15.5.4.20
 if (!String.prototype.trim) {
     // http://blog.stevenlevithan.com/archives/faster-trim-javascript
-    var trimBeginRegexp = /^\s\s*/;
-    var trimEndRegexp = /\s\s*$/;
+    // http://perfectionkills.com/whitespace-deviations/
+    var s = "[\x09\x0A\-\x0D\x20\xA0\u1680\u180E\u2000-\u200A\u202F" +
+        "\u205F\u3000\u2028\u2029\uFEFF]"
+    var trimBeginRegexp = new RegExp("^" + s + s + "*");
+    var trimEndRegexp = new RegExp(s + s + "*$");
     String.prototype.trim = function trim() {
-        return String(this).replace(trimBeginRegexp, '').replace(trimEndRegexp, '');
+        return String(this).replace(trimBeginRegexp, "").replace(trimEndRegexp, "");
     };
 }
 
-})();
+//
+// Util
+// ======
+//
+
+// http://jsperf.com/to-integer
+var toInteger = function (n) {
+    n = +n;
+    if (n !== n) // isNaN
+        n = -1;
+    else if (n !== 0 && n !== (1/0) && n !== -(1/0))
+        n = (n > 0 || -1) * Math.floor(Math.abs(n));
+    return n;
+};
+
+});

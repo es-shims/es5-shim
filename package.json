@@ -1,13 +1,14 @@
 {
     "name": "es5-shim",
+    "version": "1.2.9",
     "description": "ES5 as implementable on previous engines",
-    "version": "1.1.0",
     "homepage": "http://github.com/kriskowal/es5-shim/",
     "contributors": [
         "Kris Kowal <kris@cixar.com> (http://github.com/kriskowal/)",
         "Sami Samhuri <sami.samhuri@gmail.com> (http://samhuri.net/)",
         "Florian Schäfer <florian.schaefer@gmail.com> (http://github.com/fschaefer)",
-        "Irakli Gozalishvili <rfobic@gmail.com> (http://jeditoolkit.com)"
+        "Irakli Gozalishvili <rfobic@gmail.com> (http://jeditoolkit.com)",
+        "Kit Cambridge <kitcambridge@gmail.com> (http://kitcambridge.github.com)"
     ],
     "bugs": {
         "mail": "kris@cixar.com",

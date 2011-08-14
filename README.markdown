@@ -13,32 +13,54 @@ many cases, this means that these shims cause many ES5
 methods to silently fail.  Decide carefully whether this is
 what you want.
 
+TESTS
+-----
+
+The tests are written with the Jasmine BDD test framework.
+To run the tests, navigate to <root-folder>/tests/. 
+
+In order to run against the shim-code, the tests attempt to kill the current 
+implementation of the missing methods. This happens in <root-folder>/tests/helpers/h-kill.js.
+So in order to run the tests against the build-in methods, invalidate that file somehow
+(comment-out, delete the file, delete the script-tag, etc.).
 
 SAFE SHIMS
 ----------
 
-Array.isArray
-Array.prototype.forEach
-Array.prototype.map
-Array.prototype.filter
-Array.prototype.every
-Array.prototype.some
-Array.prototype.reduce
-Array.prototype.reduceRight
-Array.prototype.lastIndexOf
-Object.keys
-Date.now
-Date.parse (for ISO parsing)
-Date.prototype.toISOString
-Date.prototype.toJSON
-Function.prototype.bind
-String.prototype.trim
+### Complete tests ###
+
+* Array.prototype.every
+* Array.prototype.filter
+* Array.prototype.forEach
+* Array.prototype.indexOf
+* Array.prototype.lastIndexOf
+* Array.prototype.map
+* Array.prototype.some
+* Function.prototype.bind
+    * /!\ Caveat: the bound function's length is always 0.
+    * /!\ Caveat: the bound function has a prototype property.
+    * /!\ Caveat: bound functions do not try too hard to keep you
+      from manipulating their ``arguments`` and ``caller`` properties.
+    * /!\ Caveat: bound functions don't have checks in ``call`` and
+      ``apply`` to avoid executing as a constructor.
+
+### Untested ###
+
+* Array.isArray
+* Array.prototype.reduce
+* Array.prototype.reduceRight
+* Object.keys
+* Date.now
+* Date.parse (for ISO parsing)
+* Date.prototype.toISOString
+* Date.prototype.toJSON
+* String.prototype.trim
 
 
 DUBIOUS SHIMS
 -------------
 
-/?\ Object.create
+* /?\ Object.create
 
     For the case of simply "begetting" an object that
     inherits prototypically from another, this should work
@@ -53,7 +75,7 @@ DUBIOUS SHIMS
     Object.defineProperties which will probably fail
     silently.
 
-/?\ Object.getPrototypeOf
+* /?\ Object.getPrototypeOf
 
     This will return "undefined" in some cases.  It uses
     __proto__ if it's available.  Failing that, it uses
@@ -69,17 +91,20 @@ DUBIOUS SHIMS
     Because the prototype reassignment destroys the
     constructor property.
 
-/!\ Object.getOwnPropertyNames
+    This will work for all objects that were created using
+    `Object.create` implemented with this library.
+
+* /!\ Object.getOwnPropertyNames
 
     This method uses Object.keys, so it will not be accurate
     on legacy engines.
 
-Object.isSealed
+* Object.isSealed
 
     Returns "false" in all legacy engines for all objects,
     which is conveniently guaranteed to be accurate.
 
-Object.isFrozen
+* Object.isFrozen
 
     Returns "false" in all legacy engines for all objects,
     which is conveniently guaranteed to be accurate.
@@ -88,14 +113,14 @@ Object.isFrozen
 SHIMS THAT FAIL SILENTLY
 ------------------------
 
-/!\ Object.getOwnPropertyDescriptor
+* /!\ Object.getOwnPropertyDescriptor
     
     The behavior of this shim does not conform to ES5.  It
     should probably not be used at this time, until its
     behavior has been reviewed and been confirmed to be
     useful in legacy engines.
 
-/!\ Object.defineProperty
+* /!\ Object.defineProperty
 
     This method will silently fail to set "writable",
     "enumerable", and "configurable" properties.
@@ -112,32 +137,32 @@ SHIMS THAT FAIL SILENTLY
 
     https://github.com/kriskowal/es5-shim/issues#issue/5
 
-/!\ Object.defineProperties
+* /!\ Object.defineProperties
 
     This uses the Object.defineProperty shim
 
-Object.seal
+* Object.seal
 
     Silently fails on all legacy engines.  This should be
     fine unless you are depending on the safty and security
     provisions of this method, which you cannot possibly
     obtain in legacy engines.
 
-Object.freeze
+* Object.freeze
 
     Silently fails on all legacy engines.  This should be
     fine unless you are depending on the safty and security
     provisions of this method, which you cannot possibly
     obtain in legacy engines.
 
-Object.preventExtensions
+* Object.preventExtensions
 
     Silently fails on all legacy engines.  This should be
     fine unless you are depending on the safty and security
     provisions of this method, which you cannot possibly
     obtain in legacy engines.
 
-/!\ Object.isExtensible
+* /!\ Object.isExtensible
 
     Returns "true". This is probably wildly innacurate.
     This method should be reviewed before it's used.

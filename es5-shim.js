@@ -253,7 +253,7 @@ if (!Array.prototype.every) {
     Array.prototype.every = function every(fun /*, thisp */) {
         if (this === void 0 || this === null)
             throw new TypeError();
-        if (typeof fun !== "function")
+        if (typeof fun != "function")
             throw new TypeError();
         var self = Object(this);
         var length = self.length >>> 0;
@@ -272,7 +272,7 @@ if (!Array.prototype.some) {
     Array.prototype.some = function some(fun /*, thisp */) {
         if (this === void 0 || this === null)
             throw new TypeError();
-        if (typeof fun !== "function")
+        if (typeof fun != "function")
             throw new TypeError();
         var self = Object(this);
         var length = self.length >>> 0;

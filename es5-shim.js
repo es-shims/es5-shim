@@ -50,8 +50,6 @@ if (!Function.prototype.bind) {
         // 1. Let Target be the this value.
         var target = this;
         // 2. If IsCallable(Target) is false, throw a TypeError exception.
-        // XXX this gets pretty close, for all intents and purposes, letting
-        // some duck-types slide
         if (typeof target != "function")
             return new TypeError();
         // 3. Let A be a new (possibly empty) internal list of all of the

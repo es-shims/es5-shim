@@ -131,7 +131,7 @@ if (typeof protoFunction.bind == "function") {
 // ES-5 15.3.4.5
 // http://www.ecma-international.org/publications/files/drafts/tc39-2009-025.pdf
 
-if (typeof protoFunction.bind != "function") {
+if (!protoFunction.bind) {
     Function.prototype.bind = function bind(that) { // .length is 1
         // 1. Let Target be the this value.
         var target = this;
@@ -260,7 +260,7 @@ if ((supportsAccessors = owns(protoObject, '__defineGetter__'))) {
 //
 
 // ES5 15.4.3.2
-if (typeof Array.isArray != "function") {
+if (!Array.isArray) {
     Array.isArray = function isArray(obj) {
         return call(natives.Object.toString, obj) == "[object Array]";
     };
@@ -268,7 +268,7 @@ if (typeof Array.isArray != "function") {
 
 // ES5 15.4.4.18
 // https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/array/foreach
-if (typeof protoArray.forEach != "function") {
+if (!protoArray.forEach) {
     Array.prototype.forEach = function forEach(fun /*, thisp*/) {
         var self = call(natives.Object.constructor, null, this),
             thisp = arguments[1],
@@ -293,7 +293,7 @@ if (typeof protoArray.forEach != "function") {
 
 // ES5 15.4.4.19
 // https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Objects/Array/map
-if (typeof protoArray.map != "function") {
+if (!protoArray.map) {
     Array.prototype.map = function map(fun /*, thisp*/) {
         var self = call(natives.Object.constructor, null, this),
             length = self.length >>> 0;
@@ -310,7 +310,7 @@ if (typeof protoArray.map != "function") {
 }
 
 // ES5 15.4.4.20
-if (typeof protoArray.filter != "function") {
+if (!protoArray.filter) {
     Array.prototype.filter = function filter(fun /*, thisp */) {
         var self = call(natives.Object.constructor, null, this),
             length = self.length >>> 0;
@@ -326,7 +326,7 @@ if (typeof protoArray.filter != "function") {
 }
 
 // ES5 15.4.4.16
-if (typeof protoArray.every != "function") {
+if (!protoArray.every) {
     Array.prototype.every = function every(fun /*, thisp */) {
         if (this === void 0 || this === null)
             throw new TypeError();
@@ -345,7 +345,7 @@ if (typeof protoArray.every != "function") {
 
 // ES5 15.4.4.17
 // https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Array/some
-if (typeof protoArray.some != "function") {
+if (!protoArray.some) {
     Array.prototype.some = function some(fun /*, thisp */) {
         if (this === void 0 || this === null)
             throw new TypeError();
@@ -364,7 +364,7 @@ if (typeof protoArray.some != "function") {
 
 // ES5 15.4.4.21
 // https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Objects/Array/reduce
-if (typeof protoArray.reduce != "function") {
+if (!protoArray.reduce) {
     Array.prototype.reduce = function reduce(fun /*, initial*/) {
         var self = call(natives.Object.constructor, null, this),
             length = self.length >>> 0;
@@ -417,7 +417,7 @@ if (typeof protoArray.reduce != "function") {
 
 // ES5 15.4.4.22
 // https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Objects/Array/reduceRight
-if (typeof protoArray.reduceRight != "function") {
+if (!protoArray.reduceRight) {
     Array.prototype.reduceRight = function reduceRight(fun /*, initial*/) {
         var self = call(natives.Object.constructor, null, this),
             length = self.length >>> 0;
@@ -454,7 +454,7 @@ if (typeof protoArray.reduceRight != "function") {
 
 // ES5 15.4.4.14
 // https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Array/indexOf
-if (typeof protoArray.indexOf != "function") {
+if (!protoArray.indexOf) {
     Array.prototype.indexOf = function indexOf(sought /*, fromIndex */ ) {
         if (this === void 0 || this === null)
             throw new TypeError();
@@ -477,7 +477,7 @@ if (typeof protoArray.indexOf != "function") {
 }
 
 // ES5 15.4.4.15
-if (typeof protoArray.lastIndexOf) {
+if (!protoArray.lastIndexOf) {
     Array.prototype.lastIndexOf = function lastIndexOf(sought /*, fromIndex */) {
         if (this === void 0 || this === null)
             throw new TypeError();
@@ -504,7 +504,7 @@ if (typeof protoArray.lastIndexOf) {
 //
 
 // ES5 15.2.3.2
-if (typeof Object.getPrototypeOf != "function") {
+if (!Object.getPrototypeOf) {
     // https://github.com/kriskowal/es5-shim/issues#issue/2
     // http://ejohn.org/blog/objectgetprototypeof/
     // recommended by fschaefer on github
@@ -515,7 +515,7 @@ if (typeof Object.getPrototypeOf != "function") {
 }
 
 // ES5 15.2.3.3
-if (typeof Object.getOwnPropertyDescriptor != "function") {
+if (!Object.getOwnPropertyDescriptor) {
     var ERR_NON_OBJECT = "Object.getOwnPropertyDescriptor called on a " +
                          "non-object: ";
     Object.getOwnPropertyDescriptor = function getOwnPropertyDescriptor(object, property) {
@@ -566,14 +566,14 @@ if (typeof Object.getOwnPropertyDescriptor != "function") {
 }
 
 // ES5 15.2.3.4
-if (typeof Object.getOwnPropertyNames != "function") {
+if (!Object.getOwnPropertyNames) {
     Object.getOwnPropertyNames = function getOwnPropertyNames(object) {
         return Object.keys(object);
     };
 }
 
 // ES5 15.2.3.5
-if (typeof Object.create != "function") {
+if (!Object.create) {
     Object.create = function create(prototype, properties) {
         var object;
         if (prototype === null) {
@@ -671,7 +671,7 @@ if (!defineProperty) {
 }
 
 // ES5 15.2.3.7
-if (typeof Object.defineProperties != "function") {
+if (!Object.defineProperties) {
     Object.defineProperties = function defineProperties(object, properties) {
         for (var property in properties) {
             if (owns(properties, property))
@@ -682,7 +682,7 @@ if (typeof Object.defineProperties != "function") {
 }
 
 // ES5 15.2.3.8
-if (typeof Object.seal != "function") {
+if (!Object.seal) {
     Object.seal = function seal(object) {
         // this is misleading and breaks feature-detection, but
         // allows "securable" code to "gracefully" degrade to working
@@ -692,7 +692,7 @@ if (typeof Object.seal != "function") {
 }
 
 // ES5 15.2.3.9
-if (typeof Object.freeze != "function") {
+if (!Object.freeze) {
     Object.freeze = function freeze(object) {
         // this is misleading and breaks feature-detection, but
         // allows "securable" code to "gracefully" degrade to working
@@ -718,7 +718,7 @@ try {
 }
 
 // ES5 15.2.3.10
-if (typeof Object.preventExtensions != "function") {
+if (!Object.preventExtensions) {
     Object.preventExtensions = function preventExtensions(object) {
         // this is misleading and breaks feature-detection, but
         // allows "securable" code to "gracefully" degrade to working
@@ -728,21 +728,21 @@ if (typeof Object.preventExtensions != "function") {
 }
 
 // ES5 15.2.3.11
-if (typeof Object.isSealed != "function") {
+if (!Object.isSealed) {
     Object.isSealed = function isSealed(object) {
         return false;
     };
 }
 
 // ES5 15.2.3.12
-if (typeof Object.isFrozen != "function") {
+if (!Object.isFrozen) {
     Object.isFrozen = function isFrozen(object) {
         return false;
     };
 }
 
 // ES5 15.2.3.13
-if (typeof Object.isExtensible != "function") {
+if (!Object.isExtensible) {
     Object.isExtensible = function isExtensible(object) {
         return true;
     };
@@ -750,7 +750,7 @@ if (typeof Object.isExtensible != "function") {
 
 // ES5 15.2.3.14
 // http://whattheheadsaid.com/2010/10/a-safer-object-keys-compatibility-implementation
-if (typeof Object.keys != "function") {
+if (!Object.keys) {
 
     var hasDontEnumBug = true,
         dontEnums = [
@@ -804,7 +804,7 @@ if (typeof Object.keys != "function") {
 // ES5 15.9.5.43
 // Format a Date object as a string according to a simplified subset of the ISO 8601
 // standard as defined in 15.9.1.15.
-if (typeof Date.prototype.toISOString != "function") {
+if (!Date.prototype.toISOString) {
     Date.prototype.toISOString = function toISOString() {
         var result, length, value;
         if (!isFinite(this))
@@ -835,14 +835,14 @@ if (typeof Date.prototype.toISOString != "function") {
 }
 
 // ES5 15.9.4.4
-if (typeof Date.now != "function") {
+if (!Date.now) {
     Date.now = function now() {
         return new Date().getTime();
     };
 }
 
 // ES5 15.9.5.44
-if (typeof Date.prototype.toJSON != "function") {
+if (!Date.prototype.toJSON) {
     Date.prototype.toJSON = function toJSON(key) {
         // This function provides a String representation of a Date object for
         // use by JSON.stringify (15.12.3). When the toJSON method is called
@@ -993,7 +993,7 @@ if (isNaN(Date.parse("2011-06-15T21:40:05+06:00"))) {
 //
 
 // ES5 15.5.4.20
-if (typeof protoString.trim != "function") {
+if (!protoString.trim) {
     // http://blog.stevenlevithan.com/archives/faster-trim-javascript
     // http://perfectionkills.com/whitespace-deviations/
     var s = "[\x09\x0A\-\x0D\x20\xA0\u1680\u180E\u2000-\u200A\u202F" +

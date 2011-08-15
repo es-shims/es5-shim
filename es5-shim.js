@@ -13,14 +13,10 @@
 
 (function (definition) {
     // RequireJS
-    if (typeof define == "function") {
-        define(function () {
-            definition();
-        });
+    if (typeof define == "function")
+        define(definition);
     // CommonJS and <script>
-    } else {
-        definition();
-    }
+    else definition();
 
 })(function () {
 
@@ -63,7 +59,7 @@ if (!Function.prototype.bind) {
         var target = this;
         // 2. If IsCallable(Target) is false, throw a TypeError exception.
         if (typeof target != "function")
-            return new TypeError();
+            return new TypeError;
         // 3. Let A be a new (possibly empty) internal list of all of the
         //   argument values provided after thisArg (arg1, arg2 etc), in order.
         // XXX slicedArgs will stand in for "A" if used
@@ -199,9 +195,8 @@ if (!Array.prototype.forEach) {
             length = self.length >>> 0;
 
         // If no callback function or if callback is not a callable function
-        if (!fun || !fun.call) {
-            throw new TypeError();
-        }
+        if (typeof fun != "function")
+            throw new TypeError;
 
         while (i < length) {
             if (i in self) {
@@ -221,7 +216,7 @@ if (!Array.prototype.map) {
         var self = Object(this);
         var length = self.length >>> 0;
         if (typeof fun != "function")
-            throw new TypeError();
+            throw new TypeError;
         var result = new Array(length);
         var thisp = arguments[1];
         for (var i = 0; i < length; i++) {
@@ -238,7 +233,7 @@ if (!Array.prototype.filter) {
         var self = Object(this);
         var length = self.length >>> 0;
         if (typeof fun != "function")
-            throw new TypeError();
+            throw new TypeError;
         var result = [];
         var thisp = arguments[1];
         for (var i = 0; i < length; i++)
@@ -252,9 +247,9 @@ if (!Array.prototype.filter) {
 if (!Array.prototype.every) {
     Array.prototype.every = function every(fun /*, thisp */) {
         if (this === void 0 || this === null)
-            throw new TypeError();
+            throw new TypeError;
         if (typeof fun != "function")
-            throw new TypeError();
+            throw new TypeError;
         var self = Object(this);
         var length = self.length >>> 0;
         var thisp = arguments[1];
@@ -271,9 +266,9 @@ if (!Array.prototype.every) {
 if (!Array.prototype.some) {
     Array.prototype.some = function some(fun /*, thisp */) {
         if (this === void 0 || this === null)
-            throw new TypeError();
+            throw new TypeError;
         if (typeof fun != "function")
-            throw new TypeError();
+            throw new TypeError;
         var self = Object(this);
         var length = self.length >>> 0;
         var thisp = arguments[1];
@@ -295,11 +290,11 @@ if (!Array.prototype.reduce) {
         // "Function" instead of IsCallable(fun) as specified in 15.4.4.21 step 4
         // TODO: explain why this decision was made
         if (Object.prototype.toString.call(fun) != "[object Function]")
-            throw new TypeError();
+            throw new TypeError;
 
         // no value to return if no initial value and an empty array
         if (!length && arguments.length == 1)
-            throw new TypeError();
+            throw new TypeError;
 
         var i = 0;
         var result;
@@ -314,7 +309,7 @@ if (!Array.prototype.reduce) {
 
                 // if array contains no values, no initial value to return
                 if (++i >= length)
-                    throw new TypeError();
+                    throw new TypeError;
             } while (true);
         }
 
@@ -337,10 +332,10 @@ if (!Array.prototype.reduceRight) {
         // "Function" instead of IsCallable(fun) as specified in 15.4.4.22 step 4
         // TODO: explain why this decision was made
         if (Object.prototype.toString.call(fun) != "[object Function]")
-            throw new TypeError();
+            throw new TypeError;
         // no value to return if no initial value, empty array
         if (!length && arguments.length == 1)
-            throw new TypeError();
+            throw new TypeError;
 
         var result, i = length - 1;
         if (arguments.length >= 2) {
@@ -354,7 +349,7 @@ if (!Array.prototype.reduceRight) {
 
                 // if array contains no values, no initial value to return
                 if (--i < 0)
-                    throw new TypeError();
+                    throw new TypeError;
             } while (true);
         }
 
@@ -372,7 +367,7 @@ if (!Array.prototype.reduceRight) {
 if (!Array.prototype.indexOf) {
     Array.prototype.indexOf = function indexOf(sought /*, fromIndex */ ) {
         if (this === void 0 || this === null)
-            throw new TypeError();
+            throw new TypeError;
         var self = Object(this);
         var length = self.length >>> 0;
         if (!length)
@@ -395,7 +390,7 @@ if (!Array.prototype.indexOf) {
 if (!Array.prototype.lastIndexOf) {
     Array.prototype.lastIndexOf = function lastIndexOf(sought /*, fromIndex */) {
         if (this === void 0 || this === null)
-            throw new TypeError();
+            throw new TypeError;
         var self = Object(this);
         var length = self.length >>> 0;
         if (!length)
@@ -498,7 +493,7 @@ if (!Object.create) {
                 throw new TypeError("typeof prototype["+(typeof prototype)+"] != 'object'");
             var Type = function () {};
             Type.prototype = prototype;
-            object = new Type();
+            object = new Type;
             // IE has no built-in implementation of `Object.getPrototypeOf`
             // neither `__proto__`, but this manually setting `__proto__` will
             // guarantee that `Object.getPrototypeOf` will work as expected with
@@ -741,7 +736,7 @@ if (!Date.prototype.toISOString) {
 // ES5 15.9.4.4
 if (!Date.now) {
     Date.now = function now() {
-        return new Date().getTime();
+        return (new Date).getTime();
     };
 }
 
@@ -761,7 +756,7 @@ if (!Date.prototype.toJSON) {
         // O with argument "toISOString".
         // 5. If IsCallable(toISO) is false, throw a TypeError exception.
         if (typeof this.toISOString != "function")
-            throw new TypeError();
+            throw new TypeError;
         // 6. Return the result of calling the [[Call]] internal method of
         // toISO with O as the this value and an empty argument list.
         return this.toISOString.call(this);
@@ -803,7 +798,7 @@ if (isNaN(Date.parse("2011-06-15T21:40:05+06:00"))) {
                     length >= 3 ? new NativeDate(Y, M, D) :
                     length >= 2 ? new NativeDate(Y, M) :
                     length >= 1 ? new NativeDate(Y) :
-                                  new NativeDate();
+                                  new NativeDate;
                 // Prevent mixups with unfixed Date object
                 date.constructor = Date;
                 return date;

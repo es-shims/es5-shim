@@ -59,7 +59,7 @@ if (!Function.prototype.bind) {
         var target = this;
         // 2. If IsCallable(Target) is false, throw a TypeError exception.
         if (typeof target != "function")
-            return new TypeError;
+            throw new TypeError;
         // 3. Let A be a new (possibly empty) internal list of all of the
         //   argument values provided after thisArg (arg1, arg2 etc), in order.
         // XXX slicedArgs will stand in for "A" if used

@@ -905,11 +905,11 @@ if (isNaN(Date.parse("2011-06-15T21:40:05+06:00"))) {
 //
 
 // ES5 15.5.4.20
-if (!String.prototype.trim) {
+var s = "[\x09-\x0D\x20\xA0\u1680\u180E\u2000-\u200A\u202F" +
+    "\u205F\u3000\u2028\u2029\uFEFF]";
+if (!String.prototype.trim || !!s.trim()) {
     // http://blog.stevenlevithan.com/archives/faster-trim-javascript
     // http://perfectionkills.com/whitespace-deviations/
-    var s = "[\x09\x0A\-\x0D\x20\xA0\u1680\u180E\u2000-\u200A\u202F" +
-        "\u205F\u3000\u2028\u2029\uFEFF]"
     var trimBeginRegexp = new RegExp("^" + s + s + "*");
     var trimEndRegexp = new RegExp(s + s + "*$");
     String.prototype.trim = function trim() {

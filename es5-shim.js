@@ -315,7 +315,7 @@ if (!Array.prototype.reduce) {
 
         for (; i < length; i++) {
             if (i in self)
-                result = fun.call(null, result, self[i], i, self);
+                result = fun.call(void 0, result, self[i], i, self);
         }
 
         return result;
@@ -355,7 +355,7 @@ if (!Array.prototype.reduceRight) {
 
         do {
             if (i in this)
-                result = fun.call(null, result, self[i], i, self);
+                result = fun.call(void 0, result, self[i], i, self);
         } while (i--);
 
         return result;
@@ -759,7 +759,7 @@ if (!Date.prototype.toJSON) {
             throw new TypeError;
         // 6. Return the result of calling the [[Call]] internal method of
         // toISO with O as the this value and an empty argument list.
-        return this.toISOString.call(this);
+        return this.toISOString();
 
         // NOTE 1 The argument is ignored.
 

@@ -507,8 +507,8 @@ if (!Object.create) {
 }
 
 // ES5 15.2.3.6
-var oldDefineProperty = Object.defineProperty;
-var defineProperty = !!oldDefineProperty;
+var oldDefineProperty = Object.defineProperty,
+    defineProperty = oldDefineProperty;
 if (defineProperty) {
     // detect IE 8's DOM-only implementation of defineProperty;
     var subject = {};

@@ -55,11 +55,7 @@ var protoObject   = {},
     protoString   = "";
 
 var natives =
-    { Function:
-        { call  : protoFunction.call
-        , apply : protoFunction.apply
-        }
-    , Array:
+    { Array:
         { constructor : Array
         , slice       : protoArray.slice
         , splice      : protoArray.splice
@@ -103,20 +99,21 @@ var natives =
         }
     };
 
+var nativeCall = protoFunction.call,
+    nativeApply = protoFunction.apply;
 
-var apply, call, callProp = 'call';
-if (protoFunction.call.call !== protoFunction.call) {
-    do { callProp = '_' + callProp; } while(callProp in protoFunction.call);
-    protoFunction.call[callProp] = protoFunction.call;
-}
+
+var apply, call;
+if (nativeCall.call !== nativeCall)
+    nativeCall.call = nativeCall;
 
 if (typeof protoFunction.bind == "function") {
-    call = protoFunction.call[callProp](protoFunction.bind, protoFunction.call, protoFunction.call);
-    apply = protoFunction.call[callProp](protoFunction.bind, protoFunction.call, protoFunction.apply);
+    call = nativeCall.call(protoFunction.bind, nativeCall, nativeCall);
+    apply = nativeCall.call(protoFunction.bind, nativeCall, nativeApply);
 } else {
     // provide temporary `call` and `apply` functions until we've defined `bind`
     apply = function (fn, context, args) {
-        return protoFunction.call[callProp](protoFunction.apply, fn, context, args);
+        return nativeCall.call(nativeApply, fn, context, args);
     }
     call = function (fn, context) {
         return apply(fn, context, apply(natives.Array.slice, arguments, [2]));
@@ -172,13 +169,17 @@ if (!protoFunction.bind) {
                 //   list boundArgs in the same order followed by the same
                 //   values as the list ExtraArgs in the same order.
 
-                var self = call(natives.Object.create, natives.Object.constructor, target.prototype);
-                var result = apply(
-                    self,
-                    target,
-                    call(natives.Array.concat, args, call(natives.Array.slice, arguments))
+                var self = nativeCall.call(
+                    natives.Object.create, natives.Object.constructor, target.prototype
                 );
-                if (result !== null && call(natives.Object.constructor, null, result) === result)
+                var result = nativeCall.call(
+                    nativeApply, target, self,
+                    nativeCall.call(
+                        natives.Array.concat, args,
+                        nativeCall.call(natives.Array.slice, arguments)
+                    )
+                );
+                if (result !== null && nativeCall.call(natives.Object.constructor, null, result) === result)
                     return result;
                 return self;
 
@@ -202,10 +203,12 @@ if (!protoFunction.bind) {
                 //   as the arguments.
 
                 // equiv: target.call(this, ...boundArgs, ...args)
-                return apply(
-                    that,
-                    target,
-                    call(natives.Array.concat, args, call(natives.Array.slice, arguments))
+                return nativeCall.call(
+                    nativeApply, target, that,
+                    nativeCall.call(
+                        natives.Array.concat, args,
+                        nativeCall.call(natives.Array.slice, arguments)
+                    )
                 );
 
             }
@@ -236,22 +239,21 @@ if (!protoFunction.bind) {
     };
 
 
-    call = protoFunction.bind.call(protoFunction.call, protoFunction.call);
-    apply = protoFunction.bind.call(protoFunction.call, protoFunction.apply);
-    if (callProp != "call") delete protoFunction.call[callProp];
+    call = protoFunction.bind.call(nativeCall, nativeCall);
+    apply = protoFunction.bind.call(nativeCall, nativeApply);
 }
 
 // Shortcut to an often accessed properties, in order to avoid multiple
 // dereference that costs universally.
-var owns = protoFunction.bind(protoFunction.call, protoObject.hasOwnProperty);
+var owns = protoFunction.bind.call(nativeCall, protoObject.hasOwnProperty);
 
 var defineGetter, defineSetter, lookupGetter, lookupSetter, supportsAccessors;
 // If JS engine supports accessors creating shortcuts.
 if ((supportsAccessors = owns(protoObject, '__defineGetter__'))) {
-    defineGetter = protoFunction.bind.call(protoFunction.call, protoObject.__defineGetter__);
-    defineSetter = protoFunction.bind.call(protoFunction.call, protoObject.__defineSetter__);
-    lookupGetter = protoFunction.bind.call(protoFunction.call, protoObject.__lookupGetter__);
-    lookupSetter = protoFunction.bind.call(protoFunction.call, protoObject.__lookupSetter__);
+    defineGetter = protoFunction.bind.call(nativeCall, protoObject.__defineGetter__);
+    defineSetter = protoFunction.bind.call(nativeCall, protoObject.__defineSetter__);
+    lookupGetter = protoFunction.bind.call(nativeCall, protoObject.__lookupGetter__);
+    lookupSetter = protoFunction.bind.call(nativeCall, protoObject.__lookupSetter__);
 }
 
 //

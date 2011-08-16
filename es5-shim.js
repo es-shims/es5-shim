@@ -828,22 +828,22 @@ if (isNaN(Date.parse("2011-06-15T21:40:05+06:00"))) {
         // 15.9.1.15 Date Time String Format. This pattern does not implement
         // extended years ((15.9.1.15.1), as `Date.UTC` cannot parse them.
         var isoDateExpression = new RegExp("^" +
-            "(\d{4})" + // four-digit year capture
-            "(?:-(\d{2})" + // optional month capture
-            "(?:-(\d{2})" + // optional day capture
+            "(\\d{4})" + // four-digit year capture
+            "(?:-(\\d{2})" + // optional month capture
+            "(?:-(\\d{2})" + // optional day capture
             "(?:" + // capture hours:minutes:seconds.milliseconds
-                "T(\d{2})" + // hours capture
-                ":(\d{2})" + // minutes capture
+                "T(\\d{2})" + // hours capture
+                ":(\\d{2})" + // minutes capture
                 "(?:" + // optional :seconds.milliseconds
-                    ":(\d{2})" + // seconds capture
-                    "(?:\.(\d{3}))?" + // milliseconds capture
+                    ":(\\d{2})" + // seconds capture
+                    "(?:\\.(\\d{3}))?" + // milliseconds capture
                 ")?" +
             "(?:" + // capture UTC offset component
                 "Z|" + // UTC capture
                 "(?:" + // offset specifier +/-hours:minutes
                     "([-+])" + // sign capture
-                    "(\d{2})" + // hours offset capture
-                    ":(\d{2})" + // minutes offest capture
+                    "(\\d{2})" + // hours offset capture
+                    ":(\\d{2})" + // minutes offest capture
                 ")" +
             ")?)?)?)?" +
         "$");

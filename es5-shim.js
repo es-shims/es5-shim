@@ -389,7 +389,7 @@ if (!Array.prototype.indexOf) {
         var i = 0;
         if (arguments.length > 1)
             i = toInteger(arguments[1]);
-        // handle negative indicies
+        // handle negative indices
         i = i >= 0 ? i : length - Math.abs(i);
         for (; i < length; i++) {
             if (i in self && self[i] === sought) {
@@ -412,7 +412,7 @@ if (!Array.prototype.lastIndexOf) {
         var i = length - 1;
         if (arguments.length > 1)
             i = toInteger(arguments[1]);
-        // handle negative indicies
+        // handle negative indices
         i = i >= 0 ? i : length - Math.abs(i);
         for (; i >= 0; i--) {
             if (i in self && sought === self[i])

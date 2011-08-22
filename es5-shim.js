@@ -171,7 +171,7 @@ var owns = call.bind(prototypeOfObject.hasOwnProperty);
 
 var defineGetter, defineSetter, lookupGetter, lookupSetter, supportsAccessors;
 // If JS engine supports accessors creating shortcuts.
-if ((supportsAccessors = owns(prototypeOfObject, '__defineGetter__'))) {
+if ((supportsAccessors = owns(prototypeOfObject, "__defineGetter__"))) {
     defineGetter = call.bind(prototypeOfObject.__defineGetter__);
     defineSetter = call.bind(prototypeOfObject.__defineSetter__);
     lookupGetter = call.bind(prototypeOfObject.__lookupGetter__);
@@ -677,13 +677,13 @@ if (!Object.keys) {
 
     var hasDontEnumBug = true,
         dontEnums = [
-            'toString',
-            'toLocaleString',
-            'valueOf',
-            'hasOwnProperty',
-            'isPrototypeOf',
-            'propertyIsEnumerable',
-            'constructor'
+            "toString",
+            "toLocaleString",
+            "valueOf",
+            "hasOwnProperty",
+            "isPrototypeOf",
+            "propertyIsEnumerable",
+            "constructor"
         ],
         dontEnumsLength = dontEnums.length;
 
@@ -742,11 +742,11 @@ if (!Date.prototype.toISOString) {
             value = result[length];
             // pad months, days, hours, minutes, and seconds to have two digits.
             if (value < 10)
-                result[length] = '0' + value;
+                result[length] = "0" + value;
         }
         // pad milliseconds to have three digits.
-        return result.slice(0, 3).join('-') + 'T' + result.slice(3).join(':') + '.' +
-            ('000' + this.getUTCMilliseconds()).slice(-3) + 'Z';
+        return result.slice(0, 3).join("-") + "T" + result.slice(3).join(":") + "." +
+            ("000" + this.getUTCMilliseconds()).slice(-3) + "Z";
     }
 }
 

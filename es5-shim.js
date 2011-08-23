@@ -229,7 +229,7 @@ if (!protoFunction.bind) {
 
 // Shortcut to an often accessed properties, in order to avoid multiple
 // dereference that costs universally.
-var owns = protoFunction.bind.call(nativeCall, protoObject.hasOwnProperty);
+var owns = call(protoFunction.bind, nativeCall, protoObject.hasOwnProperty);
 
 var defineGetter, defineSetter, lookupGetter, lookupSetter, supportsAccessors;
 // If JS engine supports accessors creating shortcuts.

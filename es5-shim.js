@@ -451,7 +451,7 @@ if (!protoArray.indexOf) {
         var i = 0;
         if (arguments.length > 1)
             i = toInteger(arguments[1]);
-        // handle negative indicies
+        // handle negative indices
         i = i >= 0 ? i : length - call(nativeMathAbs, nativeMath, i);
         for (; i < length; i++) {
             if (i in self && self[i] === sought) {
@@ -474,7 +474,7 @@ if (!protoArray.lastIndexOf) {
         var i = length - 1;
         if (arguments.length > 1)
             i = toInteger(arguments[1]);
-        // handle negative indicies
+        // handle negative indices
         i = i >= 0 ? i : length - call(nativeMathAbs, nativeMath, i);
         for (; i >= 0; i--) {
             if (i in self && sought === self[i])
@@ -740,13 +740,13 @@ if (!Object.keys) {
 
     var hasDontEnumBug = true,
         dontEnums = [
-            'toString',
-            'toLocaleString',
-            'valueOf',
-            'hasOwnProperty',
-            'isPrototypeOf',
-            'propertyIsEnumerable',
-            'constructor'
+            "toString",
+            "toLocaleString",
+            "valueOf",
+            "hasOwnProperty",
+            "isPrototypeOf",
+            "propertyIsEnumerable",
+            "constructor"
         ],
         dontEnumsLength = dontEnums.length;
 
@@ -811,7 +811,7 @@ if (!Date.prototype.toISOString) {
             value = result[length];
             // pad months, days, hours, minutes, and seconds to have two digits.
             if (value < 10)
-                result[length] = '0' + value;
+                result[length] = "0" + value;
         }
         // pad milliseconds to have three digits.
         return call(nativeArrayJoin, call(nativeArraySlice, result, 0, 3), '-') +
@@ -900,22 +900,22 @@ if (isNaN(Date.parse("2011-06-15T21:40:05+06:00"))) {
         // 15.9.1.15 Date Time String Format. This pattern does not implement
         // extended years ((15.9.1.15.1), as `Date.UTC` cannot parse them.
         var isoDateExpression = new nativeRegExp("^" +
-            "(\d{4})" + // four-digit year capture
-            "(?:-(\d{2})" + // optional month capture
-            "(?:-(\d{2})" + // optional day capture
+            "(\\d{4})" + // four-digit year capture
+            "(?:-(\\d{2})" + // optional month capture
+            "(?:-(\\d{2})" + // optional day capture
             "(?:" + // capture hours:minutes:seconds.milliseconds
-                "T(\d{2})" + // hours capture
-                ":(\d{2})" + // minutes capture
+                "T(\\d{2})" + // hours capture
+                ":(\\d{2})" + // minutes capture
                 "(?:" + // optional :seconds.milliseconds
-                    ":(\d{2})" + // seconds capture
-                    "(?:\.(\d{3}))?" + // milliseconds capture
+                    ":(\\d{2})" + // seconds capture
+                    "(?:\\.(\\d{3}))?" + // milliseconds capture
                 ")?" +
             "(?:" + // capture UTC offset component
                 "Z|" + // UTC capture
                 "(?:" + // offset specifier +/-hours:minutes
                     "([-+])" + // sign capture
-                    "(\d{2})" + // hours offset capture
-                    ":(\d{2})" + // minutes offest capture
+                    "(\\d{2})" + // hours offset capture
+                    ":(\\d{2})" + // minutes offest capture
                 ")" +
             ")?)?)?)?" +
         "$");
@@ -979,13 +979,13 @@ if (isNaN(Date.parse("2011-06-15T21:40:05+06:00"))) {
 //
 
 // ES5 15.5.4.20
-if (!protoString.trim) {
+var ws = "\x09\x0A\x0B\x0C\x0D\x20\xA0\u1680\u180E\u2000\u2001\u2002\u2003\u2004\u2005\u2006\u2007\u2008\u2009\u200A\u202F\u205F\u3000\u2028\u2029\uFEFF";
+if (!protoString.trim || ws.trim()) {
     // http://blog.stevenlevithan.com/archives/faster-trim-javascript
     // http://perfectionkills.com/whitespace-deviations/
-    var s = "[\x09\x0A\-\x0D\x20\xA0\u1680\u180E\u2000-\u200A\u202F" +
-        "\u205F\u3000\u2028\u2029\uFEFF]"
-    var trimBeginRegexp = new nativeRegExp("^" + s + s + "*");
-    var trimEndRegexp = new nativeRegExp(s + s + "*$");
+    ws = "[" + ws + "]";
+    var trimBeginRegexp = new nativeRegExp("^" + ws + ws + "*");
+    var trimEndRegexp = new nativeRegExp(ws + ws + "*$");
     String.prototype.trim = function trim() {
         return call(nativeStringReplace,
             call(nativeStringReplace,

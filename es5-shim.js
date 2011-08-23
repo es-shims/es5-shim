@@ -234,10 +234,10 @@ var owns = call(protoFunction.bind, nativeCall, protoObject.hasOwnProperty);
 var defineGetter, defineSetter, lookupGetter, lookupSetter, supportsAccessors;
 // If JS engine supports accessors creating shortcuts.
 if ((supportsAccessors = owns(protoObject, '__defineGetter__'))) {
-    defineGetter = protoFunction.bind.call(nativeCall, protoObject.__defineGetter__);
-    defineSetter = protoFunction.bind.call(nativeCall, protoObject.__defineSetter__);
-    lookupGetter = protoFunction.bind.call(nativeCall, protoObject.__lookupGetter__);
-    lookupSetter = protoFunction.bind.call(nativeCall, protoObject.__lookupSetter__);
+    defineGetter = call(protoFunction.bind, nativeCall, protoObject.__defineGetter__);
+    defineSetter = call(protoFunction.bind, nativeCall, protoObject.__defineSetter__);
+    lookupGetter = call(protoFunction.bind, nativeCall, protoObject.__lookupGetter__);
+    lookupSetter = call(protoFunction.bind, nativeCall, protoObject.__lookupSetter__);
 }
 
 //

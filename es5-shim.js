@@ -100,7 +100,7 @@ if (typeof protoFunction.bind == "function") {
         return nativeCall.call(nativeApply, fn, context, args);
     }
     call = function (fn, context) {
-        return apply(fn, context, apply(nativeArraySlice, arguments, [2]));
+        return apply(fn, context, nativeCall.call(nativeArraySlice, arguments, 2));
     };
 }
 

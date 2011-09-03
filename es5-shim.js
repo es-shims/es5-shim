@@ -166,7 +166,7 @@ var call = Function.prototype.call;
 var prototypeOfArray = Array.prototype;
 var prototypeOfObject = Object.prototype;
 var slice = prototypeOfArray.slice;
-var toString = prototypeOfObject.toString;
+var toString = call.bind(prototypeOfObject.toString);
 var owns = call.bind(prototypeOfObject.hasOwnProperty);
 
 var defineGetter, defineSetter, lookupGetter, lookupSetter, supportsAccessors;
@@ -186,21 +186,33 @@ if ((supportsAccessors = owns(prototypeOfObject, "__defineGetter__"))) {
 // ES5 15.4.3.2
 if (!Array.isArray) {
     Array.isArray = function isArray(obj) {
-        return Object.prototype.toString.call(obj) == "[object Array]";
+        return toString(obj) == "[object Array]";
     };
 }
+
+// The IsCallable() check in the Array functions
+// has been replaced with a strict check on the
+// internal class of the object to trap cases where
+// the provided function was actually a regular
+// expression literal, which in V8 and
+// JavaScriptCore is a typeof "function".  Only in
+// V8 are regular expression literals permitted as
+// reduce parameters, so it is desirable in the
+// general case for the shim to match the more
+// strict and common behavior of rejecting regular
+// expressions.
 
 // ES5 15.4.4.18
 // https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/array/foreach
 if (!Array.prototype.forEach) {
     Array.prototype.forEach = function forEach(fun /*, thisp*/) {
-        var self = Object(this),
+        var self = toObject(this),
             thisp = arguments[1],
             i = 0,
             length = self.length >>> 0;
 
         // If no callback function or if callback is not a callable function
-        if (!fun || !fun.call) {
+        if (toString(fun) != "[object Function]") {
             throw new TypeError();
         }
 
@@ -219,12 +231,16 @@ if (!Array.prototype.forEach) {
 // https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Objects/Array/map
 if (!Array.prototype.map) {
     Array.prototype.map = function map(fun /*, thisp*/) {
-        var self = Object(this);
-        var length = self.length >>> 0;
-        if (typeof fun != "function")
+        var self = toObject(this),
+            length = self.length >>> 0,
+            result = Array(length),
+            thisp = arguments[1];
+
+        // If no callback function or if callback is not a callable function
+        if (toString(fun) != "[object Function]") {
             throw new TypeError();
-        var result = new Array(length);
-        var thisp = arguments[1];
+        }
+
         for (var i = 0; i < length; i++) {
             if (i in self)
                 result[i] = fun.call(thisp, self[i], i, self);
@@ -236,15 +252,20 @@ if (!Array.prototype.map) {
 // ES5 15.4.4.20
 if (!Array.prototype.filter) {
     Array.prototype.filter = function filter(fun /*, thisp */) {
-        var self = Object(this);
-        var length = self.length >>> 0;
-        if (typeof fun != "function")
+        var self = toObject(this),
+            length = self.length >>> 0,
+            result = [],
+            thisp = arguments[1];
+
+        // If no callback function or if callback is not a callable function
+        if (toString(fun) != "[object Function]") {
             throw new TypeError();
-        var result = [];
-        var thisp = arguments[1];
-        for (var i = 0; i < length; i++)
+        }
+
+        for (var i = 0; i < length; i++) {
             if (i in self && fun.call(thisp, self[i], i, self))
                 result.push(self[i]);
+        }
         return result;
     };
 }
@@ -252,13 +273,15 @@ if (!Array.prototype.filter) {
 // ES5 15.4.4.16
 if (!Array.prototype.every) {
     Array.prototype.every = function every(fun /*, thisp */) {
-        if (this === void 0 || this === null)
+        var self = toObject(this),
+            length = self.length >>> 0,
+            thisp = arguments[1];
+
+        // If no callback function or if callback is not a callable function
+        if (toString(fun) != "[object Function]") {
             throw new TypeError();
-        if (typeof fun !== "function")
-            throw new TypeError();
-        var self = Object(this);
-        var length = self.length >>> 0;
-        var thisp = arguments[1];
+        }
+
         for (var i = 0; i < length; i++) {
             if (i in self && !fun.call(thisp, self[i], i, self))
                 return false;
@@ -271,13 +294,15 @@ if (!Array.prototype.every) {
 // https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Array/some
 if (!Array.prototype.some) {
     Array.prototype.some = function some(fun /*, thisp */) {
-        if (this === void 0 || this === null)
+        var self = toObject(this),
+            length = self.length >>> 0,
+            thisp = arguments[1];
+
+        // If no callback function or if callback is not a callable function
+        if (toString(fun) != "[object Function]") {
             throw new TypeError();
-        if (typeof fun !== "function")
-            throw new TypeError();
-        var self = Object(this);
-        var length = self.length >>> 0;
-        var thisp = arguments[1];
+        }
+
         for (var i = 0; i < length; i++) {
             if (i in self && fun.call(thisp, self[i], i, self))
                 return true;
@@ -290,24 +315,13 @@ if (!Array.prototype.some) {
 // https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Objects/Array/reduce
 if (!Array.prototype.reduce) {
     Array.prototype.reduce = function reduce(fun /*, initial*/) {
-        var self = Object(this);
-        var length = self.length >>> 0;
-        // Whether to include (... || fun instanceof RegExp)
-        // in the following expression to trap cases where
-        // the provided function was actually a regular
-        // expression literal, which in V8 and
-        // JavaScriptCore is a typeof "function".  Only in
-        // V8 are regular expression literals permitted as
-        // reduce parameters, so it is desirable in the
-        // general case for the shim to match the more
-        // strict and common behavior of rejecting regular
-        // expressions.  However, the only case where the
-        // shim is applied is IE's Trident (and perhaps very
-        // old revisions of other engines).  In Trident,
-        // regular expressions are a typeof "object", so the
-        // following guard alone is sufficient.
-        if (Object.prototype.toString.call(fun) != "[object Function]")
+        var self = toObject(this),
+            length = self.length >>> 0;
+
+        // If no callback function or if callback is not a callable function
+        if (toString(fun) != "[object Function]") {
             throw new TypeError();
+        }
 
         // no value to return if no initial value and an empty array
         if (!length && arguments.length == 1)
@@ -343,10 +357,14 @@ if (!Array.prototype.reduce) {
 // https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Objects/Array/reduceRight
 if (!Array.prototype.reduceRight) {
     Array.prototype.reduceRight = function reduceRight(fun /*, initial*/) {
-        var self = Object(this);
-        var length = self.length >>> 0;
-        if (Object.prototype.toString.call(fun) != "[object Function]")
+        var self = toObject(this),
+            length = self.length >>> 0;
+
+        // If no callback function or if callback is not a callable function
+        if (toString(fun) != "[object Function]") {
             throw new TypeError();
+        }
+
         // no value to return if no initial value, empty array
         if (!length && arguments.length == 1)
             throw new TypeError();
@@ -380,10 +398,8 @@ if (!Array.prototype.reduceRight) {
 // https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Array/indexOf
 if (!Array.prototype.indexOf) {
     Array.prototype.indexOf = function indexOf(sought /*, fromIndex */ ) {
-        if (this === void 0 || this === null)
-            throw new TypeError();
-        var self = Object(this);
-        var length = self.length >>> 0;
+        var self = toObject(this),
+            length = self.length >>> 0;
         if (!length)
             return -1;
         var i = 0;
@@ -397,16 +413,14 @@ if (!Array.prototype.indexOf) {
             }
         }
         return -1;
-    }
+    };
 }
 
 // ES5 15.4.4.15
 if (!Array.prototype.lastIndexOf) {
     Array.prototype.lastIndexOf = function lastIndexOf(sought /*, fromIndex */) {
-        if (this === void 0 || this === null)
-            throw new TypeError();
-        var self = Object(this);
-        var length = self.length >>> 0;
+        var self = toObject(this),
+            length = self.length >>> 0;
         if (!length)
             return -1;
         var i = length - 1;
@@ -932,4 +946,17 @@ var toInteger = function (n) {
     return n;
 };
 
+var prepareString = "a"[0] != "a",
+    // ES5 9.9
+    toObject = function (o) {
+        if (o == null) { // this matches both null and undefined
+            throw new TypeError();
+        }
+        // If the implementation doesn't support by-index access of
+        // string characters (ex. IE < 7), split the string
+        if (prepareString && typeof o == "string" && o) {
+            return o.split("");
+        }
+        return Object(o);
+    };
 });

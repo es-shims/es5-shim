@@ -96,7 +96,10 @@ if (!Function.prototype.bind) {
                 //   list boundArgs in the same order followed by the same
                 //   values as the list ExtraArgs in the same order.
 
-                var self = Object.create(target.prototype);
+                var F = function(){};
+				F.prototype = target.prototype;
+				var self = new F;
+
                 var result = target.apply(
                     self,
                     args.concat(slice.call(arguments))

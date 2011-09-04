@@ -87,32 +87,34 @@ var protoObject   = {},
 var nativeCall  = protoFunction.call,
     nativeApply = protoFunction.apply;
 
-if (nativeCall.call !== nativeCall)
-    nativeCall.call = nativeCall;
-
 var apply, call;
 if (typeof protoFunction.bind == "function") {
+    if (nativeCall.call !== nativeCall) {
+        var diffCallDotCall = true,
+            oldCallDotCall = nativeCall.call;
+        nativeCall.call = nativeCall;
+    }
     call = nativeCall.call(protoFunction.bind, nativeCall, nativeCall);
     apply = nativeCall.call(protoFunction.bind, nativeCall, nativeApply);
+    if (diffCallDotCall)
+        nativeCall.call = oldCallDotCall;
 } else {
-    // provide temporary `call` and `apply` functions until we've defined `bind`
+
+    // if this path is taken, `Function.prototype.call` must have a `call`
+    // property (which may be inherited from `Function.prototype`) that points
+    // to itself, so we should add it as an own property in case it is deleted
+    // from the prototype later on
+    nativeCall.call = nativeCall;
+    call = function (fn, context) {
+        return nativeCall.call(nativeApply, fn, context, nativeCall.call(nativeArraySlice, arguments, 2));
+    };
     apply = function (fn, context, args) {
         return nativeCall.call(nativeApply, fn, context, args);
     }
-    call = function (fn, context) {
-        return apply(fn, context, nativeCall.call(nativeArraySlice, arguments, 2));
-    };
-}
 
-//
-// Function
-// ========
-//
+    // ES-5 15.3.4.5
+    // http://www.ecma-international.org/publications/files/drafts/tc39-2009-025.pdf
 
-// ES-5 15.3.4.5
-// http://www.ecma-international.org/publications/files/drafts/tc39-2009-025.pdf
-
-if (!protoFunction.bind) {
     Function.prototype.bind = function bind(that) { // .length is 1
         // 1. Let Target be the this value.
         var target = this;
@@ -153,17 +155,19 @@ if (!protoFunction.bind) {
                 //   list boundArgs in the same order followed by the same
                 //   values as the list ExtraArgs in the same order.
 
-                var self = nativeCall.call(
-                    nativeObjectCreate, nativeObject, target.prototype
-                );
-                var result = nativeCall.call(
+                var F = function(){};
+                F.prototype = target.prototype;
+                var self = new F;
+
+                // equiv: target.apply(self, [...args, ...arguments])
+                var result = call(
                     nativeApply, target, self,
-                    nativeCall.call(
+                    call(
                         nativeArrayConcat, args,
-                        nativeCall.call(nativeArraySlice, arguments)
+                        call(nativeArraySlice, arguments)
                     )
                 );
-                if (result !== null && nativeCall.call(nativeObject, null, result) === result)
+                if (result !== null && call(nativeObject, null, result) === result)
                     return result;
                 return self;
 
@@ -186,12 +190,12 @@ if (!protoFunction.bind) {
                 //   providing boundThis as the this value and providing args
                 //   as the arguments.
 
-                // equiv: target.call(this, ...boundArgs, ...args)
-                return nativeCall.call(
+                // equiv: target.apply(boundThis, [...boundArgs, ...arguments])
+                return call(
                     nativeApply, target, that,
-                    nativeCall.call(
+                    call(
                         nativeArrayConcat, args,
-                        nativeCall.call(nativeArraySlice, arguments)
+                        call(nativeArraySlice, arguments)
                     )
                 );
 
@@ -221,11 +225,8 @@ if (!protoFunction.bind) {
         // XXX can't delete it in pure-js.
         return bound;
     };
-
-
-    call = protoFunction.bind.call(nativeCall, nativeCall);
-    apply = protoFunction.bind.call(nativeCall, nativeApply);
 }
+
 
 // Shortcut to an often accessed properties, in order to avoid multiple
 // dereference that costs universally.
@@ -1010,5 +1011,6 @@ var toInteger = function (n) {
         n = (n > 0 || -1) * call(nativeMathFloor, nativeMath, call(nativeMathAbs, nativeMath, n));
     return n;
 };
+
 
 });

@@ -110,7 +110,7 @@ if (typeof protoFunction.bind == "function") {
     };
     apply = function (fn, context, args) {
         return nativeCall.call(nativeApply, fn, context, args);
-    }
+    };
 
     // ES-5 15.3.4.5
     // http://www.ecma-international.org/publications/files/drafts/tc39-2009-025.pdf

@@ -670,8 +670,20 @@ if (!Object.isFrozen) {
 // ES5 15.2.3.13
 if (!Object.isExtensible) {
     Object.isExtensible = function isExtensible(object) {
-        return true;
-    };
+	    // 1. If Type(O) is not Object throw a TypeError exception.
+	    if ( typeof object !== object ) {
+	        throw new TypeError( );
+	    }
+	    // 2. Return the Boolean value of the [[Extensible]] internal property of O.
+	    var property = '';
+	    while ( object.hasOwnProperty( property ) ) {
+	        property += '?';
+	    }
+	    object[ property ] = true;
+	    var returnValue = object.hasOwnProperty( property );
+	    delete object[ property ];
+	    return returnValue;
+	};
 }
 
 // ES5 15.2.3.14

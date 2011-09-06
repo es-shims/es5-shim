@@ -189,14 +189,14 @@ if ((supportsAccessors = owns(prototypeOfObject, "__defineGetter__"))) {
 // ES5 15.4.3.2
 if (!Array.isArray) {
     Array.isArray = function isArray(obj) {
-        return Object.prototype.toString.call(obj) == "[object Array]";
+        return prototypeOfObject.toString.call(obj) == "[object Array]";
     };
 }
 
 // ES5 15.4.4.18
 // https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/array/foreach
-if (!Array.prototype.forEach) {
-    Array.prototype.forEach = function forEach(fun /*, thisp*/) {
+if (!prototypeOfArray.forEach) {
+    prototypeOfArray.forEach = function forEach(fun /*, thisp*/) {
         var self = Object(this),
             thisp = arguments[1],
             i = 0,
@@ -220,8 +220,8 @@ if (!Array.prototype.forEach) {
 
 // ES5 15.4.4.19
 // https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Objects/Array/map
-if (!Array.prototype.map) {
-    Array.prototype.map = function map(fun /*, thisp*/) {
+if (!prototypeOfArray.map) {
+    prototypeOfArray.map = function map(fun /*, thisp*/) {
         var self = Object(this);
         var length = self.length >>> 0;
         if (typeof fun != "function")
@@ -237,8 +237,8 @@ if (!Array.prototype.map) {
 }
 
 // ES5 15.4.4.20
-if (!Array.prototype.filter) {
-    Array.prototype.filter = function filter(fun /*, thisp */) {
+if (!prototypeOfArray.filter) {
+    prototypeOfArray.filter = function filter(fun /*, thisp */) {
         var self = Object(this);
         var length = self.length >>> 0;
         if (typeof fun != "function")
@@ -253,8 +253,8 @@ if (!Array.prototype.filter) {
 }
 
 // ES5 15.4.4.16
-if (!Array.prototype.every) {
-    Array.prototype.every = function every(fun /*, thisp */) {
+if (!prototypeOfArray.every) {
+    prototypeOfArray.every = function every(fun /*, thisp */) {
         if (this === void 0 || this === null)
             throw new TypeError();
         if (typeof fun !== "function")
@@ -272,8 +272,8 @@ if (!Array.prototype.every) {
 
 // ES5 15.4.4.17
 // https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Array/some
-if (!Array.prototype.some) {
-    Array.prototype.some = function some(fun /*, thisp */) {
+if (!prototypeOfArray.some) {
+    prototypeOfArray.some = function some(fun /*, thisp */) {
         if (this === void 0 || this === null)
             throw new TypeError();
         if (typeof fun !== "function")
@@ -291,8 +291,8 @@ if (!Array.prototype.some) {
 
 // ES5 15.4.4.21
 // https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Objects/Array/reduce
-if (!Array.prototype.reduce) {
-    Array.prototype.reduce = function reduce(fun /*, initial*/) {
+if (!prototypeOfArray.reduce) {
+    prototypeOfArray.reduce = function reduce(fun /*, initial*/) {
         var self = Object(this);
         var length = self.length >>> 0;
         // Whether to include (... || fun instanceof RegExp)
@@ -309,7 +309,7 @@ if (!Array.prototype.reduce) {
         // old revisions of other engines).  In Trident,
         // regular expressions are a typeof "object", so the
         // following guard alone is sufficient.
-        if (Object.prototype.toString.call(fun) != "[object Function]")
+        if (prototypeOfObject.toString.call(fun) != "[object Function]")
             throw new TypeError();
 
         // no value to return if no initial value and an empty array
@@ -344,11 +344,11 @@ if (!Array.prototype.reduce) {
 
 // ES5 15.4.4.22
 // https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Objects/Array/reduceRight
-if (!Array.prototype.reduceRight) {
-    Array.prototype.reduceRight = function reduceRight(fun /*, initial*/) {
+if (!prototypeOfArray.reduceRight) {
+    prototypeOfArray.reduceRight = function reduceRight(fun /*, initial*/) {
         var self = Object(this);
         var length = self.length >>> 0;
-        if (Object.prototype.toString.call(fun) != "[object Function]")
+        if (prototypeOfObject.toString.call(fun) != "[object Function]")
             throw new TypeError();
         // no value to return if no initial value, empty array
         if (!length && arguments.length == 1)
@@ -381,8 +381,8 @@ if (!Array.prototype.reduceRight) {
 
 // ES5 15.4.4.14
 // https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Array/indexOf
-if (!Array.prototype.indexOf) {
-    Array.prototype.indexOf = function indexOf(sought /*, fromIndex */ ) {
+if (!prototypeOfArray.indexOf) {
+    prototypeOfArray.indexOf = function indexOf(sought /*, fromIndex */ ) {
         if (this === void 0 || this === null)
             throw new TypeError();
         var self = Object(this);
@@ -404,8 +404,8 @@ if (!Array.prototype.indexOf) {
 }
 
 // ES5 15.4.4.15
-if (!Array.prototype.lastIndexOf) {
-    Array.prototype.lastIndexOf = function lastIndexOf(sought /*, fromIndex */) {
+if (!prototypeOfArray.lastIndexOf) {
+    prototypeOfArray.lastIndexOf = function lastIndexOf(sought /*, fromIndex */) {
         if (this === void 0 || this === null)
             throw new TypeError();
         var self = Object(this);

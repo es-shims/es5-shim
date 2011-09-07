@@ -54,6 +54,8 @@ var protoObject   = {},
     protoRegExp   = /./,
     protoString   = "",
     protoDate     = Date.prototype,
+	nativeTypeError      = TypeError,
+	nativeRangeError     = RangeError,
     nativeObject         = Object,
     nativeObjectToString = protoObject.toString,
     nativeObjectCreate   = Object.create,
@@ -122,7 +124,7 @@ if (typeof protoFunction.bind == "function") {
         // XXX this gets pretty close, for all intents and purposes, letting
         // some duck-types slide
         if (typeof target.apply != "function" || typeof target.call != "function")
-            return new TypeError();
+            return new nativeTypeError();
         // 3. Let A be a new (possibly empty) internal list of all of the
         //   argument values provided after thisArg (arg1, arg2 etc), in order.
         // XXX slicedArgs will stand in for "A" if used
@@ -264,7 +266,7 @@ if (!protoArray.forEach) {
 
         // If no callback function or if callback is not a callable function
         if (!fun || !fun.call) {
-            throw new TypeError();
+            throw new nativeTypeError();
         }
 
         while (i < length) {
@@ -285,7 +287,7 @@ if (!protoArray.map) {
         var self = call(nativeObject, null, this),
             length = self.length >>> 0;
         if (typeof fun != "function")
-            throw new TypeError();
+            throw new nativeTypeError();
         var result = new nativeArray(length),
             thisp = arguments[1];
         for (var i = 0; i < length; i++) {
@@ -302,7 +304,7 @@ if (!protoArray.filter) {
         var self = call(nativeObject, null, this),
             length = self.length >>> 0;
         if (typeof fun != "function")
-            throw new TypeError();
+            throw new nativeTypeError();
         var result = [],
             thisp = arguments[1];
         for (var i = 0; i < length; i++)
@@ -316,9 +318,9 @@ if (!protoArray.filter) {
 if (!protoArray.every) {
     Array.prototype.every = function every(fun /*, thisp */) {
         if (this === void 0 || this === null)
-            throw new TypeError();
+            throw new nativeTypeError();
         if (typeof fun !== "function")
-            throw new TypeError();
+            throw new nativeTypeError();
         var self = call(nativeObject, null, this),
             length = self.length >>> 0,
             thisp = arguments[1];
@@ -335,9 +337,9 @@ if (!protoArray.every) {
 if (!protoArray.some) {
     Array.prototype.some = function some(fun /*, thisp */) {
         if (this === void 0 || this === null)
-            throw new TypeError();
+            throw new nativeTypeError();
         if (typeof fun !== "function")
-            throw new TypeError();
+            throw new nativeTypeError();
         var self = call(nativeObject, null, this),
             length = self.length >>> 0,
             thisp = arguments[1];
@@ -370,11 +372,11 @@ if (!protoArray.reduce) {
         // regular expressions are a typeof "object", so the
         // following guard alone is sufficient.
         if (prototypeOfObject.toString.call(fun) != "[object Function]")
-            throw new TypeError();
+            throw new nativeTypeError();
 
         // no value to return if no initial value and an empty array
         if (!length && arguments.length == 1)
-            throw new TypeError();
+            throw new nativeTypeError();
 
         var i = 0;
         var result;
@@ -389,7 +391,7 @@ if (!protoArray.reduce) {
 
                 // if array contains no values, no initial value to return
                 if (++i >= length)
-                    throw new TypeError();
+                    throw new nativeTypeError();
             } while (true);
         }
 
@@ -409,10 +411,10 @@ if (!protoArray.reduceRight) {
         var self = call(nativeObject, null, this),
             length = self.length >>> 0;
         if (call(nativeObjectToString, fun) != "[object Function]")
-            throw new TypeError();
+            throw new nativeTypeError();
         // no value to return if no initial value, empty array
         if (!length && arguments.length == 1)
-            throw new TypeError();
+            throw new nativeTypeError();
 
         var result, i = length - 1;
         if (arguments.length >= 2) {
@@ -426,7 +428,7 @@ if (!protoArray.reduceRight) {
 
                 // if array contains no values, no initial value to return
                 if (--i < 0)
-                    throw new TypeError();
+                    throw new nativeTypeError();
             } while (true);
         }
 
@@ -444,7 +446,7 @@ if (!protoArray.reduceRight) {
 if (!protoArray.indexOf) {
     Array.prototype.indexOf = function indexOf(sought /*, fromIndex */ ) {
         if (this === void 0 || this === null)
-            throw new TypeError();
+            throw new nativeTypeError();
         var self = call(nativeObject, null, this),
             length = self.length >>> 0;
         if (!length)
@@ -467,7 +469,7 @@ if (!protoArray.indexOf) {
 if (!protoArray.lastIndexOf) {
     Array.prototype.lastIndexOf = function lastIndexOf(sought /*, fromIndex */) {
         if (this === void 0 || this === null)
-            throw new TypeError();
+            throw new nativeTypeError();
         var self = call(nativeObject, null, this),
             length = self.length >>> 0;
         if (!length)
@@ -507,7 +509,7 @@ if (!Object.getOwnPropertyDescriptor) {
                          "non-object: ";
     Object.getOwnPropertyDescriptor = function getOwnPropertyDescriptor(object, property) {
         if ((typeof object != "object" && typeof object != "function") || object === null)
-            throw new TypeError(ERR_NON_OBJECT + object);
+            throw new nativeTypeError(ERR_NON_OBJECT + object);
         // If object does not owns property return undefined immediately.
         if (!owns(object, property))
             return undefined;
@@ -567,7 +569,7 @@ if (!Object.create) {
             object = { "__proto__": null };
         } else {
             if (typeof prototype != "object")
-                throw new TypeError("typeof prototype["+(typeof prototype)+"] != 'object'");
+                throw new nativeTypeError("typeof prototype["+(typeof prototype)+"] != 'object'");
             var Type = function () {};
             Type.prototype = prototype;
             object = new Type();
@@ -600,9 +602,9 @@ if (!defineProperty) {
 
     Object.defineProperty = function defineProperty(object, property, descriptor) {
         if (typeof object != "object" && typeof object != "function")
-            throw new TypeError(ERR_NON_OBJECT_TARGET + object);
+            throw new nativeTypeError(ERR_NON_OBJECT_TARGET + object);
         if (typeof descriptor != "object" || descriptor === null)
-            throw new TypeError(ERR_NON_OBJECT_DESCRIPTOR + descriptor);
+            throw new nativeTypeError(ERR_NON_OBJECT_DESCRIPTOR + descriptor);
         // make a valiant attempt to use the real defineProperty
         // for I8's DOM elements.
         if (oldDefineProperty && object.nodeType)
@@ -619,7 +621,7 @@ if (!defineProperty) {
                 !(owns(descriptor, "enumerable") ? descriptor.enumerable : true) ||
                 !(owns(descriptor, "configurable") ? descriptor.configurable : true)
             )
-                throw new RangeError(
+                throw new nativeRangeError(
                     "This implementation of Object.defineProperty does not " +
                     "support configurable, enumerable, or writable."
                 );
@@ -645,7 +647,7 @@ if (!defineProperty) {
             }
         } else {
             if (!supportsAccessors)
-                throw new TypeError(ERR_ACCESSORS_NOT_SUPPORTED);
+                throw new nativeTypeError(ERR_ACCESSORS_NOT_SUPPORTED);
             // If we got that far then getters and setters can be defined !!
             if (owns(descriptor, "get"))
                 defineGetter(object, property, descriptor.get);
@@ -760,7 +762,7 @@ if (!Object.keys) {
             typeof object != "object" && typeof object != "function"
             || object === null
         )
-            throw new TypeError("Object.keys called on a non-object");
+            throw new nativeTypeError("Object.keys called on a non-object");
 
         var keys = [];
         for (var name in object) {
@@ -795,7 +797,7 @@ if (!Date.prototype.toISOString) {
     Date.prototype.toISOString = function toISOString() {
         var result, length, value;
         if (!isFinite(this))
-            throw new RangeError;
+            throw new nativeRangeError;
 
         // the date time string format is specified in 15.9.1.15.
         result =
@@ -846,7 +848,7 @@ if (!Date.prototype.toJSON) {
         // XXX this gets pretty close, for all intents and purposes, letting
         // some duck-types slide
         if (typeof this.toISOString != "function")
-            throw new TypeError();
+            throw new nativeTypeError();
         // 6. Return the result of calling the [[Call]] internal method of
         // toISO with O as the this value and an empty argument list.
         return this.toISOString();

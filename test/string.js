@@ -8,8 +8,8 @@ describe('String.prototype.trim ( )', function () {
 
         var strings = ['Some text', '  Some text', 'Some text  ', '  Some text  '];
 
-        for (var i = 0; i < strings.length; i += 1) {
-            assert(strings[0].trim()).should(eql, 'Some text');
+        for (var i = 0; i < strings.length; ++i) {
+            assert(strings[i].trim()).should(eql, 'Some text');
         }
     });
 });

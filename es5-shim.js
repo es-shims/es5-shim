@@ -92,7 +92,10 @@ if (!Function.prototype.bind) {
                 //   list boundArgs in the same order followed by the same
                 //   values as the list ExtraArgs in the same order.
 
-                var self = Object.create(target.prototype);
+                var F = function(){};
+				F.prototype = target.prototype;
+				var self = new F;
+
                 var result = target.apply(
                     self,
                     args.concat(slice.call(arguments))
@@ -166,7 +169,7 @@ var owns = call.bind(prototypeOfObject.hasOwnProperty);
 
 var defineGetter, defineSetter, lookupGetter, lookupSetter, supportsAccessors;
 // If JS engine supports accessors creating shortcuts.
-if ((supportsAccessors = owns(prototypeOfObject, '__defineGetter__'))) {
+if ((supportsAccessors = owns(prototypeOfObject, "__defineGetter__"))) {
     defineGetter = call.bind(prototypeOfObject.__defineGetter__);
     defineSetter = call.bind(prototypeOfObject.__defineSetter__);
     lookupGetter = call.bind(prototypeOfObject.__lookupGetter__);
@@ -181,14 +184,14 @@ if ((supportsAccessors = owns(prototypeOfObject, '__defineGetter__'))) {
 // ES5 15.4.3.2
 if (!Array.isArray) {
     Array.isArray = function isArray(obj) {
-        return Object.prototype.toString.call(obj) == "[object Array]";
+        return prototypeOfObject.toString.call(obj) == "[object Array]";
     };
 }
 
 // ES5 15.4.4.18
 // https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/array/foreach
-if (!Array.prototype.forEach) {
-    Array.prototype.forEach = function forEach(fun /*, thisp*/) {
+if (!prototypeOfArray.forEach) {
+    prototypeOfArray.forEach = function forEach(fun /*, thisp*/) {
         var self = Object(this),
             thisp = arguments[1],
             i = 0,
@@ -211,8 +214,8 @@ if (!Array.prototype.forEach) {
 
 // ES5 15.4.4.19
 // https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Objects/Array/map
-if (!Array.prototype.map) {
-    Array.prototype.map = function map(fun /*, thisp*/) {
+if (!prototypeOfArray.map) {
+    prototypeOfArray.map = function map(fun /*, thisp*/) {
         var self = Object(this);
         var length = self.length >>> 0;
         if (typeof fun != "function")
@@ -228,8 +231,8 @@ if (!Array.prototype.map) {
 }
 
 // ES5 15.4.4.20
-if (!Array.prototype.filter) {
-    Array.prototype.filter = function filter(fun /*, thisp */) {
+if (!prototypeOfArray.filter) {
+    prototypeOfArray.filter = function filter(fun /*, thisp */) {
         var self = Object(this);
         var length = self.length >>> 0;
         if (typeof fun != "function")
@@ -244,8 +247,8 @@ if (!Array.prototype.filter) {
 }
 
 // ES5 15.4.4.16
-if (!Array.prototype.every) {
-    Array.prototype.every = function every(fun /*, thisp */) {
+if (!prototypeOfArray.every) {
+    prototypeOfArray.every = function every(fun /*, thisp */) {
         if (this === void 0 || this === null)
             throw new TypeError;
         if (typeof fun != "function")
@@ -263,8 +266,8 @@ if (!Array.prototype.every) {
 
 // ES5 15.4.4.17
 // https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Array/some
-if (!Array.prototype.some) {
-    Array.prototype.some = function some(fun /*, thisp */) {
+if (!prototypeOfArray.some) {
+    prototypeOfArray.some = function some(fun /*, thisp */) {
         if (this === void 0 || this === null)
             throw new TypeError;
         if (typeof fun != "function")
@@ -282,14 +285,14 @@ if (!Array.prototype.some) {
 
 // ES5 15.4.4.21
 // https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Objects/Array/reduce
-if (!Array.prototype.reduce) {
-    Array.prototype.reduce = function reduce(fun /*, initial*/) {
+if (!prototypeOfArray.reduce) {
+    prototypeOfArray.reduce = function reduce(fun /*, initial*/) {
         var self = Object(this);
         var length = self.length >>> 0;
         // We diverge from the spec right here by testing that fun.[[Class]] is
         // "Function" instead of IsCallable(fun) as specified in 15.4.4.21 step 4
         // TODO: explain why this decision was made
-        if (Object.prototype.toString.call(fun) != "[object Function]")
+        if (prototypeOfObject.toString.call(fun) != "[object Function]")
             throw new TypeError;
 
         // no value to return if no initial value and an empty array
@@ -324,14 +327,14 @@ if (!Array.prototype.reduce) {
 
 // ES5 15.4.4.22
 // https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Objects/Array/reduceRight
-if (!Array.prototype.reduceRight) {
-    Array.prototype.reduceRight = function reduceRight(fun /*, initial*/) {
+if (!prototypeOfArray.reduceRight) {
+    prototypeOfArray.reduceRight = function reduceRight(fun /*, initial*/) {
         var self = Object(this);
         var length = self.length >>> 0;
         // We diverge from the spec right here by testing that fun.[[Class]] is
         // "Function" instead of IsCallable(fun) as specified in 15.4.4.22 step 4
         // TODO: explain why this decision was made
-        if (Object.prototype.toString.call(fun) != "[object Function]")
+        if (prototypeOfObject.toString.call(fun) != "[object Function]")
             throw new TypeError;
         // no value to return if no initial value, empty array
         if (!length && arguments.length == 1)
@@ -364,8 +367,8 @@ if (!Array.prototype.reduceRight) {
 
 // ES5 15.4.4.14
 // https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Array/indexOf
-if (!Array.prototype.indexOf) {
-    Array.prototype.indexOf = function indexOf(sought /*, fromIndex */ ) {
+if (!prototypeOfArray.indexOf) {
+    prototypeOfArray.indexOf = function indexOf(sought /*, fromIndex */ ) {
         if (this === void 0 || this === null)
             throw new TypeError;
         var self = Object(this);
@@ -375,7 +378,7 @@ if (!Array.prototype.indexOf) {
         var i = 0;
         if (arguments.length > 1)
             i = toInteger(arguments[1]);
-        // handle negative indicies
+        // handle negative indices
         i = i >= 0 ? i : length - Math.abs(i);
         for (; i < length; i++) {
             if (i in self && self[i] === sought) {
@@ -387,8 +390,8 @@ if (!Array.prototype.indexOf) {
 }
 
 // ES5 15.4.4.15
-if (!Array.prototype.lastIndexOf) {
-    Array.prototype.lastIndexOf = function lastIndexOf(sought /*, fromIndex */) {
+if (!prototypeOfArray.lastIndexOf) {
+    prototypeOfArray.lastIndexOf = function lastIndexOf(sought /*, fromIndex */) {
         if (this === void 0 || this === null)
             throw new TypeError;
         var self = Object(this);
@@ -398,7 +401,7 @@ if (!Array.prototype.lastIndexOf) {
         var i = length - 1;
         if (arguments.length > 1)
             i = toInteger(arguments[1]);
-        // handle negative indicies
+        // handle negative indices
         i = i >= 0 ? i : length - Math.abs(i);
         for (; i >= 0; i--) {
             if (i in self && sought === self[i])
@@ -663,13 +666,13 @@ if (!Object.keys) {
 
     var hasDontEnumBug = true,
         dontEnums = [
-            'toString',
-            'toLocaleString',
-            'valueOf',
-            'hasOwnProperty',
-            'isPrototypeOf',
-            'propertyIsEnumerable',
-            'constructor'
+            "toString",
+            "toLocaleString",
+            "valueOf",
+            "hasOwnProperty",
+            "isPrototypeOf",
+            "propertyIsEnumerable",
+            "constructor"
         ],
         dontEnumsLength = dontEnums.length;
 
@@ -725,11 +728,11 @@ if (!Date.prototype.toISOString) {
             value = result[length];
             // pad months, days, hours, minutes, and seconds to have two digits.
             if (value < 10)
-                result[length] = '0' + value;
+                result[length] = "0" + value;
         }
         // pad milliseconds to have three digits.
-        return result.slice(0, 3).join('-') + 'T' + result.slice(3).join(':') + '.' +
-            ('000' + this.getUTCMilliseconds()).slice(-3) + 'Z';
+        return result.slice(0, 3).join("-") + "T" + result.slice(3).join(":") + "." +
+            ("000" + this.getUTCMilliseconds()).slice(-3) + "Z";
     }
 }
 
@@ -809,22 +812,22 @@ if (isNaN(Date.parse("2011-06-15T21:40:05+06:00"))) {
         // 15.9.1.15 Date Time String Format. This pattern does not implement
         // extended years (15.9.1.15.1), as `Date.UTC` cannot parse them.
         var isoDateExpression = new RegExp("^" +
-            "(\d{4})" + // four-digit year capture
-            "(?:-(\d{2})" + // optional month capture
-            "(?:-(\d{2})" + // optional day capture
+            "(\\d{4})" + // four-digit year capture
+            "(?:-(\\d{2})" + // optional month capture
+            "(?:-(\\d{2})" + // optional day capture
             "(?:" + // capture hours:minutes:seconds.milliseconds
-                "T(\d{2})" + // hours capture
-                ":(\d{2})" + // minutes capture
+                "T(\\d{2})" + // hours capture
+                ":(\\d{2})" + // minutes capture
                 "(?:" + // optional :seconds.milliseconds
-                    ":(\d{2})" + // seconds capture
-                    "(?:\.(\d{3}))?" + // milliseconds capture
+                    ":(\\d{2})" + // seconds capture
+                    "(?:\\.(\\d{3}))?" + // milliseconds capture
                 ")?" +
             "(?:" + // capture UTC offset component
                 "Z|" + // UTC capture
                 "(?:" + // offset specifier +/-hours:minutes
                     "([-+])" + // sign capture
-                    "(\d{2})" + // hours offset capture
-                    ":(\d{2})" + // minutes offest capture
+                    "(\\d{2})" + // hours offset capture
+                    ":(\\d{2})" + // minutes offest capture
                 ")" +
             ")?)?)?)?" +
         "$");
@@ -886,13 +889,13 @@ if (isNaN(Date.parse("2011-06-15T21:40:05+06:00"))) {
 //
 
 // ES5 15.5.4.20
-if (!String.prototype.trim) {
+var ws = "\x09\x0A\x0B\x0C\x0D\x20\xA0\u1680\u180E\u2000\u2001\u2002\u2003\u2004\u2005\u2006\u2007\u2008\u2009\u200A\u202F\u205F\u3000\u2028\u2029\uFEFF";
+if (!String.prototype.trim || ws.trim()) {
     // http://blog.stevenlevithan.com/archives/faster-trim-javascript
     // http://perfectionkills.com/whitespace-deviations/
-    var s = "[\x09\x0A\-\x0D\x20\xA0\u1680\u180E\u2000-\u200A\u202F" +
-        "\u205F\u3000\u2028\u2029\uFEFF]"
-    var trimBeginRegexp = new RegExp("^" + s + s + "*");
-    var trimEndRegexp = new RegExp(s + s + "*$");
+    ws = "[" + ws + "]";
+    var trimBeginRegexp = new RegExp("^" + ws + ws + "*"),
+        trimEndRegexp = new RegExp(ws + ws + "*$");
     String.prototype.trim = function trim() {
         return String(this).replace(trimBeginRegexp, "").replace(trimEndRegexp, "");
     };

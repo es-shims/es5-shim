@@ -1,4 +1,3 @@
-
 Provides compatibility shims so that legacy JavaScript
 engines behave as closely as possible to ES5.
 
@@ -144,21 +143,21 @@ SHIMS THAT FAIL SILENTLY
 * Object.seal
 
     Silently fails on all legacy engines.  This should be
-    fine unless you are depending on the safty and security
+    fine unless you are depending on the safety and security
     provisions of this method, which you cannot possibly
     obtain in legacy engines.
 
 * Object.freeze
 
     Silently fails on all legacy engines.  This should be
-    fine unless you are depending on the safty and security
+    fine unless you are depending on the safety and security
     provisions of this method, which you cannot possibly
     obtain in legacy engines.
 
 * Object.preventExtensions
 
     Silently fails on all legacy engines.  This should be
-    fine unless you are depending on the safty and security
+    fine unless you are depending on the safety and security
     provisions of this method, which you cannot possibly
     obtain in legacy engines.
 

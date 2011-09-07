@@ -369,7 +369,7 @@ if (!protoArray.reduce) {
         // old revisions of other engines).  In Trident,
         // regular expressions are a typeof "object", so the
         // following guard alone is sufficient.
-        if (Object.prototype.toString.call(fun) != "[object Function]")
+        if (prototypeOfObject.toString.call(fun) != "[object Function]")
             throw new TypeError();
 
         // no value to return if no initial value and an empty array

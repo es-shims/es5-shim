@@ -52,8 +52,8 @@
 // http://www.ecma-international.org/publications/files/drafts/tc39-2009-025.pdf
 
 if (!Function.prototype.bind) {
-    var slice = [].slice,
-        toString = {}.toString;
+    var slice = Array.prototype.slice,
+        toString = Object.prototype.toString;
     Function.prototype.bind = function bind(that) { // .length is 1
         // 1. Let Target be the this value.
         var target = this;

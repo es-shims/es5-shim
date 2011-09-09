@@ -189,7 +189,7 @@ if ((supportsAccessors = owns(prototypeOfObject, "__defineGetter__"))) {
 // ES5 15.4.3.2
 if (!Array.isArray) {
     Array.isArray = function isArray(obj) {
-        return prototypeOfObject.toString.call(obj) == "[object Array]";
+        return toString.call(obj) == "[object Array]";
     };
 }
 
@@ -309,7 +309,7 @@ if (!prototypeOfArray.reduce) {
         // old revisions of other engines).  In Trident,
         // regular expressions are a typeof "object", so the
         // following guard alone is sufficient.
-        if (prototypeOfObject.toString.call(fun) != "[object Function]")
+        if (toString.call(fun) != "[object Function]")
             throw new TypeError();
 
         // no value to return if no initial value and an empty array
@@ -348,7 +348,7 @@ if (!prototypeOfArray.reduceRight) {
     prototypeOfArray.reduceRight = function reduceRight(fun /*, initial*/) {
         var self = Object(this);
         var length = self.length >>> 0;
-        if (prototypeOfObject.toString.call(fun) != "[object Function]")
+        if (toString.call(fun) != "[object Function]")
             throw new TypeError();
         // no value to return if no initial value, empty array
         if (!length && arguments.length == 1)

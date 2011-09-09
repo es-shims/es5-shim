@@ -97,8 +97,8 @@ if (!Function.prototype.bind) {
                 //   values as the list ExtraArgs in the same order.
 
                 var F = function(){};
-				F.prototype = target.prototype;
-				var self = new F;
+                F.prototype = target.prototype;
+                var self = new F;
 
                 var result = target.apply(
                     self,

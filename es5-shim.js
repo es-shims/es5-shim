@@ -1,4 +1,4 @@
-// vim:set ts=4 sts=4 sw=4 st:
+// vim: ts=4 sts=4 sw=4 expandtab
 // -- kriskowal Kris Kowal Copyright (C) 2009-2010 MIT License
 // -- tlrobinson Tom Robinson Copyright (C) 2009-2010 MIT License (Narwhal Project)
 // -- dantman Daniel Friesen Copyright(C) 2010 XXX No License Specified
@@ -13,16 +13,12 @@
 
 (function (definition) {
     // RequireJS
-    if (typeof define == "function") {
-        define(function () {
-            definition();
-        });
+    if (typeof define == "function")
+        define(definition);
     // CommonJS and <script>
-    } else {
-        definition();
-    }
+    else definition();
 
-})(function (undefined) {
+})(function () {
 
 /**
  * Brings an environment as close to ECMAScript 5 compliance
@@ -56,14 +52,14 @@
 // http://www.ecma-international.org/publications/files/drafts/tc39-2009-025.pdf
 
 if (!Function.prototype.bind) {
+    var slice = Array.prototype.slice,
+        toString = Object.prototype.toString;
     Function.prototype.bind = function bind(that) { // .length is 1
         // 1. Let Target be the this value.
         var target = this;
         // 2. If IsCallable(Target) is false, throw a TypeError exception.
-        // XXX this gets pretty close, for all intents and purposes, letting
-        // some duck-types slide
-        if (typeof target.apply != "function" || typeof target.call != "function")
-            return new TypeError();
+        if (typeof target != "function")
+            throw new TypeError;
         // 3. Let A be a new (possibly empty) internal list of all of the
         //   argument values provided after thisArg (arg1, arg2 etc), in order.
         // XXX slicedArgs will stand in for "A" if used
@@ -136,7 +132,6 @@ if (!Function.prototype.bind) {
             }
 
         };
-
         // XXX bound.length is never writable, so don't even try
         //
         // 16. The length own property of F is given attributes as specified in
@@ -203,9 +198,8 @@ if (!prototypeOfArray.forEach) {
             length = self.length >>> 0;
 
         // If no callback function or if callback is not a callable function
-        if (!fun || !fun.call) {
-            throw new TypeError();
-        }
+        if (typeof fun != "function")
+            throw new TypeError;
 
         while (i < length) {
             if (i in self) {
@@ -225,7 +219,7 @@ if (!prototypeOfArray.map) {
         var self = Object(this);
         var length = self.length >>> 0;
         if (typeof fun != "function")
-            throw new TypeError();
+            throw new TypeError;
         var result = new Array(length);
         var thisp = arguments[1];
         for (var i = 0; i < length; i++) {
@@ -242,7 +236,7 @@ if (!prototypeOfArray.filter) {
         var self = Object(this);
         var length = self.length >>> 0;
         if (typeof fun != "function")
-            throw new TypeError();
+            throw new TypeError;
         var result = [];
         var thisp = arguments[1];
         for (var i = 0; i < length; i++)
@@ -256,9 +250,9 @@ if (!prototypeOfArray.filter) {
 if (!prototypeOfArray.every) {
     prototypeOfArray.every = function every(fun /*, thisp */) {
         if (this === void 0 || this === null)
-            throw new TypeError();
-        if (typeof fun !== "function")
-            throw new TypeError();
+            throw new TypeError;
+        if (typeof fun != "function")
+            throw new TypeError;
         var self = Object(this);
         var length = self.length >>> 0;
         var thisp = arguments[1];
@@ -275,9 +269,9 @@ if (!prototypeOfArray.every) {
 if (!prototypeOfArray.some) {
     prototypeOfArray.some = function some(fun /*, thisp */) {
         if (this === void 0 || this === null)
-            throw new TypeError();
-        if (typeof fun !== "function")
-            throw new TypeError();
+            throw new TypeError;
+        if (typeof fun != "function")
+            throw new TypeError;
         var self = Object(this);
         var length = self.length >>> 0;
         var thisp = arguments[1];
@@ -295,26 +289,15 @@ if (!prototypeOfArray.reduce) {
     prototypeOfArray.reduce = function reduce(fun /*, initial*/) {
         var self = Object(this);
         var length = self.length >>> 0;
-        // Whether to include (... || fun instanceof RegExp)
-        // in the following expression to trap cases where
-        // the provided function was actually a regular
-        // expression literal, which in V8 and
-        // JavaScriptCore is a typeof "function".  Only in
-        // V8 are regular expression literals permitted as
-        // reduce parameters, so it is desirable in the
-        // general case for the shim to match the more
-        // strict and common behavior of rejecting regular
-        // expressions.  However, the only case where the
-        // shim is applied is IE's Trident (and perhaps very
-        // old revisions of other engines).  In Trident,
-        // regular expressions are a typeof "object", so the
-        // following guard alone is sufficient.
+        // We diverge from the spec right here by testing that fun.[[Class]] is
+        // "Function" instead of IsCallable(fun) as specified in 15.4.4.21 step 4
+        // TODO: explain why this decision was made
         if (toString.call(fun) != "[object Function]")
-            throw new TypeError();
+            throw new TypeError;
 
         // no value to return if no initial value and an empty array
         if (!length && arguments.length == 1)
-            throw new TypeError();
+            throw new TypeError;
 
         var i = 0;
         var result;
@@ -329,13 +312,13 @@ if (!prototypeOfArray.reduce) {
 
                 // if array contains no values, no initial value to return
                 if (++i >= length)
-                    throw new TypeError();
+                    throw new TypeError;
             } while (true);
         }
 
         for (; i < length; i++) {
             if (i in self)
-                result = fun.call(null, result, self[i], i, self);
+                result = fun.call(void 0, result, self[i], i, self);
         }
 
         return result;
@@ -348,11 +331,14 @@ if (!prototypeOfArray.reduceRight) {
     prototypeOfArray.reduceRight = function reduceRight(fun /*, initial*/) {
         var self = Object(this);
         var length = self.length >>> 0;
+        // We diverge from the spec right here by testing that fun.[[Class]] is
+        // "Function" instead of IsCallable(fun) as specified in 15.4.4.22 step 4
+        // TODO: explain why this decision was made
         if (toString.call(fun) != "[object Function]")
-            throw new TypeError();
+            throw new TypeError;
         // no value to return if no initial value, empty array
         if (!length && arguments.length == 1)
-            throw new TypeError();
+            throw new TypeError;
 
         var result, i = length - 1;
         if (arguments.length >= 2) {
@@ -366,13 +352,13 @@ if (!prototypeOfArray.reduceRight) {
 
                 // if array contains no values, no initial value to return
                 if (--i < 0)
-                    throw new TypeError();
+                    throw new TypeError;
             } while (true);
         }
 
         do {
             if (i in this)
-                result = fun.call(null, result, self[i], i, self);
+                result = fun.call(void 0, result, self[i], i, self);
         } while (i--);
 
         return result;
@@ -384,7 +370,7 @@ if (!prototypeOfArray.reduceRight) {
 if (!prototypeOfArray.indexOf) {
     prototypeOfArray.indexOf = function indexOf(sought /*, fromIndex */ ) {
         if (this === void 0 || this === null)
-            throw new TypeError();
+            throw new TypeError;
         var self = Object(this);
         var length = self.length >>> 0;
         if (!length)
@@ -407,7 +393,7 @@ if (!prototypeOfArray.indexOf) {
 if (!prototypeOfArray.lastIndexOf) {
     prototypeOfArray.lastIndexOf = function lastIndexOf(sought /*, fromIndex */) {
         if (this === void 0 || this === null)
-            throw new TypeError();
+            throw new TypeError;
         var self = Object(this);
         var length = self.length >>> 0;
         if (!length)
@@ -450,7 +436,7 @@ if (!Object.getOwnPropertyDescriptor) {
             throw new TypeError(ERR_NON_OBJECT + object);
         // If object does not owns property return undefined immediately.
         if (!owns(object, property))
-            return undefined;
+            return;
 
         var descriptor, getter, setter;
 
@@ -510,22 +496,22 @@ if (!Object.create) {
                 throw new TypeError("typeof prototype["+(typeof prototype)+"] != 'object'");
             var Type = function () {};
             Type.prototype = prototype;
-            object = new Type();
+            object = new Type;
             // IE has no built-in implementation of `Object.getPrototypeOf`
             // neither `__proto__`, but this manually setting `__proto__` will
             // guarantee that `Object.getPrototypeOf` will work as expected with
             // objects created using `Object.create`
             object.__proto__ = prototype;
         }
-        if (typeof properties != "undefined")
+        if (properties !== void 0)
             Object.defineProperties(object, properties);
         return object;
     };
 }
 
 // ES5 15.2.3.6
-var oldDefineProperty = Object.defineProperty;
-var defineProperty = !!oldDefineProperty;
+var oldDefineProperty = Object.defineProperty,
+    defineProperty = oldDefineProperty;
 if (defineProperty) {
     // detect IE 8's DOM-only implementation of defineProperty;
     var subject = {};
@@ -539,9 +525,9 @@ if (!defineProperty) {
                                       "on this javascript engine";
 
     Object.defineProperty = function defineProperty(object, property, descriptor) {
-        if (typeof object != "object" && typeof object != "function")
+        if ((typeof object != "object" && typeof object != "function") || object === null)
             throw new TypeError(ERR_NON_OBJECT_TARGET + object);
-        if (typeof descriptor != "object" || descriptor === null)
+        if ((typeof descriptor != "object" && typeof descriptor != "function") || descriptor === null)
             throw new TypeError(ERR_NON_OBJECT_DESCRIPTOR + descriptor);
         // make a valiant attempt to use the real defineProperty
         // for I8's DOM elements.
@@ -695,10 +681,7 @@ if (!Object.keys) {
 
     Object.keys = function keys(object) {
 
-        if (
-            typeof object != "object" && typeof object != "function"
-            || object === null
-        )
+        if ((typeof object != "object" && typeof object != "function") || object === null)
             throw new TypeError("Object.keys called on a non-object");
 
         var keys = [];
@@ -756,7 +739,7 @@ if (!Date.prototype.toISOString) {
 // ES5 15.9.4.4
 if (!Date.now) {
     Date.now = function now() {
-        return new Date().getTime();
+        return (new Date).getTime();
     };
 }
 
@@ -775,13 +758,11 @@ if (!Date.prototype.toJSON) {
         // 4. Let toISO be the result of calling the [[Get]] internal method of
         // O with argument "toISOString".
         // 5. If IsCallable(toISO) is false, throw a TypeError exception.
-        // XXX this gets pretty close, for all intents and purposes, letting
-        // some duck-types slide
-        if (typeof this.toISOString.call != "function")
-            throw new TypeError();
+        if (typeof this.toISOString != "function")
+            throw new TypeError;
         // 6. Return the result of calling the [[Call]] internal method of
         // toISO with O as the this value and an empty argument list.
-        return this.toISOString.call(this);
+        return this.toISOString();
 
         // NOTE 1 The argument is ignored.
 
@@ -820,7 +801,7 @@ if (isNaN(Date.parse("2011-06-15T21:40:05+06:00"))) {
                     length >= 3 ? new NativeDate(Y, M, D) :
                     length >= 2 ? new NativeDate(Y, M) :
                     length >= 1 ? new NativeDate(Y) :
-                                  new NativeDate();
+                                  new NativeDate;
                 // Prevent mixups with unfixed Date object
                 date.constructor = Date;
                 return date;
@@ -829,7 +810,7 @@ if (isNaN(Date.parse("2011-06-15T21:40:05+06:00"))) {
         };
 
         // 15.9.1.15 Date Time String Format. This pattern does not implement
-        // extended years ((15.9.1.15.1), as `Date.UTC` cannot parse them.
+        // extended years (15.9.1.15.1), as `Date.UTC` cannot parse them.
         var isoDateExpression = new RegExp("^" +
             "(\\d{4})" + // four-digit year capture
             "(?:-(\\d{2})" + // optional month capture

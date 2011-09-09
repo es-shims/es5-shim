@@ -462,7 +462,7 @@ if (!protoArray.indexOf) {
             }
         }
         return -1;
-    }
+    };
 }
 
 // ES5 15.4.4.15

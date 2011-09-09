@@ -93,8 +93,8 @@ if (!Function.prototype.bind) {
                 //   values as the list ExtraArgs in the same order.
 
                 var F = function(){};
-				F.prototype = target.prototype;
-				var self = new F;
+                F.prototype = target.prototype;
+                var self = new F;
 
                 var result = target.apply(
                     self,
@@ -184,7 +184,7 @@ if ((supportsAccessors = owns(prototypeOfObject, "__defineGetter__"))) {
 // ES5 15.4.3.2
 if (!Array.isArray) {
     Array.isArray = function isArray(obj) {
-        return prototypeOfObject.toString.call(obj) == "[object Array]";
+        return toString.call(obj) == "[object Array]";
     };
 }
 
@@ -292,7 +292,7 @@ if (!prototypeOfArray.reduce) {
         // We diverge from the spec right here by testing that fun.[[Class]] is
         // "Function" instead of IsCallable(fun) as specified in 15.4.4.21 step 4
         // TODO: explain why this decision was made
-        if (prototypeOfObject.toString.call(fun) != "[object Function]")
+        if (toString.call(fun) != "[object Function]")
             throw new TypeError;
 
         // no value to return if no initial value and an empty array
@@ -334,7 +334,7 @@ if (!prototypeOfArray.reduceRight) {
         // We diverge from the spec right here by testing that fun.[[Class]] is
         // "Function" instead of IsCallable(fun) as specified in 15.4.4.22 step 4
         // TODO: explain why this decision was made
-        if (prototypeOfObject.toString.call(fun) != "[object Function]")
+        if (toString.call(fun) != "[object Function]")
             throw new TypeError;
         // no value to return if no initial value, empty array
         if (!length && arguments.length == 1)
@@ -386,7 +386,7 @@ if (!prototypeOfArray.indexOf) {
             }
         }
         return -1;
-    }
+    };
 }
 
 // ES5 15.4.4.15

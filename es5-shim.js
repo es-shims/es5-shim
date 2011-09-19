@@ -529,8 +529,12 @@ var defineProperty = !!oldDefineProperty;
 if (defineProperty) {
     // detect IE 8's DOM-only implementation of defineProperty;
     var subject = {};
-    Object.defineProperty(subject, "", {});
-    defineProperty = "" in subject;
+    try {
+        Object.defineProperty(subject, "", {});
+        defineProperty = "" in subject;
+    } catch(e) {
+        defineProperty = false;   
+    }
 }
 if (!defineProperty) {
     var ERR_NON_OBJECT_DESCRIPTOR = "Property description must be an object: ";

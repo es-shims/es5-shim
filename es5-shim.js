@@ -850,7 +850,7 @@ if (isNaN(Date.parse("2011-06-15T21:40:05+06:00"))) {
                 "(?:" + // offset specifier +/-hours:minutes
                     "([-+])" + // sign capture
                     "(\\d{2})" + // hours offset capture
-                    ":(\\d{2})" + // minutes offest capture
+                    ":(\\d{2})" + // minutes offset capture
                 ")" +
             ")?)?)?)?" +
         "$");
@@ -882,7 +882,7 @@ if (isNaN(Date.parse("2011-06-15T21:40:05+06:00"))) {
                 }
 
                 // parse the UTC offset component
-                var minutesOffset = +match.pop(), hourOffset = +match.pop(), sign = match.pop();
+                var minuteOffset = +match.pop(), hourOffset = +match.pop(), sign = match.pop();
 
                 // compute the explicit time zone offset if specified
                 var offset = 0;

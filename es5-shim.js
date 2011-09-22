@@ -9,7 +9,7 @@
 // -- bryanforbes Bryan Forbes XXX TODO License or CLA
 // -- killdream Quildreen Motta XXX TODO License or CLA
 // -- michaelficarra Michael Ficarra XXX TODO License or CLA
-// -- sharkbrainguy Gerard Paapu XXX TODO License or CLA
+// -- sharkbrainguy Gerard Paapu Copyright (C) 2011 MIT License
 // -- bbqsrc Brendan Molloy XXX TODO License or CLA
 // -- iwyg XXX TODO License or CLA
 // -- DomenicDenicola Domenic Denicola XXX TODO License or CLA

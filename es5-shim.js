@@ -422,8 +422,11 @@ if (!Object.getPrototypeOf) {
     // http://ejohn.org/blog/objectgetprototypeof/
     // recommended by fschaefer on github
     Object.getPrototypeOf = function getPrototypeOf(object) {
-        return object.__proto__ || object.constructor.prototype;
-        // or undefined if not available in this engine
+        return object.__proto__ || (
+            object.constructor ?
+            object.constructor.prototype :
+            prototypeOfObject
+        );
     };
 }
 
@@ -515,8 +518,12 @@ var oldDefineProperty = Object.defineProperty,
 if (defineProperty) {
     // detect IE 8's DOM-only implementation of defineProperty;
     var subject = {};
-    Object.defineProperty(subject, "", {});
-    defineProperty = "" in subject;
+    try {
+        Object.defineProperty(subject, "", {});
+        defineProperty = "" in subject;
+    } catch(e) {
+        defineProperty = false;   
+    }
 }
 if (!defineProperty) {
     var ERR_NON_OBJECT_DESCRIPTOR = "Property description must be an object: ";
@@ -827,7 +834,7 @@ if (isNaN(Date.parse("2011-06-15T21:40:05+06:00"))) {
                 "(?:" + // offset specifier +/-hours:minutes
                     "([-+])" + // sign capture
                     "(\\d{2})" + // hours offset capture
-                    ":(\\d{2})" + // minutes offest capture
+                    ":(\\d{2})" + // minutes offset capture
                 ")" +
             ")?)?)?)?" +
         "$");
@@ -859,7 +866,7 @@ if (isNaN(Date.parse("2011-06-15T21:40:05+06:00"))) {
                 }
 
                 // parse the UTC offset component
-                var minutesOffset = +match.pop(), hourOffset = +match.pop(), sign = match.pop();
+                var minuteOffset = +match.pop(), hourOffset = +match.pop(), sign = match.pop();
 
                 // compute the explicit time zone offset if specified
                 var offset = 0;

@@ -817,7 +817,7 @@ if (isNaN(Date.parse("2011-06-15T21:40:05+06:00"))) {
     Date = (function(NativeDate) {
 
         // Date.length === 7
-        var Date = function(Y, M, D, h, m, s, ms) {
+        var Date = function Date(Y, M, D, h, m, s, ms) {
             var length = arguments.length;
             if (this instanceof NativeDate) {
                 var date = length == 1 && String(Y) === Y ? // isString(Y)

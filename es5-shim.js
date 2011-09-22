@@ -8,7 +8,7 @@
 // -- kossnocorp Sasha Koss XXX TODO License or CLA
 // -- bryanforbes Bryan Forbes XXX TODO License or CLA
 // -- killdream Quildreen Motta XXX TODO License or CLA
-// -- michaelficarra Michael Ficarra XXX TODO License or CLA
+// -- michaelficarra Michael Ficarra Copyright (C) 2011 3-clause BSD License
 // -- sharkbrainguy Gerard Paapu XXX TODO License or CLA
 // -- bbqsrc Brendan Molloy XXX TODO License or CLA
 // -- iwyg XXX TODO License or CLA

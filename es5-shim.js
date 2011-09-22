@@ -11,13 +11,15 @@
     MIT License. http://github.com/280north/narwhal/blob/master/README.md
 */
 
+// Module systems magic dance
 (function (definition) {
     // RequireJS
-    if (typeof define == "function")
+    if (typeof define == "function") {
         define(definition);
     // CommonJS and <script>
-    else definition();
-
+    } else {
+        definition();
+    }
 })(function () {
 
 /**
@@ -52,14 +54,12 @@
 // http://www.ecma-international.org/publications/files/drafts/tc39-2009-025.pdf
 
 if (!Function.prototype.bind) {
-    var slice = Array.prototype.slice,
-        toString = Object.prototype.toString;
     Function.prototype.bind = function bind(that) { // .length is 1
         // 1. Let Target be the this value.
         var target = this;
         // 2. If IsCallable(Target) is false, throw a TypeError exception.
         if (typeof target != "function")
-            throw new TypeError;
+            throw new TypeError(); // TODO message
         // 3. Let A be a new (possibly empty) internal list of all of the
         //   argument values provided after thisArg (arg1, arg2 etc), in order.
         // XXX slicedArgs will stand in for "A" if used
@@ -164,11 +164,20 @@ var call = Function.prototype.call;
 var prototypeOfArray = Array.prototype;
 var prototypeOfObject = Object.prototype;
 var slice = prototypeOfArray.slice;
-var toString = prototypeOfObject.toString;
+// we *technically* don't have to bind toString because it
+// is a already a free variable when the global object
+// inherits from Object.prototype.  This will no longer be
+// true in modules of ES.next, but we'll be out of work by
+// then anyway.
+//var toString = prototypeOfObject.toString;
 var owns = call.bind(prototypeOfObject.hasOwnProperty);
 
-var defineGetter, defineSetter, lookupGetter, lookupSetter, supportsAccessors;
 // If JS engine supports accessors creating shortcuts.
+var defineGetter;
+var defineSetter;
+var lookupGetter;
+var lookupSetter;
+var supportsAccessors;
 if ((supportsAccessors = owns(prototypeOfObject, "__defineGetter__"))) {
     defineGetter = call.bind(prototypeOfObject.__defineGetter__);
     defineSetter = call.bind(prototypeOfObject.__defineSetter__);
@@ -199,7 +208,7 @@ if (!prototypeOfArray.forEach) {
 
         // If no callback function or if callback is not a callable function
         if (typeof fun != "function")
-            throw new TypeError;
+            throw new TypeError(); // TODO message
 
         while (i < length) {
             if (i in self) {
@@ -219,7 +228,7 @@ if (!prototypeOfArray.map) {
         var self = Object(this);
         var length = self.length >>> 0;
         if (typeof fun != "function")
-            throw new TypeError;
+            throw new TypeError(); // TODO message
         var result = new Array(length);
         var thisp = arguments[1];
         for (var i = 0; i < length; i++) {
@@ -236,7 +245,7 @@ if (!prototypeOfArray.filter) {
         var self = Object(this);
         var length = self.length >>> 0;
         if (typeof fun != "function")
-            throw new TypeError;
+            throw new TypeError(); // TODO message
         var result = [];
         var thisp = arguments[1];
         for (var i = 0; i < length; i++)
@@ -250,9 +259,9 @@ if (!prototypeOfArray.filter) {
 if (!prototypeOfArray.every) {
     prototypeOfArray.every = function every(fun /*, thisp */) {
         if (this === void 0 || this === null)
-            throw new TypeError;
+            throw new TypeError(); // TODO message
         if (typeof fun != "function")
-            throw new TypeError;
+            throw new TypeError(); // TODO message
         var self = Object(this);
         var length = self.length >>> 0;
         var thisp = arguments[1];
@@ -269,9 +278,9 @@ if (!prototypeOfArray.every) {
 if (!prototypeOfArray.some) {
     prototypeOfArray.some = function some(fun /*, thisp */) {
         if (this === void 0 || this === null)
-            throw new TypeError;
+            throw new TypeError(); // TODO message
         if (typeof fun != "function")
-            throw new TypeError;
+            throw new TypeError(); // TODO message
         var self = Object(this);
         var length = self.length >>> 0;
         var thisp = arguments[1];
@@ -289,15 +298,17 @@ if (!prototypeOfArray.reduce) {
     prototypeOfArray.reduce = function reduce(fun /*, initial*/) {
         var self = Object(this);
         var length = self.length >>> 0;
-        // We diverge from the spec right here by testing that fun.[[Class]] is
+        // We diverge from the spec here by testing that fun.[[Class]] is
         // "Function" instead of IsCallable(fun) as specified in 15.4.4.21 step 4
-        // TODO: explain why this decision was made
+        // This is to ensure that shims behave consistently even in the
+        // presence of a bug in minority browsers where regular expressions are
+        // callable.
         if (toString.call(fun) != "[object Function]")
-            throw new TypeError;
+            throw new TypeError(); // TODO message
 
         // no value to return if no initial value and an empty array
         if (!length && arguments.length == 1)
-            throw new TypeError;
+            throw new TypeError(); // TODO message
 
         var i = 0;
         var result;
@@ -312,7 +323,7 @@ if (!prototypeOfArray.reduce) {
 
                 // if array contains no values, no initial value to return
                 if (++i >= length)
-                    throw new TypeError;
+                    throw new TypeError(); // TODO message
             } while (true);
         }
 
@@ -335,10 +346,10 @@ if (!prototypeOfArray.reduceRight) {
         // "Function" instead of IsCallable(fun) as specified in 15.4.4.22 step 4
         // TODO: explain why this decision was made
         if (toString.call(fun) != "[object Function]")
-            throw new TypeError;
+            throw new TypeError(); // TODO message
         // no value to return if no initial value, empty array
         if (!length && arguments.length == 1)
-            throw new TypeError;
+            throw new TypeError(); // TODO message
 
         var result, i = length - 1;
         if (arguments.length >= 2) {
@@ -352,7 +363,7 @@ if (!prototypeOfArray.reduceRight) {
 
                 // if array contains no values, no initial value to return
                 if (--i < 0)
-                    throw new TypeError;
+                    throw new TypeError(); // TODO message
             } while (true);
         }
 
@@ -370,7 +381,7 @@ if (!prototypeOfArray.reduceRight) {
 if (!prototypeOfArray.indexOf) {
     prototypeOfArray.indexOf = function indexOf(sought /*, fromIndex */ ) {
         if (this === void 0 || this === null)
-            throw new TypeError;
+            throw new TypeError(); // TODO message
         var self = Object(this);
         var length = self.length >>> 0;
         if (!length)
@@ -393,7 +404,7 @@ if (!prototypeOfArray.indexOf) {
 if (!prototypeOfArray.lastIndexOf) {
     prototypeOfArray.lastIndexOf = function lastIndexOf(sought /*, fromIndex */) {
         if (this === void 0 || this === null)
-            throw new TypeError;
+            throw new TypeError(); // TODO message
         var self = Object(this);
         var length = self.length >>> 0;
         if (!length)
@@ -499,7 +510,7 @@ if (!Object.create) {
                 throw new TypeError("typeof prototype["+(typeof prototype)+"] != 'object'");
             var Type = function () {};
             Type.prototype = prototype;
-            object = new Type;
+            object = new Type();
             // IE has no built-in implementation of `Object.getPrototypeOf`
             // neither `__proto__`, but this manually setting `__proto__` will
             // guarantee that `Object.getPrototypeOf` will work as expected with
@@ -746,7 +757,7 @@ if (!Date.prototype.toISOString) {
 // ES5 15.9.4.4
 if (!Date.now) {
     Date.now = function now() {
-        return (new Date).getTime();
+        return new Date().getTime();
     };
 }
 
@@ -766,7 +777,7 @@ if (!Date.prototype.toJSON) {
         // O with argument "toISOString".
         // 5. If IsCallable(toISO) is false, throw a TypeError exception.
         if (typeof this.toISOString != "function")
-            throw new TypeError;
+            throw new TypeError(); // TODO message
         // 6. Return the result of calling the [[Call]] internal method of
         // toISO with O as the this value and an empty argument list.
         return this.toISOString();
@@ -808,7 +819,7 @@ if (isNaN(Date.parse("2011-06-15T21:40:05+06:00"))) {
                     length >= 3 ? new NativeDate(Y, M, D) :
                     length >= 2 ? new NativeDate(Y, M) :
                     length >= 1 ? new NativeDate(Y) :
-                                  new NativeDate;
+                                  new NativeDate();
                 // Prevent mixups with unfixed Date object
                 date.constructor = Date;
                 return date;
@@ -896,7 +907,9 @@ if (isNaN(Date.parse("2011-06-15T21:40:05+06:00"))) {
 //
 
 // ES5 15.5.4.20
-var ws = "\x09\x0A\x0B\x0C\x0D\x20\xA0\u1680\u180E\u2000\u2001\u2002\u2003\u2004\u2005\u2006\u2007\u2008\u2009\u200A\u202F\u205F\u3000\u2028\u2029\uFEFF";
+var ws = "\x09\x0A\x0B\x0C\x0D\x20\xA0\u1680\u180E\u2000\u2001\u2002\u2003" +
+    "\u2004\u2005\u2006\u2007\u2008\u2009\u200A\u202F\u205F\u3000\u2028" +
+    "\u2029\uFEFF";
 if (!String.prototype.trim || ws.trim()) {
     // http://blog.stevenlevithan.com/archives/faster-trim-javascript
     // http://perfectionkills.com/whitespace-deviations/

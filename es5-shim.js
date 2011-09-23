@@ -16,7 +16,7 @@
 // -- xavierm02 Montillet Xavier XXX TODO License or CLA
 // -- Raynos Raynos XXX TODO License or CLA
 // -- samsonjs Sami Samhuri XXX TODO License or CLA
-// -- rwldrn Rick Waldron XXX TODO License or CLA
+// -- rwldrn Rick Waldron Copyright (C) 2011 MIT License
 // -- lexer Alexey Zakharov XXX TODO License or CLA
 
 /*!

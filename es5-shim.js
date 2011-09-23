@@ -12,7 +12,7 @@
 // -- sharkbrainguy Gerard Paapu Copyright (C) 2011 MIT License
 // -- bbqsrc Brendan Molloy XXX TODO License or CLA
 // -- iwyg XXX TODO License or CLA
-// -- DomenicDenicola Domenic Denicola XXX TODO License or CLA
+// -- DomenicDenicola Domenic Denicola Copyright (C) 2011 MIT License
 // -- xavierm02 Montillet Xavier XXX TODO License or CLA
 // -- Raynos Raynos XXX TODO License or CLA
 // -- samsonjs Sami Samhuri Copyright (C) 2010 MIT License

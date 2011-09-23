@@ -475,6 +475,7 @@ if (!Array.prototype.lastIndexOf) {
 //
 
 // ES5 15.2.3.2
+// http://es5.github.com/#x15.2.3.2
 if (!Object.getPrototypeOf) {
     // https://github.com/kriskowal/es5-shim/issues#issue/2
     // http://ejohn.org/blog/objectgetprototypeof/
@@ -489,6 +490,7 @@ if (!Object.getPrototypeOf) {
 }
 
 // ES5 15.2.3.3
+// http://es5.github.com/#x15.2.3.3
 if (!Object.getOwnPropertyDescriptor) {
     var ERR_NON_OBJECT = "Object.getOwnPropertyDescriptor called on a " +
                          "non-object: ";
@@ -540,6 +542,7 @@ if (!Object.getOwnPropertyDescriptor) {
 }
 
 // ES5 15.2.3.4
+// http://es5.github.com/#x15.2.3.4
 if (!Object.getOwnPropertyNames) {
     Object.getOwnPropertyNames = function getOwnPropertyNames(object) {
         return Object.keys(object);
@@ -547,6 +550,7 @@ if (!Object.getOwnPropertyNames) {
 }
 
 // ES5 15.2.3.5
+// http://es5.github.com/#x15.2.3.5
 if (!Object.create) {
     Object.create = function create(prototype, properties) {
         var object;
@@ -571,6 +575,7 @@ if (!Object.create) {
 }
 
 // ES5 15.2.3.6
+// http://es5.github.com/#x15.2.3.6
 
 // Patch for WebKit and IE8 standard mode
 // Designed by hax <hax.github.com>
@@ -673,6 +678,7 @@ if (!Object.defineProperty || definePropertyFallback) {
 }
 
 // ES5 15.2.3.7
+// http://es5.github.com/#x15.2.3.7
 if (!Object.defineProperties) {
     Object.defineProperties = function defineProperties(object, properties) {
         for (var property in properties) {
@@ -684,6 +690,7 @@ if (!Object.defineProperties) {
 }
 
 // ES5 15.2.3.8
+// http://es5.github.com/#x15.2.3.8
 if (!Object.seal) {
     Object.seal = function seal(object) {
         // this is misleading and breaks feature-detection, but
@@ -694,6 +701,7 @@ if (!Object.seal) {
 }
 
 // ES5 15.2.3.9
+// http://es5.github.com/#x15.2.3.9
 if (!Object.freeze) {
     Object.freeze = function freeze(object) {
         // this is misleading and breaks feature-detection, but
@@ -719,6 +727,7 @@ try {
 }
 
 // ES5 15.2.3.10
+// http://es5.github.com/#x15.2.3.10
 if (!Object.preventExtensions) {
     Object.preventExtensions = function preventExtensions(object) {
         // this is misleading and breaks feature-detection, but
@@ -729,6 +738,7 @@ if (!Object.preventExtensions) {
 }
 
 // ES5 15.2.3.11
+// http://es5.github.com/#x15.2.3.11
 if (!Object.isSealed) {
     Object.isSealed = function isSealed(object) {
         return false;
@@ -736,6 +746,7 @@ if (!Object.isSealed) {
 }
 
 // ES5 15.2.3.12
+// http://es5.github.com/#x15.2.3.12
 if (!Object.isFrozen) {
     Object.isFrozen = function isFrozen(object) {
         return false;
@@ -743,6 +754,7 @@ if (!Object.isFrozen) {
 }
 
 // ES5 15.2.3.13
+// http://es5.github.com/#x15.2.3.13
 if (!Object.isExtensible) {
     Object.isExtensible = function isExtensible(object) {
         // 1. If Type(O) is not Object throw a TypeError exception.
@@ -762,9 +774,9 @@ if (!Object.isExtensible) {
 }
 
 // ES5 15.2.3.14
-// http://whattheheadsaid.com/2010/10/a-safer-object-keys-compatibility-implementation
+// http://es5.github.com/#x15.2.3.14
 if (!Object.keys) {
-
+    // http://whattheheadsaid.com/2010/10/a-safer-object-keys-compatibility-implementation
     var hasDontEnumBug = true,
         dontEnums = [
             "toString",

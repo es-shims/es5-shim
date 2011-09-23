@@ -199,6 +199,8 @@ if ((supportsAccessors = owns(prototypeOfObject, "__defineGetter__"))) {
 //
 
 // ES5 15.4.3.2
+// http://es5.github.com/#x15.4.3.2
+// https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Array/isArray
 if (!Array.isArray) {
     Array.isArray = function isArray(obj) {
         return toString(obj) == "[object Array]";
@@ -218,7 +220,8 @@ if (!Array.isArray) {
 // expressions.
 
 // ES5 15.4.4.18
-// https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/array/foreach
+// http://es5.github.com/#x15.4.4.18
+// https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/array/forEach
 if (!Array.prototype.forEach) {
     Array.prototype.forEach = function forEach(fun /*, thisp*/) {
         var self = toObject(this),
@@ -243,6 +246,7 @@ if (!Array.prototype.forEach) {
 }
 
 // ES5 15.4.4.19
+// http://es5.github.com/#x15.4.4.19
 // https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Objects/Array/map
 if (!Array.prototype.map) {
     Array.prototype.map = function map(fun /*, thisp*/) {
@@ -265,6 +269,8 @@ if (!Array.prototype.map) {
 }
 
 // ES5 15.4.4.20
+// http://es5.github.com/#x15.4.4.20
+// https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Objects/Array/filter
 if (!Array.prototype.filter) {
     Array.prototype.filter = function filter(fun /*, thisp */) {
         var self = toObject(this),
@@ -286,6 +292,8 @@ if (!Array.prototype.filter) {
 }
 
 // ES5 15.4.4.16
+// http://es5.github.com/#x15.4.4.16
+// https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Array/every
 if (!Array.prototype.every) {
     Array.prototype.every = function every(fun /*, thisp */) {
         var self = toObject(this),
@@ -306,6 +314,7 @@ if (!Array.prototype.every) {
 }
 
 // ES5 15.4.4.17
+// http://es5.github.com/#x15.4.4.17
 // https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Array/some
 if (!Array.prototype.some) {
     Array.prototype.some = function some(fun /*, thisp */) {
@@ -327,6 +336,7 @@ if (!Array.prototype.some) {
 }
 
 // ES5 15.4.4.21
+// http://es5.github.com/#x15.4.4.21
 // https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Objects/Array/reduce
 if (!Array.prototype.reduce) {
     Array.prototype.reduce = function reduce(fun /*, initial*/) {
@@ -369,6 +379,7 @@ if (!Array.prototype.reduce) {
 }
 
 // ES5 15.4.4.22
+// http://es5.github.com/#x15.4.4.22
 // https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Objects/Array/reduceRight
 if (!Array.prototype.reduceRight) {
     Array.prototype.reduceRight = function reduceRight(fun /*, initial*/) {
@@ -410,6 +421,7 @@ if (!Array.prototype.reduceRight) {
 }
 
 // ES5 15.4.4.14
+// http://es5.github.com/#x15.4.4.14
 // https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Array/indexOf
 if (!Array.prototype.indexOf) {
     Array.prototype.indexOf = function indexOf(sought /*, fromIndex */ ) {
@@ -435,6 +447,8 @@ if (!Array.prototype.indexOf) {
 }
 
 // ES5 15.4.4.15
+// http://es5.github.com/#x15.4.4.15
+// https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Array/lastIndexOf
 if (!Array.prototype.lastIndexOf) {
     Array.prototype.lastIndexOf = function lastIndexOf(sought /*, fromIndex */) {
         var self = toObject(this),

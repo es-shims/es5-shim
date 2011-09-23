@@ -824,8 +824,12 @@ if (!Object.keys) {
 //
 
 // ES5 15.9.5.43
-// Format a Date object as a string according to a simplified subset of the ISO 8601
-// standard as defined in 15.9.1.15.
+// http://es5.github.com/#x15.9.5.43
+// This function returns a String value represent the instance in time 
+// represented by this Date object. The format of the String is the Date Time 
+// string format defined in 15.9.1.15. All fields are present in the String. 
+// The time zone is always UTC, denoted by the suffix Z. If the time value of 
+// this object is not a finite Number a RangeError exception is thrown.
 if (!Date.prototype.toISOString) {
     Date.prototype.toISOString = function toISOString() {
         var result, length, value;
@@ -850,6 +854,7 @@ if (!Date.prototype.toISOString) {
 }
 
 // ES5 15.9.4.4
+// http://es5.github.com/#x15.9.4.4
 if (!Date.now) {
     Date.now = function now() {
         return new Date().getTime();
@@ -857,11 +862,13 @@ if (!Date.now) {
 }
 
 // ES5 15.9.5.44
+// http://es5.github.com/#x15.9.5.44
+// This function provides a String representation of a Date object for use by 
+// JSON.stringify (15.12.3).
 if (!Date.prototype.toJSON) {
     Date.prototype.toJSON = function toJSON(key) {
-        // This function provides a String representation of a Date object for
-        // use by JSON.stringify (15.12.3). When the toJSON method is called
-        // with argument key, the following steps are taken:
+        // When the toJSON method is called with argument key, the following 
+        // steps are taken:
 
         // 1.  Let O be the result of calling ToObject, giving it the this
         // value as its argument.
@@ -874,7 +881,7 @@ if (!Date.prototype.toJSON) {
         if (typeof this.toISOString != "function")
             throw new TypeError(); // TODO message
         // 6. Return the result of calling the [[Call]] internal method of
-        // toISO with O as the this value and an empty argument list.
+        //  toISO with O as the this value and an empty argument list.
         return this.toISOString();
 
         // NOTE 1 The argument is ignored.
@@ -888,9 +895,8 @@ if (!Date.prototype.toJSON) {
     };
 }
 
-// 15.9.4.2 Date.parse (string)
-// 15.9.1.15 Date Time String Format
-// Date.parse
+// ES5 15.9.4.2
+// http://es5.github.com/#x15.9.4.2
 // based on work shared by Daniel Friesen (dantman)
 // http://gist.github.com/303249
 if (isNaN(Date.parse("2011-06-15T21:40:05+06:00"))) {

@@ -108,6 +108,11 @@ DUBIOUS SHIMS
     Returns "false" in all legacy engines for all objects,
     which is conveniently guaranteed to be accurate.
 
+* Object.isExtensible
+
+    Works like a charm, by trying very hard to extend the
+    object then redacting the extension.
+
 
 SHIMS THAT FAIL SILENTLY
 ------------------------
@@ -160,9 +165,4 @@ SHIMS THAT FAIL SILENTLY
     fine unless you are depending on the safety and security
     provisions of this method, which you cannot possibly
     obtain in legacy engines.
-
-* /!\ Object.isExtensible
-
-    Returns "true". This is probably wildly innacurate.
-    This method should be reviewed before it's used.
 

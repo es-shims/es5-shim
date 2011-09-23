@@ -39,19 +39,8 @@
  * Brings an environment as close to ECMAScript 5 compliance
  * as is possible with the facilities of erstwhile engines.
  *
- * ES5 Draft
- * http://www.ecma-international.org/publications/files/drafts/tc39-2009-050.pdf
- *
- * NOTE: this is a draft, and as such, the URL is subject to change.  If the
- * link is broken, check in the parent directory for the latest TC39 PDF.
- * http://www.ecma-international.org/publications/files/drafts/
- *
- * Previous ES5 Draft
- * http://www.ecma-international.org/publications/files/drafts/tc39-2009-025.pdf
- * This is a broken link to the previous draft of ES5 on which most of the
- * numbered specification references and quotes herein were taken.  Updating
- * these references and quotes to reflect the new document would be a welcome
- * volunteer project.
+ * Annotated ES5: http://es5.github.com/ (specific links below)
+ * ES5 Spec: http://www.ecma-international.org/publications/files/ECMA-ST/Ecma-262.pdf
  *
  * @module
  */
@@ -64,7 +53,7 @@
 //
 
 // ES-5 15.3.4.5
-// http://www.ecma-international.org/publications/files/drafts/tc39-2009-025.pdf
+// http://es5.github.com/#x15.3.4.5
 
 if (!Function.prototype.bind) {
     Function.prototype.bind = function bind(that) { // .length is 1
@@ -78,23 +67,21 @@ if (!Function.prototype.bind) {
         // XXX slicedArgs will stand in for "A" if used
         var args = slice.call(arguments, 1); // for normal call
         // 4. Let F be a new native ECMAScript object.
-        // 9. Set the [[Prototype]] internal property of F to the standard
+        // 11. Set the [[Prototype]] internal property of F to the standard
         //   built-in Function prototype object as specified in 15.3.3.1.
-        // 10. Set the [[Call]] internal property of F as described in
+        // 12. Set the [[Call]] internal property of F as described in
         //   15.3.4.5.1.
-        // 11. Set the [[Construct]] internal property of F as described in
+        // 13. Set the [[Construct]] internal property of F as described in
         //   15.3.4.5.2.
-        // 12. Set the [[HasInstance]] internal property of F as described in
+        // 14. Set the [[HasInstance]] internal property of F as described in
         //   15.3.4.5.3.
-        // 13. The [[Scope]] internal property of F is unused and need not
-        //   exist.
         var bound = function () {
 
             if (this instanceof bound) {
                 // 15.3.4.5.2 [[Construct]]
                 // When the [[Construct]] internal method of a function object,
                 // F that was created using the bind function is called with a
-                // list of arguments ExtraArgs the following steps are taken:
+                // list of arguments ExtraArgs, the following steps are taken:
                 // 1. Let target be the value of F's [[TargetFunction]]
                 //   internal property.
                 // 2. If target has no [[Construct]] internal method, a
@@ -104,6 +91,8 @@ if (!Function.prototype.bind) {
                 // 4. Let args be a new list containing the same values as the
                 //   list boundArgs in the same order followed by the same
                 //   values as the list ExtraArgs in the same order.
+                // 5. Return the result of calling the [[Construct]] internal 
+                //   method of target providing args as the arguments.
 
                 var F = function(){};
                 F.prototype = target.prototype;
@@ -121,7 +110,7 @@ if (!Function.prototype.bind) {
                 // 15.3.4.5.1 [[Call]]
                 // When the [[Call]] internal method of a function object, F,
                 // which was created using the bind function is called with a
-                // this value and a list of arguments ExtraArgs the following
+                // this value and a list of arguments ExtraArgs, the following
                 // steps are taken:
                 // 1. Let boundArgs be the value of F's [[BoundArgs]] internal
                 //   property.
@@ -129,12 +118,12 @@ if (!Function.prototype.bind) {
                 //   property.
                 // 3. Let target be the value of F's [[TargetFunction]] internal
                 //   property.
-                // 4. Let args be a new list containing the same values as the list
-                //   boundArgs in the same order followed by the same values as
-                //   the list ExtraArgs in the same order. 5.  Return the
-                //   result of calling the [[Call]] internal method of target
-                //   providing boundThis as the this value and providing args
-                //   as the arguments.
+                // 4. Let args be a new list containing the same values as the 
+                //   list boundArgs in the same order followed by the same 
+                //   values as the list ExtraArgs in the same order.
+                // 5. Return the result of calling the [[Call]] internal method 
+                //   of target providing boundThis as the this value and 
+                //   providing args as the arguments.
 
                 // equiv: target.call(this, ...boundArgs, ...args)
                 return target.apply(
@@ -147,24 +136,35 @@ if (!Function.prototype.bind) {
         };
         // XXX bound.length is never writable, so don't even try
         //
-        // 16. The length own property of F is given attributes as specified in
-        //   15.3.5.1.
+        // 15. If the [[Class]] internal property of Target is "Function", then
+        //     a. Let L be the length property of Target minus the length of A.
+        //     b. Set the length own property of F to either 0 or L, whichever is 
+        //       larger.
+        // 16. Else set the length own property of F to 0.
+        // 17. Set the attributes of the length own property of F to the values
+        //   specified in 15.3.5.1.
+
         // TODO
-        // 17. Set the [[Extensible]] internal property of F to true.
+        // 18. Set the [[Extensible]] internal property of F to true.
+        
         // TODO
-        // 18. Call the [[DefineOwnProperty]] internal method of F with
-        //   arguments "caller", PropertyDescriptor {[[Value]]: null,
-        //   [[Writable]]: false, [[Enumerable]]: false, [[Configurable]]:
-        //   false}, and false.
+        // 19. Let thrower be the [[ThrowTypeError]] function Object (13.2.3).
+        // 20. Call the [[DefineOwnProperty]] internal method of F with 
+        //   arguments "caller", PropertyDescriptor {[[Get]]: thrower, [[Set]]:
+        //   thrower, [[Enumerable]]: false, [[Configurable]]: false}, and 
+        //   false.
+        // 21. Call the [[DefineOwnProperty]] internal method of F with 
+        //   arguments "arguments", PropertyDescriptor {[[Get]]: thrower, 
+        //   [[Set]]: thrower, [[Enumerable]]: false, [[Configurable]]: false},
+        //   and false.
+
         // TODO
-        // 19. Call the [[DefineOwnProperty]] internal method of F with
-        //   arguments "arguments", PropertyDescriptor {[[Value]]: null,
-        //   [[Writable]]: false, [[Enumerable]]: false, [[Configurable]]:
-        //   false}, and false.
-        // TODO
-        // NOTE Function objects created using Function.prototype.bind do not
-        // have a prototype property.
-        // XXX can't delete it in pure-js.
+        // NOTE Function objects created using Function.prototype.bind do not 
+        // have a prototype property or the [[Code]], [[FormalParameters]], and
+        // [[Scope]] internal properties.
+        // XXX can't delete prototype in pure-js.
+
+        // 22. Return F.
         return bound;
     };
 }
@@ -199,6 +199,8 @@ if ((supportsAccessors = owns(prototypeOfObject, "__defineGetter__"))) {
 //
 
 // ES5 15.4.3.2
+// http://es5.github.com/#x15.4.3.2
+// https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Array/isArray
 if (!Array.isArray) {
     Array.isArray = function isArray(obj) {
         return toString(obj) == "[object Array]";
@@ -218,7 +220,8 @@ if (!Array.isArray) {
 // expressions.
 
 // ES5 15.4.4.18
-// https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/array/foreach
+// http://es5.github.com/#x15.4.4.18
+// https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/array/forEach
 if (!Array.prototype.forEach) {
     Array.prototype.forEach = function forEach(fun /*, thisp*/) {
         var self = toObject(this),
@@ -243,6 +246,7 @@ if (!Array.prototype.forEach) {
 }
 
 // ES5 15.4.4.19
+// http://es5.github.com/#x15.4.4.19
 // https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Objects/Array/map
 if (!Array.prototype.map) {
     Array.prototype.map = function map(fun /*, thisp*/) {
@@ -265,6 +269,8 @@ if (!Array.prototype.map) {
 }
 
 // ES5 15.4.4.20
+// http://es5.github.com/#x15.4.4.20
+// https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Objects/Array/filter
 if (!Array.prototype.filter) {
     Array.prototype.filter = function filter(fun /*, thisp */) {
         var self = toObject(this),
@@ -286,6 +292,8 @@ if (!Array.prototype.filter) {
 }
 
 // ES5 15.4.4.16
+// http://es5.github.com/#x15.4.4.16
+// https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Array/every
 if (!Array.prototype.every) {
     Array.prototype.every = function every(fun /*, thisp */) {
         var self = toObject(this),
@@ -306,6 +314,7 @@ if (!Array.prototype.every) {
 }
 
 // ES5 15.4.4.17
+// http://es5.github.com/#x15.4.4.17
 // https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Array/some
 if (!Array.prototype.some) {
     Array.prototype.some = function some(fun /*, thisp */) {
@@ -327,6 +336,7 @@ if (!Array.prototype.some) {
 }
 
 // ES5 15.4.4.21
+// http://es5.github.com/#x15.4.4.21
 // https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Objects/Array/reduce
 if (!Array.prototype.reduce) {
     Array.prototype.reduce = function reduce(fun /*, initial*/) {
@@ -369,6 +379,7 @@ if (!Array.prototype.reduce) {
 }
 
 // ES5 15.4.4.22
+// http://es5.github.com/#x15.4.4.22
 // https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Objects/Array/reduceRight
 if (!Array.prototype.reduceRight) {
     Array.prototype.reduceRight = function reduceRight(fun /*, initial*/) {
@@ -410,6 +421,7 @@ if (!Array.prototype.reduceRight) {
 }
 
 // ES5 15.4.4.14
+// http://es5.github.com/#x15.4.4.14
 // https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Array/indexOf
 if (!Array.prototype.indexOf) {
     Array.prototype.indexOf = function indexOf(sought /*, fromIndex */ ) {
@@ -435,6 +447,8 @@ if (!Array.prototype.indexOf) {
 }
 
 // ES5 15.4.4.15
+// http://es5.github.com/#x15.4.4.15
+// https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Array/lastIndexOf
 if (!Array.prototype.lastIndexOf) {
     Array.prototype.lastIndexOf = function lastIndexOf(sought /*, fromIndex */) {
         var self = toObject(this),
@@ -461,6 +475,7 @@ if (!Array.prototype.lastIndexOf) {
 //
 
 // ES5 15.2.3.2
+// http://es5.github.com/#x15.2.3.2
 if (!Object.getPrototypeOf) {
     // https://github.com/kriskowal/es5-shim/issues#issue/2
     // http://ejohn.org/blog/objectgetprototypeof/
@@ -475,6 +490,7 @@ if (!Object.getPrototypeOf) {
 }
 
 // ES5 15.2.3.3
+// http://es5.github.com/#x15.2.3.3
 if (!Object.getOwnPropertyDescriptor) {
     var ERR_NON_OBJECT = "Object.getOwnPropertyDescriptor called on a " +
                          "non-object: ";
@@ -526,6 +542,7 @@ if (!Object.getOwnPropertyDescriptor) {
 }
 
 // ES5 15.2.3.4
+// http://es5.github.com/#x15.2.3.4
 if (!Object.getOwnPropertyNames) {
     Object.getOwnPropertyNames = function getOwnPropertyNames(object) {
         return Object.keys(object);
@@ -533,6 +550,7 @@ if (!Object.getOwnPropertyNames) {
 }
 
 // ES5 15.2.3.5
+// http://es5.github.com/#x15.2.3.5
 if (!Object.create) {
     Object.create = function create(prototype, properties) {
         var object;
@@ -557,6 +575,7 @@ if (!Object.create) {
 }
 
 // ES5 15.2.3.6
+// http://es5.github.com/#x15.2.3.6
 
 // Patch for WebKit and IE8 standard mode
 // Designed by hax <hax.github.com>
@@ -659,6 +678,7 @@ if (!Object.defineProperty || definePropertyFallback) {
 }
 
 // ES5 15.2.3.7
+// http://es5.github.com/#x15.2.3.7
 if (!Object.defineProperties) {
     Object.defineProperties = function defineProperties(object, properties) {
         for (var property in properties) {
@@ -670,6 +690,7 @@ if (!Object.defineProperties) {
 }
 
 // ES5 15.2.3.8
+// http://es5.github.com/#x15.2.3.8
 if (!Object.seal) {
     Object.seal = function seal(object) {
         // this is misleading and breaks feature-detection, but
@@ -680,6 +701,7 @@ if (!Object.seal) {
 }
 
 // ES5 15.2.3.9
+// http://es5.github.com/#x15.2.3.9
 if (!Object.freeze) {
     Object.freeze = function freeze(object) {
         // this is misleading and breaks feature-detection, but
@@ -705,6 +727,7 @@ try {
 }
 
 // ES5 15.2.3.10
+// http://es5.github.com/#x15.2.3.10
 if (!Object.preventExtensions) {
     Object.preventExtensions = function preventExtensions(object) {
         // this is misleading and breaks feature-detection, but
@@ -715,6 +738,7 @@ if (!Object.preventExtensions) {
 }
 
 // ES5 15.2.3.11
+// http://es5.github.com/#x15.2.3.11
 if (!Object.isSealed) {
     Object.isSealed = function isSealed(object) {
         return false;
@@ -722,6 +746,7 @@ if (!Object.isSealed) {
 }
 
 // ES5 15.2.3.12
+// http://es5.github.com/#x15.2.3.12
 if (!Object.isFrozen) {
     Object.isFrozen = function isFrozen(object) {
         return false;
@@ -729,6 +754,7 @@ if (!Object.isFrozen) {
 }
 
 // ES5 15.2.3.13
+// http://es5.github.com/#x15.2.3.13
 if (!Object.isExtensible) {
     Object.isExtensible = function isExtensible(object) {
         // 1. If Type(O) is not Object throw a TypeError exception.
@@ -748,9 +774,9 @@ if (!Object.isExtensible) {
 }
 
 // ES5 15.2.3.14
-// http://whattheheadsaid.com/2010/10/a-safer-object-keys-compatibility-implementation
+// http://es5.github.com/#x15.2.3.14
 if (!Object.keys) {
-
+    // http://whattheheadsaid.com/2010/10/a-safer-object-keys-compatibility-implementation
     var hasDontEnumBug = true,
         dontEnums = [
             "toString",
@@ -798,8 +824,12 @@ if (!Object.keys) {
 //
 
 // ES5 15.9.5.43
-// Format a Date object as a string according to a simplified subset of the ISO 8601
-// standard as defined in 15.9.1.15.
+// http://es5.github.com/#x15.9.5.43
+// This function returns a String value represent the instance in time 
+// represented by this Date object. The format of the String is the Date Time 
+// string format defined in 15.9.1.15. All fields are present in the String. 
+// The time zone is always UTC, denoted by the suffix Z. If the time value of 
+// this object is not a finite Number a RangeError exception is thrown.
 if (!Date.prototype.toISOString) {
     Date.prototype.toISOString = function toISOString() {
         var result, length, value;
@@ -824,6 +854,7 @@ if (!Date.prototype.toISOString) {
 }
 
 // ES5 15.9.4.4
+// http://es5.github.com/#x15.9.4.4
 if (!Date.now) {
     Date.now = function now() {
         return new Date().getTime();
@@ -831,11 +862,13 @@ if (!Date.now) {
 }
 
 // ES5 15.9.5.44
+// http://es5.github.com/#x15.9.5.44
+// This function provides a String representation of a Date object for use by 
+// JSON.stringify (15.12.3).
 if (!Date.prototype.toJSON) {
     Date.prototype.toJSON = function toJSON(key) {
-        // This function provides a String representation of a Date object for
-        // use by JSON.stringify (15.12.3). When the toJSON method is called
-        // with argument key, the following steps are taken:
+        // When the toJSON method is called with argument key, the following 
+        // steps are taken:
 
         // 1.  Let O be the result of calling ToObject, giving it the this
         // value as its argument.
@@ -848,7 +881,7 @@ if (!Date.prototype.toJSON) {
         if (typeof this.toISOString != "function")
             throw new TypeError(); // TODO message
         // 6. Return the result of calling the [[Call]] internal method of
-        // toISO with O as the this value and an empty argument list.
+        //  toISO with O as the this value and an empty argument list.
         return this.toISOString();
 
         // NOTE 1 The argument is ignored.
@@ -862,9 +895,8 @@ if (!Date.prototype.toJSON) {
     };
 }
 
-// 15.9.4.2 Date.parse (string)
-// 15.9.1.15 Date Time String Format
-// Date.parse
+// ES5 15.9.4.2
+// http://es5.github.com/#x15.9.4.2
 // based on work shared by Daniel Friesen (dantman)
 // http://gist.github.com/303249
 if (isNaN(Date.parse("2011-06-15T21:40:05+06:00"))) {
@@ -976,6 +1008,7 @@ if (isNaN(Date.parse("2011-06-15T21:40:05+06:00"))) {
 //
 
 // ES5 15.5.4.20
+// http://es5.github.com/#x15.5.4.20
 var ws = "\x09\x0A\x0B\x0C\x0D\x20\xA0\u1680\u180E\u2000\u2001\u2002\u2003" +
     "\u2004\u2005\u2006\u2007\u2008\u2009\u200A\u202F\u205F\u3000\u2028" +
     "\u2029\uFEFF";
@@ -995,11 +1028,13 @@ if (!String.prototype.trim || ws.trim()) {
 // ======
 //
 
+// ES5 9.4
+// http://es5.github.com/#x9.4
 // http://jsperf.com/to-integer
 var toInteger = function (n) {
     n = +n;
     if (n !== n) // isNaN
-        n = -1;
+        n = 0;
     else if (n !== 0 && n !== (1/0) && n !== -(1/0))
         n = (n > 0 || -1) * Math.floor(Math.abs(n));
     return n;
@@ -1007,6 +1042,7 @@ var toInteger = function (n) {
 
 var prepareString = "a"[0] != "a",
     // ES5 9.9
+    // http://es5.github.com/#x9.9
     toObject = function (o) {
         if (o == null) { // this matches both null and undefined
             throw new TypeError(); // TODO message

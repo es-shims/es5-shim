@@ -7,7 +7,7 @@
 // -- kitcambridge Kit Cambridge Copyright (C) 2011 MIT License
 // -- kossnocorp Sasha Koss XXX TODO License or CLA
 // -- bryanforbes Bryan Forbes XXX TODO License or CLA
-// -- killdream Quildreen Motta XXX TODO License or CLA
+// -- killdream Quildreen Motta Copyright (C) 2011 MIT Licence
 // -- michaelficarra Michael Ficarra Copyright (C) 2011 3-clause BSD License
 // -- sharkbrainguy Gerard Paapu Copyright (C) 2011 MIT License
 // -- bbqsrc Brendan Molloy XXX TODO License or CLA

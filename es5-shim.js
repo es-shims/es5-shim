@@ -26,12 +26,15 @@
 
 // Module systems magic dance
 (function (definition) {
-    // RequireJS
     if (typeof define == "function") {
-        define(definition);
-    // CommonJS and <script>
+    	// RequireJS
+    	define(definition);
+    } else if (typeof module === "object" && module !== null && typeof module.declare === "function") {
+		// CommonJS Modules/2.0
+		module.declare(definition);
     } else {
-        definition();
+    	// CommonJS Modules/1.1 and <script>
+    	definition();
     }
 })(function () {
 

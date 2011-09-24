@@ -10,7 +10,7 @@
 // -- killdream Quildreen Motta Copyright (C) 2011 MIT Licence
 // -- michaelficarra Michael Ficarra Copyright (C) 2011 3-clause BSD License
 // -- sharkbrainguy Gerard Paapu Copyright (C) 2011 MIT License
-// -- bbqsrc Brendan Molloy XXX TODO License or CLA
+// -- bbqsrc Brendan Molloy Copyright (c) public domain/Creative Commons Zero
 // -- iwyg XXX TODO License or CLA
 // -- DomenicDenicola Domenic Denicola Copyright (C) 2011 MIT License
 // -- xavierm02 Montillet Xavier XXX TODO License or CLA

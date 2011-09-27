@@ -436,7 +436,7 @@ if (!Array.prototype.indexOf) {
             i = toInteger(arguments[1]);
 
         // handle negative indices
-        i = i >= 0 ? i : length - Math.abs(i);
+        i = i >= 0 ? i : Math.max(0, length + i);
         for (; i < length; i++) {
             if (i in self && self[i] === sought) {
                 return i;
@@ -458,7 +458,7 @@ if (!Array.prototype.lastIndexOf) {
             return -1;
         var i = length - 1;
         if (arguments.length > 1)
-            i = toInteger(arguments[1]);
+            i = Math.min(i, toInteger(arguments[1]));
         // handle negative indices
         i = i >= 0 ? i : length - Math.abs(i);
         for (; i >= 0; i--) {

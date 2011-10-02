@@ -830,15 +830,17 @@ if (!Object.keys) {
 // string format defined in 15.9.1.15. All fields are present in the String. 
 // The time zone is always UTC, denoted by the suffix Z. If the time value of 
 // this object is not a finite Number a RangeError exception is thrown.
-if (!Date.prototype.toISOString) {
+if (!Date.prototype.toISOString || (new Date(-62198755200000).toISOString().indexOf('-000001') === -1)) {
     Date.prototype.toISOString = function toISOString() {
-        var result, length, value;
+        var result, length, value, year;
         if (!isFinite(this))
             throw new RangeError;
 
         // the date time string format is specified in 15.9.1.15.
-        result = [this.getUTCFullYear(), this.getUTCMonth() + 1, this.getUTCDate(),
+        result = [this.getUTCMonth() + 1, this.getUTCDate(),
             this.getUTCHours(), this.getUTCMinutes(), this.getUTCSeconds()];
+        year = this.getUTCFullYear();
+        year = (year < 0 ? '-' : (year > 9999 ? '+' : '')) + ('00000' + Math.abs(year)).slice(0 <= year && year <= 9999 ? -4 : -6);
 
         length = result.length;
         while (length--) {
@@ -848,7 +850,7 @@ if (!Date.prototype.toISOString) {
                 result[length] = "0" + value;
         }
         // pad milliseconds to have three digits.
-        return result.slice(0, 3).join("-") + "T" + result.slice(3).join(":") + "." +
+        return year + "-" + result.slice(0, 2).join("-") + "T" + result.slice(2).join(":") + "." +
             ("000" + this.getUTCMilliseconds()).slice(-3) + "Z";
     }
 }
@@ -899,7 +901,7 @@ if (!Date.prototype.toJSON) {
 // http://es5.github.com/#x15.9.4.2
 // based on work shared by Daniel Friesen (dantman)
 // http://gist.github.com/303249
-if (isNaN(Date.parse("2011-06-15T21:40:05+06:00"))) {
+if (Date.parse("+275760-09-13T00:00:00.000Z") !== 8.64e15) {alert(1);
     // XXX global assignment won't work in embeddings that use
     // an alternate object for the context.
     Date = (function(NativeDate) {
@@ -928,10 +930,9 @@ if (isNaN(Date.parse("2011-06-15T21:40:05+06:00"))) {
             return NativeDate.apply(this, arguments);
         };
 
-        // 15.9.1.15 Date Time String Format. This pattern does not implement
-        // extended years (15.9.1.15.1), as `Date.UTC` cannot parse them.
+        // 15.9.1.15 Date Time String Format.
         var isoDateExpression = new RegExp("^" +
-            "(\\d{4})" + // four-digit year capture
+            "(\\d{4}|[\+\-]\\d{6})" + // four-digit year capture or sign + 6-digit extended year
             "(?:-(\\d{2})" + // optional month capture
             "(?:-(\\d{2})" + // optional day capture
             "(?:" + // capture hours:minutes:seconds.milliseconds
@@ -990,6 +991,16 @@ if (isNaN(Date.parse("2011-06-15T21:40:05+06:00"))) {
                     // express the provided time zone offset in minutes. The offset is
                     // negative for time zones west of UTC; positive otherwise.
                     offset = (hourOffset * 60 + minuteOffset) * 6e4 * (sign == "+" ? -1 : 1);
+                }
+
+                // Date.UTC for years between 0 and 99 converts year to 1900 + year
+                // The Gregorian calendar has a 400-year cycle, so 
+                // to Date.UTC(year + 400, .... ) - 12622780800000 == Date.UTC(year, ...),
+                // where 12622780800000 - number of milliseconds in Gregorian calendar 400 years
+                var year = +match[0];
+                if (0 <= year && year <= 99) {
+                    match[0] = year + 400;
+                    return NativeDate.UTC.apply(this, match) + offset - 12622780800000;
                 }
 
                 // compute a new UTC date value, accounting for the optional offset

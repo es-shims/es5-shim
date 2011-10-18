@@ -268,6 +268,11 @@ describe('Array.prototype.indexOf ( searchElement [ , fromIndex ] )', function (
         assert(testArray.indexOf(3, 4)).should(eql, 4);
         assert(testArray.indexOf(1, 0)).should(eql, 0);
     });
+
+    it('http://es5.github.com/#x15.4.4.14 step 6', function () {
+        var testArrayLikeObject = {length: 1, '-10000': 'test'};
+        assert([].indexOf.call(testArrayLikeObject, 'test', '-10003')).should(eql, -1);
+    });
 });
 
 describe('Array.prototype.lastIndexOf ( searchElement [ , fromIndex ] )', function () {
@@ -289,5 +294,10 @@ describe('Array.prototype.lastIndexOf ( searchElement [ , fromIndex ] )', functi
 
         assert(testArray.lastIndexOf(3, 4)).should(eql, 4);
         assert(testArray.lastIndexOf(1, 0)).should(eql, 0);
+    });
+
+    it('http://es5.github.com/#x15.4.4.15 step 6', function () {
+        var testArrayLikeObject = {length: 1, '10000': 'test'};
+        assert([].lastIndexOf.call(testArrayLikeObject, 'test', '10003')).should(eql, -1);
     });
 });

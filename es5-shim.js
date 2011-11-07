@@ -177,7 +177,7 @@ var call = Function.prototype.call;
 var prototypeOfArray = Array.prototype;
 var prototypeOfObject = Object.prototype;
 var slice = prototypeOfArray.slice;
-var toString = call.bind(prototypeOfObject.toString);
+var _toString = call.bind(prototypeOfObject.toString);
 var owns = call.bind(prototypeOfObject.hasOwnProperty);
 
 // If JS engine supports accessors creating shortcuts.
@@ -203,7 +203,7 @@ if ((supportsAccessors = owns(prototypeOfObject, "__defineGetter__"))) {
 // https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Array/isArray
 if (!Array.isArray) {
     Array.isArray = function isArray(obj) {
-        return toString(obj) == "[object Array]";
+        return _toString(obj) == "[object Array]";
     };
 }
 
@@ -230,7 +230,7 @@ if (!Array.prototype.forEach) {
             length = self.length >>> 0;
 
         // If no callback function or if callback is not a callable function
-        if (toString(fun) != "[object Function]") {
+        if (_toString(fun) != "[object Function]") {
             throw new TypeError(); // TODO message
         }
 
@@ -256,7 +256,7 @@ if (!Array.prototype.map) {
             thisp = arguments[1];
 
         // If no callback function or if callback is not a callable function
-        if (toString(fun) != "[object Function]") {
+        if (_toString(fun) != "[object Function]") {
             throw new TypeError(); // TODO message
         }
 
@@ -279,7 +279,7 @@ if (!Array.prototype.filter) {
             thisp = arguments[1];
 
         // If no callback function or if callback is not a callable function
-        if (toString(fun) != "[object Function]") {
+        if (_toString(fun) != "[object Function]") {
             throw new TypeError(); // TODO message
         }
 
@@ -301,7 +301,7 @@ if (!Array.prototype.every) {
             thisp = arguments[1];
 
         // If no callback function or if callback is not a callable function
-        if (toString(fun) != "[object Function]") {
+        if (_toString(fun) != "[object Function]") {
             throw new TypeError(); // TODO message
         }
 
@@ -323,7 +323,7 @@ if (!Array.prototype.some) {
             thisp = arguments[1];
 
         // If no callback function or if callback is not a callable function
-        if (toString(fun) != "[object Function]") {
+        if (_toString(fun) != "[object Function]") {
             throw new TypeError(); // TODO message
         }
 
@@ -344,7 +344,7 @@ if (!Array.prototype.reduce) {
             length = self.length >>> 0;
 
         // If no callback function or if callback is not a callable function
-        if (toString(fun) != "[object Function]") {
+        if (_toString(fun) != "[object Function]") {
             throw new TypeError(); // TODO message
         }
 
@@ -387,7 +387,7 @@ if (!Array.prototype.reduceRight) {
             length = self.length >>> 0;
 
         // If no callback function or if callback is not a callable function
-        if (toString(fun) != "[object Function]") {
+        if (_toString(fun) != "[object Function]") {
             throw new TypeError(); // TODO message
         }
 
@@ -779,7 +779,7 @@ if (!Object.keys) {
     // http://whattheheadsaid.com/2010/10/a-safer-object-keys-compatibility-implementation
     var hasDontEnumBug = true,
         dontEnums = [
-            "toString",
+            "_toString",
             "toLocaleString",
             "valueOf",
             "hasOwnProperty",
@@ -789,7 +789,7 @@ if (!Object.keys) {
         ],
         dontEnumsLength = dontEnums.length;
 
-    for (var key in {"toString": null})
+    for (var key in {"_toString": null})
         hasDontEnumBug = false;
 
     Object.keys = function keys(object) {
@@ -901,7 +901,7 @@ if (!Date.prototype.toJSON) {
 // http://es5.github.com/#x15.9.4.2
 // based on work shared by Daniel Friesen (dantman)
 // http://gist.github.com/303249
-if (Date.parse("+275760-09-13T00:00:00.000Z") !== 8.64e15) {
+if (!Date.parse || Date.parse("+275760-09-13T00:00:00.000Z") !== 8.64e15) {
     // XXX global assignment won't work in embeddings that use
     // an alternate object for the context.
     Date = (function(NativeDate) {

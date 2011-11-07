@@ -9,23 +9,18 @@ var HLP = (function() {
             return;*/
         if(!_class.originals)
             _class.originals = {};
-        methods.forEach(function(obj) {
+
+        for (var i = 0, len = methods.length; i < len; i++) {
+            var obj = methods[i];
             _class.originals[obj] = _class[obj];
-            _class[obj] = undefined;
-        });
+            delete _class[obj];
+        }
     };
     return { kill: kill };
 }());
 
 HLP.kill(Function.prototype, [
     'bind'
-]);
-
-HLP.kill(Array.prototype, [
-    'forEach', 'some', 'every', 
-    'indexOf', 'lastIndexOf', 
-    'map', 'filter', 
-    'reduce', 'reduceRight'
 ]);
 
 HLP.kill(Array, [
@@ -42,4 +37,15 @@ HLP.kill(Object, [
 
 HLP.kill(Date, [
     'now', 'parse'
+]);
+
+HLP.kill(Date.prototype, [
+    "toJSON", "toISOString"
+]);
+
+HLP.kill(Array.prototype, [
+    'forEach', 'some', 'every', 
+    'indexOf', 'lastIndexOf', 
+    'map', 'filter', 
+    'reduce', 'reduceRight'
 ]);

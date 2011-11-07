@@ -32,6 +32,14 @@ HLP.kill(Array, [
     'isArray'
 ]);
 
+HLP.kill(String.prototype, [
+    "trim"
+]);
+
 HLP.kill(Object, [
     'keys'
+]);
+
+HLP.kill(Date, [
+    'now', 'parse'
 ]);

@@ -1,3 +1,3 @@
 function implement() {
-	throw 'Not implemented';
+    throw 'Not implemented';
 }

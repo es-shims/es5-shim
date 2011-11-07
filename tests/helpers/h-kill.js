@@ -1,29 +1,51 @@
 // This methods allows the killing of built-in functions,
 // so the shim can take over with that implementation
 var HLP = (function() {
-	"use strict";
-	var kill;
-	
-	kill = function(_class, methods) {
-		/*if(!Array.isArray(methods))
-			return;*/
-		if(!_class.originals)
-			_class.originals = {};
-		methods.forEach(function(obj) {
-			_class.originals[obj] = _class.prototype[obj];
-			_class.prototype[obj] = undefined;
-		});
-	};
-	return { kill: kill };
+    "use strict";
+    var kill;
+    
+    kill = function(_class, methods) {
+        /*if(!Array.isArray(methods))
+            return;*/
+        if(!_class.originals)
+            _class.originals = {};
+
+        for (var i = 0, len = methods.length; i < len; i++) {
+            var obj = methods[i];
+            _class.originals[obj] = _class[obj];
+            delete _class[obj];
+        }
+    };
+    return { kill: kill };
 }());
 
-HLP.kill(Function, [
-	'bind'
+HLP.kill(Function.prototype, [
+    'bind'
 ]);
 
 HLP.kill(Array, [
-	'forEach', 'some', 'every', 
-	'indexOf', 'lastIndexOf', 
-	'map', 'filter', 
-	'reduce', 'reduceRight'
+    'isArray'
+]);
+
+HLP.kill(String.prototype, [
+    "trim"
+]);
+
+HLP.kill(Object, [
+    'keys'
+]);
+
+HLP.kill(Date, [
+    'now', 'parse'
+]);
+
+HLP.kill(Date.prototype, [
+    "toJSON", "toISOString"
+]);
+
+HLP.kill(Array.prototype, [
+    'forEach', 'some', 'every', 
+    'indexOf', 'lastIndexOf', 
+    'map', 'filter', 
+    'reduce', 'reduceRight'
 ]);

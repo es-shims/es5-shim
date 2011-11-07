@@ -779,7 +779,7 @@ if (!Object.keys) {
     // http://whattheheadsaid.com/2010/10/a-safer-object-keys-compatibility-implementation
     var hasDontEnumBug = true,
         dontEnums = [
-            "_toString",
+            "toString",
             "toLocaleString",
             "valueOf",
             "hasOwnProperty",
@@ -789,7 +789,7 @@ if (!Object.keys) {
         ],
         dontEnumsLength = dontEnums.length;
 
-    for (var key in {"_toString": null})
+    for (var key in {"toString": null})
         hasDontEnumBug = false;
 
     Object.keys = function keys(object) {

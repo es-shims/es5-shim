@@ -31,3 +31,7 @@ HLP.kill(Array.prototype, [
 HLP.kill(Array, [
     'isArray'
 ]);
+
+HLP.kill(Object, [
+    'keys'
+]);

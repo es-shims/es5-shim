@@ -1029,4 +1029,33 @@ describe('Array', function() {
 			});
 		});
 	});
+
+	describe('isArray', function () {
+		it('should work for Array', function () {
+			var ret = Array.isArray([]);
+
+			expect(ret).toBe(true);
+		});
+
+		it('should fail for other objects', function () {
+			var objects = [
+				"someString",
+				true,
+				false,
+				42,
+				0,
+				{},
+				Object.create(null),
+				/foo/,
+				arguments,
+				document.getElementsByTagName("div")
+			];
+
+			objects.forEach(function (v) {
+				expect(Array.isArray(v)).toBe(false);
+			});
+		});
+	});
+
+	
 });

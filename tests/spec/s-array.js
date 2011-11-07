@@ -327,6 +327,7 @@ describe('Array', function() {
                 testAL;
             beforeEach(function beforeEach() {
                 testAL = {};
+                testSubject = [2, 3, undefined, true, 'hej', null, 2, false, 0];
                 testSubject.forEach(function (o,i) {
                     testAL[i] = o;
                 });
@@ -487,19 +488,19 @@ describe('Array', function() {
     
     describe('filter', function() {
         var filteredArray,
-            callback;
+            callback = function callback(o, i, arr) {
+                return (
+                    i != 3 && i != 5
+                );
+            };
         
         beforeEach(function() {
             testSubject = [2, 3, undefined, true, 'hej', 3, null, false, 0];
             delete testSubject[1];
             filteredArray = [2, undefined, 'hej', null, false, 0];
-            callback = function callback(o, i, arr) {
-                return (
-                    i != 3 && i != 5
-                );
-            }
         });
         describe('Array object', function() {
+
             it('should call the callback with the proper arguments', function() {
                 var callback = jasmine.createSpy('callback'),
                     arr = ['1'];

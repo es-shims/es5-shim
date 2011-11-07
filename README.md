@@ -35,6 +35,11 @@ SAFE SHIMS
 * Array.prototype.lastIndexOf
 * Array.prototype.map
 * Array.prototype.some
+* Array.prototype.reduce
+* Array.prototype.reduceRight
+* Array.isArray
+* Date.now
+* Date.prototype.toJSON
 * Function.prototype.bind
     * /!\ Caveat: the bound function's length is always 0.
     * /!\ Caveat: the bound function has a prototype property.
@@ -42,18 +47,13 @@ SAFE SHIMS
       from manipulating their ``arguments`` and ``caller`` properties.
     * /!\ Caveat: bound functions don't have checks in ``call`` and
       ``apply`` to avoid executing as a constructor.
+* Object.keys
+* String.prototype.trim
 
 ### Untested ###
 
-* Array.isArray
-* Array.prototype.reduce
-* Array.prototype.reduceRight
-* Object.keys
-* Date.now
 * Date.parse (for ISO parsing)
 * Date.prototype.toISOString
-* Date.prototype.toJSON
-* String.prototype.trim
 
 
 DUBIOUS SHIMS

@@ -13,7 +13,7 @@
 // -- bbqsrc Brendan Molloy (C) 2011 Creative Commons Zero (public domain)
 // -- iwyg XXX TODO License or CLA
 // -- DomenicDenicola Domenic Denicola Copyright (C) 2011 MIT License
-// -- xavierm02 Montillet Xavier XXX TODO License or CLA
+// -- xavierm02 Montillet Xavier Copyright (C) 2011 MIT License
 // -- Raynos Raynos XXX TODO License or CLA
 // -- samsonjs Sami Samhuri Copyright (C) 2010 MIT License
 // -- rwldrn Rick Waldron Copyright (C) 2011 MIT License

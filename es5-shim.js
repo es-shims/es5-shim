@@ -1084,18 +1084,18 @@ var toInteger = function (n) {
     return n;
 };
 
-var prepareString = "a"[0] != "a",
+var prepareString = "a"[0] != "a";
     // ES5 9.9
     // http://es5.github.com/#x9.9
-    toObject = function (o) {
-        if (o == null) { // this matches both null and undefined
-            throw new TypeError(); // TODO message
-        }
-        // If the implementation doesn't support by-index access of
-        // string characters (ex. IE < 9), split the string
-        if (prepareString && typeof o == "string" && o) {
-            return o.split("");
-        }
-        return Object(o);
-    };
+var toObject = function (o) {
+    if (o == null) { // this matches both null and undefined
+        throw new TypeError(); // TODO message
+    }
+    // If the implementation doesn't support by-index access of
+    // string characters (ex. IE < 9), split the string
+    if (prepareString && typeof o == "string" && o) {
+        return o.split("");
+    }
+    return Object(o);
+};
 });

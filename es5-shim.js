@@ -60,8 +60,9 @@ if (!Function.prototype.bind) {
         // 1. Let Target be the this value.
         var target = this;
         // 2. If IsCallable(Target) is false, throw a TypeError exception.
-        if (typeof target != "function")
+        if (typeof target != "function") {
             throw new TypeError(); // TODO message
+        }
         // 3. Let A be a new (possibly empty) internal list of all of the
         //   argument values provided after thisArg (arg1, arg2 etc), in order.
         // XXX slicedArgs will stand in for "A" if used
@@ -91,7 +92,7 @@ if (!Function.prototype.bind) {
                 // 4. Let args be a new list containing the same values as the
                 //   list boundArgs in the same order followed by the same
                 //   values as the list ExtraArgs in the same order.
-                // 5. Return the result of calling the [[Construct]] internal 
+                // 5. Return the result of calling the [[Construct]] internal
                 //   method of target providing args as the arguments.
 
                 var F = function(){};
@@ -102,8 +103,9 @@ if (!Function.prototype.bind) {
                     self,
                     args.concat(slice.call(arguments))
                 );
-                if (result !== null && Object(result) === result)
+                if (Object(result) === result) {
                     return result;
+                }
                 return self;
 
             } else {
@@ -118,11 +120,11 @@ if (!Function.prototype.bind) {
                 //   property.
                 // 3. Let target be the value of F's [[TargetFunction]] internal
                 //   property.
-                // 4. Let args be a new list containing the same values as the 
-                //   list boundArgs in the same order followed by the same 
+                // 4. Let args be a new list containing the same values as the
+                //   list boundArgs in the same order followed by the same
                 //   values as the list ExtraArgs in the same order.
-                // 5. Return the result of calling the [[Call]] internal method 
-                //   of target providing boundThis as the this value and 
+                // 5. Return the result of calling the [[Call]] internal method
+                //   of target providing boundThis as the this value and
                 //   providing args as the arguments.
 
                 // equiv: target.call(this, ...boundArgs, ...args)
@@ -138,7 +140,7 @@ if (!Function.prototype.bind) {
         //
         // 15. If the [[Class]] internal property of Target is "Function", then
         //     a. Let L be the length property of Target minus the length of A.
-        //     b. Set the length own property of F to either 0 or L, whichever is 
+        //     b. Set the length own property of F to either 0 or L, whichever is
         //       larger.
         // 16. Else set the length own property of F to 0.
         // 17. Set the attributes of the length own property of F to the values
@@ -146,20 +148,20 @@ if (!Function.prototype.bind) {
 
         // TODO
         // 18. Set the [[Extensible]] internal property of F to true.
-        
+
         // TODO
         // 19. Let thrower be the [[ThrowTypeError]] function Object (13.2.3).
-        // 20. Call the [[DefineOwnProperty]] internal method of F with 
+        // 20. Call the [[DefineOwnProperty]] internal method of F with
         //   arguments "caller", PropertyDescriptor {[[Get]]: thrower, [[Set]]:
-        //   thrower, [[Enumerable]]: false, [[Configurable]]: false}, and 
+        //   thrower, [[Enumerable]]: false, [[Configurable]]: false}, and
         //   false.
-        // 21. Call the [[DefineOwnProperty]] internal method of F with 
-        //   arguments "arguments", PropertyDescriptor {[[Get]]: thrower, 
+        // 21. Call the [[DefineOwnProperty]] internal method of F with
+        //   arguments "arguments", PropertyDescriptor {[[Get]]: thrower,
         //   [[Set]]: thrower, [[Enumerable]]: false, [[Configurable]]: false},
         //   and false.
 
         // TODO
-        // NOTE Function objects created using Function.prototype.bind do not 
+        // NOTE Function objects created using Function.prototype.bind do not
         // have a prototype property or the [[Code]], [[FormalParameters]], and
         // [[Scope]] internal properties.
         // XXX can't delete prototype in pure-js.
@@ -227,7 +229,7 @@ if (!Array.prototype.forEach) {
     Array.prototype.forEach = function forEach(fun /*, thisp*/) {
         var self = toObject(this),
             thisp = arguments[1],
-            i = 0,
+            i = -1,
             length = self.length >>> 0;
 
         // If no callback function or if callback is not a callable function
@@ -235,13 +237,12 @@ if (!Array.prototype.forEach) {
             throw new TypeError(); // TODO message
         }
 
-        while (i < length) {
+        while (++i < length) {
             if (i in self) {
                 // Invoke the callback function with call, passing arguments:
                 // context, property value, property key, thisArg object context
                 fun.call(thisp, self[i], i, self);
             }
-            i++;
         }
     };
 }
@@ -285,8 +286,9 @@ if (!Array.prototype.filter) {
         }
 
         for (var i = 0; i < length; i++) {
-            if (i in self && fun.call(thisp, self[i], i, self))
+            if (i in self && fun.call(thisp, self[i], i, self)) {
                 result.push(self[i]);
+            }
         }
         return result;
     };
@@ -307,8 +309,9 @@ if (!Array.prototype.every) {
         }
 
         for (var i = 0; i < length; i++) {
-            if (i in self && !fun.call(thisp, self[i], i, self))
+            if (i in self && !fun.call(thisp, self[i], i, self)) {
                 return false;
+            }
         }
         return true;
     };
@@ -329,8 +332,9 @@ if (!Array.prototype.some) {
         }
 
         for (var i = 0; i < length; i++) {
-            if (i in self && fun.call(thisp, self[i], i, self))
+            if (i in self && fun.call(thisp, self[i], i, self)) {
                 return true;
+            }
         }
         return false;
     };
@@ -350,8 +354,9 @@ if (!Array.prototype.reduce) {
         }
 
         // no value to return if no initial value and an empty array
-        if (!length && arguments.length == 1)
+        if (!length && arguments.length == 1) {
             throw new TypeError(); // TODO message
+        }
 
         var i = 0;
         var result;
@@ -365,14 +370,16 @@ if (!Array.prototype.reduce) {
                 }
 
                 // if array contains no values, no initial value to return
-                if (++i >= length)
+                if (++i >= length) {
                     throw new TypeError(); // TODO message
+                }
             } while (true);
         }
 
         for (; i < length; i++) {
-            if (i in self)
+            if (i in self) {
                 result = fun.call(void 0, result, self[i], i, self);
+            }
         }
 
         return result;
@@ -393,8 +400,9 @@ if (!Array.prototype.reduceRight) {
         }
 
         // no value to return if no initial value, empty array
-        if (!length && arguments.length == 1)
+        if (!length && arguments.length == 1) {
             throw new TypeError(); // TODO message
+        }
 
         var result, i = length - 1;
         if (arguments.length >= 2) {
@@ -407,14 +415,16 @@ if (!Array.prototype.reduceRight) {
                 }
 
                 // if array contains no values, no initial value to return
-                if (--i < 0)
+                if (--i < 0) {
                     throw new TypeError(); // TODO message
+                }
             } while (true);
         }
 
         do {
-            if (i in this)
+            if (i in this) {
                 result = fun.call(void 0, result, self[i], i, self);
+            }
         } while (i--);
 
         return result;
@@ -429,12 +439,14 @@ if (!Array.prototype.indexOf) {
         var self = toObject(this),
             length = self.length >>> 0;
 
-        if (!length)
+        if (!length) {
             return -1;
+        }
 
         var i = 0;
-        if (arguments.length > 1)
+        if (arguments.length > 1) {
             i = toInteger(arguments[1]);
+        }
 
         // handle negative indices
         i = i >= 0 ? i : Math.max(0, length + i);
@@ -455,16 +467,19 @@ if (!Array.prototype.lastIndexOf) {
         var self = toObject(this),
             length = self.length >>> 0;
 
-        if (!length)
+        if (!length) {
             return -1;
+        }
         var i = length - 1;
-        if (arguments.length > 1)
+        if (arguments.length > 1) {
             i = Math.min(i, toInteger(arguments[1]));
+        }
         // handle negative indices
         i = i >= 0 ? i : length - Math.abs(i);
         for (; i >= 0; i--) {
-            if (i in self && sought === self[i])
+            if (i in self && sought === self[i]) {
                 return i;
+            }
         }
         return -1;
     };
@@ -483,9 +498,9 @@ if (!Object.getPrototypeOf) {
     // recommended by fschaefer on github
     Object.getPrototypeOf = function getPrototypeOf(object) {
         return object.__proto__ || (
-            object.constructor ?
-            object.constructor.prototype :
-            prototypeOfObject
+            object.constructor
+                ? object.constructor.prototype
+                : prototypeOfObject
         );
     };
 }
@@ -493,20 +508,20 @@ if (!Object.getPrototypeOf) {
 // ES5 15.2.3.3
 // http://es5.github.com/#x15.2.3.3
 if (!Object.getOwnPropertyDescriptor) {
-    var ERR_NON_OBJECT = "Object.getOwnPropertyDescriptor called on a " +
-                         "non-object: ";
-    Object.getOwnPropertyDescriptor = function getOwnPropertyDescriptor(object, property) {
-        if ((typeof object != "object" && typeof object != "function") || object === null)
-            throw new TypeError(ERR_NON_OBJECT + object);
-        // If object does not owns property return undefined immediately.
-        if (!owns(object, property))
-            return;
+    var ERR_NON_OBJECT = "Object.getOwnPropertyDescriptor called on a non-object: ";
 
-        var descriptor, getter, setter;
+    Object.getOwnPropertyDescriptor = function getOwnPropertyDescriptor(object, property) {
+        if ((typeof object != "object" && typeof object != "function") || object === null) {
+            throw new TypeError(ERR_NON_OBJECT + object);
+        }
+        // If object does not owns property return undefined immediately.
+        if (!owns(object, property)) {
+            return;
+        }
 
         // If object has a property then it's for sure both `enumerable` and
         // `configurable`.
-        descriptor =  { enumerable: true, configurable: true };
+        var descriptor =  { enumerable: true, configurable: true };
 
         // If JS engine supports accessor properties then property may be a
         // getter or setter.
@@ -526,9 +541,12 @@ if (!Object.getOwnPropertyDescriptor) {
             object.__proto__ = prototype;
 
             if (getter || setter) {
-                if (getter) descriptor.get = getter;
-                if (setter) descriptor.set = setter;
-
+                if (getter) {
+                    descriptor.get = getter;
+                }
+                if (setter) {
+                    descriptor.set = setter;
+                }
                 // If it was accessor property we're done and return here
                 // in order to avoid adding `value` to the descriptor.
                 return descriptor;
@@ -558,8 +576,9 @@ if (!Object.create) {
         if (prototype === null) {
             object = { "__proto__": null };
         } else {
-            if (typeof prototype != "object")
+            if (typeof prototype != "object") {
                 throw new TypeError("typeof prototype["+(typeof prototype)+"] != 'object'");
+            }
             var Type = function () {};
             Type.prototype = prototype;
             object = new Type();
@@ -569,8 +588,9 @@ if (!Object.create) {
             // objects created using `Object.create`
             object.__proto__ = prototype;
         }
-        if (properties !== void 0)
+        if (properties !== void 0) {
             Object.defineProperties(object, properties);
+        }
         return object;
     };
 }
@@ -614,11 +634,12 @@ if (!Object.defineProperty || definePropertyFallback) {
                                       "on this javascript engine";
 
     Object.defineProperty = function defineProperty(object, property, descriptor) {
-        if ((typeof object != "object" && typeof object != "function") || object === null)
+        if ((typeof object != "object" && typeof object != "function") || object === null) {
             throw new TypeError(ERR_NON_OBJECT_TARGET + object);
-        if ((typeof descriptor != "object" && typeof descriptor != "function") || descriptor === null)
+        }
+        if ((typeof descriptor != "object" && typeof descriptor != "function") || descriptor === null) {
             throw new TypeError(ERR_NON_OBJECT_DESCRIPTOR + descriptor);
-
+        }
         // make a valiant attempt to use the real defineProperty
         // for I8's DOM elements.
         if (definePropertyFallback) {
@@ -665,15 +686,17 @@ if (!Object.defineProperty || definePropertyFallback) {
                 object[property] = descriptor.value;
             }
         } else {
-            if (!supportsAccessors)
+            if (!supportsAccessors) {
                 throw new TypeError(ERR_ACCESSORS_NOT_SUPPORTED);
+            }
             // If we got that far then getters and setters can be defined !!
-            if (owns(descriptor, "get"))
+            if (owns(descriptor, "get")) {
                 defineGetter(object, property, descriptor.get);
-            if (owns(descriptor, "set"))
+            }
+            if (owns(descriptor, "set")) {
                 defineSetter(object, property, descriptor.set);
+            }
         }
-
         return object;
     };
 }
@@ -683,8 +706,9 @@ if (!Object.defineProperty || definePropertyFallback) {
 if (!Object.defineProperties) {
     Object.defineProperties = function defineProperties(object, properties) {
         for (var property in properties) {
-            if (owns(properties, property))
+            if (owns(properties, property)) {
                 Object.defineProperty(object, property, properties[property]);
+            }
         }
         return object;
     };
@@ -790,13 +814,15 @@ if (!Object.keys) {
         ],
         dontEnumsLength = dontEnums.length;
 
-    for (var key in {"toString": null})
+    for (var key in {"toString": null}) {
         hasDontEnumBug = false;
+    }
 
     Object.keys = function keys(object) {
 
-        if ((typeof object != "object" && typeof object != "function") || object === null)
+        if ((typeof object != "object" && typeof object != "function") || object === null) {
             throw new TypeError("Object.keys called on a non-object");
+        }
 
         var keys = [];
         for (var name in object) {
@@ -813,7 +839,6 @@ if (!Object.keys) {
                 }
             }
         }
-
         return keys;
     };
 
@@ -826,16 +851,17 @@ if (!Object.keys) {
 
 // ES5 15.9.5.43
 // http://es5.github.com/#x15.9.5.43
-// This function returns a String value represent the instance in time 
-// represented by this Date object. The format of the String is the Date Time 
-// string format defined in 15.9.1.15. All fields are present in the String. 
-// The time zone is always UTC, denoted by the suffix Z. If the time value of 
+// This function returns a String value represent the instance in time
+// represented by this Date object. The format of the String is the Date Time
+// string format defined in 15.9.1.15. All fields are present in the String.
+// The time zone is always UTC, denoted by the suffix Z. If the time value of
 // this object is not a finite Number a RangeError exception is thrown.
 if (!Date.prototype.toISOString || (new Date(-62198755200000).toISOString().indexOf('-000001') === -1)) {
     Date.prototype.toISOString = function toISOString() {
         var result, length, value, year;
-        if (!isFinite(this))
+        if (!isFinite(this)) {
             throw new RangeError;
+        }
 
         // the date time string format is specified in 15.9.1.15.
         result = [this.getUTCMonth() + 1, this.getUTCDate(),
@@ -847,8 +873,9 @@ if (!Date.prototype.toISOString || (new Date(-62198755200000).toISOString().inde
         while (length--) {
             value = result[length];
             // pad months, days, hours, minutes, and seconds to have two digits.
-            if (value < 10)
+            if (value < 10) {
                 result[length] = "0" + value;
+            }
         }
         // pad milliseconds to have three digits.
         return year + "-" + result.slice(0, 2).join("-") + "T" + result.slice(2).join(":") + "." +
@@ -866,11 +893,11 @@ if (!Date.now) {
 
 // ES5 15.9.5.44
 // http://es5.github.com/#x15.9.5.44
-// This function provides a String representation of a Date object for use by 
+// This function provides a String representation of a Date object for use by
 // JSON.stringify (15.12.3).
 if (!Date.prototype.toJSON) {
     Date.prototype.toJSON = function toJSON(key) {
-        // When the toJSON method is called with argument key, the following 
+        // When the toJSON method is called with argument key, the following
         // steps are taken:
 
         // 1.  Let O be the result of calling ToObject, giving it the this
@@ -881,8 +908,9 @@ if (!Date.prototype.toJSON) {
         // 4. Let toISO be the result of calling the [[Get]] internal method of
         // O with argument "toISOString".
         // 5. If IsCallable(toISO) is false, throw a TypeError exception.
-        if (typeof this.toISOString != "function")
+        if (typeof this.toISOString != "function") {
             throw new TypeError(); // TODO message
+        }
         // 6. Return the result of calling the [[Call]] internal method of
         //  toISO with O as the this value and an empty argument list.
         return this.toISOString();
@@ -954,8 +982,9 @@ if (!Date.parse || Date.parse("+275760-09-13T00:00:00.000Z") !== 8.64e15) {
         "$");
 
         // Copy any custom methods a 3rd party library may have added
-        for (var key in NativeDate)
+        for (var key in NativeDate) {
             Date[key] = NativeDate[key];
+        }
 
         // Copy "native" methods explicitly; they may be non-enumerable
         Date.now = NativeDate.now;
@@ -975,8 +1004,9 @@ if (!Date.parse || Date.parse("+275760-09-13T00:00:00.000Z") !== 8.64e15) {
                     // match[1] is the month. Months are 0-11 in JavaScript
                     // `Date` objects, but 1-12 in ISO notation, so we
                     // decrement.
-                    if (i == 1)
+                    if (i == 1) {
                         match[i]--;
+                    }
                 }
 
                 // parse the UTC offset component
@@ -986,8 +1016,9 @@ if (!Date.parse || Date.parse("+275760-09-13T00:00:00.000Z") !== 8.64e15) {
                 var offset = 0;
                 if (sign) {
                     // detect invalid offsets and return early
-                    if (hourOffset > 23 || minuteOffset > 59)
+                    if (hourOffset > 23 || minuteOffset > 59) {
                         return NaN;
+                    }
 
                     // express the provided time zone offset in minutes. The offset is
                     // negative for time zones west of UTC; positive otherwise.
@@ -995,7 +1026,7 @@ if (!Date.parse || Date.parse("+275760-09-13T00:00:00.000Z") !== 8.64e15) {
                 }
 
                 // Date.UTC for years between 0 and 99 converts year to 1900 + year
-                // The Gregorian calendar has a 400-year cycle, so 
+                // The Gregorian calendar has a 400-year cycle, so
                 // to Date.UTC(year + 400, .... ) - 12622780800000 == Date.UTC(year, ...),
                 // where 12622780800000 - number of milliseconds in Gregorian calendar 400 years
                 var year = +match[0];
@@ -1045,25 +1076,26 @@ if (!String.prototype.trim || ws.trim()) {
 // http://jsperf.com/to-integer
 var toInteger = function (n) {
     n = +n;
-    if (n !== n) // isNaN
+    if (n !== n) { // isNaN
         n = 0;
-    else if (n !== 0 && n !== (1/0) && n !== -(1/0))
+    } else if (n !== 0 && n !== (1/0) && n !== -(1/0)) {
         n = (n > 0 || -1) * Math.floor(Math.abs(n));
+    }
     return n;
 };
 
-var prepareString = "a"[0] != "a",
+var prepareString = "a"[0] != "a";
     // ES5 9.9
     // http://es5.github.com/#x9.9
-    toObject = function (o) {
-        if (o == null) { // this matches both null and undefined
-            throw new TypeError(); // TODO message
-        }
-        // If the implementation doesn't support by-index access of
-        // string characters (ex. IE < 7), split the string
-        if (prepareString && typeof o == "string" && o) {
-            return o.split("");
-        }
-        return Object(o);
-    };
+var toObject = function (o) {
+    if (o == null) { // this matches both null and undefined
+        throw new TypeError(); // TODO message
+    }
+    // If the implementation doesn't support by-index access of
+    // string characters (ex. IE < 9), split the string
+    if (prepareString && typeof o == "string" && o) {
+        return o.split("");
+    }
+    return Object(o);
+};
 });

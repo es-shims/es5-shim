@@ -49,5 +49,68 @@ describe('Object', function () {
             }).toThrow(e);
         });
     });
+
+    describe("Object.getOwnPropertyDescriptor", function () {
+        function get() { return 42; }
+        function set(v) { this.val = v; }
+
+        var obj = {};
+        Object.defineProperty(obj, "normal", {
+           value: "normal"
+        });
+        Object.defineProperty(obj, "flags", {
+           value: "flags",
+           enumerable: true,
+           writable: true,
+           configurable: true
+        });
+        try {
+            Object.defineProperty(obj, "get", {
+               get: get
+            });
+            Object.defineProperty(obj, "set", {
+               set: set
+            });    
+        } catch (e) {
+            if (!e.message === "getters & setters can not be defined on this javascript engine") throw e;
+        }
+        
+
+        it('should return a property descriptor', function () {
+            var pd = Object.getOwnPropertyDescriptor(obj, "normal");
+            expect(pd.value).toBe("normal");
+            expect(pd.enumerable).toBe(false);
+            expect(pd.writable).toBe(false);
+            expect(pd.configurable).toBe(false);
+        });
+
+        it("should return true for flags", function () {
+            var pd = Object.getOwnPropertyDescriptor(obj, "flags");
+            expect(pd.value).toBe("flags");
+            expect(pd.enumerable).toBe(true);
+            expect(pd.writable).toBe(true);
+            expect(pd.configurable).toBe(true);
+        });
+
+        it("should return a getter", function () {
+            var pd = Object.getOwnPropertyDescriptor(obj, "get");
+            expect(pd.value).toBe(undefined);
+            expect(pd.get).toBe(get);
+            expect(pd.set).toBe(undefined);
+            expect(pd.enumerable).toBe(false);
+            expect(pd.writable).toBe(undefined);
+            expect(pd.configurable).toBe(false);
+        });
+
+        it("should return a setter", function (){
+            var pd = Object.getOwnPropertyDescriptor(obj, "set");
+            expect(pd.value).toBe(undefined);
+            expect(pd.get).toBe(undefined);
+            expect(pd.set).toBe(set);
+            expect(pd.writable).toBe(undefined);
+            expect(pd.configurable).toBe(false);
+            expect(pd.enumerable).toBe(false);
+        })
+    });
  
 });

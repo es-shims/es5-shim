@@ -179,9 +179,26 @@ var call = Function.prototype.call;
 var prototypeOfArray = Array.prototype;
 var prototypeOfObject = Object.prototype;
 var slice = prototypeOfArray.slice;
-// Having a toString local variable name breaks in Opera so use _toString.
+
+// Having a toString local variable name combined with named function
+// expressions breaks in Opera < 12 so use _toString.
 var _toString = call.bind(prototypeOfObject.toString);
 var owns = call.bind(prototypeOfObject.hasOwnProperty);
+
+// Feature test __proto__ (supported by all modern browsers except IE)
+// https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Object/Proto
+var hasProto = !!function() {
+    var result,
+        arr = [],
+        obj = { 'push': 0 };
+
+    if (arr.__proto__ == prototypeOfArray && obj.__proto__ == prototypeOfObject) {
+        arr.__proto__ = obj;
+        result = !arr.push;
+        arr.__proto__ = [];
+        return result && arr.push;
+    }
+}());
 
 //
 // Array
@@ -477,29 +494,28 @@ if (!Array.prototype.lastIndexOf) {
 // ======
 //
 
+// Non-standard subset of Object.create()
+// ES5 15.2.3.5
+// http://es5.github.com/#x15.2.3.5
+Object.beget = function beget(prototype) {
+    if (Object(prototype) !== prototype) {
+        throw new TypeError("typeof prototype[" + (typeof prototype) + "] != 'object'");
+    }
+    if (Object.create) {
+        return Object.create(prototype);
+    }
+    var Type = function () {};
+    Type.prototype = prototype;
+    return new Type;
+};
+
 // ES5 15.2.3.2
 // http://es5.github.com/#x15.2.3.2
-if (!Object.getPrototypeOf) {
-    // https://github.com/kriskowal/es5-shim/issues#issue/2
-    // http://ejohn.org/blog/objectgetprototypeof/
-    // recommended by fschaefer on github
+if (!Object.getPrototypeOf && hasProto) {
     Object.getPrototypeOf = function getPrototypeOf(object) {
-        return object.__proto__ || (
-            object.constructor
-                ? object.constructor.prototype
-                : prototypeOfObject
-        );
+        return object.__proto__;
     };
 }
-
-// ES5 15.2.3.4
-// http://es5.github.com/#x15.2.3.4
-if (!Object.getOwnPropertyNames) {
-    Object.getOwnPropertyNames = function getOwnPropertyNames(object) {
-        return Object.keys(object);
-    };
-}
-
 
 // ES5 15.2.3.6
 // http://es5.github.com/#x15.2.3.6
@@ -549,7 +565,7 @@ try {
 if (!Object.isExtensible) {
     Object.isExtensible = function isExtensible(object) {
         // 1. If Type(O) is not Object throw a TypeError exception.
-        if (Object(object) === object) {
+        if (Object(object) !== object) {
             throw new TypeError; // TODO message
         }
         // 2. Return the Boolean value of the [[Extensible]] internal property of O.

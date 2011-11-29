@@ -46,25 +46,10 @@ SAFE SHIMS
 
 * Date.parse (for ISO parsing)
 * Date.prototype.toISOString
+* Object.getPrototypeOf
 
 DUBIOUS SHIMS
 -------------
-
-* /?\ Object.getPrototypeOf
-
-    This will return "undefined" in some cases.  It uses
-    __proto__ if it's available.  Failing that, it uses
-    constructor.prototype, which depends on the constructor
-    property of the object's prototype having not been
-    replaced.  If your object was created like this, it
-    won't work:
-
-        function Foo() {
-        }
-        Foo.prototype = {};
-
-    Because the prototype reassignment destroys the
-    constructor property.
 
 * Object.isExtensible
 

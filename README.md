@@ -2,23 +2,15 @@ Provides compatibility shims so that legacy JavaScript
 engines behave as closely as possible to ES5.
 
 This package requires quite a bit more attention and
-testing.  It is not likely to behave as advertised in a
-large cross-section of browsers.
-
-"As closely as possible to ES5" is not very close.  Many of
-these shims are intended only to allow code to be written to
-ES5 without causing run-time errors in older engines.  In
-many cases, this means that these shims cause many ES5
-methods to silently fail.  Decide carefully whether this is
-what you want.
+testing.
 
 TESTS
 -----
 
 The tests are written with the Jasmine BDD test framework.
-To run the tests, navigate to <root-folder>/tests/. 
+To run the tests, navigate to <root-folder>/tests/.
 
-In order to run against the shim-code, the tests attempt to kill the current 
+In order to run against the shim-code, the tests attempt to kill the current
 implementation of the missing methods. This happens in <root-folder>/tests/helpers/h-kill.js.
 So in order to run the tests against the build-in methods, invalidate that file somehow
 (comment-out, delete the file, delete the script-tag, etc.).
@@ -55,24 +47,8 @@ SAFE SHIMS
 * Date.parse (for ISO parsing)
 * Date.prototype.toISOString
 
-
 DUBIOUS SHIMS
 -------------
-
-* /?\ Object.create
-
-    For the case of simply "begetting" an object that
-    inherits prototypically from another, this should work
-    fine across legacy engines.
-
-    /!\ Object.create(null) will work only in browsers that
-    support prototype assignment.  This creates an object
-    that does not have any properties inherited from
-    Object.prototype.  It will silently fail otherwise.
-
-    /!\ The second argument is passed to
-    Object.defineProperties which will probably fail
-    silently.
 
 * /?\ Object.getPrototypeOf
 
@@ -90,79 +66,7 @@ DUBIOUS SHIMS
     Because the prototype reassignment destroys the
     constructor property.
 
-    This will work for all objects that were created using
-    `Object.create` implemented with this library.
-
-* /!\ Object.getOwnPropertyNames
-
-    This method uses Object.keys, so it will not be accurate
-    on legacy engines.
-
-* Object.isSealed
-
-    Returns "false" in all legacy engines for all objects,
-    which is conveniently guaranteed to be accurate.
-
-* Object.isFrozen
-
-    Returns "false" in all legacy engines for all objects,
-    which is conveniently guaranteed to be accurate.
-
 * Object.isExtensible
 
     Works like a charm, by trying very hard to extend the
     object then redacting the extension.
-
-
-SHIMS THAT FAIL SILENTLY
-------------------------
-
-* /!\ Object.getOwnPropertyDescriptor
-    
-    The behavior of this shim does not conform to ES5.  It
-    should probably not be used at this time, until its
-    behavior has been reviewed and been confirmed to be
-    useful in legacy engines.
-
-* /!\ Object.defineProperty
-
-    This method will silently fail to set "writable",
-    "enumerable", and "configurable" properties.
-    
-    Providing a getter or setter with "get" or "set" on a
-    descriptor will silently fail on engines that lack
-    "__defineGetter__" and "__defineSetter__", which include
-    all versions of IE up to version 8 so far.
-
-    IE 8 provides a version of this method but it only works
-    on DOM objects.  Thus, the shim will not get installed
-    and attempts to set "value" properties will fail
-    silently on non-DOM objects.
-
-    https://github.com/kriskowal/es5-shim/issues#issue/5
-
-* /!\ Object.defineProperties
-
-    This uses the Object.defineProperty shim
-
-* Object.seal
-
-    Silently fails on all legacy engines.  This should be
-    fine unless you are depending on the safety and security
-    provisions of this method, which you cannot possibly
-    obtain in legacy engines.
-
-* Object.freeze
-
-    Silently fails on all legacy engines.  This should be
-    fine unless you are depending on the safety and security
-    provisions of this method, which you cannot possibly
-    obtain in legacy engines.
-
-* Object.preventExtensions
-
-    Silently fails on all legacy engines.  This should be
-    fine unless you are depending on the safety and security
-    provisions of this method, which you cannot possibly
-    obtain in legacy engines.
-

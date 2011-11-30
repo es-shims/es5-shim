@@ -930,7 +930,7 @@ if (!Date.prototype.toJSON) {
 // http://es5.github.com/#x15.9.4.2
 // based on work shared by Daniel Friesen (dantman)
 // http://gist.github.com/303249
-if (!Date.parse || Date.parse("+275760-09-13T00:00:00.000Z") !== 8.64e15) {
+if (!Date.parse || Date.parse("+275760-09-13T00:00:00.000Z") !== 8.64e15 || Date.parse('+033658-09-27T01:46:40.000Z') !== 1e15) {
     // XXX global assignment won't work in embeddings that use
     // an alternate object for the context.
     Date = (function(NativeDate) {

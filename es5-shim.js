@@ -707,7 +707,7 @@ if (!Object.defineProperty || definePropertyFallback) {
 if (!Object.defineProperties) {
     Object.defineProperties = function defineProperties(object, properties) {
         for (var property in properties) {
-            if (owns(properties, property) && property!='__proto__') {
+            if (owns(properties, property) && property != "__proto__") {
                 Object.defineProperty(object, property, properties[property]);
             }
         }

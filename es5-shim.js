@@ -41,8 +41,7 @@
  *
  * Annotated ES5: http://es5.github.com/ (specific links below)
  * ES5 Spec: http://www.ecma-international.org/publications/files/ECMA-ST/Ecma-262.pdf
- *
- * @module
+ * Required reading: http://javascriptweblog.wordpress.com/2011/12/05/extending-javascript-natives/
  */
 
 /*whatsupdoc*/

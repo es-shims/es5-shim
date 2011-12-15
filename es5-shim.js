@@ -275,6 +275,7 @@ if (!Array.prototype.filter) {
         var self = toObject(this),
             length = self.length >>> 0,
             result = [],
+            value,
             thisp = arguments[1];
 
         // If no callback function or if callback is not a callable function
@@ -283,8 +284,11 @@ if (!Array.prototype.filter) {
         }
 
         for (var i = 0; i < length; i++) {
-            if (i in self && fun.call(thisp, self[i], i, self)) {
-                result.push(self[i]);
+            if (i in self) {
+                value = self[i];
+                if (fun.call(thisp, value, i, self)) {
+                    result.push(value);
+                }
             }
         }
         return result;

@@ -17,6 +17,12 @@
 
 	<!-- include source files here... -->
 	<script src="../es5-shim.js"></script>
+	<script src="../object.js"></script>
+	<script>
+		for(var i in es5object){
+			Object[i] = es5object[i];
+		}
+	</script>
 
 	<!-- include spec files here... -->
 	<script src="spec/s-array.js"></script>

@@ -44,8 +44,6 @@
  * Required reading: http://javascriptweblog.wordpress.com/2011/12/05/extending-javascript-natives/
  */
 
-/*whatsupdoc*/
-
 //
 // Function
 // ========

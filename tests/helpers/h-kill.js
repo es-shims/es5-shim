@@ -14,6 +14,14 @@ var HLP = (function() {
             var obj = methods[i];
             _class.originals[obj] = _class[obj];
             delete _class[obj];
+            if (obj in _class) {
+                // try something more aggressive since V8 at least
+                // appears to ignore the delete.
+                _class[obj] = null;
+                if (_class[obj]) {
+                    console.log("Couln't overwrite", obj, "of", _class);
+                }
+            }
         }
     };
     return { kill: kill };

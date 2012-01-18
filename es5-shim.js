@@ -14,7 +14,7 @@
 // -- iwyg XXX TODO License or CLA
 // -- DomenicDenicola Domenic Denicola Copyright (C) 2011 MIT License
 // -- xavierm02 Montillet Xavier Copyright (C) 2011 MIT License
-// -- Raynos Raynos XXX TODO License or CLA
+// -- Raynos Jake Verbaten Copyright (C) 2011 MIT Licence
 // -- samsonjs Sami Samhuri Copyright (C) 2010 MIT License
 // -- rwldrn Rick Waldron Copyright (C) 2011 MIT License
 // -- lexer Alexey Zakharov XXX TODO License or CLA

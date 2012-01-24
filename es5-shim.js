@@ -718,6 +718,7 @@ if (!Object.defineProperties || definePropertiesFallback) {
         for (var property in properties) {
             if (owns(properties, property)) {
                 Object.defineProperty(object, property, properties[property]);
+			}
         }
         return object;
     };

@@ -74,6 +74,25 @@ describe('Array', function() {
             }, o);
             expect(actual).toExactlyMatch(expected);
         });
+
+        describe('strings', function() {
+            var str = 'Hello, World!';
+            it('should iterate all in a string', function() {
+                actual = [];
+                Array.prototype.forEach.call(str, function(item, index) {
+                    actual[index] = item;
+                });
+                expect(actual).toExactlyMatch(str.split(''));
+            });
+            it('should iterate all in a string using a context', function() {
+                actual = [];
+                var o = { a: actual };
+                Array.prototype.forEach.call(str, function(item, index) {
+                    this.a[index] = item;
+                }, o);
+                expect(actual).toExactlyMatch(str.split(''));
+            });
+        });
     });
     describe('some', function() {
         var actual, expected, numberOfRuns;

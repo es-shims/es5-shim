@@ -1085,7 +1085,12 @@ var toInteger = function (n) {
     return n;
 };
 
-var prepareString = "a"[0] != "a";
+var prepareString = (function(strObj) {
+    // Check failure of by-index access of string characters (IE < 9)
+    // and failure of `0 in strObj` (Rhino)
+    return strObj[0] != "a" || !(0 in strObj);
+})(Object("a"));
+
     // ES5 9.9
     // http://es5.github.com/#x9.9
 var toObject = function (o) {
@@ -1093,8 +1098,8 @@ var toObject = function (o) {
         throw new TypeError(); // TODO message
     }
     // If the implementation doesn't support by-index access of
-    // string characters (ex. IE < 9), split the string
-    if (prepareString && typeof o == "string" && o) {
+    // string characters or `0 in stringObject`, split the string
+    if (prepareString && _toString(o) == "[object String]") {
         return o.split("");
     }
     return Object(o);

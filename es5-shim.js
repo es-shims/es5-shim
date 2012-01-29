@@ -861,7 +861,7 @@ if (!Date.prototype.toISOString || (new Date(-62198755200000).toISOString().inde
     Date.prototype.toISOString = function toISOString() {
         var result, length, value, year;
         if (!isFinite(this)) {
-            throw new RangeError;
+            throw new RangeError("Date.prototype.toISOString called on non-finite value.");
         }
 
         // the date time string format is specified in 15.9.1.15.

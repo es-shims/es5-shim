@@ -857,7 +857,7 @@ if (!Object.keys) {
 // string format defined in 15.9.1.15. All fields are present in the String.
 // The time zone is always UTC, denoted by the suffix Z. If the time value of
 // this object is not a finite Number a RangeError exception is thrown.
-if (!Date.prototype.toISOString || (new Date(-62198755200000).toISOString().indexOf('-000001') === -1)) {
+if (!Date.prototype.toISOString || !~(new Date(-62198755200000).toISOString().indexOf('-000001'))) {
     Date.prototype.toISOString = function toISOString() {
         var result, length, value, year;
         if (!isFinite(this)) {
@@ -881,14 +881,6 @@ if (!Date.prototype.toISOString || (new Date(-62198755200000).toISOString().inde
         // pad milliseconds to have three digits.
         return year + "-" + result.slice(0, 2).join("-") + "T" + result.slice(2).join(":") + "." +
             ("000" + this.getUTCMilliseconds()).slice(-3) + "Z";
-    }
-}
-
-// ES5 15.9.4.4
-// http://es5.github.com/#x15.9.4.4
-if (!Date.now) {
-    Date.now = function now() {
-        return new Date().getTime();
     };
 }
 
@@ -896,7 +888,13 @@ if (!Date.now) {
 // http://es5.github.com/#x15.9.5.44
 // This function provides a String representation of a Date object for use by
 // JSON.stringify (15.12.3).
-if (!Date.prototype.toJSON) {
+if (!Date.prototype.toJSON || !~((new Date(-62198755200000)).toJSON().indexOf('-000001')) ||
+    ~(function() {
+        // is Date.prototype.toJSON non-generic?
+        try {
+            return Date.prototype.toJSON.call({toISOString:function(){return -1;}});
+        } catch (err) {}
+    }())) {
     Date.prototype.toJSON = function toJSON(key) {
         // When the toJSON method is called with argument key, the following
         // steps are taken:
@@ -924,6 +922,14 @@ if (!Date.prototype.toJSON) {
         // it does require that any such object have a toISOString method. An
         // object is free to use the argument key to filter its
         // stringification.
+    };
+}
+
+// ES5 15.9.4.4
+// http://es5.github.com/#x15.9.4.4
+if (!Date.now) {
+    Date.now = function now() {
+        return new Date().getTime();
     };
 }
 

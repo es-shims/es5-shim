@@ -222,9 +222,16 @@ if (!Array.isArray) {
 // ES5 15.4.4.18
 // http://es5.github.com/#x15.4.4.18
 // https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/array/forEach
+
+// Check failure of by-index access of string characters (IE < 9)
+// and failure of `0 in strObj` (Rhino)
+var strObj = Object("a"),
+    splitString = strObj[0] != "a" || !(0 in strObj);
+
 if (!Array.prototype.forEach) {
     Array.prototype.forEach = function forEach(fun /*, thisp*/) {
-        var self = toObject(this),
+        var object = toObject(this),
+            self = splitString && _toString(this) == "[object String]" ? this.split("") : object,
             thisp = arguments[1],
             i = -1,
             length = self.length >>> 0;
@@ -238,7 +245,7 @@ if (!Array.prototype.forEach) {
             if (i in self) {
                 // Invoke the callback function with call, passing arguments:
                 // context, property value, property key, thisArg object context
-                fun.call(thisp, self[i], i, self);
+                fun.call(thisp, self[i], i, object);
             }
         }
     };
@@ -249,7 +256,8 @@ if (!Array.prototype.forEach) {
 // https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Objects/Array/map
 if (!Array.prototype.map) {
     Array.prototype.map = function map(fun /*, thisp*/) {
-        var self = toObject(this),
+        var object = toObject(this),
+            self = splitString && _toString(this) == "[object String]" ? this.split("") : object,
             length = self.length >>> 0,
             result = Array(length),
             thisp = arguments[1];
@@ -261,7 +269,7 @@ if (!Array.prototype.map) {
 
         for (var i = 0; i < length; i++) {
             if (i in self)
-                result[i] = fun.call(thisp, self[i], i, self);
+                result[i] = fun.call(thisp, self[i], i, object);
         }
         return result;
     };
@@ -272,7 +280,8 @@ if (!Array.prototype.map) {
 // https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Objects/Array/filter
 if (!Array.prototype.filter) {
     Array.prototype.filter = function filter(fun /*, thisp */) {
-        var self = toObject(this),
+        var object = toObject(this),
+            self = splitString && _toString(this) == "[object String]" ? this.split("") : object,
             length = self.length >>> 0,
             result = [],
             value,
@@ -286,7 +295,7 @@ if (!Array.prototype.filter) {
         for (var i = 0; i < length; i++) {
             if (i in self) {
                 value = self[i];
-                if (fun.call(thisp, value, i, self)) {
+                if (fun.call(thisp, value, i, object)) {
                     result.push(value);
                 }
             }
@@ -300,7 +309,8 @@ if (!Array.prototype.filter) {
 // https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Array/every
 if (!Array.prototype.every) {
     Array.prototype.every = function every(fun /*, thisp */) {
-        var self = toObject(this),
+        var object = toObject(this),
+            self = splitString && _toString(this) == "[object String]" ? this.split("") : object,
             length = self.length >>> 0,
             thisp = arguments[1];
 
@@ -310,7 +320,7 @@ if (!Array.prototype.every) {
         }
 
         for (var i = 0; i < length; i++) {
-            if (i in self && !fun.call(thisp, self[i], i, self)) {
+            if (i in self && !fun.call(thisp, self[i], i, object)) {
                 return false;
             }
         }
@@ -323,7 +333,8 @@ if (!Array.prototype.every) {
 // https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Array/some
 if (!Array.prototype.some) {
     Array.prototype.some = function some(fun /*, thisp */) {
-        var self = toObject(this),
+        var object = toObject(this),
+            self = splitString && _toString(this) == "[object String]" ? this.split("") : object,
             length = self.length >>> 0,
             thisp = arguments[1];
 
@@ -333,7 +344,7 @@ if (!Array.prototype.some) {
         }
 
         for (var i = 0; i < length; i++) {
-            if (i in self && fun.call(thisp, self[i], i, self)) {
+            if (i in self && fun.call(thisp, self[i], i, object)) {
                 return true;
             }
         }
@@ -346,7 +357,8 @@ if (!Array.prototype.some) {
 // https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Objects/Array/reduce
 if (!Array.prototype.reduce) {
     Array.prototype.reduce = function reduce(fun /*, initial*/) {
-        var self = toObject(this),
+        var object = toObject(this),
+            self = splitString && _toString(this) == "[object String]" ? this.split("") : object,
             length = self.length >>> 0;
 
         // If no callback function or if callback is not a callable function
@@ -379,7 +391,7 @@ if (!Array.prototype.reduce) {
 
         for (; i < length; i++) {
             if (i in self) {
-                result = fun.call(void 0, result, self[i], i, self);
+                result = fun.call(void 0, result, self[i], i, object);
             }
         }
 
@@ -392,7 +404,8 @@ if (!Array.prototype.reduce) {
 // https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Objects/Array/reduceRight
 if (!Array.prototype.reduceRight) {
     Array.prototype.reduceRight = function reduceRight(fun /*, initial*/) {
-        var self = toObject(this),
+        var object = toObject(this),
+            self = splitString && _toString(this) == "[object String]" ? this.split("") : object,
             length = self.length >>> 0;
 
         // If no callback function or if callback is not a callable function
@@ -424,7 +437,7 @@ if (!Array.prototype.reduceRight) {
 
         do {
             if (i in this) {
-                result = fun.call(void 0, result, self[i], i, self);
+                result = fun.call(void 0, result, self[i], i, object);
             }
         } while (i--);
 
@@ -437,7 +450,7 @@ if (!Array.prototype.reduceRight) {
 // https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Array/indexOf
 if (!Array.prototype.indexOf) {
     Array.prototype.indexOf = function indexOf(sought /*, fromIndex */ ) {
-        var self = toObject(this),
+        var self = splitString && _toString(this) == "[object String]" ? this.split("") : toObject(this),
             length = self.length >>> 0;
 
         if (!length) {
@@ -465,7 +478,7 @@ if (!Array.prototype.indexOf) {
 // https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Array/lastIndexOf
 if (!Array.prototype.lastIndexOf) {
     Array.prototype.lastIndexOf = function lastIndexOf(sought /*, fromIndex */) {
-        var self = toObject(this),
+        var self = splitString && _toString(this) == "[object String]" ? this.split("") : toObject(this),
             length = self.length >>> 0;
 
         if (!length) {
@@ -1085,22 +1098,11 @@ var toInteger = function (n) {
     return n;
 };
 
-var prepareString = (function(strObj) {
-    // Check failure of by-index access of string characters (IE < 9)
-    // and failure of `0 in strObj` (Rhino)
-    return strObj[0] != "a" || !(0 in strObj);
-})(Object("a"));
-
-    // ES5 9.9
-    // http://es5.github.com/#x9.9
+// ES5 9.9
+// http://es5.github.com/#x9.9
 var toObject = function (o) {
     if (o == null) { // this matches both null and undefined
         throw new TypeError(); // TODO message
-    }
-    // If the implementation doesn't support by-index access of
-    // string characters or `0 in stringObject`, split the string
-    if (prepareString && _toString(o) == "[object String]") {
-        return o.split("");
     }
     return Object(o);
 };

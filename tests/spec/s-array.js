@@ -76,7 +76,8 @@ describe('Array', function() {
         });
 
         describe('strings', function() {
-            var str = 'Hello, World!';
+            var str = 'Hello, World!',
+                toString = Object.prototype.toString;
             it('should iterate all in a string', function() {
                 actual = [];
                 Array.prototype.forEach.call(str, function(item, index) {
@@ -91,6 +92,13 @@ describe('Array', function() {
                     this.a[index] = item;
                 }, o);
                 expect(actual).toExactlyMatch(str.split(''));
+            });
+            it('should have String object for third argument of callback', function() {
+                Array.prototype.forEach.call(str, function(item, index, obj) {
+                    actual = obj;
+                });
+                expect(typeof actual).toBe("object");
+                expect(toString.call(actual)).toBe("[object String]");
             });
         });
     });

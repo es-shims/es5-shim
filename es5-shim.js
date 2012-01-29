@@ -58,7 +58,7 @@ if (!Function.prototype.bind) {
         var target = this;
         // 2. If IsCallable(Target) is false, throw a TypeError exception.
         if (typeof target != "function") {
-            throw new TypeError(); // TODO message
+            throw new TypeError("Function.prototype.bind called on incompatible " + target);
         }
         // 3. Let A be a new (possibly empty) internal list of all of the
         //   argument values provided after thisArg (arg1, arg2 etc), in order.
@@ -256,7 +256,7 @@ if (!Array.prototype.map) {
 
         // If no callback function or if callback is not a callable function
         if (_toString(fun) != "[object Function]") {
-            throw new TypeError(); // TODO message
+            throw new TypeError(fun + " is not a function");
         }
 
         for (var i = 0; i < length; i++) {
@@ -280,7 +280,7 @@ if (!Array.prototype.filter) {
 
         // If no callback function or if callback is not a callable function
         if (_toString(fun) != "[object Function]") {
-            throw new TypeError(); // TODO message
+            throw new TypeError(fun + " is not a function");
         }
 
         for (var i = 0; i < length; i++) {
@@ -306,7 +306,7 @@ if (!Array.prototype.every) {
 
         // If no callback function or if callback is not a callable function
         if (_toString(fun) != "[object Function]") {
-            throw new TypeError(); // TODO message
+            throw new TypeError(fun + " is not a function");
         }
 
         for (var i = 0; i < length; i++) {
@@ -329,7 +329,7 @@ if (!Array.prototype.some) {
 
         // If no callback function or if callback is not a callable function
         if (_toString(fun) != "[object Function]") {
-            throw new TypeError(); // TODO message
+            throw new TypeError(fun + " is not a function");
         }
 
         for (var i = 0; i < length; i++) {
@@ -351,12 +351,12 @@ if (!Array.prototype.reduce) {
 
         // If no callback function or if callback is not a callable function
         if (_toString(fun) != "[object Function]") {
-            throw new TypeError(); // TODO message
+            throw new TypeError(fun + " is not a function");
         }
 
         // no value to return if no initial value and an empty array
         if (!length && arguments.length == 1) {
-            throw new TypeError(); // TODO message
+            throw new TypeError('reduce of empty array with no initial value');
         }
 
         var i = 0;
@@ -372,7 +372,7 @@ if (!Array.prototype.reduce) {
 
                 // if array contains no values, no initial value to return
                 if (++i >= length) {
-                    throw new TypeError(); // TODO message
+                    throw new TypeError('reduce of empty array with no initial value');
                 }
             } while (true);
         }
@@ -397,12 +397,12 @@ if (!Array.prototype.reduceRight) {
 
         // If no callback function or if callback is not a callable function
         if (_toString(fun) != "[object Function]") {
-            throw new TypeError(); // TODO message
+            throw new TypeError(fun + " is not a function");
         }
 
         // no value to return if no initial value, empty array
         if (!length && arguments.length == 1) {
-            throw new TypeError(); // TODO message
+            throw new TypeError('reduceRight of empty array with no initial value');
         }
 
         var result, i = length - 1;
@@ -417,7 +417,7 @@ if (!Array.prototype.reduceRight) {
 
                 // if array contains no values, no initial value to return
                 if (--i < 0) {
-                    throw new TypeError(); // TODO message
+                    throw new TypeError('reduceRight of empty array with no initial value');
                 }
             } while (true);
         }
@@ -910,7 +910,7 @@ if (!Date.prototype.toJSON) {
         // O with argument "toISOString".
         // 5. If IsCallable(toISO) is false, throw a TypeError exception.
         if (typeof this.toISOString != "function") {
-            throw new TypeError(); // TODO message
+            throw new TypeError('toISOString property is not callable');
         }
         // 6. Return the result of calling the [[Call]] internal method of
         //  toISO with O as the this value and an empty argument list.
@@ -1090,7 +1090,7 @@ var prepareString = "a"[0] != "a";
     // http://es5.github.com/#x9.9
 var toObject = function (o) {
     if (o == null) { // this matches both null and undefined
-        throw new TypeError(); // TODO message
+        throw new TypeError("can't convert "+o+" to object");
     }
     // If the implementation doesn't support by-index access of
     // string characters (ex. IE < 9), split the string

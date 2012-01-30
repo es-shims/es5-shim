@@ -857,7 +857,9 @@ if (!Object.keys) {
 // string format defined in 15.9.1.15. All fields are present in the String.
 // The time zone is always UTC, denoted by the suffix Z. If the time value of
 // this object is not a finite Number a RangeError exception is thrown.
-if (!Date.prototype.toISOString || !~(new Date(-62198755200000).toISOString().indexOf('-000001'))) {
+var negDate = -62198755200000,
+    yearStr = '-000001';
+if (!Date.prototype.toISOString || (new Date(negDate).toISOString().indexOf(yearStr) === -1)) {
     Date.prototype.toISOString = function toISOString() {
         var result, length, value, year;
         if (!isFinite(this)) {
@@ -888,11 +890,11 @@ if (!Date.prototype.toISOString || !~(new Date(-62198755200000).toISOString().in
 // http://es5.github.com/#x15.9.5.44
 // This function provides a String representation of a Date object for use by
 // JSON.stringify (15.12.3).
-if (!Date.prototype.toJSON || !~((new Date(-62198755200000)).toJSON().indexOf('-000001')) ||
-    ~(function() {
+if (!Date.prototype.toJSON || ((new Date(negDate)).toJSON().indexOf(yearStr) === -1) ||
+    !(function() {
         // is Date.prototype.toJSON non-generic?
         try {
-            return Date.prototype.toJSON.call({toISOString:function(){return -1;}});
+            return Date.prototype.toJSON.call({toISOString:function(){return 1;}});
         } catch (err) {}
     }())) {
     Date.prototype.toJSON = function toJSON(key) {

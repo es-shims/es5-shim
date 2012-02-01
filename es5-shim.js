@@ -49,6 +49,7 @@
 // ========
 //
 
+
 // ES-5 15.3.4.5
 // http://es5.github.com/#x15.3.4.5
 
@@ -192,6 +193,45 @@ if ((supportsAccessors = owns(prototypeOfObject, "__defineGetter__"))) {
     lookupGetter = call.bind(prototypeOfObject.__lookupGetter__);
     lookupSetter = call.bind(prototypeOfObject.__lookupSetter__);
 }
+
+
+// http://es5.github.com/#x15.3.4.3
+// Fix Function.prototype.apply to work with generic array-like object instead of an array
+;(function() {
+	try {
+		isNaN.apply(null, {})
+	}
+	catch(e) {
+		var ofa = Function.prototype.apply;
+		Function.prototype.apply = function(t, args) {
+			try {
+				return args != undefined ? ofa.call(this, t, args) : ofa.call(this, t);
+			}
+			catch (e) {//"Function.prototype.apply: Arguments list has wrong type"
+				if(args.length == void 0)throw e;
+				try {
+					if(0 in args) {	}
+				}
+				catch(r){
+					throw e;
+				}
+			
+				args = toObject(args);
+				var i = -1,
+					arr = [],
+					length = args.length >>> 0;
+
+				while (++i < length) {
+					if (i in args) {
+						arr.push(args[i])
+					}
+				}
+				
+				return ofa.call(this, t, arr);
+			}
+		}
+	}
+})();
 
 //
 // Array

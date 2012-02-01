@@ -134,4 +134,40 @@ describe('Function', function() {
             expect(result).not.toBe(oracle);
         });
     });
+	
+	describe('apply', function() {
+        var actual, expected,
+            testSubject;
+        
+        testSubject = {
+            push: function(o) {
+                this.a.push(o);
+            }
+        };
+        
+        function func() {
+            Array.prototype.forEach.call(arguments, function(a) {
+                this.push(a);
+            }, this);
+            return this;
+        };
+        
+        beforeEach(function() {
+            actual = [];
+            testSubject.a = [];
+        });
+        
+        it('Function.prototype.apply allow work with generic array-like object instead of an array', function() {
+            var context;
+            testSubject.func = function() {
+				try {
+					(function(a, b) { context = a + "" + b })
+						.apply(null, {0: 1, 1: 2, length: 2})
+				}
+				catch(e) {}
+            }.bind();
+            testSubject.func();
+            expect(context).toBe("12");
+        });
+    });
 });

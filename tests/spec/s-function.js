@@ -158,16 +158,45 @@ describe('Function', function() {
         });
         
         it('Function.prototype.apply allow work with generic array-like object instead of an array', function() {
-            var context;
+            var result;
             testSubject.func = function() {
 				try {
-					(function(a, b) { context = a + "" + b })
+					(function(a, b) { result = a + "" + b })
 						.apply(null, {0: 1, 1: 2, length: 2})
 				}
 				catch(e) {}
             }.bind();
             testSubject.func();
-            expect(context).toBe("12");
+            expect(result).toBe("12");
+        });
+		
+		it('Function.prototype.apply allow work with generic array-like DOM object instead of an array', function() {
+            var result;
+            testSubject.func = function() {
+				try {
+					var div = document.createElement("div");
+					div.innerHTML = "<p>1</p><p>2</p>";
+					
+					(function(a, b) { result = a.innerHTML + "" + b.innerHTML })
+						.apply(null, div.childNodes)
+				}
+				catch(e) {}
+            }.bind();
+            testSubject.func();
+            expect(result).toBe("12");
+        });
+		
+		it('Function.prototype.apply avoid using string as a second parameter', function() {
+            var result = false;
+            testSubject.func = function() {
+				try {
+					(function(a, b) { return a + b })
+						.apply(null, "123")
+				}
+				catch(e) {result = true}
+            }.bind();
+            testSubject.func();
+            expect(result).toBe(true);
         });
     });
 });

@@ -198,38 +198,42 @@ if ((supportsAccessors = owns(prototypeOfObject, "__defineGetter__"))) {
 // http://es5.github.com/#x15.3.4.3
 // Fix Function.prototype.apply to work with generic array-like object instead of an array
 ;(function() {
+	var needsPatch;
 	try {
-		isNaN.apply(null, {})
+		var result = (function (a) {return a}).apply(null, {0: 10, length: 1});
+		needsPatch = result !== 10;
+	} catch (exception) {
+		needsPatch = true;
 	}
-	catch(e) {
-		var ofa = Function.prototype.apply;
-		Function.prototype.apply = function(t, args) {
-			try {
-				return args != undefined ? ofa.call(this, t, args) : ofa.call(this, t);
-			}
-			catch (e) {//"Function.prototype.apply: Arguments list has wrong type"
-				if(args.length == void 0)throw e;
+	
+	if (needsPatch) {
+		Function.prototype.apply = (function (apply) {
+			return function (thisp, args) {
 				try {
-					if(0 in args) {	}
+					//Try original first
+					return args != undefined ?
+						apply.call(this, thisp, args) :
+						apply.call(this, thisp);
 				}
-				catch(r){
-					throw e;
-				}
-			
-				args = toObject(args);
-				var i = -1,
-					arr = [],
-					length = args.length >>> 0;
-
-				while (++i < length) {
-					if (i in args) {
-						arr.push(args[i])
-					}
-				}
+				catch (e) {//"Function.prototype.apply: Arguments list has wrong type"
+					if(args.length === void 0 || typeof args === "string")throw e;
 				
-				return ofa.call(this, t, arr);
+					//toArray: (IE < 9 Not support `Array.prototype.slice.call` on DOM object)
+					args = toObject(args);
+					var i = -1,
+						arr = [],
+						length = args.length >>> 0;
+
+					while (++i < length) {
+						if (i in args) {
+							arr.push(args[i])
+						}
+					}
+					
+					return apply.call(this, thisp, arr);
+				}
 			}
-		}
+		})(Function.prototype.apply);
 	}
 })();
 

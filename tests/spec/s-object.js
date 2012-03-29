@@ -50,4 +50,35 @@ describe('Object', function () {
         });
     });
  
+	describe("Object.isExtensible", function () {
+        var obj = { };
+
+        it('should return true if object is extensible', function () {
+            expect(Object.isExtensible(obj)).toBe(true);    
+        });
+		
+        it('should return false if object is not extensible', function () {
+            expect(Object.isExtensible(Object.preventExtensions(obj))).toBe(false);    
+        });
+        
+        it('should return false if object is seal', function () {
+            expect(Object.isExtensible(Object.seal(obj))).toBe(false);    
+        });
+		
+        it('should return false if object is freeze', function () {
+            expect(Object.isExtensible(Object.freeze(obj))).toBe(false);    
+        });
+		
+        it('should throw error for non object', function () {
+            var e1 = {};
+            expect(function () {
+                try {
+                    Object.isExtensible(42)
+                } catch (err) {
+                    throw e1;
+                }
+            }).toThrow(e1);
+        });
+    });
+ 
 });

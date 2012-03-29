@@ -784,7 +784,7 @@ if (!Object.isFrozen) {
 if (!Object.isExtensible) {
     Object.isExtensible = function isExtensible(object) {
         // 1. If Type(O) is not Object throw a TypeError exception.
-        if (Object(object) === object) {
+        if (Object(object) !== object) {
             throw new TypeError(); // TODO message
         }
         // 2. Return the Boolean value of the [[Extensible]] internal property of O.

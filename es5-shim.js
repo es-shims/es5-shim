@@ -931,7 +931,7 @@ if (!Date.prototype.toJSON) {
 // http://es5.github.com/#x15.9.4.2
 // based on work shared by Daniel Friesen (dantman)
 // http://gist.github.com/303249
-if (!Date.parse || Date.parse("+275760-09-13T00:00:00.000Z") !== 8.64e15) {
+if (!Date.parse || "Date.parse is buggy") {
     // XXX global assignment won't work in embeddings that use
     // an alternate object for the context.
     Date = (function(NativeDate) {
@@ -982,6 +982,13 @@ if (!Date.parse || Date.parse("+275760-09-13T00:00:00.000Z") !== 8.64e15) {
             ")?)?)?)?" +
         "$");
 
+        var monthes = [0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334, 365];
+
+        // Returns count of leap years before "year" since 0 CE
+        function leapYears(year) {
+            return Math.ceil(year / 4) - Math.ceil(year / 100) + Math.ceil(year / 400);
+        }
+
         // Copy any custom methods a 3rd party library may have added
         for (var key in NativeDate) {
             Date[key] = NativeDate[key];
@@ -997,47 +1004,40 @@ if (!Date.parse || Date.parse("+275760-09-13T00:00:00.000Z") !== 8.64e15) {
         Date.parse = function parse(string) {
             var match = isoDateExpression.exec(string);
             if (match) {
-                match.shift(); // kill match[0], the full match
                 // parse months, days, hours, minutes, seconds, and milliseconds
-                for (var i = 1; i < 7; i++) {
-                    // provide default values if necessary
-                    match[i] = +(match[i] || (i < 3 ? 1 : 0));
-                    // match[1] is the month. Months are 0-11 in JavaScript
-                    // `Date` objects, but 1-12 in ISO notation, so we
-                    // decrement.
-                    if (i == 1) {
-                        match[i]--;
-                    }
-                }
-
+                // provide default values if necessary
                 // parse the UTC offset component
-                var minuteOffset = +match.pop(), hourOffset = +match.pop(), sign = match.pop();
-
-                // compute the explicit time zone offset if specified
-                var offset = 0;
-                if (sign) {
-                    // detect invalid offsets and return early
-                    if (hourOffset > 23 || minuteOffset > 59) {
-                        return NaN;
+                var year = Number(match[1]),
+                    month = Number(match[2] || 1),
+                    day = Number(match[3] || 1),
+                    hour = Number(match[4] || 0),
+                    minute = Number(match[5] || 0),
+                    second = Number(match[6] || 0),
+                    millisecond = Number(match[7] || 0),
+                    signOffset = match[8] === "-" ? 1 : -1,
+                    hourOffset = Number(match[9] || 0),
+                    minuteOffset = Number(match[10] || 0),    
+                    leapYears0 = leapYears(year),
+                    leapYears1 = leapYears(year + 1),
+                    result;
+                    //debugger;
+                if (hour < (minute > 0 || second > 0 || millisecond > 0 ? 24 : 25) &&
+                    minute < 60 &&
+                    second < 60 &&
+                    millisecond < 1000 &&
+                    hourOffset < 24 && // detect invalid offsets
+                    minuteOffset < 60 &&
+                    month > 0 &&
+                    month < 13 &&
+                    day > 0 &&
+                    day < (1 + monthes[month] - monthes[month - 1] + (month === 2 ? leapYears1 - leapYears0 : 0))) {
+                    result = 365 * (year - 1970) + (month > 2 ? leapYears1 : leapYears0) - leapYears(1970) + monthes[month - 1] + day - 1;
+                    result = (((result * 24 + hour + hourOffset * signOffset) * 60 + minute + minuteOffset * signOffset) * 60 + second) * 1000 + millisecond;
+                    if (-8.64e15 <= result && result <= 8.64e15) {
+                        return result;
                     }
-
-                    // express the provided time zone offset in minutes. The offset is
-                    // negative for time zones west of UTC; positive otherwise.
-                    offset = (hourOffset * 60 + minuteOffset) * 6e4 * (sign == "+" ? -1 : 1);
                 }
-
-                // Date.UTC for years between 0 and 99 converts year to 1900 + year
-                // The Gregorian calendar has a 400-year cycle, so
-                // to Date.UTC(year + 400, .... ) - 12622780800000 == Date.UTC(year, ...),
-                // where 12622780800000 - number of milliseconds in Gregorian calendar 400 years
-                var year = +match[0];
-                if (0 <= year && year <= 99) {
-                    match[0] = year + 400;
-                    return NativeDate.UTC.apply(this, match) + offset - 12622780800000;
-                }
-
-                // compute a new UTC date value, accounting for the optional offset
-                return NativeDate.UTC.apply(this, match) + offset;
+                return NaN;
             }
             return NativeDate.parse.apply(this, arguments);
         };

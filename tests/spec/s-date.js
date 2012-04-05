@@ -64,6 +64,12 @@ describe('Date', function () {
             expect(Date.parse("2012-01-29T12:00:00.000+00:60")).toBeFalsy();      //NaN         NaN          NaN          NaN             NaN
             expect(Date.parse("-271821-04-20T00:00:00.000+00:01")).toBeFalsy();   //NaN         NaN          NaN          -864000000006e4 -864000008646e4
             expect(Date.parse("-271821-04-20T00:01:00.000+00:01")).toBe(-8.64e15);//-8.64e15    NaN          -8.64e15     -8.64e15        -864000008640e4
+
+            // When time zone is missed, local offset should be used (ES 5.1 bug)
+            // see https://bugs.ecmascript.org/show_bug.cgi?id=112
+            var tzOffset = Number(new Date(1970, 0));
+            // same as (new Date().getTimezoneOffset() * 60000)
+            expect(Date.parse('1970-01-01T00:00:00')).toBe(tzOffset);             //tzOffset    0            0            0               NaN
         });
     });
 

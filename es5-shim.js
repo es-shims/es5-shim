@@ -972,7 +972,7 @@ if (!Date.parse || "Date.parse is buggy") {
                     ":(\\d{2})" + // seconds capture
                     "(?:\\.(\\d{3}))?" + // milliseconds capture
                 ")?" +
-            "(?:" + // capture UTC offset component
+            "(" + // capture UTC offset component
                 "Z|" + // UTC capture
                 "(?:" + // offset specifier +/-hours:minutes
                     "([-+])" + // sign capture
@@ -1014,13 +1014,15 @@ if (!Date.parse || "Date.parse is buggy") {
                     minute = Number(match[5] || 0),
                     second = Number(match[6] || 0),
                     millisecond = Number(match[7] || 0),
-                    signOffset = match[8] === "-" ? 1 : -1,
-                    hourOffset = Number(match[9] || 0),
-                    minuteOffset = Number(match[10] || 0),    
+                    // When time zone is missed, local offset should be used (ES 5.1 bug)
+                    // see https://bugs.ecmascript.org/show_bug.cgi?id=112
+                    offset = match[8] ? 0 : Number(new Date(1970, 0)),
+                    signOffset = match[9] === "-" ? 1 : -1,
+                    hourOffset = Number(match[10] || 0),
+                    minuteOffset = Number(match[11] || 0),    
                     leapYears0 = leapYears(year),
                     leapYears1 = leapYears(year + 1),
                     result;
-                    //debugger;
                 if (hour < (minute > 0 || second > 0 || millisecond > 0 ? 24 : 25) &&
                     minute < 60 &&
                     second < 60 &&
@@ -1032,7 +1034,7 @@ if (!Date.parse || "Date.parse is buggy") {
                     day > 0 &&
                     day < (1 + monthes[month] - monthes[month - 1] + (month === 2 ? leapYears1 - leapYears0 : 0))) {
                     result = 365 * (year - 1970) + (month > 2 ? leapYears1 : leapYears0) - leapYears(1970) + monthes[month - 1] + day - 1;
-                    result = (((result * 24 + hour + hourOffset * signOffset) * 60 + minute + minuteOffset * signOffset) * 60 + second) * 1000 + millisecond;
+                    result = (((result * 24 + hour + hourOffset * signOffset) * 60 + minute + minuteOffset * signOffset) * 60 + second) * 1000 + millisecond + offset;
                     if (-8.64e15 <= result && result <= 8.64e15) {
                         return result;
                     }

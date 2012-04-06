@@ -92,18 +92,14 @@ if (!Function.prototype.bind) {
                 // 5. Return the result of calling the [[Construct]] internal
                 //   method of target providing args as the arguments.
 
-                var F = function(){};
-                F.prototype = target.prototype;
-                var self = new F;
-
                 var result = target.apply(
-                    self,
+                    this,
                     args.concat(slice.call(arguments))
                 );
                 if (Object(result) === result) {
                     return result;
                 }
-                return self;
+                return this;
 
             } else {
                 // 15.3.4.5.1 [[Call]]
@@ -133,6 +129,8 @@ if (!Function.prototype.bind) {
             }
 
         };
+		if(target.prototype)
+			bound.prototype = Object.create(target.prototype);
         // XXX bound.length is never writable, so don't even try
         //
         // 15. If the [[Class]] internal property of Target is "Function", then

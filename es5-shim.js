@@ -129,8 +129,9 @@ if (!Function.prototype.bind) {
             }
 
         };
-		if(target.prototype)
-			bound.prototype = Object.create(target.prototype);
+        if(target.prototype) {
+            bound.prototype = Object.create(target.prototype);
+        }
         // XXX bound.length is never writable, so don't even try
         //
         // 15. If the [[Class]] internal property of Target is "Function", then

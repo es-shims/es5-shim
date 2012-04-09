@@ -1066,5 +1066,11 @@ describe('Array', function() {
         });
     });
 
+    describe('splice', function () {
+        it('should do nothing when second param is undefined', function () {
+            expect([1,2].splice(0).length).toBe(2);
+        });
+    });
+
     
 });

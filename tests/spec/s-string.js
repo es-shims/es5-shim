@@ -8,4 +8,17 @@ describe('String', function() {
             expect(test.trim().length).toEqual(13);
         });
     });
+
+    describe("split", function() {
+        var test = "ab";
+
+        it('If "separator" is undefined must return Array with one String - "this" string', function() {
+            expect(test.split()).toEqual([test]);
+            expect(test.split(void 0)).toEqual([test]);
+        });
+
+        it('If "separator" is undefined and "limit" set to 0 must return Array[]', function() {
+            expect(test.split(void 0, 0)).toEqual([]);
+        });
+    });
 });

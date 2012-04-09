@@ -1090,6 +1090,9 @@ describe('Array', function() {
             expect(test.splice(2)).toEqual([b]);
             expect(test).toEqual([1, "a"]);
         });
+        it('runshould have the right length', function () {
+            expect(test.splice.length).toBe(2);
+        }); 
     });
 
     

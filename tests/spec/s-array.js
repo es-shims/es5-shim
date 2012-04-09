@@ -1067,8 +1067,28 @@ describe('Array', function() {
     });
 
     describe('splice', function () {
-        it('should do nothing when second param is undefined', function () {
-            expect([1,2].splice(0).length).toBe(2);
+        var b = ["b"],
+            a = [1, "a", b],
+            test;
+        beforeEach(function() {
+            test = a.slice(0);
+        });
+        
+        it('basic implementation test 1', function () {
+            expect(test.splice(0)).toEqual(a);
+        });
+        it('basic implementation test 2', function () {
+            test.splice(0, 2);
+            expect(test).toEqual([b]);
+        });            
+        
+        it('should deleted and return all items after "start" when second param is undefined', function () {
+            expect(test.splice(0)).toEqual(a);
+            expect(test).toEqual([]);
+        });
+        it('should deleted and return all items after "start" when second param is undefined', function () {
+            expect(test.splice(2)).toEqual([b]);
+            expect(test).toEqual([1, "a"]);
         });
     });
 

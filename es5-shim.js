@@ -200,8 +200,7 @@ if ((supportsAccessors = owns(prototypeOfObject, "__defineGetter__"))) {
 
 // ES5 15.4.4.12
 // http://es5.github.com/#x15.4.4.12
-// When the splice method is called with two or more arguments start, deleteCount ...
-// Do nothing when second param is undefined
+// Default value for second param
 // [bugfix, ielt9, old browsers] 
 // IE < 9 bug: [1,2].splice(0).join("") == "" but should be "12"
 if([1,2].splice(0).length != 2) {
@@ -212,7 +211,7 @@ if([1,2].splice(0).length != 2) {
      * @param {...} elementsToAdd
      */
     Array.prototype.splice = function(start, deleteCount, elements) {
-        return _origArraySplice.call(this, start, deleteCount === void 0 ? (this.length - start) : deleteCount, slice.call(arguments, 2))
+        return _origArraySplice.apply(this, start, deleteCount === void 0 ? (this.length - start) : deleteCount, slice.call(arguments, 2))
     };
 }
 
@@ -1079,7 +1078,7 @@ if("0".split(void 0, 0).length) {
     var oldSplit = String.prototype.split;
     String.prototype.split = function(separator, limit) {
         if(separator === void 0 && limit === 0)return [];
-        return oldSplit.call(this, arguments);
+        return oldSplit.apply(this, arguments);
     }
 }
 

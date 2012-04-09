@@ -205,9 +205,14 @@ if ((supportsAccessors = owns(prototypeOfObject, "__defineGetter__"))) {
 // IE < 9 bug: [1,2].splice(0).join("") == "" but should be "12"
 if([1,2].splice(0).length != 2) {
     var _origArraySplice = Array.prototype.splice;
+
     Array.prototype.splice = function(start, deleteCount) {
-        if(start === void 0 && deleteCount === void 0)return [];
-        return _origArraySplice.apply(this, [start, deleteCount === void 0 ? (this.length - start) : deleteCount].concat(slice.call(arguments, 2)))
+        if(!arguments.length)return [];
+
+        return _origArraySplice.apply(this, [
+                start === void 0 ? 0 : start,
+                deleteCount === void 0 ? (this.length - start) : deleteCount
+            ].concat(slice.call(arguments, 2)))
     };
 }
 

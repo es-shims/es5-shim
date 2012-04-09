@@ -80,6 +80,12 @@ describe('Date', function () {
             expect(new Date(-62198755200000).toISOString().indexOf('-000001-01-01')).toBe(0);
             expect(new Date(8.64e15).toISOString().indexOf('+275760-09-13')).toBe(0);
         });
+
+        it('should return correct dates', function () {
+            expect(new Date(-1).toISOString()).toBe('1969-12-31T23:59:59.999Z');// Safari 5.1.5 "1969-12-31T23:59:59.-01Z"
+            expect(new Date(-3509827334573292).toISOString()).toBe('-109252-01-01T10:37:06.708Z'); // Opera 11.61/Opera 12 bug with Date#getUTCMonth
+        });
+
     });
 
     describe("toJSON", function () {

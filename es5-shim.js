@@ -900,11 +900,43 @@ if (!Date.now) {
     };
 }
 
+
 // ES5 15.9.5.44
 // http://es5.github.com/#x15.9.5.44
 // This function provides a String representation of a Date object for use by
 // JSON.stringify (15.12.3).
-if (!Date.prototype.toJSON) {
+function isPrimitive(input) {
+    var t = typeof input;
+    return input === null || t === "undefined" || t === "boolean" || t === "number" || t === "string";
+}
+
+function ToPrimitive(input) {
+    var val, valueOf, toString;
+    if (isPrimitive(input)) {
+        return input;
+    }
+    valueOf = input.valueOf;
+    if (typeof valueOf === "function") {
+        val = valueOf.call(input);
+        if (isPrimitive(val)) {
+            return val;
+        }
+    }
+    toString = input.toString;
+    if (typeof toString === "function") {
+        val = toString.call(input);
+        if (isPrimitive(val)) {
+            return val;
+        }
+    }
+    throw new TypeError();
+}
+
+var dateToJSONIsSupported = false;
+try {
+    dateToJSONIsSupported = Date.prototype.toJSON && new Date(NaN).toJSON() === null;
+} catch (e) {}
+if (!dateToJSONIsSupported) {
     Date.prototype.toJSON = function toJSON(key) {
         // When the toJSON method is called with argument key, the following
         // steps are taken:
@@ -912,17 +944,23 @@ if (!Date.prototype.toJSON) {
         // 1.  Let O be the result of calling ToObject, giving it the this
         // value as its argument.
         // 2. Let tv be ToPrimitive(O, hint Number).
+        var o = Object(this),
+            tv = ToPrimitive(o),
+            toISO;
         // 3. If tv is a Number and is not finite, return null.
-        // XXX
+        if (typeof tv === 'number' && !isFinite(tv)) {
+            return null;
+        }
         // 4. Let toISO be the result of calling the [[Get]] internal method of
         // O with argument "toISOString".
+        toISO = o.toISOString;
         // 5. If IsCallable(toISO) is false, throw a TypeError exception.
-        if (typeof this.toISOString != "function") {
+        if (typeof toISO != "function") {
             throw new TypeError('toISOString property is not callable');
         }
         // 6. Return the result of calling the [[Call]] internal method of
         //  toISO with O as the this value and an empty argument list.
-        return this.toISOString();
+        return toISO.call(o);
 
         // NOTE 1 The argument is ignored.
 

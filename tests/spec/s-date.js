@@ -89,6 +89,25 @@ describe('Date', function () {
     });
 
     describe("toJSON", function () {
+
+        // Opera 11.6x/12 bug
+        it('should call toISOString', function () {
+          var date = new Date(0);
+          date.toISOString = function () {
+            return 1;
+          };
+          expect(date.toJSON()).toBe(1);
+        });
+
+        it('should return null for not finite dates', function () {
+          var date = new Date(NaN),
+              json;
+          try {
+            json = date.toJSON();
+          } catch (e) {}
+          expect(json).toBe(null);
+        });
+
         it('should return the isoString when stringified', function () {
             var date = new Date();
             expect(JSON.stringify(date.toISOString())).toBe(JSON.stringify(date));

@@ -1077,15 +1077,9 @@ if (!String.prototype.trim || ws.trim()) {
 
 // ES5 9.4
 // http://es5.github.com/#x9.4
-// http://jsperf.com/to-integer
+// http://jsperf.com/to-integer/7
 var toInteger = function (n) {
-    n = +n;
-    if (n !== n) { // isNaN
-        n = 0;
-    } else if (n !== 0 && n !== (1/0) && n !== -(1/0)) {
-        n = (n > 0 || -1) * Math.floor(Math.abs(n));
-    }
-    return n;
+    return isNaN(n) ? -1 : ~~n;
 };
 
 var prepareString = "a"[0] != "a";

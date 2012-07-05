@@ -31,7 +31,7 @@
         define(definition);
     // YUI3
     } else if (typeof YUI === "function") {
-        YUI.add("ES5", definition);
+        YUI.add("es5", definition);
     // CommonJS and <script>
     } else {
         definition();

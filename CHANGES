@@ -1,11 +1,10 @@
-
 1.2.10
  - Group-effort Style Cleanup
  - Took a stab at fixing Object.defineProperty on IE8 without
    bad side-effects. (@hax)
  - Object.isExtensible no longer fakes it. (@xavierm)
  - Date.prototype.toISOString no longer deals with partial
-   ISO dates, per spec (@kitcamberidge)
+   ISO dates, per spec (@kitcambridge)
  - More (mostly from @bryanforbes)
 
 1.2.9

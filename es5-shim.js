@@ -571,7 +571,7 @@ if (!Object.getOwnPropertyNames) {
 
 // ES5 15.2.3.5
 // http://es5.github.com/#x15.2.3.5
-if (!Object.create) {
+if (!Object.create && Object.defineProperty) {
     Object.create = function create(prototype, properties) {
         var object;
         if (prototype === null) {
@@ -617,8 +617,7 @@ function doesDefinePropertyWork(object) {
     }
 }
 
-// check whether defineProperty works if it's given. Otherwise,
-// shim partially.
+// check whether defineProperty works if it's given.
 if (Object.defineProperty) {
     var definePropertyWorksOnObject = doesDefinePropertyWork({});
     var definePropertyWorksOnDom = typeof document == "undefined" ||
@@ -628,7 +627,7 @@ if (Object.defineProperty) {
     }
 }
 
-if (!Object.defineProperty || definePropertyFallback) {
+if (definePropertyFallback) {
     var ERR_NON_OBJECT_DESCRIPTOR = "Property description must be an object: ";
     var ERR_NON_OBJECT_TARGET = "Object.defineProperty called on non-object: "
     var ERR_ACCESSORS_NOT_SUPPORTED = "getters & setters can not be defined " +
@@ -704,7 +703,7 @@ if (!Object.defineProperty || definePropertyFallback) {
 
 // ES5 15.2.3.7
 // http://es5.github.com/#x15.2.3.7
-if (!Object.defineProperties) {
+if (!Object.defineProperties && Object.defineProperty) {
     Object.defineProperties = function defineProperties(object, properties) {
         for (var property in properties) {
             if (owns(properties, property) && property != "__proto__") {

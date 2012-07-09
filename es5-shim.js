@@ -29,6 +29,9 @@
     // RequireJS
     if (typeof define == "function") {
         define(definition);
+    // YUI3
+    } else if (typeof YUI == "function") {
+        YUI.add("es5", definition);
     // CommonJS and <script>
     } else {
         definition();

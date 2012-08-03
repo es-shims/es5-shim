@@ -466,7 +466,7 @@ if (!Array.prototype.indexOf || ([0, 1].indexOf(1, 2) != -1)) {
 // ES5 15.4.4.15
 // http://es5.github.com/#x15.4.4.15
 // https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Array/lastIndexOf
-if (!Array.prototype.lastIndexOf || ([0, 1].lastIndexOf(0, -2) != -1)) {
+if (!Array.prototype.lastIndexOf || ([0, 1].lastIndexOf(0, -3) != -1)) {
     Array.prototype.lastIndexOf = function lastIndexOf(sought /*, fromIndex */) {
         var self = toObject(this),
             length = self.length >>> 0;

@@ -1,3 +1,4 @@
+[![build status](https://secure.travis-ci.org/kriskowal/es5-shim.png)](http://travis-ci.org/kriskowal/es5-shim)
 Provides compatibility shims so that legacy JavaScript
 engines behave as closely as possible to ES5.
 

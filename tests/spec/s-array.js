@@ -1066,5 +1066,46 @@ describe('Array', function() {
         });
     });
 
+    describe('splice', function () {
+        var b = ["b"],
+            a = [1, "a", b],
+            test;
+        beforeEach(function() {
+            test = a.slice(0);
+        });
+        
+        it('basic implementation test 1', function () {
+            expect(test.splice(0)).toEqual(a);
+        });
+        it('basic implementation test 2', function () {
+            test.splice(0, 2);
+            expect(test).toEqual([b]);
+        });            
+                 
+        
+        it('should do nothing if method called with no arguments', function () {
+            expect(test.splice()).toEqual([]);
+            expect(test).toEqual(a);
+        });
+        //TODO:: Is this realy TRUE behavior?
+        it('should set first argument to 0 if first argument is set but undefined', function () {
+            var test2 = test.slice(0);
+            expect(test.splice(void 0, 2)).toEqual(test2.splice(0, 2));
+            expect(test).toEqual(test2);
+        });
+
+        it('should deleted and return all items after "start" when second argument is undefined', function () {
+            expect(test.splice(0)).toEqual(a);
+            expect(test).toEqual([]);
+        });
+        it('should deleted and return all items after "start" when second argument is undefined', function () {
+            expect(test.splice(2)).toEqual([b]);
+            expect(test).toEqual([1, "a"]);
+        });
+        it('runshould have the right length', function () {
+            expect(test.splice.length).toBe(2);
+        }); 
+    });
+
     
 });

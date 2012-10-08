@@ -182,16 +182,17 @@ if ((supportsAccessors = owns(prototypeOfObject, "__defineGetter__"))) {
 // Default value for second param
 // [bugfix, ielt9, old browsers]
 // IE < 9 bug: [1,2].splice(0).join("") == "" but should be "12"
-if([1,2].splice(0).length != 2) {
-    var _origArraySplice = Array.prototype.splice;
-
+if ([1,2].splice(0).length != 2) {
+    var array_splice = Array.prototype.splice;
     Array.prototype.splice = function(start, deleteCount) {
-        if(!arguments.length)return [];
-
-        return _origArraySplice.apply(this, [
+        if (!arguments.length) {
+            return [];
+        } else {
+            return array_splice.apply(this, [
                 start === void 0 ? 0 : start,
                 deleteCount === void 0 ? (this.length - start) : deleteCount
             ].concat(slice.call(arguments, 2)))
+        }
     };
 }
 
@@ -221,14 +222,16 @@ if (!Array.isArray) {
 // https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/array/forEach
 
 // Check failure of by-index access of string characters (IE < 9)
-// and failure of `0 in strObj` (Rhino)
-var strObj = Object("a"),
-    splitString = strObj[0] != "a" || !(0 in strObj);
+// and failure of `0 in boxedString` (Rhino)
+var boxedString = Object("a"),
+    splitString = boxedString[0] != "a" || !(0 in boxedString);
 
 if (!Array.prototype.forEach) {
     Array.prototype.forEach = function forEach(fun /*, thisp*/) {
         var object = toObject(this),
-            self = splitString && _toString(this) == "[object String]" ? this.split("") : object,
+            self = splitString && _toString(this) == "[object String]" ?
+                this.split("") :
+                object,
             thisp = arguments[1],
             i = -1,
             length = self.length >>> 0;
@@ -241,7 +244,8 @@ if (!Array.prototype.forEach) {
         while (++i < length) {
             if (i in self) {
                 // Invoke the callback function with call, passing arguments:
-                // context, property value, property key, thisArg object context
+                // context, property value, property key, thisArg object
+                // context
                 fun.call(thisp, self[i], i, object);
             }
         }
@@ -254,7 +258,9 @@ if (!Array.prototype.forEach) {
 if (!Array.prototype.map) {
     Array.prototype.map = function map(fun /*, thisp*/) {
         var object = toObject(this),
-            self = splitString && _toString(this) == "[object String]" ? this.split("") : object,
+            self = splitString && _toString(this) == "[object String]" ?
+                this.split("") :
+                object,
             length = self.length >>> 0,
             result = Array(length),
             thisp = arguments[1];
@@ -278,7 +284,9 @@ if (!Array.prototype.map) {
 if (!Array.prototype.filter) {
     Array.prototype.filter = function filter(fun /*, thisp */) {
         var object = toObject(this),
-            self = splitString && _toString(this) == "[object String]" ? this.split("") : object,
+            self = splitString && _toString(this) == "[object String]" ?
+                this.split("") :
+                    object,
             length = self.length >>> 0,
             result = [],
             value,
@@ -307,7 +315,9 @@ if (!Array.prototype.filter) {
 if (!Array.prototype.every) {
     Array.prototype.every = function every(fun /*, thisp */) {
         var object = toObject(this),
-            self = splitString && _toString(this) == "[object String]" ? this.split("") : object,
+            self = splitString && _toString(this) == "[object String]" ?
+                this.split("") :
+                object,
             length = self.length >>> 0,
             thisp = arguments[1];
 
@@ -331,7 +341,9 @@ if (!Array.prototype.every) {
 if (!Array.prototype.some) {
     Array.prototype.some = function some(fun /*, thisp */) {
         var object = toObject(this),
-            self = splitString && _toString(this) == "[object String]" ? this.split("") : object,
+            self = splitString && _toString(this) == "[object String]" ?
+                this.split("") :
+                object,
             length = self.length >>> 0,
             thisp = arguments[1];
 
@@ -355,7 +367,9 @@ if (!Array.prototype.some) {
 if (!Array.prototype.reduce) {
     Array.prototype.reduce = function reduce(fun /*, initial*/) {
         var object = toObject(this),
-            self = splitString && _toString(this) == "[object String]" ? this.split("") : object,
+            self = splitString && _toString(this) == "[object String]" ?
+                this.split("") :
+                object,
             length = self.length >>> 0;
 
         // If no callback function or if callback is not a callable function
@@ -365,7 +379,7 @@ if (!Array.prototype.reduce) {
 
         // no value to return if no initial value and an empty array
         if (!length && arguments.length == 1) {
-            throw new TypeError('reduce of empty array with no initial value');
+            throw new TypeError("reduce of empty array with no initial value");
         }
 
         var i = 0;
@@ -381,7 +395,7 @@ if (!Array.prototype.reduce) {
 
                 // if array contains no values, no initial value to return
                 if (++i >= length) {
-                    throw new TypeError('reduce of empty array with no initial value');
+                    throw new TypeError("reduce of empty array with no initial value");
                 }
             } while (true);
         }
@@ -402,7 +416,9 @@ if (!Array.prototype.reduce) {
 if (!Array.prototype.reduceRight) {
     Array.prototype.reduceRight = function reduceRight(fun /*, initial*/) {
         var object = toObject(this),
-            self = splitString && _toString(this) == "[object String]" ? this.split("") : object,
+            self = splitString && _toString(this) == "[object String]" ?
+                this.split("") :
+                object,
             length = self.length >>> 0;
 
         // If no callback function or if callback is not a callable function
@@ -412,7 +428,7 @@ if (!Array.prototype.reduceRight) {
 
         // no value to return if no initial value, empty array
         if (!length && arguments.length == 1) {
-            throw new TypeError('reduceRight of empty array with no initial value');
+            throw new TypeError("reduceRight of empty array with no initial value");
         }
 
         var result, i = length - 1;
@@ -427,7 +443,7 @@ if (!Array.prototype.reduceRight) {
 
                 // if array contains no values, no initial value to return
                 if (--i < 0) {
-                    throw new TypeError('reduceRight of empty array with no initial value');
+                    throw new TypeError("reduceRight of empty array with no initial value");
                 }
             } while (true);
         }
@@ -447,7 +463,9 @@ if (!Array.prototype.reduceRight) {
 // https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Array/indexOf
 if (!Array.prototype.indexOf || ([0, 1].indexOf(1, 2) != -1)) {
     Array.prototype.indexOf = function indexOf(sought /*, fromIndex */ ) {
-        var self = splitString && _toString(this) == "[object String]" ? this.split("") : toObject(this),
+        var self = splitString && _toString(this) == "[object String]" ?
+                this.split("") :
+                toObject(this),
             length = self.length >>> 0;
 
         if (!length) {
@@ -475,7 +493,9 @@ if (!Array.prototype.indexOf || ([0, 1].indexOf(1, 2) != -1)) {
 // https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Array/lastIndexOf
 if (!Array.prototype.lastIndexOf || ([0, 1].lastIndexOf(0, -3) != -1)) {
     Array.prototype.lastIndexOf = function lastIndexOf(sought /*, fromIndex */) {
-        var self = splitString && _toString(this) == "[object String]" ? this.split("") : toObject(this),
+        var self = splitString && _toString(this) == "[object String]" ?
+                this.split("") :
+                toObject(this),
             length = self.length >>> 0;
 
         if (!length) {
@@ -523,7 +543,10 @@ if (!Object.keys) {
 
     Object.keys = function keys(object) {
 
-        if ((typeof object != "object" && typeof object != "function") || object === null) {
+        if (
+            (typeof object != "object" && typeof object != "function") ||
+            object === null
+        ) {
             throw new TypeError("Object.keys called on a non-object");
         }
 
@@ -559,9 +582,12 @@ if (!Object.keys) {
 // string format defined in 15.9.1.15. All fields are present in the String.
 // The time zone is always UTC, denoted by the suffix Z. If the time value of
 // this object is not a finite Number a RangeError exception is thrown.
-var negDate = -62198755200000,
-    yearStr = '-000001';
-if (!Date.prototype.toISOString || (new Date(negDate).toISOString().indexOf(yearStr) === -1)) {
+var negativeDate = -62198755200000,
+    negativeYearString = "-000001";
+if (
+    !Date.prototype.toISOString ||
+    (new Date(negativeDate).toISOString().indexOf(negativeYearString) === -1)
+) {
     Date.prototype.toISOString = function toISOString() {
         var result, length, value, year, month;
         if (!isFinite(this)) {
@@ -578,19 +604,27 @@ if (!Date.prototype.toISOString || (new Date(negDate).toISOString().indexOf(year
         // the date time string format is specified in 15.9.1.15.
         result = [month + 1, this.getUTCDate(),
             this.getUTCHours(), this.getUTCMinutes(), this.getUTCSeconds()];
-        year = (year < 0 ? '-' : (year > 9999 ? '+' : '')) + ('00000' + Math.abs(year)).slice(0 <= year && year <= 9999 ? -4 : -6);
+        year = (
+            (year < 0 ? "-" : (year > 9999 ? "+" : "")) +
+            ("00000" + Math.abs(year))
+            .slice(0 <= year && year <= 9999 ? -4 : -6)
+        );
 
         length = result.length;
         while (length--) {
             value = result[length];
-            // pad months, days, hours, minutes, and seconds to have two digits.
+            // pad months, days, hours, minutes, and seconds to have two
+            // digits.
             if (value < 10) {
                 result[length] = "0" + value;
             }
         }
         // pad milliseconds to have three digits.
-        return year + "-" + result.slice(0, 2).join("-") + "T" + result.slice(2).join(":") + "." +
-            ("000" + this.getUTCMilliseconds()).slice(-3) + "Z";
+        return (
+            year + "-" + result.slice(0, 2).join("-") +
+            "T" + result.slice(2).join(":") + "." +
+            ("000" + this.getUTCMilliseconds()).slice(-3) + "Z"
+        );
     };
 }
 
@@ -604,7 +638,7 @@ try {
     dateToJSONIsSupported = (
         Date.prototype.toJSON &&
         new Date(NaN).toJSON() === null &&
-        new Date(negDate).toJSON().indexOf(yearStr) !== -1 &&
+        new Date(negativeDate).toJSON().indexOf(negativeYearString) !== -1 &&
         Date.prototype.toJSON.call({ // generic
             toISOString: function () {
                 return true;
@@ -625,7 +659,7 @@ if (!dateToJSONIsSupported) {
             tv = toPrimitive(o),
             toISO;
         // 3. If tv is a Number and is not finite, return null.
-        if (typeof tv === 'number' && !isFinite(tv)) {
+        if (typeof tv === "number" && !isFinite(tv)) {
             return null;
         }
         // 4. Let toISO be the result of calling the [[Get]] internal method of
@@ -633,7 +667,7 @@ if (!dateToJSONIsSupported) {
         toISO = o.toISOString;
         // 5. If IsCallable(toISO) is false, throw a TypeError exception.
         if (typeof toISO != "function") {
-            throw new TypeError('toISOString property is not callable');
+            throw new TypeError("toISOString property is not callable");
         }
         // 6. Return the result of calling the [[Call]] internal method of
         //  toISO with O as the this value and an empty argument list.
@@ -685,7 +719,8 @@ if (!Date.parse || "Date.parse is buggy") {
 
         // 15.9.1.15 Date Time String Format.
         var isoDateExpression = new RegExp("^" +
-            "(\\d{4}|[\+\-]\\d{6})" + // four-digit year capture or sign + 6-digit extended year
+            "(\\d{4}|[\+\-]\\d{6})" + // four-digit year capture or sign +
+                                      // 6-digit extended year
             "(?:-(\\d{2})" + // optional month capture
             "(?:-(\\d{2})" + // optional day capture
             "(?:" + // capture hours:minutes:seconds.milliseconds
@@ -705,11 +740,19 @@ if (!Date.parse || "Date.parse is buggy") {
             ")?)?)?)?" +
         "$");
 
-        var monthes = [0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334, 365];
+        var months = [
+            0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334, 365
+        ];
 
         function dayFromMonth(year, month) {
             var t = month > 1 ? 1 : 0;
-            return monthes[month] + Math.floor((year - 1969 + t) / 4) - Math.floor((year - 1901 + t) / 100) + Math.floor((year - 1601 + t) / 400) + 365 * (year - 1970);
+            return (
+                months[month] +
+                Math.floor((year - 1969 + t) / 4) -
+                Math.floor((year - 1901 + t) / 100) +
+                Math.floor((year - 1601 + t) / 400) +
+                365 * (year - 1970)
+            );
         }
 
         // Copy any custom methods a 3rd party library may have added
@@ -737,19 +780,38 @@ if (!Date.parse || "Date.parse is buggy") {
                     minute = Number(match[5] || 0),
                     second = Number(match[6] || 0),
                     millisecond = Number(match[7] || 0),
-                    // When time zone is missed, local offset should be used (ES 5.1 bug)
+                    // When time zone is missed, local offset should be used
+                    // (ES 5.1 bug)
                     // see https://bugs.ecmascript.org/show_bug.cgi?id=112
-                    offset = !match[4] || match[8] ? 0 : Number(new Date(1970, 0)),
+                    offset = !match[4] || match[8] ?
+                        0 : Number(new Date(1970, 0)),
                     signOffset = match[9] === "-" ? 1 : -1,
                     hourOffset = Number(match[10] || 0),
                     minuteOffset = Number(match[11] || 0),
                     result;
-                if (hour < (minute > 0 || second > 0 || millisecond > 0 ? 24 : 25) &&
+                if (
+                    hour < (
+                        minute > 0 || second > 0 || millisecond > 0 ?
+                        24 : 25
+                    ) &&
                     minute < 60 && second < 60 && millisecond < 1000 &&
-                    month > -1 && month < 12 && hourOffset < 24 && minuteOffset < 60 && // detect invalid offsets
-                    day > -1 && day < dayFromMonth(year, month + 1) - dayFromMonth(year, month)) {
-                    result = ((dayFromMonth(year, month) + day) * 24 + hour + hourOffset * signOffset) * 60;
-                    result = ((result + minute + minuteOffset * signOffset) * 60 + second) * 1000 + millisecond + offset;
+                    month > -1 && month < 12 && hourOffset < 24 &&
+                    minuteOffset < 60 && // detect invalid offsets
+                    day > -1 &&
+                    day < (
+                        dayFromMonth(year, month + 1) -
+                        dayFromMonth(year, month)
+                    )
+                ) {
+                    result = (
+                        (dayFromMonth(year, month) + day) * 24 +
+                        hour +
+                        hourOffset * signOffset
+                    ) * 60;
+                    result = (
+                        (result + minute + minuteOffset * signOffset) * 60 +
+                        second
+                    ) * 1000 + millisecond + offset;
                     if (-8.64e15 <= result && result <= 8.64e15) {
                         return result;
                     }
@@ -781,22 +843,26 @@ if (!Date.now) {
 // ES5 15.5.4.14
 // http://es5.github.com/#x15.5.4.14
 // [bugfix, chrome]
-// If separator is undefined, then the result array contains just one String, which is the this value (converted to a String). If limit is not undefined, then the output array is truncated so that it contains no more than limit elements.
+// If separator is undefined, then the result array contains just one String,
+// which is the this value (converted to a String). If limit is not undefined,
+// then the output array is truncated so that it contains no more than limit
+// elements.
 // "0".split(undefined, 0) -> []
 if("0".split(void 0, 0).length) {
-    var oldSplit = String.prototype.split;
+    var string_split = String.prototype.split;
     String.prototype.split = function(separator, limit) {
         if(separator === void 0 && limit === 0)return [];
-        return oldSplit.apply(this, arguments);
+        return string_split.apply(this, arguments);
     }
 }
 
 // ECMA-262, 3rd B.2.3
-// Note an ECMAScript standart, although ECMAScript 3rd Edition has a non-normative section suggesting uniform semantics
-// and it should be normalized across all browsers
+// Note an ECMAScript standart, although ECMAScript 3rd Edition has a
+// non-normative section suggesting uniform semantics and it should be
+// normalized across all browsers
 // [bugfix, IE lt 9] IE < 9 substr() with negative value not working in IE
 if("".substr && "0b".substr(-1) !== "b") {
-    var oldSubstr = String.prototype.substr;
+    var string_substr = String.prototype.substr;
     /**
      *  Get the substring of a string
      *  @param  {integer}  start   where to start the substring
@@ -804,7 +870,11 @@ if("".substr && "0b".substr(-1) !== "b") {
      *  @return {string}
      */
     String.prototype.substr = function(start, length) {
-        return oldSubstr.call(this, start < 0 ? (start = this.length + start) < 0 ? 0 : start : start, length);
+        return string_substr.call(
+            this,
+            start < 0 ? (start = this.length + start) < 0 ? 0 : start : start,
+            length
+        );
     }
 }
 
@@ -823,7 +893,9 @@ if (!String.prototype.trim || ws.trim()) {
         if (this === undefined || this === null) {
             throw new TypeError("can't convert "+this+" to object");
         }
-        return String(this).replace(trimBeginRegexp, "").replace(trimEndRegexp, "");
+        return String(this)
+            .replace(trimBeginRegexp, "")
+            .replace(trimEndRegexp, "");
     };
 }
 
@@ -847,8 +919,14 @@ function toInteger(n) {
 }
 
 function isPrimitive(input) {
-    var t = typeof input;
-    return input === null || t === "undefined" || t === "boolean" || t === "number" || t === "string";
+    var type = typeof input;
+    return (
+        input === null ||
+        type === "undefined" ||
+        type === "boolean" ||
+        type === "number" ||
+        type === "string"
+    );
 }
 
 function toPrimitive(input) {

@@ -178,6 +178,24 @@ if ((supportsAccessors = owns(prototypeOfObject, "__defineGetter__"))) {
 // =====
 //
 
+// ES5 15.4.4.12
+// http://es5.github.com/#x15.4.4.12
+// Default value for second param
+// [bugfix, ielt9, old browsers] 
+// IE < 9 bug: [1,2].splice(0).join("") == "" but should be "12"
+if([1,2].splice(0).length != 2) {
+    var _origArraySplice = Array.prototype.splice;
+
+    Array.prototype.splice = function(start, deleteCount) {
+        if(!arguments.length)return [];
+
+        return _origArraySplice.apply(this, [
+                start === void 0 ? 0 : start,
+                deleteCount === void 0 ? (this.length - start) : deleteCount
+            ].concat(slice.call(arguments, 2)))
+    };
+}
+
 // ES5 15.4.3.2
 // http://es5.github.com/#x15.4.3.2
 // https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Array/isArray
@@ -722,6 +740,37 @@ if (!Date.parse || Date.parse("+275760-09-13T00:00:00.000Z") !== 8.64e15) {
 // String
 // ======
 //
+
+
+// ES5 15.5.4.14
+// http://es5.github.com/#x15.5.4.14
+// [bugfix, chrome]
+// If separator is undefined, then the result array contains just one String, which is the this value (converted to a String). If limit is not undefined, then the output array is truncated so that it contains no more than limit elements.
+// "0".split(undefined, 0) -> []
+if("0".split(void 0, 0).length) {
+    var oldSplit = String.prototype.split;
+    String.prototype.split = function(separator, limit) {
+        if(separator === void 0 && limit === 0)return [];
+        return oldSplit.apply(this, arguments);
+    }
+}
+
+// ECMA-262, 3rd B.2.3
+// Note an ECMAScript standart, although ECMAScript 3rd Edition has a non-normative section suggesting uniform semantics
+// and it should be normalized across all browsers
+// [bugfix, IE lt 9] IE < 9 substr() with negative value not working in IE
+if("".substr && "0b".substr(-1) !== "b") {
+    var oldSubstr = String.prototype.substr;
+    /** 
+     *  Get the substring of a string 
+     *  @param  {integer}  start   where to start the substring 
+     *  @param  {integer}  length  how many characters to return 
+     *  @return {string} 
+     */
+    String.prototype.substr = function(start, length) {
+        return oldSubstr.call(this, start < 0 ? (start = this.length + start) < 0 ? 0 : start : start, length);
+    }
+}
 
 // ES5 15.5.4.20
 // http://es5.github.com/#x15.5.4.20

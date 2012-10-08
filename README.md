@@ -1,19 +1,17 @@
-Provides compatibility shims so that legacy JavaScript
-engines behave as closely as possible to ES5.
 
-This package requires quite a bit more attention and
-testing.  It is not likely to behave as advertised in a
-large cross-section of browsers.
+`es5-shim.js` and `es5-shim.min.js` monkey-patch a JavaScript context to
+contain all EcmaScript 5 methods that can be faithfully emulated with a
+legacy JavaScript engine.
 
-"As closely as possible to ES5" is not very close.  Many of
-these shims are intended only to allow code to be written to
-ES5 without causing run-time errors in older engines.  In
-many cases, this means that these shims cause many ES5
-methods to silently fail.  Decide carefully whether this is
-what you want.
+`es5-sham.js` and `es5-sham.min.js` monkey-patch other ES5 methods as
+closely as possible.  For these methods, as closely as possible to ES5
+is not very close.  Many of these shams are intended only to allow code
+to be written to ES5 without causing run-time errors in older engines.
+In many cases, this means that these shams cause many ES5 methods to
+silently fail.  Decide carefully whether this is what you want.
 
-TESTS
------
+
+## Tests
 
 The tests are written with the Jasmine BDD test framework.
 To run the tests, navigate to <root-folder>/tests/. 
@@ -23,8 +21,7 @@ implementation of the missing methods. This happens in <root-folder>/tests/helpe
 So in order to run the tests against the build-in methods, invalidate that file somehow
 (comment-out, delete the file, delete the script-tag, etc.).
 
-SAFE SHIMS
-----------
+## Shims
 
 ### Complete tests ###
 
@@ -55,9 +52,7 @@ SAFE SHIMS
 * Date.parse (for ISO parsing)
 * Date.prototype.toISOString
 
-
-DUBIOUS SHIMS
--------------
+## Shams
 
 * /?\ Object.create
 
@@ -113,9 +108,7 @@ DUBIOUS SHIMS
     Works like a charm, by trying very hard to extend the
     object then redacting the extension.
 
-
-SHIMS THAT FAIL SILENTLY
-------------------------
+### Fail silently
 
 * /!\ Object.getOwnPropertyDescriptor
     

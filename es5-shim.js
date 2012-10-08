@@ -547,17 +547,25 @@ if (!Object.keys) {
 // string format defined in 15.9.1.15. All fields are present in the String.
 // The time zone is always UTC, denoted by the suffix Z. If the time value of
 // this object is not a finite Number a RangeError exception is thrown.
-if (!Date.prototype.toISOString || (new Date(-62198755200000).toISOString().indexOf('-000001') === -1)) {
+if (!Date.prototype.toISOString || 
+    (new Date(-1).toISOString() !== '1969-12-31T23:59:59.999Z') ||
+    (new Date(-62198755200000).toISOString().indexOf('-000001') === -1)) {
     Date.prototype.toISOString = function toISOString() {
-        var result, length, value, year;
+        var result, length, value, year, month;
         if (!isFinite(this)) {
             throw new RangeError("Date.prototype.toISOString called on non-finite value.");
         }
 
-        // the date time string format is specified in 15.9.1.15.
-        result = [this.getUTCMonth() + 1, this.getUTCDate(),
-            this.getUTCHours(), this.getUTCMinutes(), this.getUTCSeconds()];
         year = this.getUTCFullYear();
+
+        month = this.getUTCMonth();
+        // see https://github.com/kriskowal/es5-shim/issues/111
+        year += Math.floor(month / 12);
+        month = (month % 12 + 12) % 12;
+
+        // the date time string format is specified in 15.9.1.15.
+        result = [month + 1, this.getUTCDate(),
+            this.getUTCHours(), this.getUTCMinutes(), this.getUTCSeconds()];
         year = (year < 0 ? '-' : (year > 9999 ? '+' : '')) + ('00000' + Math.abs(year)).slice(0 <= year && year <= 9999 ? -4 : -6);
 
         length = result.length;
@@ -582,11 +590,43 @@ if (!Date.now) {
     };
 }
 
+
 // ES5 15.9.5.44
 // http://es5.github.com/#x15.9.5.44
 // This function provides a String representation of a Date object for use by
 // JSON.stringify (15.12.3).
-if (!Date.prototype.toJSON) {
+function isPrimitive(input) {
+    var t = typeof input;
+    return input === null || t === "undefined" || t === "boolean" || t === "number" || t === "string";
+}
+
+function ToPrimitive(input) {
+    var val, valueOf, toString;
+    if (isPrimitive(input)) {
+        return input;
+    }
+    valueOf = input.valueOf;
+    if (typeof valueOf === "function") {
+        val = valueOf.call(input);
+        if (isPrimitive(val)) {
+            return val;
+        }
+    }
+    toString = input.toString;
+    if (typeof toString === "function") {
+        val = toString.call(input);
+        if (isPrimitive(val)) {
+            return val;
+        }
+    }
+    throw new TypeError();
+}
+
+var dateToJSONIsSupported = false;
+try {
+    dateToJSONIsSupported = Date.prototype.toJSON && new Date(NaN).toJSON() === null;
+} catch (e) {}
+if (!dateToJSONIsSupported) {
     Date.prototype.toJSON = function toJSON(key) {
         // When the toJSON method is called with argument key, the following
         // steps are taken:
@@ -594,17 +634,23 @@ if (!Date.prototype.toJSON) {
         // 1.  Let O be the result of calling ToObject, giving it the this
         // value as its argument.
         // 2. Let tv be ToPrimitive(O, hint Number).
+        var o = Object(this),
+            tv = ToPrimitive(o),
+            toISO;
         // 3. If tv is a Number and is not finite, return null.
-        // XXX
+        if (typeof tv === 'number' && !isFinite(tv)) {
+            return null;
+        }
         // 4. Let toISO be the result of calling the [[Get]] internal method of
         // O with argument "toISOString".
+        toISO = o.toISOString;
         // 5. If IsCallable(toISO) is false, throw a TypeError exception.
-        if (typeof this.toISOString != "function") {
+        if (typeof toISO != "function") {
             throw new TypeError('toISOString property is not callable');
         }
         // 6. Return the result of calling the [[Call]] internal method of
         //  toISO with O as the this value and an empty argument list.
-        return this.toISOString();
+        return toISO.call(o);
 
         // NOTE 1 The argument is ignored.
 
@@ -621,7 +667,7 @@ if (!Date.prototype.toJSON) {
 // http://es5.github.com/#x15.9.4.2
 // based on work shared by Daniel Friesen (dantman)
 // http://gist.github.com/303249
-if (!Date.parse || Date.parse("+275760-09-13T00:00:00.000Z") !== 8.64e15) {
+if (!Date.parse || "Date.parse is buggy") {
     // XXX global assignment won't work in embeddings that use
     // an alternate object for the context.
     Date = (function(NativeDate) {
@@ -662,7 +708,7 @@ if (!Date.parse || Date.parse("+275760-09-13T00:00:00.000Z") !== 8.64e15) {
                     ":(\\d{2})" + // seconds capture
                     "(?:\\.(\\d{3}))?" + // milliseconds capture
                 ")?" +
-            "(?:" + // capture UTC offset component
+            "(" + // capture UTC offset component
                 "Z|" + // UTC capture
                 "(?:" + // offset specifier +/-hours:minutes
                     "([-+])" + // sign capture
@@ -671,6 +717,13 @@ if (!Date.parse || Date.parse("+275760-09-13T00:00:00.000Z") !== 8.64e15) {
                 ")" +
             ")?)?)?)?" +
         "$");
+
+        var monthes = [0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334, 365];
+
+        function dayFromMonth(year, month) {
+            var t = month > 1 ? 1 : 0;
+            return monthes[month] + Math.floor((year - 1969 + t) / 4) - Math.floor((year - 1901 + t) / 100) + Math.floor((year - 1601 + t) / 400) + 365 * (year - 1970);
+        }
 
         // Copy any custom methods a 3rd party library may have added
         for (var key in NativeDate) {
@@ -687,47 +740,34 @@ if (!Date.parse || Date.parse("+275760-09-13T00:00:00.000Z") !== 8.64e15) {
         Date.parse = function parse(string) {
             var match = isoDateExpression.exec(string);
             if (match) {
-                match.shift(); // kill match[0], the full match
                 // parse months, days, hours, minutes, seconds, and milliseconds
-                for (var i = 1; i < 7; i++) {
-                    // provide default values if necessary
-                    match[i] = +(match[i] || (i < 3 ? 1 : 0));
-                    // match[1] is the month. Months are 0-11 in JavaScript
-                    // `Date` objects, but 1-12 in ISO notation, so we
-                    // decrement.
-                    if (i == 1) {
-                        match[i]--;
-                    }
-                }
-
+                // provide default values if necessary
                 // parse the UTC offset component
-                var minuteOffset = +match.pop(), hourOffset = +match.pop(), sign = match.pop();
-
-                // compute the explicit time zone offset if specified
-                var offset = 0;
-                if (sign) {
-                    // detect invalid offsets and return early
-                    if (hourOffset > 23 || minuteOffset > 59) {
-                        return NaN;
+                var year = Number(match[1]),
+                    month = Number(match[2] || 1) - 1,
+                    day = Number(match[3] || 1) - 1,
+                    hour = Number(match[4] || 0),
+                    minute = Number(match[5] || 0),
+                    second = Number(match[6] || 0),
+                    millisecond = Number(match[7] || 0),
+                    // When time zone is missed, local offset should be used (ES 5.1 bug)
+                    // see https://bugs.ecmascript.org/show_bug.cgi?id=112
+                    offset = !match[4] || match[8] ? 0 : Number(new Date(1970, 0)),
+                    signOffset = match[9] === "-" ? 1 : -1,
+                    hourOffset = Number(match[10] || 0),
+                    minuteOffset = Number(match[11] || 0),
+                    result;
+                if (hour < (minute > 0 || second > 0 || millisecond > 0 ? 24 : 25) && 
+                    minute < 60 && second < 60 && millisecond < 1000 && 
+                    month > -1 && month < 12 && hourOffset < 24 && minuteOffset < 60 && // detect invalid offsets
+                    day > -1 && day < dayFromMonth(year, month + 1) - dayFromMonth(year, month)) {
+                    result = ((dayFromMonth(year, month) + day) * 24 + hour + hourOffset * signOffset) * 60;
+                    result = ((result + minute + minuteOffset * signOffset) * 60 + second) * 1000 + millisecond + offset;
+                    if (-8.64e15 <= result && result <= 8.64e15) {
+                        return result;
                     }
-
-                    // express the provided time zone offset in minutes. The offset is
-                    // negative for time zones west of UTC; positive otherwise.
-                    offset = (hourOffset * 60 + minuteOffset) * 6e4 * (sign == "+" ? -1 : 1);
                 }
-
-                // Date.UTC for years between 0 and 99 converts year to 1900 + year
-                // The Gregorian calendar has a 400-year cycle, so
-                // to Date.UTC(year + 400, .... ) - 12622780800000 == Date.UTC(year, ...),
-                // where 12622780800000 - number of milliseconds in Gregorian calendar 400 years
-                var year = +match[0];
-                if (0 <= year && year <= 99) {
-                    match[0] = year + 400;
-                    return NativeDate.UTC.apply(this, match) + offset - 12622780800000;
-                }
-
-                // compute a new UTC date value, accounting for the optional offset
-                return NativeDate.UTC.apply(this, match) + offset;
+                return NaN;
             }
             return NativeDate.parse.apply(this, arguments);
         };

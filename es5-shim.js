@@ -546,9 +546,9 @@ if (!Object.keys) {
 // string format defined in 15.9.1.15. All fields are present in the String.
 // The time zone is always UTC, denoted by the suffix Z. If the time value of
 // this object is not a finite Number a RangeError exception is thrown.
-if (!Date.prototype.toISOString ||
-    (new Date(-1).toISOString() !== '1969-12-31T23:59:59.999Z') ||
-    (new Date(-62198755200000).toISOString().indexOf('-000001') === -1)) {
+var negDate = -62198755200000,
+    yearStr = '-000001';
+if (!Date.prototype.toISOString || (new Date(negDate).toISOString().indexOf(yearStr) === -1)) {
     Date.prototype.toISOString = function toISOString() {
         var result, length, value, year, month;
         if (!isFinite(this)) {
@@ -578,14 +578,6 @@ if (!Date.prototype.toISOString ||
         // pad milliseconds to have three digits.
         return year + "-" + result.slice(0, 2).join("-") + "T" + result.slice(2).join(":") + "." +
             ("000" + this.getUTCMilliseconds()).slice(-3) + "Z";
-    }
-}
-
-// ES5 15.9.4.4
-// http://es5.github.com/#x15.9.4.4
-if (!Date.now) {
-    Date.now = function now() {
-        return new Date().getTime();
     };
 }
 
@@ -594,37 +586,20 @@ if (!Date.now) {
 // http://es5.github.com/#x15.9.5.44
 // This function provides a String representation of a Date object for use by
 // JSON.stringify (15.12.3).
-function isPrimitive(input) {
-    var t = typeof input;
-    return input === null || t === "undefined" || t === "boolean" || t === "number" || t === "string";
-}
-
-function ToPrimitive(input) {
-    var val, valueOf, toString;
-    if (isPrimitive(input)) {
-        return input;
-    }
-    valueOf = input.valueOf;
-    if (typeof valueOf === "function") {
-        val = valueOf.call(input);
-        if (isPrimitive(val)) {
-            return val;
-        }
-    }
-    toString = input.toString;
-    if (typeof toString === "function") {
-        val = toString.call(input);
-        if (isPrimitive(val)) {
-            return val;
-        }
-    }
-    throw new TypeError();
-}
-
 var dateToJSONIsSupported = false;
 try {
-    dateToJSONIsSupported = Date.prototype.toJSON && new Date(NaN).toJSON() === null;
-} catch (e) {}
+    dateToJSONIsSupported = (
+        Date.prototype.toJSON &&
+        new Date(NaN).toJSON() === null &&
+        new Date(negDate).toJSON().indexOf(yearStr) !== -1 &&
+        Date.prototype.toJSON.call({ // generic
+            toISOString: function () {
+                return true;
+            }
+        })
+    );
+} catch (e) {
+}
 if (!dateToJSONIsSupported) {
     Date.prototype.toJSON = function toJSON(key) {
         // When the toJSON method is called with argument key, the following
@@ -632,9 +607,9 @@ if (!dateToJSONIsSupported) {
 
         // 1.  Let O be the result of calling ToObject, giving it the this
         // value as its argument.
-        // 2. Let tv be ToPrimitive(O, hint Number).
+        // 2. Let tv be toPrimitive(O, hint Number).
         var o = Object(this),
-            tv = ToPrimitive(o),
+            tv = toPrimitive(o),
             toISO;
         // 3. If tv is a Number and is not finite, return null.
         if (typeof tv === 'number' && !isFinite(tv)) {
@@ -775,6 +750,15 @@ if (!Date.parse || "Date.parse is buggy") {
     })(Date);
 }
 
+// ES5 15.9.4.4
+// http://es5.github.com/#x15.9.4.4
+if (!Date.now) {
+    Date.now = function now() {
+        return new Date().getTime();
+    };
+}
+
+
 //
 // String
 // ======
@@ -838,7 +822,8 @@ if (!String.prototype.trim || ws.trim()) {
 // ES5 9.4
 // http://es5.github.com/#x9.4
 // http://jsperf.com/to-integer
-var toInteger = function (n) {
+
+function toInteger(n) {
     n = +n;
     if (n !== n) { // isNaN
         n = 0;
@@ -846,7 +831,34 @@ var toInteger = function (n) {
         n = (n > 0 || -1) * Math.floor(Math.abs(n));
     }
     return n;
-};
+}
+
+function isPrimitive(input) {
+    var t = typeof input;
+    return input === null || t === "undefined" || t === "boolean" || t === "number" || t === "string";
+}
+
+function toPrimitive(input) {
+    var val, valueOf, toString;
+    if (isPrimitive(input)) {
+        return input;
+    }
+    valueOf = input.valueOf;
+    if (typeof valueOf === "function") {
+        val = valueOf.call(input);
+        if (isPrimitive(val)) {
+            return val;
+        }
+    }
+    toString = input.toString;
+    if (typeof toString === "function") {
+        val = toString.call(input);
+        if (isPrimitive(val)) {
+            return val;
+        }
+    }
+    throw new TypeError();
+}
 
 var prepareString = "a"[0] != "a";
     // ES5 9.9

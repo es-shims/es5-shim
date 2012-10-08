@@ -97,14 +97,21 @@ if (!Object.getOwnPropertyNames) {
 // http://es5.github.com/#x15.2.3.5
 if (!Object.create) {
     Object.create = function create(prototype, properties) {
+
         var object;
+        function Type() {}  // An empty constructor.
+
         if (prototype === null) {
             object = { "__proto__": null };
         } else {
-            if (typeof prototype != "object") {
-                throw new TypeError("typeof prototype["+(typeof prototype)+"] != 'object'");
+            if (typeof prototype !== "object" && typeof prototype !== "function") {
+                // In the native implementation `parent` can be `null`
+                // OR *any* `instanceof Object`  (Object|Function|Array|RegExp|etc)
+                // Use `typeof` tho, b/c in old IE, DOM elements are not `instanceof Object`
+                // like they are in modern browsers. Using `Object.create` on DOM elements
+                // is...err...probably inappropriate, but the native version allows for it.
+                throw new TypeError("Object prototype may only be an Object or null"); // same msg as Chrome
             }
-            var Type = function () {};
             Type.prototype = prototype;
             object = new Type();
             // IE has no built-in implementation of `Object.getPrototypeOf`
@@ -113,9 +120,11 @@ if (!Object.create) {
             // objects created using `Object.create`
             object.__proto__ = prototype;
         }
+
         if (properties !== void 0) {
             Object.defineProperties(object, properties);
         }
+
         return object;
     };
 }

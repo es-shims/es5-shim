@@ -316,7 +316,7 @@ describe('Array', function() {
             expect(testSubject.indexOf(2, -9)).toEqual(0);
         });
         it('should work with fromIndex being greater than the length', function() {
-            expect(testSubject.indexOf('hej', 20)).toEqual(-1);
+            expect(testSubject.indexOf(0, 20)).toEqual(-1);
         });
         it('should work with fromIndex being negative and greater than the length', function() {
             expect(testSubject.indexOf('hej', -20)).toEqual(4);
@@ -370,7 +370,7 @@ describe('Array', function() {
                 expect(indexOf.call(testAL, 2, -9)).toEqual(0);
             });
             it('should work with fromIndex being greater than the length (array-like)', function() {
-                expect(indexOf.call(testAL, 'hej', 20)).toEqual(-1);
+                expect(indexOf.call(testAL, 0, 20)).toEqual(-1);
             });
             it('should work with fromIndex being negative and greater than the length (array-like)', function() {
                 expect(indexOf.call(testAL, 'hej', -20)).toEqual(4);

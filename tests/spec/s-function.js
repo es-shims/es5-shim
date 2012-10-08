@@ -133,5 +133,15 @@ describe('Function', function() {
             result = new subject;
             expect(result).not.toBe(oracle);
         });
+        it('returns the value that instance of original "class" when called as a constructor', function() {
+            var classA = function(x) {
+                this.name = x || "A";
+            }
+            var classB = classA.bind(null, "B");
+            
+            var result = new classB;
+            expect(result instanceof classA).toBe(true);
+            expect(result instanceof classB).toBe(true);
+        });
     });
 });

@@ -180,7 +180,7 @@ if ((supportsAccessors = owns(prototypeOfObject, "__defineGetter__"))) {
 // ES5 15.4.4.12
 // http://es5.github.com/#x15.4.4.12
 // Default value for second param
-// [bugfix, ielt9, old browsers] 
+// [bugfix, ielt9, old browsers]
 // IE < 9 bug: [1,2].splice(0).join("") == "" but should be "12"
 if([1,2].splice(0).length != 2) {
     var _origArraySplice = Array.prototype.splice;
@@ -546,7 +546,7 @@ if (!Object.keys) {
 // string format defined in 15.9.1.15. All fields are present in the String.
 // The time zone is always UTC, denoted by the suffix Z. If the time value of
 // this object is not a finite Number a RangeError exception is thrown.
-if (!Date.prototype.toISOString || 
+if (!Date.prototype.toISOString ||
     (new Date(-1).toISOString() !== '1969-12-31T23:59:59.999Z') ||
     (new Date(-62198755200000).toISOString().indexOf('-000001') === -1)) {
     Date.prototype.toISOString = function toISOString() {
@@ -756,8 +756,8 @@ if (!Date.parse || "Date.parse is buggy") {
                     hourOffset = Number(match[10] || 0),
                     minuteOffset = Number(match[11] || 0),
                     result;
-                if (hour < (minute > 0 || second > 0 || millisecond > 0 ? 24 : 25) && 
-                    minute < 60 && second < 60 && millisecond < 1000 && 
+                if (hour < (minute > 0 || second > 0 || millisecond > 0 ? 24 : 25) &&
+                    minute < 60 && second < 60 && millisecond < 1000 &&
                     month > -1 && month < 12 && hourOffset < 24 && minuteOffset < 60 && // detect invalid offsets
                     day > -1 && day < dayFromMonth(year, month + 1) - dayFromMonth(year, month)) {
                     result = ((dayFromMonth(year, month) + day) * 24 + hour + hourOffset * signOffset) * 60;
@@ -800,11 +800,11 @@ if("0".split(void 0, 0).length) {
 // [bugfix, IE lt 9] IE < 9 substr() with negative value not working in IE
 if("".substr && "0b".substr(-1) !== "b") {
     var oldSubstr = String.prototype.substr;
-    /** 
-     *  Get the substring of a string 
-     *  @param  {integer}  start   where to start the substring 
-     *  @param  {integer}  length  how many characters to return 
-     *  @return {string} 
+    /**
+     *  Get the substring of a string
+     *  @param  {integer}  start   where to start the substring
+     *  @param  {integer}  length  how many characters to return
+     *  @return {string}
      */
     String.prototype.substr = function(start, length) {
         return oldSubstr.call(this, start < 0 ? (start = this.length + start) < 0 ? 0 : start : start, length);

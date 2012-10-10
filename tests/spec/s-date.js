@@ -71,6 +71,15 @@ describe('Date', function () {
             // same as (new Date().getTimezoneOffset() * 60000)
             expect(Date.parse('1970-01-01T00:00:00')).toBe(tzOffset);             //tzOffset    0            0            0               NaN
         });
+
+        it("should be able to coerce to a number", function(){
+            var actual = Number(new Date(1970, 0));
+            var expected = parseInt(actual, 10);
+            expect(actual).toBeDefined();
+            expect(actual).toEqual(expected);
+            expect(isNaN(actual)).toBeFalsy();
+        });
+
     });
 
     describe("toString", function(){

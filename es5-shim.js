@@ -940,7 +940,7 @@ if (!Date.parse || Date.parse("+275760-09-13T00:00:00.000Z") !== 8.64e15) {
     Date = (function(NativeDate) {
 
         // Date.length === 7
-        var Date = function Date(Y, M, D, h, m, s, ms) {
+        var Date = function(Y, M, D, h, m, s, ms) {
             var length = arguments.length;
             if (this instanceof NativeDate) {
                 var date = length == 1 && String(Y) === Y ? // isString(Y)

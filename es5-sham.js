@@ -106,8 +106,13 @@ if (!Object.create) {
 
         if (prototype === null) {
             if (supportsProto) {
-                object = { "__proto__": null };
+                object = {};
             } else {
+                // In old IE __proto__ can't be used to manually set `null`, nor
+                // does any other method exist to make an object that inherits from
+                // nothing, aside from Object.prototype itself. Instead, create
+                // a new global object and *steal* its Object.prototype and strip
+                // it bare. This is *very* inefficient but provides a valuable result.
                 var iframe = document.createElement('iframe');
                 iframe.style.display = 'none';
                 document.body.appendChild(iframe);
@@ -122,7 +127,6 @@ if (!Object.create) {
                 delete object.toLocaleString;
                 delete object.toString;
                 delete object.valueOf;
-                object.__proto__ = null;
             }
         } else {
             if (typeof prototype !== "object" && typeof prototype !== "function") {
@@ -135,12 +139,13 @@ if (!Object.create) {
             }
             Type.prototype = prototype;
             object = new Type();
-            // IE has no built-in implementation of `Object.getPrototypeOf`
-            // neither `__proto__`, but this manually setting `__proto__` will
-            // guarantee that `Object.getPrototypeOf` will work as expected with
-            // objects created using `Object.create`
-            object.__proto__ = prototype;
         }
+
+        // IE has no built-in implementation of `Object.getPrototypeOf`
+        // neither `__proto__`, but this manually setting `__proto__` will
+        // guarantee that `Object.getPrototypeOf` will work as expected with
+        // objects created using `Object.create`
+        object.__proto__ = prototype;
 
         if (properties !== void 0) {
             Object.defineProperties(object, properties);

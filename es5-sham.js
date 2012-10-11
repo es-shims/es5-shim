@@ -95,6 +95,9 @@ if (!Object.getOwnPropertyNames) {
 
 // ES5 15.2.3.5
 // http://es5.github.com/#x15.2.3.5
+
+var supportsProto = { "__proto__": [] } instanceof Array;
+
 if (!Object.create) {
     Object.create = function create(prototype, properties) {
 
@@ -102,21 +105,25 @@ if (!Object.create) {
         function Type() {}  // An empty constructor.
 
         if (prototype === null) {
-            var iframe = document.createElement('iframe');
-            iframe.style.display = 'none';
-            document.body.appendChild(iframe);
-            iframe.src = 'javascript:';
-            object = iframe.contentWindow.Object.prototype;
-            document.body.removeChild(iframe);
-            iframe = null;
-            delete object.constructor;
-            delete object.hasOwnProperty;
-            delete object.propertyIsEnumerable;
-            delete object.isProtoypeOf;
-            delete object.toLocaleString;
-            delete object.toString;
-            delete object.valueOf;
-            object.__proto__ = null;
+            if (supportsProto) {
+                object = { "__proto__": null };
+            } else {
+                var iframe = document.createElement('iframe');
+                iframe.style.display = 'none';
+                document.body.appendChild(iframe);
+                iframe.src = 'javascript:';
+                object = iframe.contentWindow.Object.prototype;
+                document.body.removeChild(iframe);
+                iframe = null;
+                delete object.constructor;
+                delete object.hasOwnProperty;
+                delete object.propertyIsEnumerable;
+                delete object.isProtoypeOf;
+                delete object.toLocaleString;
+                delete object.toString;
+                delete object.valueOf;
+                object.__proto__ = null;
+            }
         } else {
             if (typeof prototype !== "object" && typeof prototype !== "function") {
                 // In the native implementation `parent` can be `null`

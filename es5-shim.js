@@ -784,7 +784,7 @@ if (!Date.parse || "Date.parse is buggy") {
                     // (ES 5.1 bug)
                     // see https://bugs.ecmascript.org/show_bug.cgi?id=112
                     offset = !match[4] || match[8] ?
-                        0 : Number(new Date(1970, 0)),
+                        0 : Number(new NativeDate(1970, 0)),
                     signOffset = match[9] === "-" ? 1 : -1,
                     hourOffset = Number(match[10] || 0),
                     minuteOffset = Number(match[11] || 0),

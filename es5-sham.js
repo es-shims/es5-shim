@@ -95,14 +95,54 @@ if (!Object.getOwnPropertyNames) {
 
 // ES5 15.2.3.5
 // http://es5.github.com/#x15.2.3.5
+
+
 if (!Object.create) {
+    var supportsProto = { "__proto__": [] } instanceof Array;
+
+    if (supportsProto) {
+        var createEmpty = function(){
+            return { "__proto__": null };
+        };
+    } else {
+        // In old IE __proto__ can't be used to manually set `null`, nor
+        // does any other method exist to make an object that inherits from
+        // nothing, aside from Object.prototype itself. Instead, create
+        // a new global object and *steal* its Object.prototype and strip
+        // it bare. This is used as the prototype to create nullary objects.
+        var createEmpty = (function(){
+            var iframe = document.createElement('iframe');
+            iframe.style.display = 'none';
+            document.body.appendChild(iframe);
+            iframe.src = 'javascript:';
+            var empty = iframe.contentWindow.Object.prototype;
+            document.body.removeChild(iframe);
+            iframe = null;
+            delete empty.constructor;
+            delete empty.hasOwnProperty;
+            delete empty.propertyIsEnumerable;
+            delete empty.isProtoypeOf;
+            delete empty.toLocaleString;
+            delete empty.toString;
+            delete empty.valueOf;
+            empty.__proto__ = null;
+
+            function Empty(){}
+            Empty.prototype = empty;
+
+            return function(){
+                return new Empty();
+            };
+        })();
+    }
+
     Object.create = function create(prototype, properties) {
 
         var object;
         function Type() {}  // An empty constructor.
 
         if (prototype === null) {
-            object = { "__proto__": null };
+            object = createEmpty();
         } else {
             if (typeof prototype !== "object" && typeof prototype !== "function") {
                 // In the native implementation `parent` can be `null`

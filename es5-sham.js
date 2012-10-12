@@ -96,38 +96,54 @@ if (!Object.getOwnPropertyNames) {
 // ES5 15.2.3.5
 // http://es5.github.com/#x15.2.3.5
 
-var supportsProto = { "__proto__": [] } instanceof Array;
 
 if (!Object.create) {
+    var supportsProto = { "__proto__": [] } instanceof Array;
+
+    if (supportsProto) {
+        var createEmpty = function(){
+            return { "__proto__": null };
+        };
+    } else {
+        // In old IE __proto__ can't be used to manually set `null`, nor
+        // does any other method exist to make an object that inherits from
+        // nothing, aside from Object.prototype itself. Instead, create
+        // a new global object and *steal* its Object.prototype and strip
+        // it bare. This is used as the prototype to create nullary objects.
+        var createEmpty = (function(){
+            var iframe = document.createElement('iframe');
+            iframe.style.display = 'none';
+            document.body.appendChild(iframe);
+            iframe.src = 'javascript:';
+            var empty = iframe.contentWindow.Object.prototype;
+            document.body.removeChild(iframe);
+            iframe = null;
+            delete empty.constructor;
+            delete empty.hasOwnProperty;
+            delete empty.propertyIsEnumerable;
+            delete empty.isProtoypeOf;
+            delete empty.toLocaleString;
+            delete empty.toString;
+            delete empty.valueOf;
+
+            function Empty(){}
+            Empty.prototype = empty;
+
+            return function(){
+                var obj = new Empty();
+                obj.__proto__ = null;
+                return obj;
+            };
+        })();
+    }
+
     Object.create = function create(prototype, properties) {
 
         var object;
         function Type() {}  // An empty constructor.
 
         if (prototype === null) {
-            if (supportsProto) {
-                object = {};
-            } else {
-                // In old IE __proto__ can't be used to manually set `null`, nor
-                // does any other method exist to make an object that inherits from
-                // nothing, aside from Object.prototype itself. Instead, create
-                // a new global object and *steal* its Object.prototype and strip
-                // it bare. This is *very* inefficient but provides a valuable result.
-                var iframe = document.createElement('iframe');
-                iframe.style.display = 'none';
-                document.body.appendChild(iframe);
-                iframe.src = 'javascript:';
-                object = iframe.contentWindow.Object.prototype;
-                document.body.removeChild(iframe);
-                iframe = null;
-                delete object.constructor;
-                delete object.hasOwnProperty;
-                delete object.propertyIsEnumerable;
-                delete object.isProtoypeOf;
-                delete object.toLocaleString;
-                delete object.toString;
-                delete object.valueOf;
-            }
+            object = createEmpty();
         } else {
             if (typeof prototype !== "object" && typeof prototype !== "function") {
                 // In the native implementation `parent` can be `null`
@@ -139,13 +155,12 @@ if (!Object.create) {
             }
             Type.prototype = prototype;
             object = new Type();
+            // IE has no built-in implementation of `Object.getPrototypeOf`
+            // neither `__proto__`, but this manually setting `__proto__` will
+            // guarantee that `Object.getPrototypeOf` will work as expected with
+            // objects created using `Object.create`
+            object.__proto__ = prototype;
         }
-
-        // IE has no built-in implementation of `Object.getPrototypeOf`
-        // neither `__proto__`, but this manually setting `__proto__` will
-        // guarantee that `Object.getPrototypeOf` will work as expected with
-        // objects created using `Object.create`
-        object.__proto__ = prototype;
 
         if (properties !== void 0) {
             Object.defineProperties(object, properties);

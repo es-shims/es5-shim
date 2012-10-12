@@ -694,12 +694,12 @@ if (!Date.parse || "Date.parse is buggy") {
     Date = (function(NativeDate) {
 
         // Date.length === 7
-        var newDate = function Date(Y, M, D, h, m, s, ms) {
+        function Date(Y, M, D, h, m, s, ms) {
             var length = arguments.length;
             if (this instanceof NativeDate) {
                 var date = length == 1 && String(Y) === Y ? // isString(Y)
                     // We explicitly pass it through parse:
-                    new NativeDate(newDate.parse(Y)) :
+                    new NativeDate(Date.parse(Y)) :
                     // We have to manually make calls depending on argument
                     // length here
                     length >= 7 ? new NativeDate(Y, M, D, h, m, s, ms) :
@@ -711,7 +711,7 @@ if (!Date.parse || "Date.parse is buggy") {
                     length >= 1 ? new NativeDate(Y) :
                                   new NativeDate();
                 // Prevent mixups with unfixed Date object
-                date.constructor = newDate;
+                date.constructor = Date;
                 return date;
             }
             return NativeDate.apply(this, arguments);
@@ -757,17 +757,17 @@ if (!Date.parse || "Date.parse is buggy") {
 
         // Copy any custom methods a 3rd party library may have added
         for (var key in NativeDate) {
-            newDate[key] = NativeDate[key];
+            Date[key] = NativeDate[key];
         }
 
         // Copy "native" methods explicitly; they may be non-enumerable
-        newDate.now = NativeDate.now;
-        newDate.UTC = NativeDate.UTC;
-        newDate.prototype = NativeDate.prototype;
-        newDate.prototype.constructor = Date;
+        Date.now = NativeDate.now;
+        Date.UTC = NativeDate.UTC;
+        Date.prototype = NativeDate.prototype;
+        Date.prototype.constructor = Date;
 
         // Upgrade Date.parse to handle simplified ISO 8601 strings
-        newDate.parse = function parse(string) {
+        Date.parse = function parse(string) {
             var match = isoDateExpression.exec(string);
             if (match) {
                 // parse months, days, hours, minutes, seconds, and milliseconds
@@ -821,7 +821,7 @@ if (!Date.parse || "Date.parse is buggy") {
             return NativeDate.parse.apply(this, arguments);
         };
 
-        return newDate;
+        return Date;
     })(Date);
 }
 

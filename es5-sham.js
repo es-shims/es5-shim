@@ -125,14 +125,13 @@ if (!Object.create) {
             delete empty.toLocaleString;
             delete empty.toString;
             delete empty.valueOf;
+            empty.__proto__ = null;
 
             function Empty(){}
             Empty.prototype = empty;
 
             return function(){
-                var obj = new Empty();
-                obj.__proto__ = null;
-                return obj;
+                return new Empty();
             };
         })();
     }

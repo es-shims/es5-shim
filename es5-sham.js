@@ -112,11 +112,12 @@ if (!Object.create) {
         // used as the prototype to create nullary objects.
         createEmpty = (function () {
             var iframe = document.createElement('iframe');
+            var parent = document.body || document.documentElement;
             iframe.style.display = 'none';
-            document.body.appendChild(iframe);
+            parent.appendChild(iframe);
             iframe.src = 'javascript:';
             var empty = iframe.contentWindow.Object.prototype;
-            document.body.removeChild(iframe);
+            parent.removeChild(iframe);
             iframe = null;
             delete empty.constructor;
             delete empty.hasOwnProperty;

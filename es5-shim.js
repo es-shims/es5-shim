@@ -872,7 +872,7 @@ if("".substr && "0b".substr(-1) !== "b") {
     String.prototype.substr = function(start, length) {
         return string_substr.call(
             this,
-            start < 0 ? (start = this.length + start) < 0 ? 0 : start : start,
+            start < 0 ? ((start = this.length + start) < 0 ? 0 : start) : start,
             length
         );
     }

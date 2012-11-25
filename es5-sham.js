@@ -100,7 +100,7 @@ if (!Object.create) {
     // Contributed by Brandon Benvie, October, 2012
     var createEmpty;
     var supportsProto = Object.prototype.__proto__ === null;
-    if (supportsProto) {
+    if (supportsProto || typeof document == 'undefined') {
         createEmpty = function () {
             return { "__proto__": null };
         };
@@ -122,7 +122,7 @@ if (!Object.create) {
             delete empty.constructor;
             delete empty.hasOwnProperty;
             delete empty.propertyIsEnumerable;
-            delete empty.isProtoypeOf;
+            delete empty.isPrototypeOf;
             delete empty.toLocaleString;
             delete empty.toString;
             delete empty.valueOf;

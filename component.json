@@ -1,6 +1,1 @@
-{
-    "name": "es5-shim",
-    "version": "2.0.2",
-    "main": "es5-shim.js",
-    "dependencies": {}
-}
+package.json

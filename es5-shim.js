@@ -32,6 +32,8 @@
 // ES-5 15.3.4.5
 // http://es5.github.com/#x15.3.4.5
 
+function Empty() {}
+
 if (!Function.prototype.bind) {
     Function.prototype.bind = function bind(that) { // .length is 1
         // 1. Let Target be the this value.
@@ -110,7 +112,10 @@ if (!Function.prototype.bind) {
 
         };
         if(target.prototype) {
-            bound.prototype = Object.create(target.prototype);
+            Empty.prototype = target.prototype;
+            bound.prototype = new Empty();
+            // Clean up dangling references.
+            Empty.prototype = null;
         }
         // XXX bound.length is never writable, so don't even try
         //

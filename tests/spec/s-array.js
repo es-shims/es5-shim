@@ -1081,7 +1081,7 @@ describe('Array', function() {
                 42,
                 0,
                 {},
-				Object.create && Object.create(null) || null,
+                Object.create && Object.create(null) || null,
                 /foo/,
                 arguments,
                 document.getElementsByTagName("div")
@@ -1098,14 +1098,14 @@ describe('Array', function() {
             a = [1, "a", b],
             test;
 
-		var makeArray = function(l, prefix) {
-			prefix = prefix || "";
-			var a = [];
-			while (l--) {
-				a.unshift(prefix + Array(l + 1).join(" ") + l)
-			}
-			return a
-		};
+        var makeArray = function(l, prefix) {
+            prefix = prefix || "";
+            var a = [];
+            while (l--) {
+                a.unshift(prefix + Array(l + 1).join(" ") + l)
+            }
+            return a
+        };
 
         beforeEach(function() {
             test = a.slice(0);
@@ -1135,7 +1135,7 @@ describe('Array', function() {
             expect((function() {
                 var array = makeArray(6);
 
-				array.splice(array.length - 1, 1, "");
+                array.splice(array.length - 1, 1, "");
                 array.splice(0, 1, 1,2,3,4);
                 array.splice(0, 0, 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20, 21, 22, 23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45);
 
@@ -1144,41 +1144,41 @@ describe('Array', function() {
             }())).toBe("1|2|3|4|99999999999999|5|6|7|8|9|10|11|12|13|14|15|16|17|18|19|20|21|22|23|24|25|26|27|28|29|30|31|32|33|34|35|36|37|38|39|40|41|42|43|44|45|1|2|3|4| 1|  2|   3|    4|");
         });
 
-		it('should return right result 3', function () {
-			expect((function() {
-				var array = [1,2,3];
+        it('should return right result 3', function () {
+            expect((function() {
+                var array = [1,2,3];
 
-				array.splice(0);
-				array.splice(0, 1, 1,2,3,4,5,6,7,8,9,10);
-				array.splice(1, 1, "F1", "F2", "F3", "F4", "F5", "F6", "F7", "F8", "F9", "F10", "F11", "F12", "F13", "F14", "F15", "F16", "F17", "F18", "F19", "F20", "F21","F22", "F23", "F24", "F25", "F26");
-				array.splice(5, 1, "YYY", "XXX");
-				array.splice(0, 1);
-				array.splice(0, 2);
-				array.pop();
-				array.push.apply(array, makeArray(10, "-"));
-				array.splice(array.length - 2, 10);
-				array.splice();
-				array.splice(1, 1, 1,2,3,4,5,6,7,8,9,10,1,2,3,4,5,6,7,8,9);
-				array.splice(1, 1, "F1", "F2", "F3", "F4", "F5", "F6", "F7", "F8", "F9", "F10", "F11", "F12", "F13", "F14", "F15", "F16", "F17", "F18", "F19", "F20", "F21","F22", "F23", "F24", "F25", "F26",1,23,4,5,6,7,8);
-				array.splice(30, 10);
-				array.splice(30, 1);
-				array.splice(30, 0);
-				array.splice(2, 5, 1,2,3,"P", "LLL", "CCC", "YYY", "XXX");
-				array.push(1,2,3,4,5,6);
-				array.splice(1, 6, 1,2,3,4,5,6,7,8,9,4,5,6,7,8,9);
-				array.splice(3, 7);
-				array.unshift(7,8,9,10,11);
-				array.pop();
-				array.splice(5, 2);
-				array.pop();
-				array.unshift.apply(array, makeArray(8, "~"));
-				array.pop();
-				array.splice(3, 1, "F1", "F2", "F3", "F4", "F5", "F6", "F7", "F8", "F9", "F10", "F11", "F12", "F13", "F14", "F15", "F16", "F17", "F18", "F19", "F20", "F21","F22", "F23", "F24", "F25", "F26",1,23,4,5,6,7,8);
-				array.splice(4, 5, "P", "LLL", "CCC", "YYY", "XXX");
+                array.splice(0);
+                array.splice(0, 1, 1,2,3,4,5,6,7,8,9,10);
+                array.splice(1, 1, "F1", "F2", "F3", "F4", "F5", "F6", "F7", "F8", "F9", "F10", "F11", "F12", "F13", "F14", "F15", "F16", "F17", "F18", "F19", "F20", "F21","F22", "F23", "F24", "F25", "F26");
+                array.splice(5, 1, "YYY", "XXX");
+                array.splice(0, 1);
+                array.splice(0, 2);
+                array.pop();
+                array.push.apply(array, makeArray(10, "-"));
+                array.splice(array.length - 2, 10);
+                array.splice();
+                array.splice(1, 1, 1,2,3,4,5,6,7,8,9,10,1,2,3,4,5,6,7,8,9);
+                array.splice(1, 1, "F1", "F2", "F3", "F4", "F5", "F6", "F7", "F8", "F9", "F10", "F11", "F12", "F13", "F14", "F15", "F16", "F17", "F18", "F19", "F20", "F21","F22", "F23", "F24", "F25", "F26",1,23,4,5,6,7,8);
+                array.splice(30, 10);
+                array.splice(30, 1);
+                array.splice(30, 0);
+                array.splice(2, 5, 1,2,3,"P", "LLL", "CCC", "YYY", "XXX");
+                array.push(1,2,3,4,5,6);
+                array.splice(1, 6, 1,2,3,4,5,6,7,8,9,4,5,6,7,8,9);
+                array.splice(3, 7);
+                array.unshift(7,8,9,10,11);
+                array.pop();
+                array.splice(5, 2);
+                array.pop();
+                array.unshift.apply(array, makeArray(8, "~"));
+                array.pop();
+                array.splice(3, 1, "F1", "F2", "F3", "F4", "F5", "F6", "F7", "F8", "F9", "F10", "F11", "F12", "F13", "F14", "F15", "F16", "F17", "F18", "F19", "F20", "F21","F22", "F23", "F24", "F25", "F26",1,23,4,5,6,7,8);
+                array.splice(4, 5, "P", "LLL", "CCC", "YYY", "XXX");
 
-				return array.join("|");
-			}())).toBe("~0|~ 1|~  2|F1|P|LLL|CCC|YYY|XXX|F7|F8|F9|F10|F11|F12|F13|F14|F15|F16|F17|F18|F19|F20|F21|F22|F23|F24|F25|F26|1|23|4|5|6|7|8|~    4|~     5|~      6|~       7|7|8|9|10|11|2|4|5|6|7|8|9|CCC|YYY|XXX|F7|F8|F9|F10|F11|F12|F13|F14|F15|F16|F17|F18|F19|F20|F21|F22|F23|F24|F25|F26|1|23|4|9|10|1|2|3|4|5|6|7|8|9|YYY|XXX|F6|F7|F8|F9|F10|F11|F12|F13|F14|F15|F16|F17|F18|F19|F20|F21|F22|F23|F24|F25|F26|3|4|5|6|7|8|9|-0|- 1|-  2|-   3|-    4|-     5|-      6|-       7|1|2|3");
-		});
+                return array.join("|");
+            }())).toBe("~0|~ 1|~  2|F1|P|LLL|CCC|YYY|XXX|F7|F8|F9|F10|F11|F12|F13|F14|F15|F16|F17|F18|F19|F20|F21|F22|F23|F24|F25|F26|1|23|4|5|6|7|8|~    4|~     5|~      6|~       7|7|8|9|10|11|2|4|5|6|7|8|9|CCC|YYY|XXX|F7|F8|F9|F10|F11|F12|F13|F14|F15|F16|F17|F18|F19|F20|F21|F22|F23|F24|F25|F26|1|23|4|9|10|1|2|3|4|5|6|7|8|9|YYY|XXX|F6|F7|F8|F9|F10|F11|F12|F13|F14|F15|F16|F17|F18|F19|F20|F21|F22|F23|F24|F25|F26|3|4|5|6|7|8|9|-0|- 1|-  2|-   3|-    4|-     5|-      6|-       7|1|2|3");
+        });
                  
         
         it('should do nothing if method called with no arguments', function () {

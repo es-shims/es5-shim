@@ -1,1 +1,9 @@
-package.json
+{
+    "name": "es5-shim",
+    "repo": "kriskowal/es5-shim",
+    "description": "ES5 as implementable on previous engines",
+    "version": "2.0.5",
+    "main": "es5-shim.js",
+    "scripts": ["es5-shim.js"],
+    "license": "MIT"
+}

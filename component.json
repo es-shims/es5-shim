@@ -21,8 +21,8 @@
         }
     ],
     "main": "es5-shim.js",
-    "scripts": ["es6-shim.js"],
-    "repo": "paulmillr/es6-shim",
+    "scripts": ["es5-shim.js"],
+    "repo": "kriskowal/es5-shim",
     "engines": {
         "node": ">=0.2.0"
     }

@@ -746,7 +746,7 @@ if (!Date.parse || "Date.parse is buggy") {
                 ":(\\d{2})" + // minutes capture
                 "(?:" + // optional :seconds.milliseconds
                     ":(\\d{2})" + // seconds capture
-                    "(?:\\.(\\d{1,}))?" + // milliseconds capture
+                    "(?:(\\.\\d{1,}))?" + // milliseconds capture
                 ")?" +
             "(" + // capture UTC offset component
                 "Z|" + // UTC capture
@@ -773,15 +773,6 @@ if (!Date.parse || "Date.parse is buggy") {
             );
         }
 
-        function millisecondsFromFraction(fraction) {
-            if (fraction === 0) {
-                return 0;
-            }
-            var digits = Math.floor(Math.log(fraction) / Math.LN10) + 1;
-            var milliseconds = 1000 * (fraction / Math.pow(10, digits));
-            return Math.floor(milliseconds);
-        }
-
         // Copy any custom methods a 3rd party library may have added
         for (var key in NativeDate) {
             Date[key] = NativeDate[key];
@@ -806,7 +797,7 @@ if (!Date.parse || "Date.parse is buggy") {
                     hour = Number(match[4] || 0),
                     minute = Number(match[5] || 0),
                     second = Number(match[6] || 0),
-                    millisecond = millisecondsFromFraction(Number(match[7] || 0)),
+                    millisecond = Math.floor(Number(match[7] || 0) * 1000),
                     // When time zone is missed, local offset should be used
                     // (ES 5.1 bug)
                     // see https://bugs.ecmascript.org/show_bug.cgi?id=112

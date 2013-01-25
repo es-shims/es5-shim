@@ -859,32 +859,32 @@ if (!Date.now) {
 
 // IE has a broken Number.toFixed()
 if (!Number.prototype.toFixed || (0.9).toFixed(0) === '0') {
-	// Needs to make (0.8, 0) => 1 and (1843654265.0774949, 5) => 1843654265.07749
-	Number.prototype.toFixed = function (num, decimals) {
-		var rounder, s;
+    // Needs to make (0.8, 0) => 1 and (1843654265.0774949, 5) => 1843654265.07749
+    Number.prototype.toFixed = function (num, decimals) {
+        var rounder, s;
 
-		rounder = 5 * Math.pow(10, -1 * ((decimals || 0) + 1));
-		num += rounder;
-		s = num.toString().split('.');
+        rounder = 5 * Math.pow(10, -1 * ((decimals || 0) + 1));
+        num += rounder;
+        s = num.toString().split('.');
 
-		if (decimals) {
-			if (s.length < 2) {
-				s[1] = '';
-			} else {
-				s[1] = s[1].substring(0, decimals);
-			}
+        if (decimals) {
+            if (s.length < 2) {
+                s[1] = '';
+            } else {
+                s[1] = s[1].substring(0, decimals);
+            }
 
-			while (s[1].length < decimals) {
-				s[1] += '0';
-			}
+            while (s[1].length < decimals) {
+                s[1] += '0';
+            }
 
-			s = s.join('.');
-		} else {
-			s = s[0];
-		}
+            s = s.join('.');
+        } else {
+            s = s[0];
+        }
 
-		return s;
-	};
+        return s;
+    };
 }
 
 

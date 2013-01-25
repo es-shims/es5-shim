@@ -32,6 +32,8 @@
 // ES-5 15.3.4.5
 // http://es5.github.com/#x15.3.4.5
 
+function Empty() {}
+
 if (!Function.prototype.bind) {
     Function.prototype.bind = function bind(that) { // .length is 1
         // 1. Let Target be the this value.
@@ -110,7 +112,10 @@ if (!Function.prototype.bind) {
 
         };
         if(target.prototype) {
-            bound.prototype = Object.create(target.prototype);
+            Empty.prototype = target.prototype;
+            bound.prototype = new Empty();
+            // Clean up dangling references.
+            Empty.prototype = null;
         }
         // XXX bound.length is never writable, so don't even try
         //
@@ -193,6 +198,19 @@ if ([1,2].splice(0).length != 2) {
                 deleteCount === void 0 ? (this.length - start) : deleteCount
             ].concat(slice.call(arguments, 2)))
         }
+    };
+}
+
+// ES5 15.4.4.12
+// http://es5.github.com/#x15.4.4.13
+// Return len+argCount.
+// [bugfix, ielt8]
+// IE < 8 bug: [].unshift(0) == undefined but should be "1"
+if ([].unshift(0) != 1) {
+    var array_unshift = Array.prototype.unshift;
+    Array.prototype.unshift = function() {
+        array_unshift.apply(this, arguments);
+        return this.length;
     };
 }
 
@@ -872,7 +890,7 @@ if("".substr && "0b".substr(-1) !== "b") {
     String.prototype.substr = function(start, length) {
         return string_substr.call(
             this,
-            start < 0 ? (start = this.length + start) < 0 ? 0 : start : start,
+            start < 0 ? ((start = this.length + start) < 0 ? 0 : start) : start,
             length
         );
     }

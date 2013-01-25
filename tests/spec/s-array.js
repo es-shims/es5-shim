@@ -1093,6 +1093,12 @@ describe('Array', function() {
         });
     });
 
+    describe('unshift', function () {
+        it('should return length', function () {
+            expect([].unshift(0)).toEqual(1);
+        });
+    });
+
     describe('splice', function () {
         var b = ["b"],
             a = [1, "a", b],

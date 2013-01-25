@@ -198,7 +198,8 @@ if (Object.defineProperty) {
     var definePropertyWorksOnDom = typeof document == "undefined" ||
         doesDefinePropertyWork(document.createElement("div"));
     if (!definePropertyWorksOnObject || !definePropertyWorksOnDom) {
-        var definePropertyFallback = Object.defineProperty;
+        var definePropertyFallback = Object.defineProperty,
+            definePropertiesFallback = Object.defineProperties;
     }
 }
 
@@ -278,8 +279,17 @@ if (!Object.defineProperty || definePropertyFallback) {
 
 // ES5 15.2.3.7
 // http://es5.github.com/#x15.2.3.7
-if (!Object.defineProperties) {
+if (!Object.defineProperties || definePropertiesFallback) {
     Object.defineProperties = function defineProperties(object, properties) {
+        // make a valiant attempt to use the real defineProperties
+        if (definePropertiesFallback) {
+            try {
+                return definePropertiesFallback.call(Object, object, properties);
+            } catch (exception) {
+                // try the shim if the real one doesn't work
+            }
+        }
+        
         for (var property in properties) {
             if (owns(properties, property) && property != "__proto__") {
                 Object.defineProperty(object, property, properties[property]);

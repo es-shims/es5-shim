@@ -43,7 +43,7 @@ HLP.kill(Object, [
     'keys'
 ]);
 
-HLP.kill(Number, [
+HLP.kill(Number.prototype, [
     'toFixed'
 ]);
 

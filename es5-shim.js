@@ -857,14 +857,37 @@ if (!Date.now) {
 // ======
 //
 
-// IE has a broken Number.toFixed()
+// ES5.1 15.7.4.5
 if (!Number.prototype.toFixed || (0.9).toFixed(0) === '0') {
+    // IE has a broken Number.toFixed()
     // Needs to make (0.8, 0) => 1 and (1843654265.0774949, 5) => 1843654265.07749
-    Number.prototype.toFixed = function (num, decimals) {
-        var rounder, s;
+    Number.prototype.toFixed = function (decimals) {
+        var num, rounder, s;
 
-        rounder = 5 * Math.pow(10, -1 * ((decimals || 0) + 1));
-        num += rounder;
+        if (decimals === undefined) {
+            decimals = 0;
+        } else {
+            decimals = toInteger(decimals);
+        }
+
+        if (decimals < 0 || decimals > 20) {
+            throw new RangeError("Number.toFixed called with invalid number of decimals");
+        }
+
+        if (this === NaN) {
+            return "NaN";
+        }
+        
+        // Note:  The math should be more like this, but it fails due
+        // to rounding issues:
+        //
+        // power = Math.pow(10, decimals);
+        // s = String(Math.round(this * power) / power);
+        //
+        // Because that doesn't work, we use .toString() instead.
+
+        rounder = 5 * Math.pow(10, -1 * (decimals + 1));
+        num = this + rounder;
         s = num.toString().split('.');
 
         if (decimals) {

@@ -15,6 +15,24 @@
     }
 })(function () {
 
+
+var call = Function.prototype.call;
+var prototypeOfObject = Object.prototype;
+var owns = call.bind(prototypeOfObject.hasOwnProperty);
+
+// If JS engine supports accessors creating shortcuts.
+var defineGetter;
+var defineSetter;
+var lookupGetter;
+var lookupSetter;
+var supportsAccessors;
+if ((supportsAccessors = owns(prototypeOfObject, "__defineGetter__"))) {
+    defineGetter = call.bind(prototypeOfObject.__defineGetter__);
+    defineSetter = call.bind(prototypeOfObject.__defineSetter__);
+    lookupGetter = call.bind(prototypeOfObject.__lookupGetter__);
+    lookupSetter = call.bind(prototypeOfObject.__lookupSetter__);
+}
+
 // ES5 15.2.3.2
 // http://es5.github.com/#x15.2.3.2
 if (!Object.getPrototypeOf) {
@@ -289,7 +307,7 @@ if (!Object.defineProperties || definePropertiesFallback) {
                 // try the shim if the real one doesn't work
             }
         }
-        
+
         for (var property in properties) {
             if (owns(properties, property) && property != "__proto__") {
                 Object.defineProperty(object, property, properties[property]);

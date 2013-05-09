@@ -48,15 +48,53 @@ if (!Object.getPrototypeOf) {
     };
 }
 
-// ES5 15.2.3.3
-// http://es5.github.com/#x15.2.3.3
-if (!Object.getOwnPropertyDescriptor) {
-    var ERR_NON_OBJECT = "Object.getOwnPropertyDescriptor called on a non-object: ";
+//ES5 15.2.3.3
+//http://es5.github.com/#x15.2.3.3
 
-    Object.getOwnPropertyDescriptor = function getOwnPropertyDescriptor(object, property) {
-        if ((typeof object != "object" && typeof object != "function") || object === null) {
-            throw new TypeError(ERR_NON_OBJECT + object);
-        }
+function doesGetOwnPropertyDescriptorWork(object) {
+	try {
+		object.sentinel = 0;
+		return Object.getOwnPropertyDescriptor(
+				object,
+				"sentinel"
+		).value === 0;
+	} catch (exception) {
+		// returns falsy
+	}
+}
+
+//check whether getOwnPropertyDescriptor works if it's given. Otherwise,
+//shim partially.
+if (Object.defineProperty) {
+	var getOwnPropertyDescriptorWorksOnObject = 
+		doesGetOwnPropertyDescriptorWork({});
+	var getOwnPropertyDescriptorWorksOnDom = typeof document == "undefined" ||
+	doesGetOwnPropertyDescriptorWork(document.createElement("div"));
+	if (!getOwnPropertyDescriptorWorksOnDom || 
+			!getOwnPropertyDescriptorWorksOnObject
+	) {
+		var getOwnPropertyDescriptorFallback = Object.getOwnPropertyDescriptor;
+	}
+}
+
+if (!Object.getOwnPropertyDescriptor || getOwnPropertyDescriptorFallback) {
+	var ERR_NON_OBJECT = "Object.getOwnPropertyDescriptor called on a non-object: ";
+
+	Object.getOwnPropertyDescriptor = function getOwnPropertyDescriptor(object, property) {
+		if ((typeof object != "object" && typeof object != "function") || object === null) {
+			throw new TypeError(ERR_NON_OBJECT + object);
+		}
+
+		// make a valiant attempt to use the real getOwnPropertyDescriptor
+		// for I8's DOM elements.
+		if (getOwnPropertyDescriptorFallback) {
+			try {
+				return getOwnPropertyDescriptorFallback.call(Object, object, property);
+			} catch (exception) {
+				// try the shim if the real one doesn't work
+			}
+		}
+
         // If object does not owns property return undefined immediately.
         if (!owns(object, property)) {
             return;

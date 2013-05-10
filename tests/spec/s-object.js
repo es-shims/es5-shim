@@ -81,4 +81,101 @@ describe('Object', function () {
         });
     });
  
+	describe("Object.defineProperty", function () {
+        var obj;
+
+        beforeEach(function() {
+           obj = {}; 
+           
+           Object.defineProperty(obj, 'name', {
+               value : 'Testing',
+               configurable: true,
+               enumerable: true,
+               writable: true
+           });
+        });
+        
+        it('should return the initial value', function () {
+            expect(obj.hasOwnProperty('name')).toBeTruthy();
+            expect(obj.name).toBe('Testing');
+        });
+        
+        it('should be setable', function () {
+            obj.name = 'Other';
+            expect(obj.name).toBe('Other');
+        });
+        
+        it('should return the parent initial value', function () {
+            var child = Object.create(obj, {});
+
+            expect(child.name).toBe('Testing');
+            expect(child.hasOwnProperty('name')).toBeFalsy();
+        });
+        
+        it('should not override the parent value', function () {
+            var child = Object.create(obj, {});
+            
+            Object.defineProperty(child, 'name', {
+                value : 'Other'
+            });
+
+            expect(obj.name).toBe('Testing');
+            expect(child.name).toBe('Other');
+        });
+        
+        it('should throw error for non object', function () {
+            expect(function () {
+                Object.defineProperty(42, 'name', {});
+            }).toThrow();
+        });
+    });
+	
+	describe("Object.getOwnPropertyDescriptor", function () {
+        it('should return undefined because the object does not own the property', function () {
+            var descr = Object.getOwnPropertyDescriptor({}, 'name');
+            
+            expect(descr).toBeUndefined()   
+        });
+        
+        it('should return a data descriptor', function () {
+            var descr = Object.getOwnPropertyDescriptor({name: 'Testing'}, 'name');
+            
+            expect(descr).not.toBeUndefined();
+            expect(descr.value).toBe('Testing');
+            expect(descr.writable).toBe(true);
+            expect(descr.enumerable).toBe(true);
+            expect(descr.configurable).toBe(true);
+        });
+        
+        it('should return undefined because the object does not own the property', function () {
+            var descr = Object.getOwnPropertyDescriptor(Object.create({name: 'Testing'}, {}), 'name');
+            
+            expect(descr).toBeUndefined()   
+        });
+        
+        it('should return a data descriptor', function () {
+            var obj = Object.create({}, {
+                name: {
+                    value : 'Testing',
+                    configurable: true,
+                    enumerable: true,
+                    writable: true
+                }
+            });
+            
+            var descr = Object.getOwnPropertyDescriptor(obj, 'name');
+            
+            expect(descr).not.toBeUndefined();
+            expect(descr.value).toBe('Testing');
+            expect(descr.writable).toBe(true);
+            expect(descr.enumerable).toBe(true);
+            expect(descr.configurable).toBe(true);
+        });
+        
+    	it('should throw error for non object', function () {
+            expect(function () {
+                Object.getOwnPropertyDescriptor(42, 'name');
+            }).toThrow();
+        });
+    });
 });

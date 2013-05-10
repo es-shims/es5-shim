@@ -188,7 +188,7 @@ if ((supportsAccessors = owns(prototypeOfObject, "__defineGetter__"))) {
 // [bugfix, ielt9, old browsers]
 // IE < 9 bug: [1,2].splice(0).join("") == "" but should be "12"
 if ([1,2].splice(0).length != 2) {
-    var _Array_splice_ = Array.prototype.splice;
+    var array_splice = Array.prototype.splice;
 
     if(function() { // test IE < 9 to splice bug - see issue #138
         function makeArray(l) {
@@ -220,7 +220,7 @@ if ([1,2].splice(0).length != 2) {
             if (!arguments.length) {
                 return [];
             } else {
-                return _Array_splice_.apply(this, [
+                return array_splice.apply(this, [
                     start === void 0 ? 0 : start,
                     deleteCount === void 0 ? (this.length - start) : deleteCount
                 ].concat(_Array_slice_.call(arguments, 2)))
@@ -266,12 +266,12 @@ if ([1,2].splice(0).length != 2) {
                 // delete all items from this array and replace it to 'left part' + _Array_slice_.call(arguments, 2) + 'right part'
                 args.unshift(0, this.length);
 
-                _Array_splice_.apply(this, args);
+                array_splice.apply(this, args);
 
                 return result;
             }
 
-            return _Array_splice_.call(this, start, deleteCount);
+            return array_splice.call(this, start, deleteCount);
         }
 
     }

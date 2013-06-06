@@ -953,6 +953,14 @@ describe('Array', function() {
                 }).toThrow();
                 expect(spy).not.toHaveBeenCalled();
             });
+            it('should work as expected for empty arrays with an initial value', function() {
+                var spy = jasmine.createSpy(),
+                    result;
+                
+                result = [].reduceRight(spy, '');
+                expect(spy).not.toHaveBeenCalled();
+                expect(result).toBe('');
+            });
             it('should throw correctly if no callback is given', function() {
                 expect(function() {
                     testSubject.reduceRight();

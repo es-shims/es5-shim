@@ -542,6 +542,10 @@ if (!Array.prototype.reduceRight) {
             } while (true);
         }
 
+        if (i < 0) {
+            return result;
+        }
+
         do {
             if (i in this) {
                 result = fun.call(void 0, result, self[i], i, object);

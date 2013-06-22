@@ -853,6 +853,10 @@ if (!Date.parse || "Date.parse is buggy") {
             );
         }
 
+        function toUTC(t) {
+            return Number(new NativeDate(1970, 0, 1, 0, 0, 0, t));
+        }
+
         // Copy any custom methods a 3rd party library may have added
         for (var key in NativeDate) {
             Date[key] = NativeDate[key];
@@ -881,8 +885,7 @@ if (!Date.parse || "Date.parse is buggy") {
                     // When time zone is missed, local offset should be used
                     // (ES 5.1 bug)
                     // see https://bugs.ecmascript.org/show_bug.cgi?id=112
-                    offset = !match[4] || match[8] ?
-                        0 : Number(new NativeDate(1970, 0)),
+                    isLocalTime = Boolean(match[4] && !match[8]),
                     signOffset = match[9] === "-" ? 1 : -1,
                     hourOffset = Number(match[10] || 0),
                     minuteOffset = Number(match[11] || 0),
@@ -909,7 +912,10 @@ if (!Date.parse || "Date.parse is buggy") {
                     result = (
                         (result + minute + minuteOffset * signOffset) * 60 +
                         second
-                    ) * 1000 + millisecond + offset;
+                    ) * 1000 + millisecond;
+                    if (isLocalTime) {
+                        result = toUTC(result);
+                    }
                     if (-8.64e15 <= result && result <= 8.64e15) {
                         return result;
                     }

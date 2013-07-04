@@ -1,4 +1,3 @@
-
 `es5-shim.js` and `es5-shim.min.js` monkey-patch a JavaScript context to
 contain all EcmaScript 5 methods that can be faithfully emulated with a
 legacy JavaScript engine.
@@ -44,7 +43,9 @@ So in order to run the tests against the built-in methods, invalidate that file 
       from manipulating their ``arguments`` and ``caller`` properties.
     * /!\ Caveat: bound functions don't have checks in ``call`` and
       ``apply`` to avoid executing as a constructor.
+* Number.prototype.toFixed
 * Object.keys
+* String.prototype.split
 * String.prototype.trim
 
 ### Untested ###

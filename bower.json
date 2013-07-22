@@ -1,0 +1,9 @@
+{
+  "name": "es5-shim",
+  "version": "2.0.12",
+  "main": "es5-shim.min.js", 
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/kriskowal/es5-shim"
+  }
+}

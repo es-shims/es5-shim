@@ -111,7 +111,7 @@ if (!Function.prototype.bind) {
             }
 
         };
-        if(target.prototype) {
+        if (target.prototype) {
             Empty.prototype = target.prototype;
             bound.prototype = new Empty();
             // Clean up dangling references.
@@ -190,7 +190,7 @@ if ((supportsAccessors = owns(prototypeOfObject, "__defineGetter__"))) {
 if ([1,2].splice(0).length != 2) {
     var array_splice = Array.prototype.splice;
 
-    if(function() { // test IE < 9 to splice bug - see issue #138
+    if (function() { // test IE < 9 to splice bug - see issue #138
         function makeArray(l) {
             var a = [];
             while (l--) {
@@ -209,7 +209,7 @@ if ([1,2].splice(0).length != 2) {
         lengthBefore = array.length; //20
         array.splice(5, 0, "XXX"); // add one element
 
-        if(lengthBefore + 1 == array.length) {
+        if (lengthBefore + 1 == array.length) {
             return true;// has right splice implementation without bugs
         }
         // else {
@@ -234,25 +234,25 @@ if ([1,2].splice(0).length != 2) {
                 , addElementsCount = args.length
             ;
 
-            if(!arguments.length) {
+            if (!arguments.length) {
                 return [];
             }
 
-            if(start === void 0) { // default
+            if (start === void 0) { // default
                 start = 0;
             }
-            if(deleteCount === void 0) { // default
+            if (deleteCount === void 0) { // default
                 deleteCount = this.length - start;
             }
 
-            if(addElementsCount > 0) {
-                if(deleteCount <= 0) {
-                    if(start == this.length) { // tiny optimisation #1
+            if (addElementsCount > 0) {
+                if (deleteCount <= 0) {
+                    if (start == this.length) { // tiny optimisation #1
                         this.push.apply(this, args);
                         return [];
                     }
 
-                    if(start == 0) { // tiny optimisation #2
+                    if (start == 0) { // tiny optimisation #2
                         this.unshift.apply(this, args);
                         return [];
                     }
@@ -1218,7 +1218,7 @@ if (
 // non-normative section suggesting uniform semantics and it should be
 // normalized across all browsers
 // [bugfix, IE lt 9] IE < 9 substr() with negative value not working in IE
-if("".substr && "0b".substr(-1) !== "b") {
+if ("".substr && "0b".substr(-1) !== "b") {
     var string_substr = String.prototype.substr;
     /**
      *  Get the substring of a string

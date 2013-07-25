@@ -159,6 +159,7 @@ if (!Function.prototype.bind) {
 var call = Function.prototype.call;
 var prototypeOfArray = Array.prototype;
 var prototypeOfObject = Object.prototype;
+var prototypeOfString = String.prototype;
 var _Array_slice_ = prototypeOfArray.slice;
 // Having a toString local variable name breaks in Opera so use _toString.
 var _toString = call.bind(prototypeOfObject.toString);
@@ -188,7 +189,7 @@ if ((supportsAccessors = owns(prototypeOfObject, "__defineGetter__"))) {
 // [bugfix, ielt9, old browsers]
 // IE < 9 bug: [1,2].splice(0).join("") == "" but should be "12"
 if ([1,2].splice(0).length != 2) {
-    var array_splice = Array.prototype.splice;
+    var array_splice = prototypeOfArray.splice;
 
     if(function() { // test IE < 9 to splice bug - see issue #138
         function makeArray(l) {
@@ -216,7 +217,7 @@ if ([1,2].splice(0).length != 2) {
         //    IE8 bug
         // }
     }()) {//IE 6/7
-        Array.prototype.splice = function(start, deleteCount) {
+        prototypeOfArray.splice = function(start, deleteCount) {
             if (!arguments.length) {
                 return [];
             } else {
@@ -228,7 +229,7 @@ if ([1,2].splice(0).length != 2) {
         };
     }
     else {//IE8
-        Array.prototype.splice = function(start, deleteCount) {
+        prototypeOfArray.splice = function(start, deleteCount) {
             var result
                 , args = _Array_slice_.call(arguments, 2)
                 , addElementsCount = args.length
@@ -283,8 +284,8 @@ if ([1,2].splice(0).length != 2) {
 // [bugfix, ielt8]
 // IE < 8 bug: [].unshift(0) == undefined but should be "1"
 if ([].unshift(0) != 1) {
-    var array_unshift = Array.prototype.unshift;
-    Array.prototype.unshift = function() {
+    var array_unshift = prototypeOfArray.unshift;
+    prototypeOfArray.unshift = function() {
         array_unshift.apply(this, arguments);
         return this.length;
     };
@@ -320,8 +321,8 @@ if (!Array.isArray) {
 var boxedString = Object("a"),
     splitString = boxedString[0] != "a" || !(0 in boxedString);
 
-if (!Array.prototype.forEach) {
-    Array.prototype.forEach = function forEach(fun /*, thisp*/) {
+if (!prototypeOfArray.forEach) {
+    prototypeOfArray.forEach = function forEach(fun /*, thisp*/) {
         var object = toObject(this),
             self = splitString && _toString(this) == "[object String]" ?
                 this.split("") :
@@ -349,8 +350,8 @@ if (!Array.prototype.forEach) {
 // ES5 15.4.4.19
 // http://es5.github.com/#x15.4.4.19
 // https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Objects/Array/map
-if (!Array.prototype.map) {
-    Array.prototype.map = function map(fun /*, thisp*/) {
+if (!prototypeOfArray.map) {
+    prototypeOfArray.map = function map(fun /*, thisp*/) {
         var object = toObject(this),
             self = splitString && _toString(this) == "[object String]" ?
                 this.split("") :
@@ -375,8 +376,8 @@ if (!Array.prototype.map) {
 // ES5 15.4.4.20
 // http://es5.github.com/#x15.4.4.20
 // https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Objects/Array/filter
-if (!Array.prototype.filter) {
-    Array.prototype.filter = function filter(fun /*, thisp */) {
+if (!prototypeOfArray.filter) {
+    prototypeOfArray.filter = function filter(fun /*, thisp */) {
         var object = toObject(this),
             self = splitString && _toString(this) == "[object String]" ?
                 this.split("") :
@@ -406,8 +407,8 @@ if (!Array.prototype.filter) {
 // ES5 15.4.4.16
 // http://es5.github.com/#x15.4.4.16
 // https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Array/every
-if (!Array.prototype.every) {
-    Array.prototype.every = function every(fun /*, thisp */) {
+if (!prototypeOfArray.every) {
+    prototypeOfArray.every = function every(fun /*, thisp */) {
         var object = toObject(this),
             self = splitString && _toString(this) == "[object String]" ?
                 this.split("") :
@@ -432,8 +433,8 @@ if (!Array.prototype.every) {
 // ES5 15.4.4.17
 // http://es5.github.com/#x15.4.4.17
 // https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Array/some
-if (!Array.prototype.some) {
-    Array.prototype.some = function some(fun /*, thisp */) {
+if (!prototypeOfArray.some) {
+    prototypeOfArray.some = function some(fun /*, thisp */) {
         var object = toObject(this),
             self = splitString && _toString(this) == "[object String]" ?
                 this.split("") :
@@ -458,8 +459,8 @@ if (!Array.prototype.some) {
 // ES5 15.4.4.21
 // http://es5.github.com/#x15.4.4.21
 // https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Objects/Array/reduce
-if (!Array.prototype.reduce) {
-    Array.prototype.reduce = function reduce(fun /*, initial*/) {
+if (!prototypeOfArray.reduce) {
+    prototypeOfArray.reduce = function reduce(fun /*, initial*/) {
         var object = toObject(this),
             self = splitString && _toString(this) == "[object String]" ?
                 this.split("") :
@@ -507,8 +508,8 @@ if (!Array.prototype.reduce) {
 // ES5 15.4.4.22
 // http://es5.github.com/#x15.4.4.22
 // https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Objects/Array/reduceRight
-if (!Array.prototype.reduceRight) {
-    Array.prototype.reduceRight = function reduceRight(fun /*, initial*/) {
+if (!prototypeOfArray.reduceRight) {
+    prototypeOfArray.reduceRight = function reduceRight(fun /*, initial*/) {
         var object = toObject(this),
             self = splitString && _toString(this) == "[object String]" ?
                 this.split("") :
@@ -559,8 +560,8 @@ if (!Array.prototype.reduceRight) {
 // ES5 15.4.4.14
 // http://es5.github.com/#x15.4.4.14
 // https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Array/indexOf
-if (!Array.prototype.indexOf || ([0, 1].indexOf(1, 2) != -1)) {
-    Array.prototype.indexOf = function indexOf(sought /*, fromIndex */ ) {
+if (!prototypeOfArray.indexOf || ([0, 1].indexOf(1, 2) != -1)) {
+    prototypeOfArray.indexOf = function indexOf(sought /*, fromIndex */ ) {
         var self = splitString && _toString(this) == "[object String]" ?
                 this.split("") :
                 toObject(this),
@@ -589,8 +590,8 @@ if (!Array.prototype.indexOf || ([0, 1].indexOf(1, 2) != -1)) {
 // ES5 15.4.4.15
 // http://es5.github.com/#x15.4.4.15
 // https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Array/lastIndexOf
-if (!Array.prototype.lastIndexOf || ([0, 1].lastIndexOf(0, -3) != -1)) {
-    Array.prototype.lastIndexOf = function lastIndexOf(sought /*, fromIndex */) {
+if (!prototypeOfArray.lastIndexOf || ([0, 1].lastIndexOf(0, -3) != -1)) {
+    prototypeOfArray.lastIndexOf = function lastIndexOf(sought /*, fromIndex */) {
         var self = splitString && _toString(this) == "[object String]" ?
                 this.split("") :
                 toObject(this),
@@ -1114,7 +1115,7 @@ if (!Number.prototype.toFixed || (0.00008).toFixed(3) !== '0.000' || (0.9).toFix
 //    ''.split(/.?/) should be [], not [""]
 //    '.'.split(/()()/) should be ["."], not ["", "", "."]
 
-var string_split = String.prototype.split;
+var string_split = prototypeOfString.split;
 if (
     'ab'.split(/(?:ab)*/).length !== 2 ||
     '.'.split(/(.?)(.?)/).length !== 4 ||
@@ -1125,13 +1126,13 @@ if (
     (function () {
         var compliantExecNpcg = /()??/.exec("")[1] === void 0; // NPCG: nonparticipating capturing group
 
-        String.prototype.split = function (separator, limit) {
+        prototypeOfString.split = function (separator, limit) {
             var string = this;
             if (separator === void 0 && limit === 0)
                 return [];
 
             // If `separator` is not a regex, use native split
-            if (Object.prototype.toString.call(separator) !== "[object RegExp]") {
+            if (_toString.call(separator) !== "[object RegExp]") {
                 return string_split.apply(this, arguments);
             }
 
@@ -1206,7 +1207,7 @@ if (
 // elements.
 // "0".split(undefined, 0) -> []
 } else if ("0".split(void 0, 0).length) {
-    String.prototype.split = function(separator, limit) {
+    prototypeOfString.split = function(separator, limit) {
         if (separator === void 0 && limit === 0) return [];
         return string_split.apply(this, arguments);
     }
@@ -1219,14 +1220,14 @@ if (
 // normalized across all browsers
 // [bugfix, IE lt 9] IE < 9 substr() with negative value not working in IE
 if("".substr && "0b".substr(-1) !== "b") {
-    var string_substr = String.prototype.substr;
+    var string_substr = prototypeOfString.substr;
     /**
      *  Get the substring of a string
      *  @param  {integer}  start   where to start the substring
      *  @param  {integer}  length  how many characters to return
      *  @return {string}
      */
-    String.prototype.substr = function(start, length) {
+    prototypeOfString.substr = function(start, length) {
         return string_substr.call(
             this,
             start < 0 ? ((start = this.length + start) < 0 ? 0 : start) : start,
@@ -1240,13 +1241,13 @@ if("".substr && "0b".substr(-1) !== "b") {
 var ws = "\x09\x0A\x0B\x0C\x0D\x20\xA0\u1680\u180E\u2000\u2001\u2002\u2003" +
     "\u2004\u2005\u2006\u2007\u2008\u2009\u200A\u202F\u205F\u3000\u2028" +
     "\u2029\uFEFF";
-if (!String.prototype.trim || ws.trim()) {
+if (!prototypeOfString.trim || ws.trim()) {
     // http://blog.stevenlevithan.com/archives/faster-trim-javascript
     // http://perfectionkills.com/whitespace-deviations/
     ws = "[" + ws + "]";
     var trimBeginRegexp = new RegExp("^" + ws + ws + "*"),
         trimEndRegexp = new RegExp(ws + ws + "*$");
-    String.prototype.trim = function trim() {
+    prototypeOfString.trim = function trim() {
         if (this === void 0 || this === null) {
             throw new TypeError("can't convert "+this+" to object");
         }

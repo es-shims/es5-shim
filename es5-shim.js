@@ -15,6 +15,7 @@
     }
 })(function () {
 
+
 /**
  * Brings an environment as close to ECMAScript 5 compliance
  * as is possible with the facilities of erstwhile engines.
@@ -23,6 +24,14 @@
  * ES5 Spec: http://www.ecma-international.org/publications/files/ECMA-ST/Ecma-262.pdf
  * Required reading: http://javascriptweblog.wordpress.com/2011/12/05/extending-javascript-natives/
  */
+
+
+// Cache object prototypes
+var prototypeOfArray = Array.prototype;
+var prototypeOfObject = Object.prototype;
+var prototypeOfString = String.prototype;
+var prototypeOfFunction = Function.prototype;
+
 
 //
 // Function
@@ -34,8 +43,8 @@
 
 function Empty() {}
 
-if (!Function.prototype.bind) {
-    Function.prototype.bind = function bind(that) { // .length is 1
+if (!prototypeOfFunction.bind) {
+    prototypeOfFunction.bind = function bind(that) { // .length is 1
         // 1. Let Target be the this value.
         var target = this;
         // 2. If IsCallable(Target) is false, throw a TypeError exception.
@@ -152,14 +161,11 @@ if (!Function.prototype.bind) {
     };
 }
 
-// Shortcut to an often accessed properties, in order to avoid multiple
+// Shortcut to properties accessed often, in order to avoid multiple
 // dereference that costs universally.
 // _Please note: Shortcuts are defined after `Function.prototype.bind` as we
-// us it in defining shortcuts.
-var call = Function.prototype.call;
-var prototypeOfArray = Array.prototype;
-var prototypeOfObject = Object.prototype;
-var prototypeOfString = String.prototype;
+// use it in defining shortcuts.
+var call = prototypeOfFunction.call;
 var _Array_slice_ = prototypeOfArray.slice;
 // Having a toString local variable name breaks in Opera so use _toString.
 var _toString = call.bind(prototypeOfObject.toString);

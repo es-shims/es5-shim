@@ -68,7 +68,7 @@ So in order to run the tests against the built-in methods, invalidate that file 
 
 * :warning: Object.getPrototypeOf
 
-    This will return "undefined" in some cases.  It uses __proto__ if
+    This will return "undefined" in some cases.  It uses `__proto__` if
     it's available.  Failing that, it uses constructor.prototype, which
     depends on the constructor property of the object's prototype having
     not been replaced.  If your object was created like this, it won't

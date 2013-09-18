@@ -1119,7 +1119,7 @@ if (
     'ab'.split(/(?:ab)*/).length !== 2 ||
     '.'.split(/(.?)(.?)/).length !== 4 ||
     'tesst'.split(/(s)*/)[1] === "t" ||
-    ''.split(/.?/).length === 0 ||
+    ''.split(/.?/).length ||
     '.'.split(/()()/).length > 1
 ) {
     (function () {

@@ -26,7 +26,12 @@
     "url": "http://github.com/kriskowal/es5-shim.git"
   },
   "scripts": {
-    "minify": "uglifyjs es5-shim.js --source-map=es5-shim.map -b ascii_only=true,beautify=false > es5-shim.min.js; uglifyjs es5-sham.js --source-map=es5-sham.map -b ascii_only=true,beautify=false > es5-sham.min.js"
+    "minify": "uglifyjs es5-shim.js --source-map=es5-shim.map -b ascii_only=true,beautify=false > es5-shim.min.js; uglifyjs es5-sham.js --source-map=es5-sham.map -b ascii_only=true,beautify=false > es5-sham.min.js",
+    "test": "jasmine-node --matchall tests/spec/"
+  },
+  "devDependencies": {
+    "jasmine-node": "~1.11.0",
+    "uglifyjs": "~2.3.6"
   },
   "engines": {
     "node": ">=0.2.0"

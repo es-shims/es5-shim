@@ -1091,9 +1091,11 @@ describe('Array', function() {
                 {},
                 Object.create && Object.create(null) || null,
                 /foo/,
-                arguments,
-                document.getElementsByTagName("div")
+                arguments
             ];
+            if (typeof document !== 'undefined') {
+                objects.push(document.getElementsByTagName('div'));
+            }
 
             objects.forEach(function (v) {
                 expect(Array.isArray(v)).toBe(false);

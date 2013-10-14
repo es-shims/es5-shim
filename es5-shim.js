@@ -55,7 +55,7 @@ if (!Function.prototype.bind) {
         //   15.3.4.5.2.
         // 14. Set the [[HasInstance]] internal property of F as described in
         //   15.3.4.5.3.
-        var bound = function () {
+        var binder = function () {
 
             if (this instanceof bound) {
                 // 15.3.4.5.2 [[Construct]]
@@ -111,14 +111,7 @@ if (!Function.prototype.bind) {
             }
 
         };
-        if (target.prototype) {
-            Empty.prototype = target.prototype;
-            bound.prototype = new Empty();
-            // Clean up dangling references.
-            Empty.prototype = null;
-        }
-        // XXX bound.length is never writable, so don't even try
-        //
+
         // 15. If the [[Class]] internal property of Target is "Function", then
         //     a. Let L be the length property of Target minus the length of A.
         //     b. Set the length own property of F to either 0 or L, whichever is
@@ -126,6 +119,20 @@ if (!Function.prototype.bind) {
         // 16. Else set the length own property of F to 0.
         // 17. Set the attributes of the length own property of F to the values
         //   specified in 15.3.5.1.
+        var boundLength = Math.max(0, target.length - args.length);
+        var boundArgs = [];
+        for (var i = 0; i < boundLength; i++) {
+            boundArgs.push("$" + i);
+        }
+
+        var bound = Function("binder", "return function(" + boundArgs.join(",") + "){return binder.apply(this,arguments)}")(binder);
+
+        if (target.prototype) {
+            Empty.prototype = target.prototype;
+            bound.prototype = new Empty();
+            // Clean up dangling references.
+            Empty.prototype = null;
+        }
 
         // TODO
         // 18. Set the [[Extensible]] internal property of F to true.

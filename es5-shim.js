@@ -4,7 +4,7 @@
 // Module systems magic dance
 (function (definition) {
     // RequireJS
-    if (typeof define == "function") {
+    if (typeof define == "function" && define.amd) {
         define(definition);
     // YUI3
     } else if (typeof YUI == "function") {

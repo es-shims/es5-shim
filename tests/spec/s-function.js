@@ -143,5 +143,34 @@ describe('Function', function() {
             expect(result instanceof classA).toBe(true);
             expect(result instanceof classB).toBe(true);
         });
+        it('should throw correctly when passed an object', function() {
+            expect(function() {
+                Function.prototype.bind.call({}, {});
+            }).toThrow();
+        });
+        it('binds to console.log when it is an object', function() {
+            var realConsole = console;
+            console = {
+                log: {}
+            };
+
+            expect(function() {
+                var logger = Function.prototype.bind.call(console.log, console);
+            }).not.toThrow();
+
+            console = realConsole;
+        });
+        it('binds properly to (even IE) console.log allowing it to be called with apply', function() {
+            if(!console) {
+                console = {
+                    log: function() {}
+                };
+            }
+            expect(function() {
+                var logger = Function.prototype.bind.call(console.log, console);
+                logger.apply(['hello','world']);
+            }).not.toThrow();
+        });
+
     });
 });

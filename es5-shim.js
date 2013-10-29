@@ -39,8 +39,12 @@ if (!Function.prototype.bind) {
         // 1. Let Target be the this value.
         var target = this;
         // 2. If IsCallable(Target) is false, throw a TypeError exception.
-        if (typeof target != "function") {
-            throw new TypeError("Function.prototype.bind called on incompatible " + target);
+        if (typeof target != "function" && (
+                // Check that target isn't IE console[info,log,warn,error] which has typeof "object"
+                // and is often wrapped as Function.prototype.bind.call(console.log, console)
+                typeof console == "undefined" || typeof console.log != "object" || (target != console.info && target != console.log && target != console.warn && target != console.error)
+            )) {
+                throw new TypeError("Function.prototype.bind called on incompatible " + target);
         }
         // 3. Let A be a new (possibly empty) internal list of all of the
         //   argument values provided after thisArg (arg1, arg2 etc), in order.

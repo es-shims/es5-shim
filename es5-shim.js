@@ -319,8 +319,15 @@ if (!Array.isArray) {
 // and failure of `0 in boxedString` (Rhino)
 var boxedString = Object("a"),
     splitString = boxedString[0] != "a" || !(0 in boxedString);
+// Check node 0.6.21 bug where third parameter is not boxed
+var boxedForEach = true;
+if (Array.prototype.forEach) {
+    Array.prototype.forEach.call("foo", function(item, i, obj) {
+        if (typeof obj !== 'object') boxedForEach = false;
+    });
+}
 
-if (!Array.prototype.forEach) {
+if (!Array.prototype.forEach || !boxedForEach) {
     Array.prototype.forEach = function forEach(fun /*, thisp*/) {
         var object = toObject(this),
             self = splitString && _toString(this) == "[object String]" ?

@@ -99,12 +99,20 @@ describe('Date', function () {
     });
 
     describe("valueOf", function(){
+        // Note that new Date(1970, 0).valueOf() is 0 in UTC timezone.
+        // Check check that it's a number (and an int), not that it's "truthy".
         var actual = (new Date(1970, 0));
         beforeEach(function(){
             actual = (new Date(1970, 0)).valueOf();
         });
+        it("should give a numeric value", function(){
+            expect(typeof actual).toBe("number");
+        });
+        it("should not be NaN", function(){
+            expect(isNaN(actual)).toBe(false);
+        });
         it("should give an int value", function(){
-            expect(parseInt(actual, 10)).toBeTruthy();
+            expect(actual).toBe(Math.floor(actual));
         });
     });
 

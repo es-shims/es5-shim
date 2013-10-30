@@ -143,5 +143,25 @@ describe('Function', function() {
             expect(result instanceof classA).toBe(true);
             expect(result instanceof classB).toBe(true);
         });
+        it('sets a correct length without thisArg', function () {
+            var subject = function (a, b, c) { return a + b + c; }.bind();
+            expect(subject.length).toEqual(3);
+        });
+        it('sets a correct length with thisArg', function () {
+            var subject = function (a, b, c) { return a + b + c; }.bind({});
+            expect(subject.length).toEqual(3);
+        });
+        it('sets a correct length with thisArg and first argument', function () {
+            var subject = function (a, b, c) { return a + b + c; }.bind({}, 1);
+            expect(subject.length).toEqual(2);
+        });
+        it('sets a correct length without thisArg and first argument', function () {
+            var subject = function (a, b, c) { return a + b + c; }.bind(undefined, 1);
+            expect(subject.length).toEqual(2);
+        });
+        it('sets a correct length without thisArg and too many argument', function () {
+            var subject = function (a, b, c) { return a + b + c; }.bind(undefined, 1, 2, 3, 4);
+            expect(subject.length).toEqual(0);
+        });
     });
 });

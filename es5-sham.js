@@ -2,6 +2,7 @@
 // vim: ts=4 sts=4 sw=4 expandtab
 
 // Module systems magic dance
+;
 (function (definition) {
     // RequireJS
     if (typeof define == "function") {

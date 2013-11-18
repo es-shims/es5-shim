@@ -117,14 +117,22 @@ if (!Function.prototype.bind) {
         //     b. Set the length own property of F to either 0 or L, whichever is
         //       larger.
         // 16. Else set the length own property of F to 0.
+        
+        var boundLength = Math.max(0, target.length - args.length);
+
         // 17. Set the attributes of the length own property of F to the values
         //   specified in 15.3.5.1.
-        var boundLength = Math.max(0, target.length - args.length);
         var boundArgs = [];
         for (var i = 0; i < boundLength; i++) {
             boundArgs.push("$" + i);
         }
 
+        // XXX Build a dynamic function with desired amount of arguments is the only 
+        // way to set the length property of a function. 
+        // In environments where Content Security Policies enabled (Chrome extensions, 
+        // for ex.) all use of eval or Function costructor throws an exception. 
+        // However in all of these environments Function.prototype.bind exists 
+        // and so this code will never be executed.
         var bound = Function("binder", "return function(" + boundArgs.join(",") + "){return binder.apply(this,arguments)}")(binder);
 
         if (target.prototype) {

@@ -191,6 +191,8 @@ if ((supportsAccessors = owns(prototypeOfObject, "__defineGetter__"))) {
 // IE < 9 bug: [1,2].splice(0).join("") == "" but should be "12"
 if ([1,2].splice(0).length != 2) {
     var array_splice = Array.prototype.splice;
+    var array_push = Array.prototype.push;
+    var array_unshift = Array.prototype.unshift;
 
     if (function() { // test IE < 9 to splice bug - see issue #138
         function makeArray(l) {
@@ -250,12 +252,12 @@ if ([1,2].splice(0).length != 2) {
             if (addElementsCount > 0) {
                 if (deleteCount <= 0) {
                     if (start == this.length) { // tiny optimisation #1
-                        this.push.apply(this, args);
+                        array_push.apply(this, args);
                         return [];
                     }
 
                     if (start == 0) { // tiny optimisation #2
-                        this.unshift.apply(this, args);
+                        array_unshift.apply(this, args);
                         return [];
                     }
                 }

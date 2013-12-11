@@ -37,7 +37,6 @@ So in order to run the tests against the built-in methods, invalidate that file 
 * Date.now
 * Date.prototype.toJSON
 * Function.prototype.bind
-    * :warning: Caveat: the bound function's length is always 0.
     * :warning: Caveat: the bound function has a prototype property.
     * :warning: Caveat: bound functions do not try too hard to keep you
       from manipulating their ``arguments`` and ``caller`` properties.

@@ -1,6 +1,6 @@
 {
   "name": "es5-shim",
-  "version": "2.1.0",
+  "version": "2.2.0",
   "description": "ES5 as implementable on previous engines",
   "homepage": "http://github.com/kriskowal/es5-shim/",
   "contributors": [
@@ -37,3 +37,4 @@
     "node": ">=0.2.0"
   }
 }
+

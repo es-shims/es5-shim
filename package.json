@@ -30,7 +30,7 @@
     "test": "jasmine-node --matchall tests/spec/"
   },
   "devDependencies": {
-    "jasmine-node": "~1.11.0",
+    "jasmine-node": "~1.12.0",
     "uglifyjs": "~2.3.6"
   },
   "engines": {

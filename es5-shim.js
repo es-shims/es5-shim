@@ -26,20 +26,6 @@
  * Required reading: http://javascriptweblog.wordpress.com/2011/12/05/extending-javascript-natives/
  */
 
-// ES-5 15.1.2.2
-if (parseInt('08') !== 8) {
-    parseInt = (function (origParseInt) {
-        var hexRegex = /^0[xX]/;
-        return function parseIntES5(str, radix) {
-            str = String(str).trim();
-            if (!+radix) {
-                radix = hexRegex.test(str) ? 16 : 10;
-            }
-            return origParseInt(str, radix);
-        };
-    }(parseInt));
-}
-
 //
 // Function
 // ========
@@ -1294,6 +1280,20 @@ if (!String.prototype.trim || ws.trim()) {
             .replace(trimBeginRegexp, "")
             .replace(trimEndRegexp, "");
     };
+}
+
+// ES-5 15.1.2.2
+if (parseInt('08') !== 8) {
+    parseInt = (function (origParseInt) {
+        var hexRegex = /^0[xX]/;
+        return function parseIntES5(str, radix) {
+            str = String(str).trim();
+            if (!+radix) {
+                radix = hexRegex.test(str) ? 16 : 10;
+            }
+            return origParseInt(str, radix);
+        };
+    }(parseInt));
 }
 
 //

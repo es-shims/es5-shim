@@ -32,7 +32,7 @@ if (parseInt('08') !== 8) {
         var hexRegex = /^0[xX]/;
         return function parseIntES5(str, radix) {
             str = String(str).trim();
-            if (!radix) {
+            if (!+radix) {
                 radix = hexRegex.test(str) ? 16 : 10;
             }
             return origParseInt(str, radix);

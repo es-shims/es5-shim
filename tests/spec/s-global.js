@@ -29,6 +29,12 @@ describe('global methods', function () {
             expect(parseInt('  42')).toBe(parseInt('42', 10));
             expect(parseInt('  08')).toBe(parseInt('08', 10));
         });
+
+       it('defaults the radix properly when not a true number', function () {
+           var fakeZero = { valueOf: function () { return 0; } };
+           expect(parseInt('08', fakeZero)).toBe(parseInt('08', 10));
+           expect(parseInt('0x16', fakeZero)).toBe(parseInt('0x16', 16));
+       });
     });
 });
 

@@ -29,8 +29,12 @@
 // ES-5 15.1.2.2
 if (parseInt('08') !== 8) {
     parseInt = (function (origParseInt) {
+        var hexRegex = /^0[xX]/;
         return function parseIntES5(str, radix) {
-            return origParseInt(str, radix || 10);
+            if (!radix) {
+                radix = hexRegex.test(String(str)) ? 16 : 10;
+            }
+            return origParseInt(str, radix);
         };
     }(parseInt));
 }

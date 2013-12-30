@@ -8,7 +8,7 @@ describe('global methods', function () {
             }
         });
 
-        it('defaults the radix to 10', function () {
+        it('defaults the radix to 10 when the number does not start with 0x or 0X', function () {
            [
                '01',
                '08',
@@ -17,6 +17,11 @@ describe('global methods', function () {
            ].forEach(function (str) {
                expect(parseInt(str)).toBe(parseInt(str, 10));
            });
+        });
+
+        it('defaults the radix to 16 when the number starts with 0x or 0X', function () {
+            expect(parseInt('0x16')).toBe(parseInt('0x16', 16));
+            expect(parseInt('0X16')).toBe(parseInt('0X16', 16));
         });
     });
 });

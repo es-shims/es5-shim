@@ -31,8 +31,9 @@ if (parseInt('08') !== 8) {
     parseInt = (function (origParseInt) {
         var hexRegex = /^0[xX]/;
         return function parseIntES5(str, radix) {
+            str = String(str).trim();
             if (!radix) {
-                radix = hexRegex.test(String(str)) ? 16 : 10;
+                radix = hexRegex.test(str) ? 16 : 10;
             }
             return origParseInt(str, radix);
         };

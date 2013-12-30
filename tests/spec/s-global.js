@@ -23,6 +23,12 @@ describe('global methods', function () {
             expect(parseInt('0x16')).toBe(parseInt('0x16', 16));
             expect(parseInt('0X16')).toBe(parseInt('0X16', 16));
         });
+
+        it('ignores leading whitespace', function () {
+            expect(parseInt('  0x16')).toBe(parseInt('0x16', 16));
+            expect(parseInt('  42')).toBe(parseInt('42', 10));
+            expect(parseInt('  08')).toBe(parseInt('08', 10));
+        });
     });
 });
 

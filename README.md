@@ -48,6 +48,7 @@ So in order to run the tests against the built-in methods, invalidate that file 
 * String.prototype.trim
 * Date.parse (for ISO parsing)
 * Date.prototype.toISOString
+* parseInt
 
 ## Shams
 

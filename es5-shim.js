@@ -26,6 +26,20 @@
  * Required reading: http://javascriptweblog.wordpress.com/2011/12/05/extending-javascript-natives/
  */
 
+// ES-5 15.1.2.2
+if (parseInt('08') !== 8) {
+    parseInt = (function (origParseInt) {
+        var hexRegex = /^0[xX]/;
+        return function parseIntES5(str, radix) {
+            str = String(str).trim();
+            if (!+radix) {
+                radix = hexRegex.test(str) ? 16 : 10;
+            }
+            return origParseInt(str, radix);
+        };
+    }(parseInt));
+}
+
 //
 // Function
 // ========
@@ -119,7 +133,7 @@ if (!Function.prototype.bind) {
         //     b. Set the length own property of F to either 0 or L, whichever is
         //       larger.
         // 16. Else set the length own property of F to 0.
-        
+
         var boundLength = Math.max(0, target.length - args.length);
 
         // 17. Set the attributes of the length own property of F to the values

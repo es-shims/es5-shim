@@ -2,7 +2,7 @@
   "name": "es5-shim",
   "version": "2.2.0",
   "description": "ES5 as implementable on previous engines",
-  "homepage": "http://github.com/kriskowal/es5-shim/",
+  "homepage": "http://github.com/es-shims/es5-shim/",
   "contributors": [
     "Kris Kowal <kris@cixar.com> (http://github.com/kriskowal/)",
     "Sami Samhuri <sami.samhuri@gmail.com> (http://samhuri.net/)",
@@ -12,18 +12,18 @@
   ],
   "bugs": {
     "mail": "kris@cixar.com",
-    "url": "http://github.com/kriskowal/es5-shim/issues"
+    "url": "http://github.com/es-shims/es5-shim/issues"
   },
   "licenses": [
     {
       "type": "MIT",
-      "url": "http://github.com/kriskowal/es5-shim/raw/master/LICENSE"
+      "url": "http://github.com/es-shims/es5-shim/raw/master/LICENSE"
     }
   ],
   "main": "es5-shim.js",
   "repository": {
     "type": "git",
-    "url": "http://github.com/kriskowal/es5-shim.git"
+    "url": "http://github.com/es-shims/es5-shim.git"
   },
   "scripts": {
     "minify": "uglifyjs es5-shim.js --source-map=es5-shim.map -b ascii_only=true,beautify=false > es5-shim.min.js; uglifyjs es5-sham.js --source-map=es5-sham.map -b ascii_only=true,beautify=false > es5-sham.min.js",

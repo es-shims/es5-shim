@@ -1,3 +1,9 @@
+#es5-shim <sup>[![Version Badge][2]][1]</sup>
+
+[![npm badge][9]][1]
+
+[![Build Status][3]][4] [![dependency status][5]][6]  [![dev dependency status][7]][8]
+
 `es5-shim.js` and `es5-shim.min.js` monkey-patch a JavaScript context to
 contain all EcmaScript 5 methods that can be faithfully emulated with a
 legacy JavaScript engine.
@@ -152,4 +158,14 @@ So in order to run the tests against the built-in methods, invalidate that file 
     fine unless you are depending on the safety and security
     provisions of this method, which you cannot possibly
     obtain in legacy engines.
+
+[1]: https://npmjs.org/package/es5-shim
+[2]: http://vb.teelaun.ch/es-shims/es5-shim.svg
+[3]: https://travis-ci.org/es-shims/es5-shim.png
+[4]: https://travis-ci.org/es-shims/es5-shim
+[5]: https://david-dm.org/es-shims/es5-shim.png
+[6]: https://david-dm.org/es-shims/es5-shim
+[7]: https://david-dm.org/es-shims/es5-shim/dev-status.png
+[8]: https://david-dm.org/es-shims/es5-shim#info=devDependencies
+[9]: https://nodei.co/npm/es5-shim.png?downloads=true&stars=true
 

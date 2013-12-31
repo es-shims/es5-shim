@@ -26,20 +26,6 @@
  * Required reading: http://javascriptweblog.wordpress.com/2011/12/05/extending-javascript-natives/
  */
 
-// ES-5 15.1.2.2
-if (parseInt('08') !== 8) {
-    parseInt = (function (origParseInt) {
-        var hexRegex = /^0[xX]/;
-        return function parseIntES5(str, radix) {
-            str = String(str).trim();
-            if (!+radix) {
-                radix = hexRegex.test(str) ? 16 : 10;
-            }
-            return origParseInt(str, radix);
-        };
-    }(parseInt));
-}
-
 //
 // Function
 // ========
@@ -1276,7 +1262,7 @@ if ("".substr && "0b".substr(-1) !== "b") {
 }
 
 // ES5 15.5.4.20
-// http://es5.github.com/#x15.5.4.20
+// whitespace from: http://es5.github.io/#x15.5.4.20
 var ws = "\x09\x0A\x0B\x0C\x0D\x20\xA0\u1680\u180E\u2000\u2001\u2002\u2003" +
     "\u2004\u2005\u2006\u2007\u2008\u2009\u200A\u202F\u205F\u3000\u2028" +
     "\u2029\uFEFF";
@@ -1294,6 +1280,20 @@ if (!String.prototype.trim || ws.trim()) {
             .replace(trimBeginRegexp, "")
             .replace(trimEndRegexp, "");
     };
+}
+
+// ES-5 15.1.2.2
+if (parseInt(ws + '08') !== 8 || parseInt(ws + '0x16') !== 22) {
+    parseInt = (function (origParseInt) {
+        var hexRegex = /^0[xX]/;
+        return function parseIntES5(str, radix) {
+            str = String(str).trim();
+            if (!+radix) {
+                radix = hexRegex.test(str) ? 16 : 10;
+            }
+            return origParseInt(str, radix);
+        };
+    }(parseInt));
 }
 
 //

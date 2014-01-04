@@ -48,6 +48,12 @@ describe('Object', function () {
                 }
             }).toThrow(e);
         });
+
+        it('should not enumerate over non-enumerable properties', function () {
+             var Foo = function () {};
+             expect(Object.keys(Foo.prototype)).toEqual([]);
+             expect(Object.keys(Boolean.prototype)).toEqual([]);
+        });
     });
 
 	describe("Object.isExtensible", function () {

@@ -655,6 +655,7 @@ if (!Array.prototype.lastIndexOf || ([0, 1].lastIndexOf(0, -3) != -1)) {
 if (!Object.keys) {
     // http://whattheheadsaid.com/2010/10/a-safer-object-keys-compatibility-implementation
     var hasDontEnumBug = true,
+        hasProtoEnumBug = (function () {}).propertyIsEnumerable('prototype'),
         dontEnums = [
             "toString",
             "toLocaleString",
@@ -671,25 +672,27 @@ if (!Object.keys) {
     }
 
     Object.keys = function keys(object) {
+        var isFunction = toString.call(object) === '[object Function]',
+            isObject = object !== null && typeof object === 'object';
 
-        if (
-            (typeof object != "object" && typeof object != "function") ||
-            object === null
-        ) {
+        if (!isObject && !isFunction) {
             throw new TypeError("Object.keys called on a non-object");
         }
 
-        var keys = [];
+        var keys = [],
+            skipProto = hasProtoEnumBug && isFunction;
         for (var name in object) {
-            if (owns(object, name)) {
+            if (!(skipProto && name === 'prototype') && owns(object, name)) {
                 keys.push(name);
             }
         }
 
         if (hasDontEnumBug) {
-            for (var i = 0, ii = dontEnumsLength; i < ii; i++) {
+            var ctor = object.constructor,
+                skipConstructor = ctor && ctor.prototype === object;
+            for (var i = 0; i < dontEnumsLength; i++) {
                 var dontEnum = dontEnums[i];
-                if (owns(object, dontEnum)) {
+                if (!(skipConstructor && dontEnum === 'constructor') && owns(object, dontEnum)) {
                     keys.push(dontEnum);
                 }
             }

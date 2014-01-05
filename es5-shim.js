@@ -1,4 +1,9 @@
-// Copyright 2009-2012 by contributors, MIT License
+/*!
+ * https://github.com/es-shims/es5-shim
+ * @license es5-shim Copyright 2009-2014 by contributors, MIT License
+ * see https://github.com/es-shims/es5-shim/blob/master/LICENSE
+ */
+
 // vim: ts=4 sts=4 sw=4 expandtab
 
 //Add semicolon to prevent IIFE from being passed as argument to concated code.

@@ -27,7 +27,9 @@
     "url": "http://github.com/es-shims/es5-shim.git"
   },
   "scripts": {
-    "minify": "uglifyjs es5-shim.js --source-map=es5-shim.map -b ascii_only=true,beautify=false > es5-shim.min.js; uglifyjs es5-sham.js --source-map=es5-sham.map -b ascii_only=true,beautify=false > es5-sham.min.js",
+    "minify": "npm run minify-shim && npm run minify-sham",
+    "minify-shim": "uglifyjs es5-shim.js --comments --source-map=es5-shim.map -b ascii_only=true,beautify=false > es5-shim.min.js",
+    "minify-sham": "uglifyjs es5-sham.js --comments --source-map=es5-sham.map -b ascii_only=true,beautify=false > es5-sham.min.js",
     "test": "jasmine-node --matchall tests/spec/"
   },
   "devDependencies": {

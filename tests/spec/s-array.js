@@ -1,3 +1,5 @@
+var toString = Object.prototype.toString;
+
 describe('Array', function() {
     var testSubject;
     beforeEach(function() {
@@ -76,8 +78,7 @@ describe('Array', function() {
         });
 
         describe('strings', function() {
-            var str = 'Hello, World!',
-                toString = Object.prototype.toString;
+            var str = 'Hello, World!';
             it('should iterate all in a string', function() {
                 actual = [];
                 Array.prototype.forEach.call(str, function(item, index) {
@@ -93,13 +94,14 @@ describe('Array', function() {
                 }, o);
                 expect(actual).toExactlyMatch(str.split(''));
             });
-            it('should have String object for third argument of callback', function() {
-                Array.prototype.forEach.call(str, function(item, index, obj) {
-                    actual = obj;
-                });
-                expect(typeof actual).toBe("object");
-                expect(toString.call(actual)).toBe("[object String]");
+        });
+        it('should have a boxed object as list argument of callback', function() {
+            var actual;
+            Array.prototype.forEach.call('foo', function(item, index, list) {
+                actual = list;
             });
+            expect(typeof actual).toBe('object');
+            expect(toString.call(actual)).toBe('[object String]');
         });
     });
     describe('some', function() {
@@ -195,6 +197,14 @@ describe('Array', function() {
                 return false;
             }, o);
             expect(actual).toExactlyMatch(expected);
+        });
+        it('should have a boxed object as list argument of callback', function() {
+            var actual;
+            Array.prototype.some.call('foo', function(item, index, list) {
+                actual = list;
+            });
+            expect(typeof actual).toBe('object');
+            expect(toString.call(actual)).toBe('[object String]');
         });
     });
     describe('every', function() {
@@ -293,6 +303,14 @@ describe('Array', function() {
                 return true;
             }, o);
             expect(actual).toExactlyMatch(expected);
+        });
+        it('should have a boxed object as list argument of callback', function() {
+            var actual;
+            Array.prototype.every.call('foo', function(item, index, list) {
+                actual = list;
+            });
+            expect(typeof actual).toBe('object');
+            expect(toString.call(actual)).toBe('[object String]');
         });
     });
 
@@ -651,6 +669,14 @@ describe('Array', function() {
                 expect(testSubject).toExactlyMatch(copy);
             });
         });
+        it('should have a boxed object as list argument of callback', function() {
+            var actual;
+            Array.prototype.filter.call('foo', function(item, index, list) {
+                actual = list;
+            });
+            expect(typeof actual).toBe('object');
+            expect(toString.call(actual)).toBe('[object String]');
+        });
     });
     describe('map', function() {
         var callback;
@@ -766,6 +792,14 @@ describe('Array', function() {
                 });
                 expect(i).toBe(3);
             });
+        });
+        it('should have a boxed object as list argument of callback', function() {
+            var actual;
+            Array.prototype.map.call('foo', function(item, index, list) {
+                actual = list;
+            });
+            expect(typeof actual).toBe('object');
+            expect(toString.call(actual)).toBe('[object String]');
         });
     });
 
@@ -915,6 +949,14 @@ describe('Array', function() {
             it('should have the right length', function() {
                 expect(testSubject.reduce.length).toBe(1);
             });
+        });
+        it('should have a boxed object as list argument of callback', function() {
+            var actual;
+            Array.prototype.reduce.call('foo', function(accumulator, item, index, list) {
+                actual = list;
+            });
+            expect(typeof actual).toBe('object');
+            expect(toString.call(actual)).toBe('[object String]');
         });
     });
     describe('reduceRight', function() {

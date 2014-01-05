@@ -688,9 +688,11 @@ if (!Object.keys) {
         }
 
         if (hasDontEnumBug) {
-            for (var i = 0, ii = dontEnumsLength; i < ii; i++) {
+            var ctor = object.constructor,
+                skipConstructor = ctor && ctor.prototype === object;
+            for (var i = 0; i < dontEnumsLength; i++) {
                 var dontEnum = dontEnums[i];
-                if (owns(object, dontEnum)) {
+                if (!(skipConstructor && dontEnum === 'constructor') && owns(object, dontEnum)) {
                     keys.push(dontEnum);
                 }
             }

@@ -8,19 +8,23 @@
 
 //Add semicolon to prevent IIFE from being passed as argument to concated code.
 ;
-// Module systems magic dance
-(function (definition) {
-    // RequireJS
-    if (typeof define == "function") {
-        define(definition);
-    // YUI3
-    } else if (typeof YUI == "function") {
-        YUI.add("es5", definition);
-    // CommonJS and <script>
+
+// UMD (Universal Module Definition)
+// see https://github.com/umdjs/umd/blob/master/returnExports.js
+(function (root, factory) {
+    if (typeof define === 'function' && define.amd) {
+        // AMD. Register as an anonymous module.
+        define(factory);
+    } else if (typeof exports === 'object') {
+        // Node. Does not work with strict CommonJS, but
+        // only CommonJS-like enviroments that support module.exports,
+        // like Node.
+        module.exports = factory();
     } else {
-        definition();
-    }
-})(function () {
+        // Browser globals (root is window)
+        root.returnExports = factory();
+  }
+}(this, function () {
 
 /**
  * Brings an environment as close to ECMAScript 5 compliance
@@ -1370,4 +1374,4 @@ var toObject = function (o) {
     return Object(o);
 };
 
-});
+}));

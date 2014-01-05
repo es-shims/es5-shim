@@ -36,6 +36,23 @@
   },
   "engines": {
     "node": ">=0.6.0"
+  },
+  "testling": {
+    "browsers": [
+      "iexplore/6.0..latest",
+      "firefox/3.0..6.0",
+      "firefox/18.0..latest",
+      "firefox/nightly",
+      "chrome/4.0..10.0",
+      "chrome/25.0..latest",
+      "chrome/canary",
+      "opera/10.0..latest",
+      "opera/next",
+      "safari/4.0..latest",
+      "ipad/6.0..latest",
+      "iphone/6.0..latest",
+      "android-browser/4.2"
+    ]
   }
 }
 

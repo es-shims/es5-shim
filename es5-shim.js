@@ -681,7 +681,7 @@ if (!Object.keys) {
     }
 
     Object.keys = function keys(object) {
-        var isFunction = toString.call(object) === '[object Function]',
+        var isFunction = _toString(object) === '[object Function]',
             isObject = object !== null && typeof object === 'object';
 
         if (!isObject && !isFunction) {

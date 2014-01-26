@@ -1,7 +1,7 @@
 {
   "name": "es5-shim",
   "version": "2.3.0",
-  "description": "ES5 as implementable on previous engines",
+  "description": "ECMAScript 5 compatibility shims for legacy JavaScript engines",
   "homepage": "http://github.com/es-shims/es5-shim/",
   "contributors": [
     "Kris Kowal <kris@cixar.com> (http://github.com/kriskowal/)",

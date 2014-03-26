@@ -55,6 +55,11 @@ describe('Object', function () {
              expect(Object.keys(Boolean.prototype)).toEqual([]);
              expect(Object.keys(Object.prototype)).toEqual([]);
         });
+
+        it('works with boxed primitives', function () {
+            expect(Object.keys(new String('hello'))).toEqual(['0', '1', '2', '3', '4']);
+            expect(Object.keys(Object('hello'))).toEqual(['0', '1', '2', '3', '4']);
+        });
     });
 
 	describe("Object.isExtensible", function () {

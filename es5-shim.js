@@ -663,7 +663,7 @@ if (!Array.prototype.lastIndexOf || ([0, 1].lastIndexOf(0, -3) != -1)) {
 // http://es5.github.com/#x15.2.3.14
 if (!Object.keys) {
     // http://whattheheadsaid.com/2010/10/a-safer-object-keys-compatibility-implementation
-    var hasDontEnumBug = true,
+    var hasDontEnumBug = !({'toString': null}).propertyIsEnumerable('toString'),
         hasProtoEnumBug = (function () {}).propertyIsEnumerable('prototype'),
         dontEnums = [
             "toString",
@@ -675,10 +675,6 @@ if (!Object.keys) {
             "constructor"
         ],
         dontEnumsLength = dontEnums.length;
-
-    for (var key in {"toString": null}) {
-        hasDontEnumBug = false;
-    }
 
     Object.keys = function keys(object) {
         var isFunction = _toString(object) === '[object Function]',

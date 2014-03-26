@@ -674,10 +674,27 @@ if (!Object.keys) {
             "propertyIsEnumerable",
             "constructor"
         ],
-        dontEnumsLength = dontEnums.length;
+        dontEnumsLength = dontEnums.length,
+        isFunction = function isFunction(value) {
+            return _toString(value) === '[object Function]';
+        },
+        isArguments = function isArguments(value) {
+            var str = _toString(value);
+            var isArguments = str === '[object Arguments]';
+            if (!isArguments) {
+                isArguments = !Array.isArray(str)
+                && value !== null
+                && typeof value === 'object'
+                && typeof value.length === 'number'
+                && value.length >= 0
+                && isFunction(value.callee);
+            }
+            return isArguments;
+        };
 
     Object.keys = function keys(object) {
-        var isFunction = _toString(object) === '[object Function]',
+        var isFunction = isFunction(object),
+            isArguments = isArguments(object),
             isObject = object !== null && typeof object === 'object';
 
         if (!isObject && !isFunction) {

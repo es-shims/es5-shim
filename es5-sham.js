@@ -46,7 +46,7 @@ if (!Object.getPrototypeOf) {
     // https://github.com/es-shims/es5-shim/issues#issue/2
     // http://ejohn.org/blog/objectgetprototypeof/
     // recommended by fschaefer on github
-    // 
+    //
     // sure, and webreflection says ^_^
     // ... this will nerever possibly return null
     // ... Opera Mini breaks here with infinite loops

@@ -163,7 +163,10 @@ if (!Object.create) {
 
     // Contributed by Brandon Benvie, October, 2012
     var createEmpty;
-    var supportsProto = Object.prototype.__proto__ === null;
+    var supportsProto = !({__proto__:null} instanceof Object);
+                        // the following produces false positives
+                        // in Opera Mini => not a reliable check
+                        // Object.prototype.__proto__ === null
     if (supportsProto || typeof document == 'undefined') {
         createEmpty = function () {
             return { "__proto__": null };

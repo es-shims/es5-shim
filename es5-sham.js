@@ -46,8 +46,13 @@ if (!Object.getPrototypeOf) {
     // https://github.com/es-shims/es5-shim/issues#issue/2
     // http://ejohn.org/blog/objectgetprototypeof/
     // recommended by fschaefer on github
+    // 
+    // sure, and webreflection says ^_^
+    // ... this will nerever possibly return null
+    // ... Opera Mini breaks here with infinite loops
     Object.getPrototypeOf = function getPrototypeOf(object) {
-        return object.__proto__ || (
+        var proto = object.__proto__;
+        return (proto || proto === null && proto) || (
             object.constructor
                 ? object.constructor.prototype
                 : prototypeOfObject

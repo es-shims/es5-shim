@@ -120,13 +120,21 @@ if (!Object.getOwnPropertyDescriptor || getOwnPropertyDescriptorFallback) {
             // `__proto__` so that `__lookupGetter__` will return getter only
             // if it's owned by an object.
             var prototype = object.__proto__;
-            object.__proto__ = prototypeOfObject;
+            var notPrototypeOfObject = object !== prototypeOfObject;
+            // avoid recursion problem, breaking in Opera Mini when
+            // Object.getOwnPropertyDescriptor(Object.prototype, 'toString')
+            // or any other Object.prototype accessor
+            if (notPrototypeOfObject) {
+                object.__proto__ = prototypeOfObject;
+            }
 
             var getter = lookupGetter(object, property);
             var setter = lookupSetter(object, property);
 
-            // Once we have getter and setter we can put values back.
-            object.__proto__ = prototype;
+            if (notPrototypeOfObject) {
+                // Once we have getter and setter we can put values back.
+                object.__proto__ = prototype;
+            }
 
             if (getter || setter) {
                 if (getter) {

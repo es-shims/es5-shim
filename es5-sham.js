@@ -53,9 +53,7 @@ if (!Object.getPrototypeOf) {
     Object.getPrototypeOf = function getPrototypeOf(object) {
         var proto = object.__proto__;
         return (proto || (proto === null && proto)) || (
-            object.constructor
-                ? object.constructor.prototype
-                : prototypeOfObject
+            object.constructor ? object.constructor.prototype : prototypeOfObject
         );
     };
 }

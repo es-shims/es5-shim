@@ -52,9 +52,13 @@ if (!Object.getPrototypeOf) {
     // ... Opera Mini breaks here with infinite loops
     Object.getPrototypeOf = function getPrototypeOf(object) {
         var proto = object.__proto__;
-        return (proto || (proto === null && proto)) || (
-            object.constructor ? object.constructor.prototype : prototypeOfObject
-        );
+        if (proto || proto === null) {
+            return proto;
+        } else if (object.constructor) {
+            return object.constructor.prototype;
+        } else {
+            return prototypeOfObject;
+        }
     };
 }
 

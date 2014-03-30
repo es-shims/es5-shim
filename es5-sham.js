@@ -76,13 +76,10 @@ function doesGetOwnPropertyDescriptorWork(object) {
 //check whether getOwnPropertyDescriptor works if it's given. Otherwise,
 //shim partially.
 if (Object.defineProperty) {
-    var getOwnPropertyDescriptorWorksOnObject = 
-        doesGetOwnPropertyDescriptorWork({});
+    var getOwnPropertyDescriptorWorksOnObject = doesGetOwnPropertyDescriptorWork({});
     var getOwnPropertyDescriptorWorksOnDom = typeof document === "undefined" ||
     doesGetOwnPropertyDescriptorWork(document.createElement("div"));
-    if (!getOwnPropertyDescriptorWorksOnDom || 
-            !getOwnPropertyDescriptorWorksOnObject
-    ) {
+    if (!getOwnPropertyDescriptorWorksOnDom || !getOwnPropertyDescriptorWorksOnObject) {
         var getOwnPropertyDescriptorFallback = Object.getOwnPropertyDescriptor;
     }
 }

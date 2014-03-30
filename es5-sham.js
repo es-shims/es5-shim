@@ -11,10 +11,10 @@
 // Module systems magic dance
 (function (definition) {
     // RequireJS
-    if (typeof define == "function") {
+    if (typeof define === "function") {
         define(definition);
     // YUI3
-    } else if (typeof YUI == "function") {
+    } else if (typeof YUI === "function") {
         YUI.add("es5-sham", definition);
     // CommonJS and <script>
     } else {
@@ -78,7 +78,7 @@ function doesGetOwnPropertyDescriptorWork(object) {
 if (Object.defineProperty) {
     var getOwnPropertyDescriptorWorksOnObject = 
         doesGetOwnPropertyDescriptorWork({});
-    var getOwnPropertyDescriptorWorksOnDom = typeof document == "undefined" ||
+    var getOwnPropertyDescriptorWorksOnDom = typeof document === "undefined" ||
     doesGetOwnPropertyDescriptorWork(document.createElement("div"));
     if (!getOwnPropertyDescriptorWorksOnDom || 
             !getOwnPropertyDescriptorWorksOnObject
@@ -91,7 +91,7 @@ if (!Object.getOwnPropertyDescriptor || getOwnPropertyDescriptorFallback) {
     var ERR_NON_OBJECT = "Object.getOwnPropertyDescriptor called on a non-object: ";
 
     Object.getOwnPropertyDescriptor = function getOwnPropertyDescriptor(object, property) {
-        if ((typeof object != "object" && typeof object != "function") || object === null) {
+        if ((typeof object !== "object" && typeof object !== "function") || object === null) {
             throw new TypeError(ERR_NON_OBJECT + object);
         }
 
@@ -178,7 +178,7 @@ if (!Object.create) {
                         // the following produces false positives
                         // in Opera Mini => not a reliable check
                         // Object.prototype.__proto__ === null
-    if (supportsProto || typeof document == 'undefined') {
+    if (supportsProto || typeof document === 'undefined') {
         createEmpty = function () {
             return { "__proto__": null };
         };
@@ -274,7 +274,7 @@ function doesDefinePropertyWork(object) {
 // shim partially.
 if (Object.defineProperty) {
     var definePropertyWorksOnObject = doesDefinePropertyWork({});
-    var definePropertyWorksOnDom = typeof document == "undefined" ||
+    var definePropertyWorksOnDom = typeof document === "undefined" ||
         doesDefinePropertyWork(document.createElement("div"));
     if (!definePropertyWorksOnObject || !definePropertyWorksOnDom) {
         var definePropertyFallback = Object.defineProperty,
@@ -289,10 +289,10 @@ if (!Object.defineProperty || definePropertyFallback) {
                                       "on this javascript engine";
 
     Object.defineProperty = function defineProperty(object, property, descriptor) {
-        if ((typeof object != "object" && typeof object != "function") || object === null) {
+        if ((typeof object !== "object" && typeof object !== "function") || object === null) {
             throw new TypeError(ERR_NON_OBJECT_TARGET + object);
         }
-        if ((typeof descriptor != "object" && typeof descriptor != "function") || descriptor === null) {
+        if ((typeof descriptor !== "object" && typeof descriptor !== "function") || descriptor === null) {
             throw new TypeError(ERR_NON_OBJECT_DESCRIPTOR + descriptor);
         }
         // make a valiant attempt to use the real defineProperty
@@ -370,7 +370,7 @@ if (!Object.defineProperties || definePropertiesFallback) {
         }
 
         for (var property in properties) {
-            if (owns(properties, property) && property != "__proto__") {
+            if (owns(properties, property) && property !== "__proto__") {
                 Object.defineProperty(object, property, properties[property]);
             }
         }
@@ -406,7 +406,7 @@ try {
 } catch (exception) {
     Object.freeze = (function freeze(freezeObject) {
         return function freeze(object) {
-            if (typeof object == "function") {
+            if (typeof object === "function") {
                 return object;
             } else {
                 return freezeObject(object);

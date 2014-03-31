@@ -22,6 +22,15 @@ describe('Object', function () {
             expect(keys.length).toBe(7);
         });
 
+        describe('arguments objects', function () {
+            it('works with an arguments object', function () {
+                (function () {
+                    expect(arguments.length).toBe(3);
+                    expect(Object.keys(arguments)).toEqual(['0', '1', '2']);
+                }(1, 2, 3));
+            });
+        });
+
         it('should return an Array', function () {
             expect(Array.isArray(keys)).toBe(true);
         });

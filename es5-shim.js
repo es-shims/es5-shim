@@ -697,12 +697,12 @@ if (!Object.keys) {
             isArgs = isArguments(object),
             isObject = object !== null && typeof object === 'object';
 
-        if (!isObject && !isFn) {
+        if (!isObject && !isFn && !isArgs) {
             throw new TypeError("Object.keys called on a non-object");
         }
 
-        var keys = [],
-            skipProto = hasProtoEnumBug && isFn;
+        var keys = [];
+        var skipProto = hasProtoEnumBug && isFn;
         for (var name in object) {
             if (!(skipProto && name === 'prototype') && owns(object, name)) {
                 keys.push(name);

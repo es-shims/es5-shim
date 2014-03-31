@@ -62,7 +62,7 @@ describe('Object', function () {
         });
     });
 
-	describe("Object.isExtensible", function () {
+    describe("Object.isExtensible", function () {
         var obj = { };
 
         it('should return true if object is extensible', function () {
@@ -93,7 +93,7 @@ describe('Object', function () {
         });
     });
 
-	describe("Object.defineProperty", function () {
+    describe("Object.defineProperty", function () {
         var obj;
 
         beforeEach(function() {
@@ -142,7 +142,7 @@ describe('Object', function () {
         });
     });
 
-	describe("Object.getOwnPropertyDescriptor", function () {
+    describe("Object.getOwnPropertyDescriptor", function () {
         it('should return undefined because the object does not own the property', function () {
             var descr = Object.getOwnPropertyDescriptor({}, 'name');
 
@@ -184,7 +184,7 @@ describe('Object', function () {
             expect(descr.configurable).toBe(true);
         });
 
-    	it('should throw error for non object', function () {
+        it('should throw error for non object', function () {
             expect(function () {
                 Object.getOwnPropertyDescriptor(42, 'name');
             }).toThrow();

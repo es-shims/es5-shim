@@ -683,11 +683,11 @@ if (!Object.keys) {
             var isArgs = str === '[object Arguments]';
             if (!isArgs) {
                 isArgs = !Array.isArray(str)
-                && value !== null
-                && typeof value === 'object'
-                && typeof value.length === 'number'
-                && value.length >= 0
-                && isFunction(value.callee);
+                    && value !== null
+                    && typeof value === 'object'
+                    && typeof value.length === 'number'
+                    && value.length >= 0
+                    && isFunction(value.callee);
             }
             return isArgs;
         };

@@ -695,7 +695,8 @@ if (!Object.keys) {
     Object.keys = function keys(object) {
         var isFn = isFunction(object),
             isArgs = isArguments(object),
-            isObject = object !== null && typeof object === 'object';
+            isObject = object !== null && typeof object === 'object',
+            isString = isObject && _toString(object) === '[object String]';
 
         if (!isObject && !isFn && !isArgs) {
             throw new TypeError("Object.keys called on a non-object");
@@ -703,9 +704,15 @@ if (!Object.keys) {
 
         var keys = [];
         var skipProto = hasProtoEnumBug && isFn;
-        for (var name in object) {
-            if (!(skipProto && name === 'prototype') && owns(object, name)) {
-                keys.push(name);
+        if (isString || isArgs) {
+            for (var i = 0; i < object.length; ++i) {
+                keys.push(String(i));
+            }
+        } else {
+            for (var name in object) {
+                if (!(skipProto && name === 'prototype') && owns(object, name)) {
+                    keys.push(String(name));
+                }
             }
         }
 

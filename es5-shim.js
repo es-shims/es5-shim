@@ -680,29 +680,29 @@ if (!Object.keys) {
         },
         isArguments = function isArguments(value) {
             var str = _toString(value);
-            var isArguments = str === '[object Arguments]';
-            if (!isArguments) {
-                isArguments = !Array.isArray(str)
+            var isArgs = str === '[object Arguments]';
+            if (!isArgs) {
+                isArgs = !Array.isArray(str)
                 && value !== null
                 && typeof value === 'object'
                 && typeof value.length === 'number'
                 && value.length >= 0
                 && isFunction(value.callee);
             }
-            return isArguments;
+            return isArgs;
         };
 
     Object.keys = function keys(object) {
-        var isFunction = isFunction(object),
-            isArguments = isArguments(object),
+        var isFn = isFunction(object),
+            isArgs = isArguments(object),
             isObject = object !== null && typeof object === 'object';
 
-        if (!isObject && !isFunction) {
+        if (!isObject && !isFn) {
             throw new TypeError("Object.keys called on a non-object");
         }
 
         var keys = [],
-            skipProto = hasProtoEnumBug && isFunction;
+            skipProto = hasProtoEnumBug && isFn;
         for (var name in object) {
             if (!(skipProto && name === 'prototype') && owns(object, name)) {
                 keys.push(name);

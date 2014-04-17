@@ -498,7 +498,11 @@ if (!Array.prototype.some || !properlyBoxesContext(Array.prototype.some)) {
 // ES5 15.4.4.21
 // http://es5.github.com/#x15.4.4.21
 // https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Objects/Array/reduce
-if (!Array.prototype.reduce) {
+var reduceCoercesToObject = false;
+if (Array.prototype.reduce) {
+    reduceCoercesToObject = typeof Array.prototype.reduce.call('a', function (_, _, _, list) { return list; }) === 'object';
+}
+if (!Array.prototype.reduce || !reduceCoercesToObject) {
     Array.prototype.reduce = function reduce(fun /*, initial*/) {
         var object = toObject(this),
             self = splitString && _toString(this) == "[object String]" ?

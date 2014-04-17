@@ -7,6 +7,11 @@ describe('String', function() {
             expect(test.trim()).toEqual("Hello, World!");
             expect(test.trim().length).toEqual(13);
         });
+
+        it('does not trim the zero-width space', function() {
+            expect('\u200b'.trim()).toEqual('\u200b');
+            expect('\u200b'.trim().length).toEqual(1);
+        });
     });
 
     describe("split", function() {

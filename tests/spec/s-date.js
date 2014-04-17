@@ -10,25 +10,17 @@ describe('Date', function () {
         // TODO: Write the rest of the test.
 
         it('should support extended years', function () {
-
             expect(Date.parse('0001-01-01T00:00:00Z')).toBe(-62135596800000);
             expect(Date.parse('+275760-09-13T00:00:00.000Z')).toBe(8.64e15);
             expect(Date.parse('+033658-09-27T01:46:40.000Z')).toBe(1e15);
             expect(Date.parse('-000001-01-01T00:00:00Z')).toBe(-62198755200000);
             expect(Date.parse('+002009-12-15T00:00:00Z')).toBe(1260835200000);
-
         });
 
-        it('should work', function () {
+        it('should be an invalid date', function () {
                                                                                   //Chrome 19     Opera 12      Firefox 11    IE 9          Safari 5.1.1
             expect(Date.parse("2012-11-31T23:59:59.000Z")).toBeFalsy();           //1354406399000 NaN           NaN           1354406399000 NaN
-            expect(Date.parse("2012-12-31T23:59:59.000Z")).toBe(1356998399000);   //1356998399000 1356998399000 1356998399000 1356998399000 1356998399000
             expect(Date.parse("2012-12-31T23:59:60.000Z")).toBeFalsy();           //NaN           NaN           NaN           NaN           1356998400000
-            expect(Date.parse("2012-04-04T05:02:02.170Z")).toBe(1333515722170);   //1333515722170 1333515722170 1333515722170 1333515722170 1333515722170
-            expect(Date.parse("2012-04-04T05:02:02.170999Z")).toBe(1333515722170);   //1333515722170 1333515722170 1333515722170 1333515722170 1333515722170
-            expect(Date.parse("2012-04-04T05:02:02.17Z")).toBe(1333515722170);    //1333515722170 1333515722170 1333515722170 1333515722170 1333515722170
-            expect(Date.parse("2012-04-04T05:02:02.1Z")).toBe(1333515722100);     //1333515722170 1333515722170 1333515722170 1333515722170 1333515722170
-            expect(Date.parse("2012-04-04T24:00:00.000Z")).toBe(1333584000000);   //NaN           1333584000000 1333584000000 1333584000000 1333584000000
             expect(Date.parse("2012-04-04T24:00:00.500Z")).toBeFalsy();           //NaN           NaN           1333584000500 1333584000500 NaN
             expect(Date.parse("2012-12-31T10:08:60.000Z")).toBeFalsy();           //NaN           NaN           NaN           NaN           1356948540000
             expect(Date.parse("2012-13-01T12:00:00.000Z")).toBeFalsy();           //NaN           NaN           NaN           NaN           NaN
@@ -39,22 +31,37 @@ describe('Date', function () {
             expect(Date.parse("2012-12-31T12:00:60.000Z")).toBeFalsy();           //NaN           NaN           NaN           NaN           1356955260000
             expect(Date.parse("2012-00-31T23:59:59.000Z")).toBeFalsy();           //NaN           NaN           NaN           NaN           NaN
             expect(Date.parse("2012-12-00T23:59:59.000Z")).toBeFalsy();           //NaN           NaN           NaN           NaN           NaN
-            expect(Date.parse("2012-02-29T12:00:00.000Z")).toBe(1330516800000);   //1330516800000 1330516800000 1330516800000 1330516800000 1330516800000
             expect(Date.parse("2011-02-29T12:00:00.000Z")).toBeFalsy();           //1298980800000 NaN           NaN           1298980800000 NaN
-            expect(Date.parse("2011-03-01T12:00:00.000Z")).toBe(1298980800000);   //1298980800000 1298980800000 1298980800000 1298980800000 1298980800000
+        });
 
-            // extended years:
-            expect(Date.parse("0000-01-01T00:00:00.000Z")).toBe(-621672192e5);    //-621672192e5  -621672192e5  -621672192e5  -621672192e5  -621672192e5
-            expect(Date.parse("+275760-09-13T00:00:00.000Z")).toBe(8.64e15);      //8.64e15       NaN           8.64e15       8.64e15       8.64e15
-            expect(Date.parse("-271821-04-20T00:00:00.000Z")).toBe(-8.64e15);     //-8.64e15      NaN           -8.64e15      -8.64e15      -8.6400000864e15
-            expect(Date.parse("+275760-09-13T00:00:00.001Z")).toBeFalsy();        //NaN           NaN           NaN           8.64e15 + 1   8.64e15 + 1
-            expect(Date.parse("-271821-04-19T23:59:59.999Z")).toBeFalsy();        //NaN           NaN           NaN           -8.64e15 - 1  -8.6400000864e15 - 1
+        it('should work', function () {
+                                                                                  //Chrome 19     Opera 12      Firefox 11    IE 9          Safari 5.1.1
+            expect(Date.parse("2012-12-31T23:59:59.000Z")).toBe(1356998399000);   //1356998399000 1356998399000 1356998399000 1356998399000 1356998399000
+            expect(Date.parse("2012-04-04T05:02:02.170Z")).toBe(1333515722170);   //1333515722170 1333515722170 1333515722170 1333515722170 1333515722170
+            expect(Date.parse("2012-04-04T05:02:02.170999Z")).toBe(1333515722170);   //1333515722170 1333515722170 1333515722170 1333515722170 1333515722170
+            expect(Date.parse("2012-04-04T05:02:02.17Z")).toBe(1333515722170);    //1333515722170 1333515722170 1333515722170 1333515722170 1333515722170
+            expect(Date.parse("2012-04-04T05:02:02.1Z")).toBe(1333515722100);     //1333515722170 1333515722170 1333515722170 1333515722170 1333515722170
+            expect(Date.parse("2012-04-04T24:00:00.000Z")).toBe(1333584000000);   //NaN           1333584000000 1333584000000 1333584000000 1333584000000
+            expect(Date.parse("2012-02-29T12:00:00.000Z")).toBe(1330516800000);   //1330516800000 1330516800000 1330516800000 1330516800000 1330516800000
+            expect(Date.parse("2011-03-01T12:00:00.000Z")).toBe(1298980800000);   //1298980800000 1298980800000 1298980800000 1298980800000 1298980800000
 
             // https://github.com/es-shims/es5-shim/issues/80 Safari bug with leap day
             expect(Date.parse("2034-03-01T00:00:00.000Z") -
                         Date.parse("2034-02-27T23:59:59.999Z")).toBe(86400001);   //86400001      86400001       86400001       86400001      1
 
-            // Time Zone Offset
+        });
+
+        it('should support extended years', function () {
+                                                                                  //Chrome 19     Opera 12      Firefox 11    IE 9          Safari 5.1.1
+            expect(Date.parse("0000-01-01T00:00:00.000Z")).toBe(-621672192e5);    //-621672192e5  -621672192e5  -621672192e5  -621672192e5  -621672192e5
+            expect(Date.parse("+275760-09-13T00:00:00.000Z")).toBe(8.64e15);      //8.64e15       NaN           8.64e15       8.64e15       8.64e15
+            expect(Date.parse("-271821-04-20T00:00:00.000Z")).toBe(-8.64e15);     //-8.64e15      NaN           -8.64e15      -8.64e15      -8.6400000864e15
+            expect(Date.parse("+275760-09-13T00:00:00.001Z")).toBeFalsy();        //NaN           NaN           NaN           8.64e15 + 1   8.64e15 + 1
+            expect(Date.parse("-271821-04-19T23:59:59.999Z")).toBeFalsy();        //NaN           NaN           NaN           -8.64e15 - 1  -8.6400000864e15 - 1
+        });
+
+        it('works with timezone offsets', function () {
+                                                                                  //Chrome 19     Opera 12      Firefox 11    IE 9          Safari 5.1.1
             expect(Date.parse("2012-01-29T12:00:00.000+01:00")).toBe(132783480e4);//132783480e4 132783480e4  132783480e4  132783480e4     132783480e4
             expect(Date.parse("2012-01-29T12:00:00.000-00:00")).toBe(132783840e4);//132783840e4 132783840e4  132783840e4  132783840e4     132783840e4
             expect(Date.parse("2012-01-29T12:00:00.000+00:00")).toBe(132783840e4);//132783840e4 132783840e4  132783840e4  132783840e4     132783840e4

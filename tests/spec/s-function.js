@@ -1,5 +1,18 @@
 describe('Function', function() {
     "use strict";
+
+    describe('apply', function() {
+        describe('arraylike objects', function() {
+            var arrayLike = { length: 4, 0: 1, 2: 4, 3: true };
+            var expectedArray = [1, undefined, 4, true];
+            var actualArray;
+            (function () {
+                actualArray = Array.prototype.slice.apply(arguments);
+            }).apply(null, arrayLike);
+            expect(actualArray).toEqual(expectedArray);
+        });
+    });
+
     describe('bind', function() {
         var actual, expected,
             testSubject;

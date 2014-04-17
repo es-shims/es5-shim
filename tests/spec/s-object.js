@@ -73,7 +73,11 @@ describe('Object', function () {
         it('works with boxed primitives with extra properties', function () {
             var x = new String('x');
             x.y = 1;
-            expect(Object.keys(x)).toEqual(['0', 'y']);
+            var actual = Object.keys(x);
+            var expected = ['0', 'y'];
+            actual.sort();
+            expected.sort();
+            expect(actual).toEqual(expected);
         });
     });
 

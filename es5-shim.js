@@ -212,7 +212,7 @@ if ((supportsAccessors = owns(prototypeOfObject, "__defineGetter__"))) {
 // http://es5.github.com/#x15.4.4.12
 // Default value for second param
 // [bugfix, ielt9, old browsers]
-// IE < 9 bug: [1,2].splice(0).join("") == "" but should be "12"
+// IE < 9 bug: [1,2].splice(0).join("") === "" but should be "12"
 if ([1,2].splice(0).length != 2) {
     var array_splice = Array.prototype.splice;
     var array_push = Array.prototype.push;
@@ -237,7 +237,7 @@ if ([1,2].splice(0).length != 2) {
         lengthBefore = array.length; //20
         array.splice(5, 0, "XXX"); // add one element
 
-        if (lengthBefore + 1 == array.length) {
+        if (lengthBefore + 1 === array.length) {
             return true;// has right splice implementation without bugs
         }
         // else {
@@ -275,12 +275,12 @@ if ([1,2].splice(0).length != 2) {
 
             if (addElementsCount > 0) {
                 if (deleteCount <= 0) {
-                    if (start == this.length) { // tiny optimisation #1
+                    if (start === this.length) { // tiny optimisation #1
                         array_push.apply(this, args);
                         return [];
                     }
 
-                    if (start == 0) { // tiny optimisation #2
+                    if (start === 0) { // tiny optimisation #2
                         array_unshift.apply(this, args);
                         return [];
                     }
@@ -309,7 +309,7 @@ if ([1,2].splice(0).length != 2) {
 // http://es5.github.com/#x15.4.4.13
 // Return len+argCount.
 // [bugfix, ielt8]
-// IE < 8 bug: [].unshift(0) == undefined but should be "1"
+// IE < 8 bug: [].unshift(0) === undefined but should be "1"
 if ([].unshift(0) != 1) {
     var array_unshift = Array.prototype.unshift;
     Array.prototype.unshift = function() {
@@ -323,7 +323,7 @@ if ([].unshift(0) != 1) {
 // https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Array/isArray
 if (!Array.isArray) {
     Array.isArray = function isArray(obj) {
-        return _toString(obj) == "[object Array]";
+        return _toString(obj) === "[object Array]";
     };
 }
 
@@ -363,7 +363,7 @@ var properlyBoxesContext = function properlyBoxed(method) {
 if (!Array.prototype.forEach || !properlyBoxesContext(Array.prototype.forEach)) {
     Array.prototype.forEach = function forEach(fun /*, thisp*/) {
         var object = toObject(this),
-            self = splitString && _toString(this) == "[object String]" ?
+            self = splitString && _toString(this) === "[object String]" ?
                 this.split("") :
                 object,
             thisp = arguments[1],
@@ -392,7 +392,7 @@ if (!Array.prototype.forEach || !properlyBoxesContext(Array.prototype.forEach)) 
 if (!Array.prototype.map || !properlyBoxesContext(Array.prototype.map)) {
     Array.prototype.map = function map(fun /*, thisp*/) {
         var object = toObject(this),
-            self = splitString && _toString(this) == "[object String]" ?
+            self = splitString && _toString(this) === "[object String]" ?
                 this.split("") :
                 object,
             length = self.length >>> 0,
@@ -418,7 +418,7 @@ if (!Array.prototype.map || !properlyBoxesContext(Array.prototype.map)) {
 if (!Array.prototype.filter || !properlyBoxesContext(Array.prototype.filter)) {
     Array.prototype.filter = function filter(fun /*, thisp */) {
         var object = toObject(this),
-            self = splitString && _toString(this) == "[object String]" ?
+            self = splitString && _toString(this) === "[object String]" ?
                 this.split("") :
                     object,
             length = self.length >>> 0,
@@ -449,7 +449,7 @@ if (!Array.prototype.filter || !properlyBoxesContext(Array.prototype.filter)) {
 if (!Array.prototype.every || !properlyBoxesContext(Array.prototype.every)) {
     Array.prototype.every = function every(fun /*, thisp */) {
         var object = toObject(this),
-            self = splitString && _toString(this) == "[object String]" ?
+            self = splitString && _toString(this) === "[object String]" ?
                 this.split("") :
                 object,
             length = self.length >>> 0,
@@ -475,7 +475,7 @@ if (!Array.prototype.every || !properlyBoxesContext(Array.prototype.every)) {
 if (!Array.prototype.some || !properlyBoxesContext(Array.prototype.some)) {
     Array.prototype.some = function some(fun /*, thisp */) {
         var object = toObject(this),
-            self = splitString && _toString(this) == "[object String]" ?
+            self = splitString && _toString(this) === "[object String]" ?
                 this.split("") :
                 object,
             length = self.length >>> 0,
@@ -505,7 +505,7 @@ if (Array.prototype.reduce) {
 if (!Array.prototype.reduce || !reduceCoercesToObject) {
     Array.prototype.reduce = function reduce(fun /*, initial*/) {
         var object = toObject(this),
-            self = splitString && _toString(this) == "[object String]" ?
+            self = splitString && _toString(this) === "[object String]" ?
                 this.split("") :
                 object,
             length = self.length >>> 0;
@@ -516,7 +516,7 @@ if (!Array.prototype.reduce || !reduceCoercesToObject) {
         }
 
         // no value to return if no initial value and an empty array
-        if (!length && arguments.length == 1) {
+        if (!length && arguments.length === 1) {
             throw new TypeError("reduce of empty array with no initial value");
         }
 
@@ -554,7 +554,7 @@ if (!Array.prototype.reduce || !reduceCoercesToObject) {
 if (!Array.prototype.reduceRight) {
     Array.prototype.reduceRight = function reduceRight(fun /*, initial*/) {
         var object = toObject(this),
-            self = splitString && _toString(this) == "[object String]" ?
+            self = splitString && _toString(this) === "[object String]" ?
                 this.split("") :
                 object,
             length = self.length >>> 0;
@@ -565,7 +565,7 @@ if (!Array.prototype.reduceRight) {
         }
 
         // no value to return if no initial value, empty array
-        if (!length && arguments.length == 1) {
+        if (!length && arguments.length === 1) {
             throw new TypeError("reduceRight of empty array with no initial value");
         }
 
@@ -605,7 +605,7 @@ if (!Array.prototype.reduceRight) {
 // https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Array/indexOf
 if (!Array.prototype.indexOf || ([0, 1].indexOf(1, 2) != -1)) {
     Array.prototype.indexOf = function indexOf(sought /*, fromIndex */ ) {
-        var self = splitString && _toString(this) == "[object String]" ?
+        var self = splitString && _toString(this) === "[object String]" ?
                 this.split("") :
                 toObject(this),
             length = self.length >>> 0;
@@ -635,7 +635,7 @@ if (!Array.prototype.indexOf || ([0, 1].indexOf(1, 2) != -1)) {
 // https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Array/lastIndexOf
 if (!Array.prototype.lastIndexOf || ([0, 1].lastIndexOf(0, -3) != -1)) {
     Array.prototype.lastIndexOf = function lastIndexOf(sought /*, fromIndex */) {
-        var self = splitString && _toString(this) == "[object String]" ?
+        var self = splitString && _toString(this) === "[object String]" ?
                 this.split("") :
                 toObject(this),
             length = self.length >>> 0;
@@ -865,7 +865,7 @@ if (!Date.parse || doesNotParseY2KNewYear || acceptsInvalidDates || !supportsExt
         function Date(Y, M, D, h, m, s, ms) {
             var length = arguments.length;
             if (this instanceof NativeDate) {
-                var date = length == 1 && String(Y) === Y ? // isString(Y)
+                var date = length === 1 && String(Y) === Y ? // isString(Y)
                     // We explicitly pass it through parse:
                     new NativeDate(Date.parse(Y)) :
                     // We have to manually make calls depending on argument

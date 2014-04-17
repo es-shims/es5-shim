@@ -1,4 +1,5 @@
 var toString = Object.prototype.toString;
+var canDistinguishSparseFromUndefined = 0 in [undefined]; // IE 6 - 8 have a bug where this returns false.
 
 describe('Array', function() {
     var testSubject;

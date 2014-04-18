@@ -35,6 +35,21 @@
  * Required reading: http://javascriptweblog.wordpress.com/2011/12/05/extending-javascript-natives/
  */
 
+// Shortcut to an often accessed properties, in order to avoid multiple
+// dereference that costs universally.
+// _Please note: Shortcuts are defined after `Function.prototype.bind` as we
+// us it in defining shortcuts.
+var call = Function.prototype.call;
+var prototypeOfArray = Array.prototype;
+var prototypeOfObject = Object.prototype;
+var _Array_slice_ = prototypeOfArray.slice;
+// Having a toString local variable name breaks in Opera so use _toString.
+var _toString = call.bind(prototypeOfObject.toString);
+var owns = call.bind(prototypeOfObject.hasOwnProperty);
+var array_splice = Array.prototype.splice;
+var array_push = Array.prototype.push;
+var array_unshift = Array.prototype.unshift;
+
 //
 // Function
 // ========
@@ -50,7 +65,7 @@ if (!Function.prototype.bind) {
         // 1. Let Target be the this value.
         var target = this;
         // 2. If IsCallable(Target) is false, throw a TypeError exception.
-        if (typeof target != "function") {
+        if (typeof target !== "function") {
             throw new TypeError("Function.prototype.bind called on incompatible " + target);
         }
         // 3. Let A be a new (possibly empty) internal list of all of the
@@ -178,18 +193,6 @@ if (!Function.prototype.bind) {
     };
 }
 
-// Shortcut to an often accessed properties, in order to avoid multiple
-// dereference that costs universally.
-// _Please note: Shortcuts are defined after `Function.prototype.bind` as we
-// us it in defining shortcuts.
-var call = Function.prototype.call;
-var prototypeOfArray = Array.prototype;
-var prototypeOfObject = Object.prototype;
-var _Array_slice_ = prototypeOfArray.slice;
-// Having a toString local variable name breaks in Opera so use _toString.
-var _toString = call.bind(prototypeOfObject.toString);
-var owns = call.bind(prototypeOfObject.hasOwnProperty);
-
 // If JS engine supports accessors creating shortcuts.
 var defineGetter;
 var defineSetter;
@@ -214,22 +217,17 @@ if ((supportsAccessors = owns(prototypeOfObject, "__defineGetter__"))) {
 // [bugfix, ielt9, old browsers]
 // IE < 9 bug: [1,2].splice(0).join("") === "" but should be "12"
 if ([1,2].splice(0).length != 2) {
-    var array_splice = Array.prototype.splice;
-    var array_push = Array.prototype.push;
-    var array_unshift = Array.prototype.unshift;
-
     if (function() { // test IE < 9 to splice bug - see issue #138
         function makeArray(l) {
             var a = [];
             while (l--) {
-                a.unshift(l)
+                a.unshift(l);
             }
-            return a
+            return a;
         }
 
-        var array = []
-            , lengthBefore
-        ;
+        var array = [];
+        var lengthBefore;
 
         array.splice.bind(array, 0, 0).apply(null, makeArray(20));
         array.splice.bind(array, 0, 0).apply(null, makeArray(26));
@@ -251,16 +249,15 @@ if ([1,2].splice(0).length != 2) {
                 return array_splice.apply(this, [
                     start === void 0 ? 0 : start,
                     deleteCount === void 0 ? (this.length - start) : deleteCount
-                ].concat(_Array_slice_.call(arguments, 2)))
+                ].concat(_Array_slice_.call(arguments, 2)));
             }
         };
     }
     else {//IE8
         Array.prototype.splice = function(start, deleteCount) {
-            var result
-                , args = _Array_slice_.call(arguments, 2)
-                , addElementsCount = args.length
-            ;
+            var result;
+            var args = _Array_slice_.call(arguments, 2);
+            var addElementsCount = args.length;
 
             if (!arguments.length) {
                 return [];
@@ -300,7 +297,7 @@ if ([1,2].splice(0).length != 2) {
             }
 
             return array_splice.call(this, start, deleteCount);
-        }
+        };
 
     }
 }
@@ -311,7 +308,6 @@ if ([1,2].splice(0).length != 2) {
 // [bugfix, ielt8]
 // IE < 8 bug: [].unshift(0) === undefined but should be "1"
 if ([].unshift(0) != 1) {
-    var array_unshift = Array.prototype.unshift;
     Array.prototype.unshift = function() {
         array_unshift.apply(this, arguments);
         return this.length;
@@ -353,7 +349,7 @@ var properlyBoxesContext = function properlyBoxed(method) {
     // Check node 0.6.21 bug where third parameter is not boxed
     var properlyBoxes = true;
     if (method) {
-        method.call('foo', function (item, index, context) {
+        method.call('foo', function (_, __, context) {
             if (typeof context !== 'object') { properlyBoxes = false; }
         });
     }
@@ -500,7 +496,7 @@ if (!Array.prototype.some || !properlyBoxesContext(Array.prototype.some)) {
 // https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Objects/Array/reduce
 var reduceCoercesToObject = false;
 if (Array.prototype.reduce) {
-    reduceCoercesToObject = typeof Array.prototype.reduce.call('a', function (_, _, _, list) { return list; }) === 'object';
+    reduceCoercesToObject = typeof Array.prototype.reduce.call('a', function (_, __, ___, list) { return list; }) === 'object';
 }
 if (!Array.prototype.reduce || !reduceCoercesToObject) {
     Array.prototype.reduce = function reduce(fun /*, initial*/) {
@@ -706,16 +702,16 @@ if (!Object.keys) {
             throw new TypeError("Object.keys called on a non-object");
         }
 
-        var keys = [];
+        var theKeys = [];
         var skipProto = hasProtoEnumBug && isFn;
         if (isString || isArgs) {
             for (var i = 0; i < object.length; ++i) {
-                keys.push(String(i));
+                theKeys.push(String(i));
             }
         } else {
             for (var name in object) {
                 if (!(skipProto && name === 'prototype') && owns(object, name)) {
-                    keys.push(String(name));
+                    theKeys.push(String(name));
                 }
             }
         }
@@ -723,14 +719,14 @@ if (!Object.keys) {
         if (hasDontEnumBug) {
             var ctor = object.constructor,
                 skipConstructor = ctor && ctor.prototype === object;
-            for (var i = 0; i < dontEnumsLength; i++) {
-                var dontEnum = dontEnums[i];
+            for (var j = 0; j < dontEnumsLength; j++) {
+                var dontEnum = dontEnums[j];
                 if (!(skipConstructor && dontEnum === 'constructor') && owns(object, dontEnum)) {
-                    keys.push(dontEnum);
+                    theKeys.push(dontEnum);
                 }
             }
         }
-        return keys;
+        return theKeys;
     };
 
 }
@@ -883,7 +879,7 @@ if (!Date.parse || doesNotParseY2KNewYear || acceptsInvalidDates || !supportsExt
                 return date;
             }
             return NativeDate.apply(this, arguments);
-        };
+        }
 
         // 15.9.1.15 Date Time String Format.
         var isoDateExpression = new RegExp("^" +
@@ -1075,7 +1071,7 @@ if (!Number.prototype.toFixed || (0.00008).toFixed(3) !== '0.000' || (0.9).toFix
             return n;
         }
 
-        Number.prototype.toFixed = function (fractionDigits) {
+        Number.prototype.toFixed = function toFixed(fractionDigits) {
             var f, x, s, m, e, z, j, k;
 
             // Test for NaN and round fractionDigits down
@@ -1158,7 +1154,7 @@ if (!Number.prototype.toFixed || (0.00008).toFixed(3) !== '0.000' || (0.9).toFix
             }
 
             return m;
-        }
+        };
     }());
 }
 
@@ -1212,8 +1208,8 @@ if (
                         (separator.sticky     ? "y" : ""), // Firefox 3+
                 lastLastIndex = 0,
                 // Make `global` and avoid `lastIndex` issues by working with a copy
-                separator = new RegExp(separator.source, flags + "g"),
                 separator2, match, lastIndex, lastLength;
+            separator = new RegExp(separator.source, flags + "g");
             string += ""; // Type-convert
             if (!compliantExecNpcg) {
                 // Doesn't need flags gy, but they don't hurt
@@ -1276,10 +1272,10 @@ if (
 // elements.
 // "0".split(undefined, 0) -> []
 } else if ("0".split(void 0, 0).length) {
-    String.prototype.split = function(separator, limit) {
+    String.prototype.split = function split(separator, limit) {
         if (separator === void 0 && limit === 0) return [];
         return string_split.apply(this, arguments);
-    }
+    };
 }
 
 
@@ -1296,13 +1292,13 @@ if ("".substr && "0b".substr(-1) !== "b") {
      *  @param  {integer}  length  how many characters to return
      *  @return {string}
      */
-    String.prototype.substr = function(start, length) {
+    String.prototype.substr = function substr(start, length) {
         return string_substr.call(
             this,
             start < 0 ? ((start = this.length + start) < 0 ? 0 : start) : start,
             length
         );
-    }
+    };
 }
 
 // ES5 15.5.4.20
@@ -1333,7 +1329,7 @@ if (parseInt(ws + '08') !== 8 || parseInt(ws + '0x16') !== 22) {
         var hexRegex = /^0[xX]/;
         return function parseIntES5(str, radix) {
             str = String(str).trim();
-            if (!+radix) {
+            if (!Number(radix)) {
                 radix = hexRegex.test(str) ? 16 : 10;
             }
             return origParseInt(str, radix);

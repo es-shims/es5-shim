@@ -1,3 +1,6 @@
+3.0.2
+ - Fix `Function#bind` in IE 7 and 8 (#224, #225, #226)
+
 3.0.1
  - Version bump to ensure npm has newest minified assets
 

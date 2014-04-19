@@ -1170,6 +1170,10 @@ describe('Array', function() {
             test = a.slice(0);
         });
 
+        it('has the right length', function () {
+            expect(Array.prototype.splice.length).toEqual(2);
+        });
+
         it('basic implementation test 1', function () {
             expect(test.splice(0)).toEqual(a);
         });

@@ -1,3 +1,10 @@
+3.0.0
+ - es5-sham: fix `Object.getPrototypeOf` and `Object.getOwnPropertyDescriptor` for Opera Mini
+ - Better override noncompliant native ES5 methods: `Array#forEach`, `Array#map`, `Array#filter`, `Array#every`, `Array#some`, `Array#reduce`, `Date.parse`, `String#trim`
+ - Added spec-compliant shim for `parseInt`
+ - Ensure `Object.keys` handles more edge cases with `arguments` objects and boxed primitives
+ - Improve minification of builds
+
 2.3.0
  - parseInt is now properly shimmed in ES3 browsers to default the radix
  - update URLs to point to the new organization

@@ -217,8 +217,8 @@ if ((supportsAccessors = owns(prototypeOfObject, "__defineGetter__"))) {
 // Default value for second param
 // [bugfix, ielt9, old browsers]
 // IE < 9 bug: [1,2].splice(0).join("") === "" but should be "12"
-if ([1,2].splice(0).length != 2) {
-    if (function() { // test IE < 9 to splice bug - see issue #138
+if ([1, 2].splice(0).length !== 2) {
+    if (function () { // test IE < 9 to splice bug - see issue #138
         function makeArray(l) {
             var a = [];
             while (l--) {
@@ -242,7 +242,7 @@ if ([1,2].splice(0).length != 2) {
         // else {
         //    IE8 bug
         // }
-    }()) {//IE 6/7
+    }()) { // IE 6/7
         Array.prototype.splice = function(start, deleteCount) {
             if (!arguments.length) {
                 return [];
@@ -253,8 +253,7 @@ if ([1,2].splice(0).length != 2) {
                 ].concat(_Array_slice_.call(arguments, 2)));
             }
         };
-    }
-    else {//IE8
+    } else { // IE8
         Array.prototype.splice = function(start, deleteCount) {
             var result;
             var args = _Array_slice_.call(arguments, 2);
@@ -308,7 +307,7 @@ if ([1,2].splice(0).length != 2) {
 // Return len+argCount.
 // [bugfix, ielt8]
 // IE < 8 bug: [].unshift(0) === undefined but should be "1"
-if ([].unshift(0) != 1) {
+if ([].unshift(0) !== 1) {
     Array.prototype.unshift = function() {
         array_unshift.apply(this, arguments);
         return this.length;
@@ -344,7 +343,7 @@ if (!Array.isArray) {
 // Check failure of by-index access of string characters (IE < 9)
 // and failure of `0 in boxedString` (Rhino)
 var boxedString = Object("a");
-var splitString = boxedString[0] != "a" || !(0 in boxedString);
+var splitString = boxedString[0] !== "a" || !(0 in boxedString);
 
 var properlyBoxesContext = function properlyBoxed(method) {
     // Check node 0.6.21 bug where third parameter is not boxed
@@ -368,7 +367,7 @@ if (!Array.prototype.forEach || !properlyBoxesContext(Array.prototype.forEach)) 
             length = self.length >>> 0;
 
         // If no callback function or if callback is not a callable function
-        if (_toString(fun) != "[object Function]") {
+        if (_toString(fun) !== "[object Function]") {
             throw new TypeError(); // TODO message
         }
 
@@ -397,7 +396,7 @@ if (!Array.prototype.map || !properlyBoxesContext(Array.prototype.map)) {
             thisp = arguments[1];
 
         // If no callback function or if callback is not a callable function
-        if (_toString(fun) != "[object Function]") {
+        if (_toString(fun) !== "[object Function]") {
             throw new TypeError(fun + " is not a function");
         }
 
@@ -424,7 +423,7 @@ if (!Array.prototype.filter || !properlyBoxesContext(Array.prototype.filter)) {
             thisp = arguments[1];
 
         // If no callback function or if callback is not a callable function
-        if (_toString(fun) != "[object Function]") {
+        if (_toString(fun) !== "[object Function]") {
             throw new TypeError(fun + " is not a function");
         }
 
@@ -453,7 +452,7 @@ if (!Array.prototype.every || !properlyBoxesContext(Array.prototype.every)) {
             thisp = arguments[1];
 
         // If no callback function or if callback is not a callable function
-        if (_toString(fun) != "[object Function]") {
+        if (_toString(fun) !== "[object Function]") {
             throw new TypeError(fun + " is not a function");
         }
 
@@ -479,7 +478,7 @@ if (!Array.prototype.some || !properlyBoxesContext(Array.prototype.some)) {
             thisp = arguments[1];
 
         // If no callback function or if callback is not a callable function
-        if (_toString(fun) != "[object Function]") {
+        if (_toString(fun) !== "[object Function]") {
             throw new TypeError(fun + " is not a function");
         }
 
@@ -508,7 +507,7 @@ if (!Array.prototype.reduce || !reduceCoercesToObject) {
             length = self.length >>> 0;
 
         // If no callback function or if callback is not a callable function
-        if (_toString(fun) != "[object Function]") {
+        if (_toString(fun) !== "[object Function]") {
             throw new TypeError(fun + " is not a function");
         }
 
@@ -557,7 +556,7 @@ if (!Array.prototype.reduceRight) {
             length = self.length >>> 0;
 
         // If no callback function or if callback is not a callable function
-        if (_toString(fun) != "[object Function]") {
+        if (_toString(fun) !== "[object Function]") {
             throw new TypeError(fun + " is not a function");
         }
 
@@ -600,7 +599,7 @@ if (!Array.prototype.reduceRight) {
 // ES5 15.4.4.14
 // http://es5.github.com/#x15.4.4.14
 // https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Array/indexOf
-if (!Array.prototype.indexOf || ([0, 1].indexOf(1, 2) != -1)) {
+if (!Array.prototype.indexOf || ([0, 1].indexOf(1, 2) !== -1)) {
     Array.prototype.indexOf = function indexOf(sought /*, fromIndex */ ) {
         var self = splitString && _toString(this) === "[object String]" ?
                 this.split("") :
@@ -630,7 +629,7 @@ if (!Array.prototype.indexOf || ([0, 1].indexOf(1, 2) != -1)) {
 // ES5 15.4.4.15
 // http://es5.github.com/#x15.4.4.15
 // https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Array/lastIndexOf
-if (!Array.prototype.lastIndexOf || ([0, 1].lastIndexOf(0, -3) != -1)) {
+if (!Array.prototype.lastIndexOf || ([0, 1].lastIndexOf(0, -3) !== -1)) {
     Array.prototype.lastIndexOf = function lastIndexOf(sought /*, fromIndex */) {
         var self = splitString && _toString(this) === "[object String]" ?
                 this.split("") :
@@ -828,7 +827,7 @@ if (!dateToJSONIsSupported) {
         // O with argument "toISOString".
         toISO = o.toISOString;
         // 5. If IsCallable(toISO) is false, throw a TypeError exception.
-        if (typeof toISO != "function") {
+        if (typeof toISO !== "function") {
             throw new TypeError("toISOString property is not callable");
         }
         // 6. Return the result of calling the [[Call]] internal method of

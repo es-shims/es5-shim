@@ -45,6 +45,10 @@ var array_splice = Array.prototype.splice;
 var array_push = Array.prototype.push;
 var array_unshift = Array.prototype.unshift;
 
+var isFunction = function (val) {
+    return prototypeOfObject.toString.call(val) === '[object Function]';
+};
+
 //
 // Function
 // ========
@@ -60,7 +64,7 @@ if (!Function.prototype.bind) {
         // 1. Let Target be the this value.
         var target = this;
         // 2. If IsCallable(Target) is false, throw a TypeError exception.
-        if (typeof target !== "function") {
+        if (!isFunction(target)) {
             throw new TypeError("Function.prototype.bind called on incompatible " + target);
         }
         // 3. Let A be a new (possibly empty) internal list of all of the
@@ -367,7 +371,7 @@ if (!Array.prototype.forEach || !properlyBoxesContext(Array.prototype.forEach)) 
             length = self.length >>> 0;
 
         // If no callback function or if callback is not a callable function
-        if (_toString(fun) !== "[object Function]") {
+        if (!isFunction(fun)) {
             throw new TypeError(); // TODO message
         }
 
@@ -396,7 +400,7 @@ if (!Array.prototype.map || !properlyBoxesContext(Array.prototype.map)) {
             thisp = arguments[1];
 
         // If no callback function or if callback is not a callable function
-        if (_toString(fun) !== "[object Function]") {
+        if (!isFunction(fun)) {
             throw new TypeError(fun + " is not a function");
         }
 
@@ -423,7 +427,7 @@ if (!Array.prototype.filter || !properlyBoxesContext(Array.prototype.filter)) {
             thisp = arguments[1];
 
         // If no callback function or if callback is not a callable function
-        if (_toString(fun) !== "[object Function]") {
+        if (!isFunction(fun)) {
             throw new TypeError(fun + " is not a function");
         }
 
@@ -452,7 +456,7 @@ if (!Array.prototype.every || !properlyBoxesContext(Array.prototype.every)) {
             thisp = arguments[1];
 
         // If no callback function or if callback is not a callable function
-        if (_toString(fun) !== "[object Function]") {
+        if (!isFunction(fun)) {
             throw new TypeError(fun + " is not a function");
         }
 
@@ -478,7 +482,7 @@ if (!Array.prototype.some || !properlyBoxesContext(Array.prototype.some)) {
             thisp = arguments[1];
 
         // If no callback function or if callback is not a callable function
-        if (_toString(fun) !== "[object Function]") {
+        if (!isFunction(fun)) {
             throw new TypeError(fun + " is not a function");
         }
 
@@ -507,7 +511,7 @@ if (!Array.prototype.reduce || !reduceCoercesToObject) {
             length = self.length >>> 0;
 
         // If no callback function or if callback is not a callable function
-        if (_toString(fun) !== "[object Function]") {
+        if (!isFunction(fun)) {
             throw new TypeError(fun + " is not a function");
         }
 
@@ -556,7 +560,7 @@ if (!Array.prototype.reduceRight) {
             length = self.length >>> 0;
 
         // If no callback function or if callback is not a callable function
-        if (_toString(fun) !== "[object Function]") {
+        if (!isFunction(fun)) {
             throw new TypeError(fun + " is not a function");
         }
 
@@ -675,9 +679,6 @@ if (!Object.keys) {
             "constructor"
         ],
         dontEnumsLength = dontEnums.length,
-        isFunction = function isFunction(value) {
-            return _toString(value) === '[object Function]';
-        },
         isArguments = function isArguments(value) {
             var str = _toString(value);
             var isArgs = str === '[object Arguments]';
@@ -1368,20 +1369,20 @@ function isPrimitive(input) {
 }
 
 function toPrimitive(input) {
-    var val, valueOf, toString;
+    var val, valueOf, toStr;
     if (isPrimitive(input)) {
         return input;
     }
     valueOf = input.valueOf;
-    if (typeof valueOf === "function") {
+    if (isFunction(valueOf)) {
         val = valueOf.call(input);
         if (isPrimitive(val)) {
             return val;
         }
     }
-    toString = input.toString;
-    if (typeof toString === "function") {
-        val = toString.call(input);
+    toStr = input.toString;
+    if (isFunction(toStr)) {
+        val = toStr.call(input);
         if (isPrimitive(val)) {
             return val;
         }

@@ -154,10 +154,10 @@ if (!Function.prototype.bind) {
         }
 
         // XXX Build a dynamic function with desired amount of arguments is the only 
-        // way to set the length property of a function. 
-        // In environments where Content Security Policies enabled (Chrome extensions, 
-        // for ex.) all use of eval or Function costructor throws an exception. 
-        // However in all of these environments Function.prototype.bind exists 
+        // way to set the length property of a function.
+        // In environments where Content Security Policies enabled (Chrome extensions,
+        // for ex.) all use of eval or Function costructor throws an exception.
+        // However in all of these environments Function.prototype.bind exists
         // and so this code will never be executed.
         var bound = Function("binder", "return function(" + boundArgs.join(",") + "){return binder.apply(this,arguments)}")(binder);
 

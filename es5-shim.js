@@ -43,9 +43,6 @@ var call = Function.prototype.call;
 var prototypeOfArray = Array.prototype;
 var prototypeOfObject = Object.prototype;
 var _Array_slice_ = prototypeOfArray.slice;
-// Having a toString local variable name breaks in Opera so use _toString.
-var _toString = call.bind(prototypeOfObject.toString);
-var owns = call.bind(prototypeOfObject.hasOwnProperty);
 var array_splice = Array.prototype.splice;
 var array_push = Array.prototype.push;
 var array_unshift = Array.prototype.unshift;
@@ -192,6 +189,10 @@ if (!Function.prototype.bind) {
         return bound;
     };
 }
+
+// Having a toString local variable name breaks in Opera so use _toString.
+var _toString = call.bind(prototypeOfObject.toString);
+var owns = call.bind(prototypeOfObject.hasOwnProperty);
 
 // If JS engine supports accessors creating shortcuts.
 var defineGetter;

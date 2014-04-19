@@ -1,3 +1,6 @@
+3.0.1
+ - Version bump to ensure npm has newest minified assets
+
 3.0.0
  - es5-sham: fix `Object.getPrototypeOf` and `Object.getOwnPropertyDescriptor` for Opera Mini
  - Better override noncompliant native ES5 methods: `Array#forEach`, `Array#map`, `Array#filter`, `Array#every`, `Array#some`, `Array#reduce`, `Date.parse`, `String#trim`

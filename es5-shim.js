@@ -48,6 +48,9 @@ var array_unshift = Array.prototype.unshift;
 var isFunction = function (val) {
     return prototypeOfObject.toString.call(val) === '[object Function]';
 };
+var isRegex = function (val) {
+    return prototypeOfObject.toString.call(val) === '[object RegExp]';
+};
 
 //
 // Function

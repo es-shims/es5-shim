@@ -1,3 +1,6 @@
+3.1.0
+ - Fix String#replace in Firefox up through 29 (#228)
+
 3.0.2
  - Fix `Function#bind` in IE 7 and 8 (#224, #225, #226)
 

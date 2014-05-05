@@ -97,6 +97,15 @@ describe('Function', function() {
             expect(ret).toBe(actual);
             expect(ret).not.toBe(testSubject);
         });
+        it('has the new instance\'s context as a constructor', function() {
+            var actualContext;
+            var expectedContext = { foo: 'bar' };
+            testSubject.func = function() {
+                actualContext = this;
+            }.bind(expectedContext);
+            var result = new testSubject.func();
+            expect(actualContext).not.toBe(expectedContext);
+        });
         it('passes the correct arguments as a constructor', function() {
             var ret, expected = { name: "Correct" };
             testSubject.func = function(arg) {

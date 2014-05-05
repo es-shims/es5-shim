@@ -14,6 +14,17 @@ describe('String', function() {
         });
     });
 
+    describe("replace", function() {
+        it('returns undefined for non-capturing groups', function() {
+            var groups = [];
+            'x'.replace(/x(.)?/g,function(m,group){
+                groups.push(group); /* "" in FF, `undefined` in CH/WK/IE */
+            });
+            expect(groups.length).toBe(1);
+            expect(groups[0]).toBeUndefined();
+        });
+    });
+
     describe("split", function() {
         var test = "ab";
 

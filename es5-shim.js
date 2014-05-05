@@ -48,6 +48,9 @@ var array_unshift = Array.prototype.unshift;
 var isFunction = function (val) {
     return prototypeOfObject.toString.call(val) === '[object Function]';
 };
+var isRegex = function (val) {
+    return prototypeOfObject.toString.call(val) === '[object RegExp]';
+};
 
 //
 // Function
@@ -1279,6 +1282,35 @@ if (
     };
 }
 
+var str_replace = String.prototype.replace;
+var replaceReportsGroupsCorrectly = (function () {
+    var groups = [];
+    'x'.replace(/x(.)?/g, function (match, group) {
+        groups.push(group);
+    });
+    return groups.length === 1 && typeof groups[0] === 'undefined';
+}());
+
+if (!replaceReportsGroupsCorrectly) {
+    String.prototype.replace = function replace(searchValue, replaceValue) {
+        var isFn = isFunction(replaceValue);
+        var hasCapturingGroups = isRegex(searchValue) && (/\)[*?]/).test(searchValue.source);
+        if (!isFn || !hasCapturingGroups) {
+            return str_replace.apply(this, arguments);
+        } else {
+            var wrappedReplaceValue = function (match) {
+                var length = arguments.length;
+                var originalLastIndex = searchValue.lastIndex;
+                searchValue.lastIndex = 0;
+                var args = searchValue.exec(match);
+                searchValue.lastIndex = originalLastIndex;
+                args.push(arguments[length - 2], arguments[length - 1]);
+                return replaceValue.apply(this, args);
+            };
+            return str_replace.call(this, searchValue, wrappedReplaceValue);
+        }
+    };
+}
 
 // ECMA-262, 3rd B.2.3
 // Note an ECMAScript standart, although ECMAScript 3rd Edition has a

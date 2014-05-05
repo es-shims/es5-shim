@@ -47,6 +47,8 @@ To run the tests, navigate to <root-folder>/tests/.
 * Object.keys
 * String.prototype.split
 * String.prototype.trim
+* String.prototype.replace
+    * Firefox (through v29) natively handles capturing groups incorrectly.
 * Date.parse (for ISO parsing)
 * Date.prototype.toISOString
 * parseInt

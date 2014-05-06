@@ -1,3 +1,6 @@
+3.1.1
+ - Update minified files (#231)
+
 3.1.0
  - Fix String#replace in Firefox up through 29 (#228)
 

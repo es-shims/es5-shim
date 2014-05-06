@@ -1201,7 +1201,7 @@ if (
                 return [];
 
             // If `separator` is not a regex, use native split
-            if (Object.prototype.toString.call(separator) !== "[object RegExp]") {
+            if (_toString(separator) !== "[object RegExp]") {
                 return string_split.apply(this, arguments);
             }
 

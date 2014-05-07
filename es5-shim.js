@@ -354,13 +354,19 @@ var splitString = boxedString[0] !== "a" || !(0 in boxedString);
 
 var properlyBoxesContext = function properlyBoxed(method) {
     // Check node 0.6.21 bug where third parameter is not boxed
-    var properlyBoxes = true;
+    var properlyBoxesNonStrict = true;
+    var properlyBoxesStrict = true;
     if (method) {
         method.call('foo', function (_, __, context) {
-            if (typeof context !== 'object') { properlyBoxes = false; }
+            if (typeof context !== 'object') { properlyBoxesNonStrict = false; }
         });
+
+        method.call([1], function () {
+            'use strict';
+            properlyBoxesStrict = typeof this === 'string';
+        }, 'x');
     }
-    return !!method && properlyBoxes;
+    return !!method && properlyBoxesNonStrict && properlyBoxesStrict;
 };
 
 if (!Array.prototype.forEach || !properlyBoxesContext(Array.prototype.forEach)) {

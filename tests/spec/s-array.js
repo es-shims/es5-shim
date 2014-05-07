@@ -104,6 +104,14 @@ describe('Array', function() {
             expect(typeof actual).toBe('object');
             expect(toString.call(actual)).toBe('[object String]');
         });
+        it('does not autobox the content in strict mode', function() {
+            var actual;
+            [1].forEach(function () {
+                'use strict';
+                actual = this;
+            }, 'x');
+            expect(typeof actual).toBe('string');
+        });
     });
     describe('some', function() {
         var actual, expected, numberOfRuns;

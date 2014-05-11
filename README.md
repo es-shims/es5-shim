@@ -61,11 +61,6 @@ To run the tests, navigate to <root-folder>/tests/.
     prototypically from another, this should work fine across legacy
     engines.
 
-    :warning: Object.create(null) will work only in browsers that
-    support prototype assignment.  This creates an object that does not
-    have any properties inherited from Object.prototype.  It will
-    silently fail otherwise.
-
     :warning: The second argument is passed to Object.defineProperties
     which will probably fail either silently or with extreme predudice.
 

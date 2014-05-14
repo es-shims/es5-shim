@@ -1,3 +1,7 @@
+3.2.0
+ - Fix es5-sham UMD definition to work properly with AMD (#237)
+ - Ensure that Array methods do not autobox context in strict mode (#233)
+
 3.1.1
  - Update minified files (#231)
 

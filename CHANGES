@@ -1,3 +1,6 @@
+3.3.0
+ - Fix Array#reduceRight in node 0.6 and older browsers (#238)
+
 3.2.0
  - Fix es5-sham UMD definition to work properly with AMD (#237)
  - Ensure that Array methods do not autobox context in strict mode (#233)

@@ -2,7 +2,11 @@ describe('Date', function () {
 
     describe('now', function () {
         it('should be the current time', function () {
-            expect(Date.now() / 1e3).toBeCloseTo(new Date().getTime() / 1e3, 2);
+            var before = (new Date()).getTime();
+            var middle = Date.now();
+            var after = (new Date()).getTime();
+            expect(middle).not.toBeLessThan(before);
+            expect(middle).not.toBeGreaterThan(after);
         });
     });
 

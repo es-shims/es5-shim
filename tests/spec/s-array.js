@@ -869,10 +869,8 @@ describe('Array', function() {
                 delete testSubject[1];
                 var visited = {};
                 testSubject.reduce(function(a,b) {
-                    if(a)
-                        visited[a] = true;
-                    if(b)
-                        visited[b] = true;
+                    if (a) { visited[a] = true; }
+                    if (b) { visited[b] = true; }
                     return 0;
                 });
 
@@ -1122,6 +1120,14 @@ describe('Array', function() {
             it('should have the right length', function() {
                 expect(testSubject.reduceRight.length).toBe(1);
             });
+        });
+        it('should have a boxed object as list argument of callback', function() {
+            var actual;
+            Array.prototype.reduceRight.call('foo', function(accumulator, item, index, list) {
+                actual = list;
+            });
+            expect(typeof actual).toBe('object');
+            expect(toString.call(actual)).toBe('[object String]');
         });
     });
 

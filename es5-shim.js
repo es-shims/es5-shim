@@ -560,7 +560,11 @@ if (!Array.prototype.reduce || !reduceCoercesToObject) {
 // ES5 15.4.4.22
 // http://es5.github.com/#x15.4.4.22
 // https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Objects/Array/reduceRight
-if (!Array.prototype.reduceRight) {
+var reduceRightCoercesToObject = false;
+if (Array.prototype.reduceRight) {
+    reduceRightCoercesToObject = typeof Array.prototype.reduceRight.call('a', function (_, __, ___, list) { return list; }) === 'object';
+}
+if (!Array.prototype.reduceRight || !reduceRightCoercesToObject) {
     Array.prototype.reduceRight = function reduceRight(fun /*, initial*/) {
         var object = toObject(this),
             self = splitString && _toString(this) === "[object String]" ?

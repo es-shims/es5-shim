@@ -509,7 +509,7 @@ if (!Array.prototype.some || !properlyBoxesContext(Array.prototype.some)) {
 // https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Objects/Array/reduce
 var reduceCoercesToObject = false;
 if (Array.prototype.reduce) {
-    reduceCoercesToObject = typeof Array.prototype.reduce.call('a', function (_, __, ___, list) { return list; }) === 'object';
+    reduceCoercesToObject = typeof Array.prototype.reduce.call('es5', function (_, __, ___, list) { return list; }) === 'object';
 }
 if (!Array.prototype.reduce || !reduceCoercesToObject) {
     Array.prototype.reduce = function reduce(fun /*, initial*/) {
@@ -562,7 +562,7 @@ if (!Array.prototype.reduce || !reduceCoercesToObject) {
 // https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Objects/Array/reduceRight
 var reduceRightCoercesToObject = false;
 if (Array.prototype.reduceRight) {
-    reduceRightCoercesToObject = typeof Array.prototype.reduceRight.call('a', function (_, __, ___, list) { return list; }) === 'object';
+    reduceRightCoercesToObject = typeof Array.prototype.reduceRight.call('es5', function (_, __, ___, list) { return list; }) === 'object';
 }
 if (!Array.prototype.reduceRight || !reduceRightCoercesToObject) {
     Array.prototype.reduceRight = function reduceRight(fun /*, initial*/) {

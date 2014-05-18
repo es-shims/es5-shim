@@ -1,3 +1,7 @@
+3.3.2
+ - Remove an internal "bind" call, which should make the shim a bit faster
+ - Fix a bug with object boxing in Array#reduceRight that was failing a test in IE 6
+
 3.3.1
  - Fixing an Array#splice bug in IE 6/7
  - cleaning up Array#splice tests

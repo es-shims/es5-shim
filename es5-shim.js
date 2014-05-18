@@ -1053,7 +1053,7 @@ if (!Number.prototype.toFixed || (0.00008).toFixed(3) !== '0.000' || (0.9).toFix
             }
         }
 
-        function toString() {
+        function numToString() {
             var i = size;
             var s = '';
             while (--i >= 0) {
@@ -1148,11 +1148,11 @@ if (!Number.prototype.toFixed || (0.00008).toFixed(3) !== '0.000' || (0.9).toFix
                     divide(1 << j);
                     multiply(1, 1);
                     divide(2);
-                    m = toString();
+                    m = numToString();
                 } else {
                     multiply(0, z);
                     multiply(1 << (-e), 0);
-                    m = toString() + '0.00000000000000000000'.slice(2, 2 + f);
+                    m = numToString() + '0.00000000000000000000'.slice(2, 2 + f);
                 }
             }
 

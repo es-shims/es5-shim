@@ -1175,9 +1175,9 @@ describe('Array', function() {
             prefix = prefix || "";
             var a = [];
             while (l--) {
-                a.unshift(prefix + Array(l + 1).join(" ") + l)
+                a.unshift(prefix + Array(l + 1).join(" ") + l);
             }
-            return a
+            return a;
         };
 
         beforeEach(function() {

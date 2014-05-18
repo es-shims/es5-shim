@@ -58,11 +58,19 @@ describe('Object', function () {
             }).toThrow(e);
         });
 
-        it('should not enumerate over non-enumerable properties', function () {
-             var Foo = function () {};
-             expect(Object.keys(Foo.prototype)).toEqual([]);
-             expect(Object.keys(Boolean.prototype)).toEqual([]);
-             expect(Object.keys(Object.prototype)).toEqual([]);
+        describe('enumerating over non-enumerable properties', function () {
+             it('has no enumerable keys on a Function', function () {
+                 var Foo = function () {};
+                 expect(Object.keys(Foo.prototype)).toEqual([]);
+             });
+
+             it('has no enumerable keys on a boolean', function () {
+                 expect(Object.keys(Boolean.prototype)).toEqual([]);
+             });
+
+             it('has no enumerable keys on an object', function () {
+                 expect(Object.keys(Object.prototype)).toEqual([]);
+             });
         });
 
         it('works with boxed primitives', function () {

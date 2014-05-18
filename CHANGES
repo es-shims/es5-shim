@@ -1,3 +1,7 @@
+3.3.1
+ - Fixing an Array#splice bug in IE 6/7
+ - cleaning up Array#splice tests
+
 3.3.0
  - Fix Array#reduceRight in node 0.6 and older browsers (#238)
 

@@ -1191,6 +1191,7 @@ describe('Array', function() {
         it('basic implementation test 1', function () {
             expect(test.splice(0)).toEqual(a);
         });
+
         it('basic implementation test 2', function () {
             test.splice(0, 2);
             expect(test).toEqual([b]);
@@ -1262,7 +1263,7 @@ describe('Array', function() {
             expect(test.splice()).toEqual([]);
             expect(test).toEqual(a);
         });
-        //TODO:: Is this realy TRUE behavior?
+
         it('should set first argument to 0 if first argument is set but undefined', function () {
             var test2 = test.slice(0);
             expect(test.splice(void 0, 2)).toEqual(test2.splice(0, 2));
@@ -1286,16 +1287,19 @@ describe('Array', function() {
             test.splice.call(obj, 0, 0, 1, 2, 3);
             expect(obj.length).toEqual(3);
         });
+
         it('should work with objects - adding 2', function () {
             var obj = {0:1, length: 1};
             test.splice.call(obj, 1, 0, 2, 3);
             expect(obj.length).toEqual(3);
         });
+
         it('should work with objects - removing', function () {
             var obj = {0:1, 1:2, 2: 3, length: 3};
             test.splice.call(obj, 0, 3);
             expect(obj.length).toEqual(0);
         });
+
         it('should work with objects - replacing', function () {
             var obj = {0:99, length: 1};
             test.splice.call(obj, 0, 1, 1, 2, 3);

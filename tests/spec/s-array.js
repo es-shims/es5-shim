@@ -1278,25 +1278,25 @@ describe('Array', function() {
 
         it('should work with objects - adding 1', function () {
             var obj = {};
-            test.splice.call(obj, 0, 0, 1, 2, 3);
+            Array.prototype.splice.call(obj, 0, 0, 1, 2, 3);
             expect(obj.length).toBe(3);
         });
 
         it('should work with objects - adding 2', function () {
             var obj = {0:1, length: 1};
-            test.splice.call(obj, 1, 0, 2, 3);
+            Array.prototype.splice.call(obj, 1, 0, 2, 3);
             expect(obj.length).toBe(3);
         });
 
         it('should work with objects - removing', function () {
             var obj = {0:1, 1:2, 2: 3, length: 3};
-            test.splice.call(obj, 0, 3);
+            Array.prototype.splice.call(obj, 0, 3);
             expect(obj.length).toBe(0);
         });
 
         it('should work with objects - replacing', function () {
             var obj = {0:99, length: 1};
-            test.splice.call(obj, 0, 1, 1, 2, 3);
+            Array.prototype.splice.call(obj, 0, 1, 1, 2, 3);
             expect(obj.length).toBe(3);
             expect(obj[0]).toBe(1);
         });

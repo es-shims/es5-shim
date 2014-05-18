@@ -605,7 +605,7 @@ if (!Array.prototype.reduceRight || !reduceRightCoercesToObject) {
         }
 
         do {
-            if (i in this) {
+            if (i in self) {
                 result = fun.call(void 0, result, self[i], i, object);
             }
         } while (i--);

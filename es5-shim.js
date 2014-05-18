@@ -254,6 +254,7 @@ if ([1, 2].splice(0).length !== 2) {
             if (!arguments.length) {
                 return [];
             } else {
+                this.length = Math.max(toInteger(this.length), 0);
                 return array_splice.apply(this, [
                     start === void 0 ? 0 : start,
                     deleteCount === void 0 ? (this.length - start) : deleteCount

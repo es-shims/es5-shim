@@ -1200,6 +1200,7 @@ if (
     'ab'.split(/(?:ab)*/).length !== 2 ||
     '.'.split(/(.?)(.?)/).length !== 4 ||
     'tesst'.split(/(s)*/)[1] === "t" ||
+    'test'.split(/(?:)/, -1).length !== 4 ||
     ''.split(/.?/).length ||
     '.'.split(/()()/).length > 1
 ) {

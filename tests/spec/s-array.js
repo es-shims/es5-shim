@@ -1132,32 +1132,48 @@ describe('Array', function() {
     });
 
     describe('isArray', function () {
-        it('should work for Array', function () {
-            var ret = Array.isArray([]);
-
-            expect(ret).toBe(true);
+        it('should be true for Array', function () {
+            expect(Array.isArray([])).toBe(true);
         });
 
-        it('should fail for other objects', function () {
-            var objects = [
-                "someString",
+        it('should be false for primitives', function () {
+            var primitives = [
+                'foo',
                 true,
                 false,
                 42,
                 0,
+                -0,
+                NaN,
+                Infinity,
+                -Infinity
+            ];
+            primitives.forEach(function (v) {
+                expect(Array.isArray(v)).toBe(false);
+            });
+        });
+
+        it('should fail for other objects', function () {
+            var objects = [
                 {},
-                Object.create && Object.create(null) || null,
                 /foo/,
                 arguments
             ];
-            if (typeof document !== 'undefined') {
-                objects.push(document.getElementsByTagName('div'));
+            if (Object.create) {
+                objects.push(Object.create(null));
             }
 
             objects.forEach(function (v) {
                 expect(Array.isArray(v)).toBe(false);
             });
         });
+
+        if (typeof document !== 'undefined') {
+            it('should be false for an HTML element', function () {
+                var el = document.getElementsByTagName('div');
+                expect(Array.isArray(el)).toBe(false);
+            });
+        }
     });
 
     describe('unshift', function () {

@@ -336,44 +336,44 @@ describe('Array', function() {
         it('should find the element', function() {
             expected = 4;
             actual = testSubject.indexOf('hej');
-            expect(actual).toEqual(expected);
+            expect(actual).toBe(expected);
         });
         it('should not find the element', function() {
             expected = -1;
             actual = testSubject.indexOf('mus');
-            expect(actual).toEqual(expected);
+            expect(actual).toBe(expected);
         });
         it('should find undefined as well', function() {
             expected = -1;
             actual = testSubject.indexOf(undefined);
-            expect(actual).not.toEqual(expected);
+            expect(actual).not.toBe(expected);
         });
         it('should skip unset indexes', function() {
             expected = 2;
             actual = testSubject.indexOf(undefined);
-            expect(actual).toEqual(expected);
+            expect(actual).toBe(expected);
         });
         it('should use a strict test', function() {
             actual = testSubject.indexOf(null);
-            expect(actual).toEqual(5);
+            expect(actual).toBe(5);
 
             actual = testSubject.indexOf('2');
-            expect(actual).toEqual(-1);
+            expect(actual).toBe(-1);
         });
         it('should skip the first if fromIndex is set', function() {
-            expect(testSubject.indexOf(2, 2)).toEqual(6);
-            expect(testSubject.indexOf(2, 0)).toEqual(0);
-            expect(testSubject.indexOf(2, 6)).toEqual(6);
+            expect(testSubject.indexOf(2, 2)).toBe(6);
+            expect(testSubject.indexOf(2, 0)).toBe(0);
+            expect(testSubject.indexOf(2, 6)).toBe(6);
         });
         it('should work with negative fromIndex', function() {
-            expect(testSubject.indexOf(2, -3)).toEqual(6);
-            expect(testSubject.indexOf(2, -9)).toEqual(0);
+            expect(testSubject.indexOf(2, -3)).toBe(6);
+            expect(testSubject.indexOf(2, -9)).toBe(0);
         });
         it('should work with fromIndex being greater than the length', function() {
-            expect(testSubject.indexOf(0, 20)).toEqual(-1);
+            expect(testSubject.indexOf(0, 20)).toBe(-1);
         });
         it('should work with fromIndex being negative and greater than the length', function() {
-            expect(testSubject.indexOf('hej', -20)).toEqual(4);
+            expect(testSubject.indexOf('hej', -20)).toBe(4);
         });
 
         describe('Array-like', function ArrayLike() {
@@ -390,44 +390,44 @@ describe('Array', function() {
             it('should find the element (array-like)', function() {
                 expected = 4;
                 actual = indexOf.call(testAL, 'hej');
-                expect(actual).toEqual(expected);
+                expect(actual).toBe(expected);
             });
             it('should not find the element (array-like)', function() {
                 expected = -1;
                 actual = indexOf.call(testAL, 'mus');
-                expect(actual).toEqual(expected);
+                expect(actual).toBe(expected);
             });
             it('should find undefined as well (array-like)', function() {
                 expected = -1;
                 actual = indexOf.call(testAL, undefined);
-                expect(actual).not.toEqual(expected);
+                expect(actual).not.toBe(expected);
             });
             it('should skip unset indexes (array-like)', function() {
                 expected = 2;
                 actual = indexOf.call(testAL, undefined);
-                expect(actual).toEqual(expected);
+                expect(actual).toBe(expected);
             });
             it('should use a strict test (array-like)', function() {
                 actual = Array.prototype.indexOf.call(testAL, null);
-                expect(actual).toEqual(5);
+                expect(actual).toBe(5);
 
                 actual = Array.prototype.indexOf.call(testAL, '2');
-                expect(actual).toEqual(-1);
+                expect(actual).toBe(-1);
             });
             it('should skip the first if fromIndex is set (array-like)', function() {
-                expect(indexOf.call(testAL, 2, 2)).toEqual(6);
-                expect(indexOf.call(testAL, 2, 0)).toEqual(0);
-                expect(indexOf.call(testAL, 2, 6)).toEqual(6);
+                expect(indexOf.call(testAL, 2, 2)).toBe(6);
+                expect(indexOf.call(testAL, 2, 0)).toBe(0);
+                expect(indexOf.call(testAL, 2, 6)).toBe(6);
             });
             it('should work with negative fromIndex (array-like)', function() {
-                expect(indexOf.call(testAL, 2, -3)).toEqual(6);
-                expect(indexOf.call(testAL, 2, -9)).toEqual(0);
+                expect(indexOf.call(testAL, 2, -3)).toBe(6);
+                expect(indexOf.call(testAL, 2, -9)).toBe(0);
             });
             it('should work with fromIndex being greater than the length (array-like)', function() {
-                expect(indexOf.call(testAL, 0, 20)).toEqual(-1);
+                expect(indexOf.call(testAL, 0, 20)).toBe(-1);
             });
             it('should work with fromIndex being negative and greater than the length (array-like)', function() {
-                expect(indexOf.call(testAL, 'hej', -20)).toEqual(4);
+                expect(indexOf.call(testAL, 'hej', -20)).toBe(4);
             });
         });
     });
@@ -444,44 +444,44 @@ describe('Array', function() {
             it('should find the element', function() {
                 expected = 4;
                 actual = testSubject.lastIndexOf('hej');
-                expect(actual).toEqual(expected);
+                expect(actual).toBe(expected);
             });
             it('should not find the element', function() {
                 expected = -1;
                 actual = testSubject.lastIndexOf('mus');
-                expect(actual).toEqual(expected);
+                expect(actual).toBe(expected);
             });
             it('should find undefined as well', function() {
                 expected = -1;
                 actual = testSubject.lastIndexOf(undefined);
-                expect(actual).not.toEqual(expected);
+                expect(actual).not.toBe(expected);
             });
             it('should skip unset indexes', function() {
                 expected = 2;
                 actual = testSubject.lastIndexOf(undefined);
-                expect(actual).toEqual(expected);
+                expect(actual).toBe(expected);
             });
             it('should use a strict test', function() {
                 actual = testSubject.lastIndexOf(null);
-                expect(actual).toEqual(5);
+                expect(actual).toBe(5);
 
                 actual = testSubject.lastIndexOf('2');
-                expect(actual).toEqual(-1);
+                expect(actual).toBe(-1);
             });
             it('should skip the first if fromIndex is set', function() {
-                expect(testSubject.lastIndexOf(2, 2)).toEqual(0);
-                expect(testSubject.lastIndexOf(2, 0)).toEqual(0);
-                expect(testSubject.lastIndexOf(2, 6)).toEqual(6);
+                expect(testSubject.lastIndexOf(2, 2)).toBe(0);
+                expect(testSubject.lastIndexOf(2, 0)).toBe(0);
+                expect(testSubject.lastIndexOf(2, 6)).toBe(6);
             });
             it('should work with negative fromIndex', function() {
-                expect(testSubject.lastIndexOf(2, -3)).toEqual(6);
-                expect(testSubject.lastIndexOf(2, -9)).toEqual(0);
+                expect(testSubject.lastIndexOf(2, -3)).toBe(6);
+                expect(testSubject.lastIndexOf(2, -9)).toBe(0);
             });
             it('should work with fromIndex being greater than the length', function() {
-                expect(testSubject.lastIndexOf(2, 20)).toEqual(6);
+                expect(testSubject.lastIndexOf(2, 20)).toBe(6);
             });
             it('should work with fromIndex being negative and greater than the length', function() {
-                expect(testSubject.lastIndexOf(2, -20)).toEqual(-1);
+                expect(testSubject.lastIndexOf(2, -20)).toBe(-1);
             });
         });
 
@@ -498,44 +498,44 @@ describe('Array', function() {
             it('should find the element (array-like)', function() {
                 expected = 4;
                 actual = lastIndexOf.call(testAL, 'hej');
-                expect(actual).toEqual(expected);
+                expect(actual).toBe(expected);
             });
             it('should not find the element (array-like)', function() {
                 expected = -1;
                 actual = lastIndexOf.call(testAL, 'mus');
-                expect(actual).toEqual(expected);
+                expect(actual).toBe(expected);
             });
             it('should find undefined as well (array-like)', function() {
                 expected = -1;
                 actual = lastIndexOf.call(testAL, undefined);
-                expect(actual).not.toEqual(expected);
+                expect(actual).not.toBe(expected);
             });
             it('should skip unset indexes (array-like)', function() {
                 expected = 2;
                 actual = lastIndexOf.call(testAL, undefined);
-                expect(actual).toEqual(expected);
+                expect(actual).toBe(expected);
             });
             it('should use a strict test (array-like)', function() {
                 actual = lastIndexOf.call(testAL, null);
-                expect(actual).toEqual(5);
+                expect(actual).toBe(5);
 
                 actual = lastIndexOf.call(testAL, '2');
-                expect(actual).toEqual(-1);
+                expect(actual).toBe(-1);
             });
             it('should skip the first if fromIndex is set', function() {
-                expect(lastIndexOf.call(testAL, 2, 2)).toEqual(0);
-                expect(lastIndexOf.call(testAL, 2, 0)).toEqual(0);
-                expect(lastIndexOf.call(testAL, 2, 6)).toEqual(6);
+                expect(lastIndexOf.call(testAL, 2, 2)).toBe(0);
+                expect(lastIndexOf.call(testAL, 2, 0)).toBe(0);
+                expect(lastIndexOf.call(testAL, 2, 6)).toBe(6);
             });
             it('should work with negative fromIndex', function() {
-                expect(lastIndexOf.call(testAL, 2, -3)).toEqual(6);
-                expect(lastIndexOf.call(testAL, 2, -9)).toEqual(0);
+                expect(lastIndexOf.call(testAL, 2, -3)).toBe(6);
+                expect(lastIndexOf.call(testAL, 2, -9)).toBe(0);
             });
             it('should work with fromIndex being greater than the length', function() {
-                expect(lastIndexOf.call(testAL, 2, 20)).toEqual(6);
+                expect(lastIndexOf.call(testAL, 2, 20)).toBe(6);
             });
             it('should work with fromIndex being negative and greater than the length', function() {
-                expect(lastIndexOf.call(testAL, 2, -20)).toEqual(-1);
+                expect(lastIndexOf.call(testAL, 2, -20)).toBe(-1);
             });
         });
     });
@@ -1162,7 +1162,7 @@ describe('Array', function() {
 
     describe('unshift', function () {
         it('should return length', function () {
-            expect([].unshift(0)).toEqual(1);
+            expect([].unshift(0)).toBe(1);
         });
     });
 
@@ -1185,7 +1185,7 @@ describe('Array', function() {
         });
 
         it('has the right length', function () {
-            expect(Array.prototype.splice.length).toEqual(2);
+            expect(Array.prototype.splice.length).toBe(2);
         });
 
         it('basic implementation test 1', function () {
@@ -1279,26 +1279,26 @@ describe('Array', function() {
         it('should work with objects - adding 1', function () {
             var obj = {};
             test.splice.call(obj, 0, 0, 1, 2, 3);
-            expect(obj.length).toEqual(3);
+            expect(obj.length).toBe(3);
         });
 
         it('should work with objects - adding 2', function () {
             var obj = {0:1, length: 1};
             test.splice.call(obj, 1, 0, 2, 3);
-            expect(obj.length).toEqual(3);
+            expect(obj.length).toBe(3);
         });
 
         it('should work with objects - removing', function () {
             var obj = {0:1, 1:2, 2: 3, length: 3};
             test.splice.call(obj, 0, 3);
-            expect(obj.length).toEqual(0);
+            expect(obj.length).toBe(0);
         });
 
         it('should work with objects - replacing', function () {
             var obj = {0:99, length: 1};
             test.splice.call(obj, 0, 1, 1, 2, 3);
-            expect(obj.length).toEqual(3);
-            expect(obj[0]).toEqual(1);
+            expect(obj.length).toBe(3);
+            expect(obj[0]).toBe(1);
         });
     });
 

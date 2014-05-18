@@ -5,12 +5,12 @@ describe('String', function() {
 
         it('trims all ES5 whitespace', function() {
             expect(test.trim()).toEqual("Hello, World!");
-            expect(test.trim().length).toEqual(13);
+            expect(test.trim().length).toBe(13);
         });
 
         it('does not trim the zero-width space', function() {
-            expect('\u200b'.trim()).toEqual('\u200b');
-            expect('\u200b'.trim().length).toEqual(1);
+            expect('\u200b'.trim()).toBe('\u200b');
+            expect('\u200b'.trim().length).toBe(1);
         });
     });
 

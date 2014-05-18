@@ -1,5 +1,9 @@
 var toString = Object.prototype.toString;
 var canDistinguishSparseFromUndefined = 0 in [undefined]; // IE 6 - 8 have a bug where this returns false.
+var hasStrictMode = (function() {
+  "use strict";
+   return !this;
+}());
 
 describe('Array', function() {
     var testSubject;
@@ -17,7 +21,6 @@ describe('Array', function() {
     };
 
     describe('forEach', function() {
-        "use strict";
         var expected, actual;
 
         beforeEach(function() {
@@ -104,14 +107,16 @@ describe('Array', function() {
             expect(typeof actual).toBe('object');
             expect(toString.call(actual)).toBe('[object String]');
         });
-        it('does not autobox the content in strict mode', function() {
-            var actual;
-            [1].forEach(function () {
-                'use strict';
-                actual = this;
-            }, 'x');
-            expect(typeof actual).toBe('string');
-        });
+        if (hasStrictMode) {
+            it('does not autobox the content in strict mode', function() {
+                var actual;
+                [1].forEach(function () {
+                    'use strict';
+                    actual = this;
+                }, 'x');
+                expect(typeof actual).toBe('string');
+            });
+        }
     });
     describe('some', function() {
         var actual, expected, numberOfRuns;

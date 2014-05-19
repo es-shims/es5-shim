@@ -1213,7 +1213,7 @@ if (
 
             // If `separator` is not a regex, use native split
             if (_toString.call(separator) !== "[object RegExp]") {
-                return string_split.apply(this, arguments);
+                return string_split.call(this, separator, limit);
             }
 
             var output = [],
@@ -1289,7 +1289,7 @@ if (
 } else if ("0".split(void 0, 0).length) {
     String.prototype.split = function split(separator, limit) {
         if (separator === void 0 && limit === 0) return [];
-        return string_split.apply(this, arguments);
+        return string_split.call(this, separator, limit);
     };
 }
 
@@ -1307,7 +1307,7 @@ if (!replaceReportsGroupsCorrectly) {
         var isFn = isFunction(replaceValue);
         var hasCapturingGroups = isRegex(searchValue) && (/\)[*?]/).test(searchValue.source);
         if (!isFn || !hasCapturingGroups) {
-            return str_replace.apply(this, arguments);
+            return str_replace.call(this, searchValue, replaceValue);
         } else {
             var wrappedReplaceValue = function (match) {
                 var length = arguments.length;

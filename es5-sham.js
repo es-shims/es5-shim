@@ -36,7 +36,21 @@ var defineSetter;
 var lookupGetter;
 var lookupSetter;
 var supportsAccessors;
-if ((supportsAccessors = owns(prototypeOfObject, "__defineGetter__"))) {
+(function() {
+    supportsAccessors = false;
+    try {
+        var obj = document.createElement("div");
+        Object.defineProperty(obj, "dummy", {
+            get: function() {
+                return "test";
+            }
+        });
+        if (obj.dummy === "test")
+            supportsAccessors = true;
+    }
+    catch (e) {}
+}());
+if (supportsAccessors) {
     defineGetter = call.bind(prototypeOfObject.__defineGetter__);
     defineSetter = call.bind(prototypeOfObject.__defineSetter__);
     lookupGetter = call.bind(prototypeOfObject.__lookupGetter__);

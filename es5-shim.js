@@ -244,6 +244,18 @@ var spliceWorksWithEmptyObject = (function () {
     return obj.length === 1;
 }());
 var omittingSecondSpliceArgIsNoop = [1].splice(0).length === 0;
+var spliceNoopReturnsEmptyArray = (function () {
+    var a = [1, 2];
+    var result = a.splice();
+    return a.length === 2 && isArray(result) && result.length === 0;
+}());
+if (spliceNoopReturnsEmptyArray) {
+    // Safari 5.0 bug where .split() returns undefined
+    Array.prototype.splice = function splice(start, deleteCount) {
+        if (arguments.length === 0) { return []; }
+        else { return array_splice.apply(this, arguments); }
+    };
+}
 if (!omittingSecondSpliceArgIsNoop || !spliceWorksWithEmptyObject) {
     Array.prototype.splice = function splice(start, deleteCount) {
         if (arguments.length === 0) { return []; }

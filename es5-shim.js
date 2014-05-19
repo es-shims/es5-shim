@@ -51,6 +51,9 @@ var isFunction = function (val) {
 var isRegex = function (val) {
     return prototypeOfObject.toString.call(val) === '[object RegExp]';
 };
+var isArray = function isArray(obj) {
+    return _toString.call(obj) === "[object Array]";
+};
 
 //
 // Function
@@ -326,9 +329,7 @@ if ([].unshift(0) !== 1) {
 // http://es5.github.com/#x15.4.3.2
 // https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Array/isArray
 if (!Array.isArray) {
-    Array.isArray = function isArray(obj) {
-        return _toString.call(obj) === "[object Array]";
-    };
+    Array.isArray = isArray;
 }
 
 // The IsCallable() check in the Array functions
@@ -686,7 +687,7 @@ var isArguments = function isArguments(value) {
     var str = _toString.call(value);
     var isArgs = str === '[object Arguments]';
     if (!isArgs) {
-        isArgs = !Array.isArray(str)
+        isArgs = !isArray(str)
             && value !== null
             && typeof value === 'object'
             && typeof value.length === 'number'

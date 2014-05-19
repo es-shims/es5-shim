@@ -86,7 +86,7 @@ describe('Date', function () {
             expect(Date.parse('1970-01-01T00:00:00')).toBe(tzOffset);             //tzOffset    0            0            0               NaN
         });
 
-        it("should be able to coerce to a number", function(){
+        it("should be able to coerce to a number", function () {
             var actual = Number(new Date(1970, 0));
             var expected = parseInt(actual, 10);
             expect(actual).toBeDefined();
@@ -96,12 +96,14 @@ describe('Date', function () {
 
     });
 
-    describe("toString", function(){
-        var actual = (new Date(1970, 0)).toString();
-        beforeEach(function(){
+    describe("toString", function () {
+        var actual;
+
+        beforeEach(function () {
             actual = (new Date(1970, 0)).toString();
         });
-        it("should show correct date info for "+actual, function(){
+
+        it("should show correct date info for " + actual, function () {
             expect(actual).toMatch(/1970/);
             expect(actual).toMatch(/jan/i);
             expect(actual).toMatch(/thu/i);
@@ -109,20 +111,21 @@ describe('Date', function () {
         });
     });
 
-    describe("valueOf", function(){
+    describe("valueOf", function () {
         // Note that new Date(1970, 0).valueOf() is 0 in UTC timezone.
         // Check check that it's a number (and an int), not that it's "truthy".
-        var actual = (new Date(1970, 0));
-        beforeEach(function(){
+        var actual;
+
+        beforeEach(function () {
             actual = (new Date(1970, 0)).valueOf();
         });
-        it("should give a numeric value", function(){
+        it("should give a numeric value", function () {
             expect(typeof actual).toBe("number");
         });
-        it("should not be NaN", function(){
+        it("should not be NaN", function () {
             expect(isNaN(actual)).toBe(false);
         });
-        it("should give an int value", function(){
+        it("should give an int value", function () {
             expect(actual).toBe(Math.floor(actual));
         });
     });
@@ -165,7 +168,7 @@ describe('Date', function () {
         it('should return the isoString when stringified', function () {
             var date = new Date();
             expect(JSON.stringify(date.toISOString())).toBe(JSON.stringify(date));
-        }) 
+        });
     });
 
 });

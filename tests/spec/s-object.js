@@ -3,11 +3,11 @@ describe('Object', function () {
 
     describe("Object.keys", function () {
         var obj = {
-            "str": "boz",
-            "obj": { },
-            "arr": [],
-            "bool": true,
-            "num": 42,
+            str: "boz",
+            obj: { },
+            arr: [],
+            bool: true,
+            num: 42,
             "null": null,
             "undefined": undefined
         };
@@ -123,11 +123,11 @@ describe('Object', function () {
     describe("Object.defineProperty", function () {
         var obj;
 
-        beforeEach(function() {
+        beforeEach(function () {
            obj = {};
 
            Object.defineProperty(obj, 'name', {
-               value : 'Testing',
+               value: 'Testing',
                configurable: true,
                enumerable: true,
                writable: true
@@ -155,7 +155,7 @@ describe('Object', function () {
             var child = Object.create(obj, {});
 
             Object.defineProperty(child, 'name', {
-                value : 'Other'
+                value: 'Other'
             });
 
             expect(obj.name).toBe('Testing');
@@ -195,7 +195,7 @@ describe('Object', function () {
         it('should return a data descriptor', function () {
             var obj = Object.create({}, {
                 name: {
-                    value : 'Testing',
+                    value: 'Testing',
                     configurable: true,
                     enumerable: true,
                     writable: true

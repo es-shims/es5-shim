@@ -35,8 +35,8 @@ var defineGetter;
 var defineSetter;
 var lookupGetter;
 var lookupSetter;
-var supportsAccessors;
-if ((supportsAccessors = owns(prototypeOfObject, "__defineGetter__"))) {
+var supportsAccessors = owns(prototypeOfObject, "__defineGetter__");
+if (supportsAccessors) {
     defineGetter = call.bind(prototypeOfObject.__defineGetter__);
     defineSetter = call.bind(prototypeOfObject.__defineSetter__);
     lookupGetter = call.bind(prototypeOfObject.__lookupGetter__);

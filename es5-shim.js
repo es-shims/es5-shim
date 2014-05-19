@@ -23,7 +23,7 @@
     } else {
         // Browser globals (root is window)
         root.returnExports = factory();
-  }
+    }
 }(this, function () {
 
 /**
@@ -44,6 +44,9 @@ var _Array_slice_ = prototypeOfArray.slice;
 var array_splice = Array.prototype.splice;
 var array_push = Array.prototype.push;
 var array_unshift = Array.prototype.unshift;
+
+// Having a toString local variable name breaks in Opera so use _toString.
+var _toString = prototypeOfObject.toString;
 
 var isFunction = function (val) {
     return prototypeOfObject.toString.call(val) === '[object Function]';
@@ -177,7 +180,7 @@ if (!Function.prototype.bind) {
         // for ex.) all use of eval or Function costructor throws an exception.
         // However in all of these environments Function.prototype.bind exists
         // and so this code will never be executed.
-        var bound = Function("binder", "return function(" + boundArgs.join(",") + "){return binder.apply(this,arguments)}")(binder);
+        var bound = Function("binder", "return function (" + boundArgs.join(",") + "){return binder.apply(this,arguments)}")(binder);
 
         if (target.prototype) {
             Empty.prototype = target.prototype;
@@ -214,8 +217,6 @@ if (!Function.prototype.bind) {
 // _Please note: Shortcuts are defined after `Function.prototype.bind` as we
 // us it in defining shortcuts.
 var owns = call.bind(prototypeOfObject.hasOwnProperty);
-// Having a toString local variable name breaks in Opera so use _toString.
-var _toString = prototypeOfObject.toString;
 
 // If JS engine supports accessors creating shortcuts.
 var defineGetter;
@@ -266,7 +267,7 @@ if ([1, 2].splice(0).length !== 2) {
         //    IE8 bug
         // }
     }()) { // IE 6/7
-        Array.prototype.splice = function(start, deleteCount) {
+        Array.prototype.splice = function (start, deleteCount) {
             if (!arguments.length) {
                 return [];
             } else {
@@ -278,7 +279,7 @@ if ([1, 2].splice(0).length !== 2) {
             }
         };
     } else { // IE8
-        Array.prototype.splice = function(start, deleteCount) {
+        Array.prototype.splice = function (start, deleteCount) {
             var result;
             var args = _Array_slice_.call(arguments, 2);
             var addElementsCount = args.length;
@@ -332,7 +333,7 @@ if ([1, 2].splice(0).length !== 2) {
 // [bugfix, ielt8]
 // IE < 8 bug: [].unshift(0) === undefined but should be "1"
 if ([].unshift(0) !== 1) {
-    Array.prototype.unshift = function() {
+    Array.prototype.unshift = function () {
         array_unshift.apply(this, arguments);
         return this.length;
     };
@@ -360,7 +361,6 @@ if (!Array.isArray) {
 // ES5 15.4.4.18
 // http://es5.github.com/#x15.4.4.18
 // https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/array/forEach
-
 
 // Check failure of by-index access of string characters (IE < 9)
 // and failure of `0 in boxedString` (Rhino)
@@ -429,8 +429,9 @@ if (!Array.prototype.map || !properlyBoxesContext(Array.prototype.map)) {
         }
 
         for (var i = 0; i < length; i++) {
-            if (i in self)
+            if (i in self) {
                 result[i] = fun.call(thisp, self[i], i, object);
+            }
         }
         return result;
     };
@@ -791,12 +792,10 @@ if (
         month = (month % 12 + 12) % 12;
 
         // the date time string format is specified in 15.9.1.15.
-        result = [month + 1, this.getUTCDate(),
-            this.getUTCHours(), this.getUTCMinutes(), this.getUTCSeconds()];
+        result = [month + 1, this.getUTCDate(), this.getUTCHours(), this.getUTCMinutes(), this.getUTCSeconds()];
         year = (
             (year < 0 ? "-" : (year > 9999 ? "+" : "")) +
-            ("00000" + Math.abs(year))
-            .slice(0 <= year && year <= 9999 ? -4 : -6)
+            ("00000" + Math.abs(year)).slice(0 <= year && year <= 9999 ? -4 : -6)
         );
 
         length = result.length;
@@ -883,7 +882,7 @@ var doesNotParseY2KNewYear = isNaN(Date.parse("2000-01-01T00:00:00.000Z"));
 if (!Date.parse || doesNotParseY2KNewYear || acceptsInvalidDates || !supportsExtendedYears) {
     // XXX global assignment won't work in embeddings that use
     // an alternate object for the context.
-    Date = (function(NativeDate) {
+    Date = (function (NativeDate) {
 
         // Date.length === 7
         function Date(Y, M, D, h, m, s, ms) {
@@ -1192,7 +1191,6 @@ if (!Number.prototype.toFixed || (0.00008).toFixed(3) !== '0.000' || (0.9).toFix
 // ======
 //
 
-
 // ES5 15.5.4.14
 // http://es5.github.com/#x15.5.4.14
 
@@ -1222,8 +1220,9 @@ if (
 
         String.prototype.split = function (separator, limit) {
             var string = this;
-            if (separator === void 0 && limit === 0)
+            if (separator === void 0 && limit === 0) {
                 return [];
+            }
 
             // If `separator` is not a regex, use native split
             if (_toString.call(separator) !== "[object RegExp]") {
@@ -1302,7 +1301,7 @@ if (
 // "0".split(undefined, 0) -> []
 } else if ("0".split(void 0, 0).length) {
     String.prototype.split = function split(separator, limit) {
-        if (separator === void 0 && limit === 0) return [];
+        if (separator === void 0 && limit === 0) { return []; }
         return string_split.call(this, separator, limit);
     };
 }
@@ -1338,7 +1337,7 @@ if (!replaceReportsGroupsCorrectly) {
 }
 
 // ECMA-262, 3rd B.2.3
-// Note an ECMAScript standart, although ECMAScript 3rd Edition has a
+// Not an ECMAScript standard, although ECMAScript 3rd Edition has a
 // non-normative section suggesting uniform semantics and it should be
 // normalized across all browsers
 // [bugfix, IE lt 9] IE < 9 substr() with negative value not working in IE
@@ -1373,7 +1372,7 @@ if (!String.prototype.trim || ws.trim() || !zeroWidth.trim()) {
         trimEndRegexp = new RegExp(ws + ws + "*$");
     String.prototype.trim = function trim() {
         if (this === void 0 || this === null) {
-            throw new TypeError("can't convert "+this+" to object");
+            throw new TypeError("can't convert " + this + " to object");
         }
         return String(this)
             .replace(trimBeginRegexp, "")
@@ -1408,7 +1407,7 @@ function toInteger(n) {
     n = +n;
     if (n !== n) { // isNaN
         n = 0;
-    } else if (n !== 0 && n !== (1/0) && n !== -(1/0)) {
+    } else if (n !== 0 && n !== (1 / 0) && n !== -(1 / 0)) {
         n = (n > 0 || -1) * Math.floor(Math.abs(n));
     }
     return n;
@@ -1451,7 +1450,7 @@ function toPrimitive(input) {
 // http://es5.github.com/#x9.9
 var toObject = function (o) {
     if (o == null) { // this matches both null and undefined
-        throw new TypeError("can't convert "+o+" to object");
+        throw new TypeError("can't convert " + o + " to object");
     }
     return Object(o);
 };

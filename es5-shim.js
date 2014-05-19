@@ -1239,7 +1239,7 @@ if (
              */
             limit = limit === void 0 ?
                 -1 >>> 0 : // Math.pow(2, 32) - 1
-                limit >>> 0; // ToUint32(limit)
+                ToUint32(limit);
             while (match = separator.exec(string)) {
                 // `separator.lastIndex` is not reliable cross-browser
                 lastIndex = match.index + match[0].length;
@@ -1440,6 +1440,10 @@ var toObject = function (o) {
         throw new TypeError("can't convert "+o+" to object");
     }
     return Object(o);
+};
+
+var ToUint32 = function ToUint32(x) {
+    return x >>> 0;
 };
 
 }));

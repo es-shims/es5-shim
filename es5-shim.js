@@ -54,6 +54,19 @@ var isRegex = function (val) {
 var isArray = function isArray(obj) {
     return _toString.call(obj) === "[object Array]";
 };
+var isArguments = function isArguments(value) {
+    var str = _toString.call(value);
+    var isArgs = str === '[object Arguments]';
+    if (!isArgs) {
+        isArgs = !isArray(str)
+            && value !== null
+            && typeof value === 'object'
+            && typeof value.length === 'number'
+            && value.length >= 0
+            && isFunction(value.callee);
+    }
+    return isArgs;
+};
 
 //
 // Function
@@ -683,19 +696,6 @@ if (!Array.prototype.lastIndexOf || ([0, 1].lastIndexOf(0, -3) !== -1)) {
 var keysWorksWithArguments = Object.keys && (function () {
     return Object.keys(arguments).length === 2;
 }(1, 2));
-var isArguments = function isArguments(value) {
-    var str = _toString.call(value);
-    var isArgs = str === '[object Arguments]';
-    if (!isArgs) {
-        isArgs = !isArray(str)
-            && value !== null
-            && typeof value === 'object'
-            && typeof value.length === 'number'
-            && value.length >= 0
-            && isFunction(value.callee);
-    }
-    return isArgs;
-};
 if (!Object.keys) {
     // http://whattheheadsaid.com/2010/10/a-safer-object-keys-compatibility-implementation
     var hasDontEnumBug = !({'toString': null}).propertyIsEnumerable('toString'),

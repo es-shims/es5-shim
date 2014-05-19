@@ -679,6 +679,22 @@ if (!Array.prototype.lastIndexOf || ([0, 1].lastIndexOf(0, -3) !== -1)) {
 
 // ES5 15.2.3.14
 // http://es5.github.com/#x15.2.3.14
+var keysWorksWithArguments = Object.keys && (function () {
+    return Object.keys(arguments).length === 2;
+}(1, 2));
+var isArguments = function isArguments(value) {
+    var str = _toString.call(value);
+    var isArgs = str === '[object Arguments]';
+    if (!isArgs) {
+        isArgs = !Array.isArray(str)
+            && value !== null
+            && typeof value === 'object'
+            && typeof value.length === 'number'
+            && value.length >= 0
+            && isFunction(value.callee);
+    }
+    return isArgs;
+};
 if (!Object.keys) {
     // http://whattheheadsaid.com/2010/10/a-safer-object-keys-compatibility-implementation
     var hasDontEnumBug = !({'toString': null}).propertyIsEnumerable('toString'),
@@ -692,20 +708,7 @@ if (!Object.keys) {
             "propertyIsEnumerable",
             "constructor"
         ],
-        dontEnumsLength = dontEnums.length,
-        isArguments = function isArguments(value) {
-            var str = _toString.call(value);
-            var isArgs = str === '[object Arguments]';
-            if (!isArgs) {
-                isArgs = !Array.isArray(str)
-                    && value !== null
-                    && typeof value === 'object'
-                    && typeof value.length === 'number'
-                    && value.length >= 0
-                    && isFunction(value.callee);
-            }
-            return isArgs;
-        };
+        dontEnumsLength = dontEnums.length;
 
     Object.keys = function keys(object) {
         var isFn = isFunction(object),
@@ -743,7 +746,16 @@ if (!Object.keys) {
         }
         return theKeys;
     };
-
+} else if (!keysWorksWithArguments) {
+    // Safari 5.0 bug
+    var originalKeys = Object.keys;
+    Object.keys = function keys(object) {
+        if (isArguments(object)) {
+            return originalKeys(Array.prototype.slice.call(object));
+        } else {
+            return originalKeys(object);
+        }
+    };
 }
 
 //

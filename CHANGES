@@ -1,3 +1,10 @@
+3.4.0
+  - Removed nonstandard SpiderMonkey extension to Array#splice - when `deleteCount` is omitted, it's now treated as 0. (#192, #239)
+  - Fix Object.keys with Arguments objects in Safari 5.0
+  - Now shimming String#split in Opera 10.6
+  - Avoid using "toString" as a variable name, since that breaks Opera
+  - Internal implementation and test cleanups
+
 3.3.2
  - Remove an internal "bind" call, which should make the shim a bit faster
  - Fix a bug with object boxing in Array#reduceRight that was failing a test in IE 6

@@ -1176,8 +1176,13 @@ describe('Array', function () {
             expect(Array.prototype.splice.length).toBe(2);
         });
 
+        it('treats undefined deleteCount as 0', function () {
+            expect(test.splice(0).length).toBe(0);
+            expect(test.splice(0)).toEqual(test.splice(0, 0));
+        });
+
         it('basic implementation test 1', function () {
-            expect(test.splice(0)).toEqual(a);
+            expect(test.splice(0, 0)).toEqual([]);
         });
 
         it('basic implementation test 2', function () {
@@ -1210,7 +1215,7 @@ describe('Array', function () {
         it('should return right result 3', function () {
             var array = [1, 2, 3];
 
-            array.splice(0);
+            array.splice(0, array.length);
             array.splice(0, 1, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
             array.splice(1, 1, "F1", "F2", "F3", "F4", "F5", "F6", "F7", "F8", "F9", "F10", "F11", "F12", "F13", "F14", "F15", "F16", "F17", "F18", "F19", "F20", "F21","F22", "F23", "F24", "F25", "F26");
             array.splice(5, 1, "YYY", "XXX");
@@ -1250,18 +1255,6 @@ describe('Array', function () {
             var test2 = test.slice(0);
             expect(test.splice(void 0, 2)).toEqual(test2.splice(0, 2));
             expect(test).toEqual(test2);
-        });
-
-        it('should deleted and return all items after "start" when second argument is undefined', function () {
-            expect(test.splice(0)).toEqual(a);
-            expect(test).toEqual([]);
-        });
-        it('should deleted and return all items after "start" when second argument is undefined', function () {
-            expect(test.splice(2)).toEqual([b]);
-            expect(test).toEqual([1, "a"]);
-        });
-        it('runshould have the right length', function () {
-            expect(test.splice.length).toBe(2);
         });
 
         it('should work with objects - adding 1', function () {

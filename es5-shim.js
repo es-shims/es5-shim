@@ -889,8 +889,9 @@ if (!Date.parse || doesNotParseY2KNewYear || acceptsInvalidDates || !supportsExt
             );
         }
 
+        var localOffset = (new NativeDate).getTimezoneOffset() * 60 * 1000; 
         function toUTC(t) {
-            return Number(new NativeDate(1970, 0, 1, 0, 0, 0, t));
+            return t + localOffset;
         }
 
         // Copy any custom methods a 3rd party library may have added

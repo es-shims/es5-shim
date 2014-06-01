@@ -77,6 +77,42 @@ var isArguments = function isArguments(value) {
     return isArgs;
 };
 
+var supportsDescriptors = Object.defineProperty && (function () {
+    try {
+        Object.defineProperty({}, 'x', {});
+        return true;
+    } catch (e) { /* this is ES3 */
+        return false;
+    }
+}());
+
+// Define configurable, writable and non-enumerable props
+// if they don't exist.
+var defineProperty;
+if (supportsDescriptors) {
+    defineProperty = function (object, name, method, forceAssign) {
+        if (!forceAssign && (name in object)) { return; }
+        Object.defineProperty(object, name, {
+            configurable: true,
+            enumerable: false,
+            writable: true,
+            value: method
+        });
+    };
+} else {
+    defineProperty = function (object, name, method, forceAssign) {
+        if (!forceAssign && (name in object)) { return; }
+        object[name] = method;
+    };
+}
+var defineProperties = function (object, map, forceAssign) {
+    for (var name in map) {
+        if (ObjectPrototype.hasOwnProperty.call(map, name)) {
+          defineProperty(object, name, map[name], forceAssign);
+        }
+    }
+};
+
 //
 // Util
 // ======

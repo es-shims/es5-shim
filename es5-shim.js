@@ -252,8 +252,11 @@ var spliceNoopReturnsEmptyArray = (function () {
 if (spliceNoopReturnsEmptyArray) {
     // Safari 5.0 bug where .split() returns undefined
     Array.prototype.splice = function splice(start, deleteCount) {
-        if (arguments.length === 0) { return []; }
-        else { return array_splice.apply(this, arguments); }
+        if (arguments.length === 0) {
+            return [];
+        } else {
+            return array_splice.apply(this, arguments);
+        }
     };
 }
 if (!omittingSecondSpliceArgIsNoop || !spliceWorksWithEmptyObject) {
@@ -263,8 +266,11 @@ if (!omittingSecondSpliceArgIsNoop || !spliceWorksWithEmptyObject) {
         this.length = Math.max(toInteger(this.length), 0);
         if (arguments.length > 0 && typeof deleteCount !== 'number') {
             args = _Array_slice_.call(arguments);
-            if (args.length < 2) { args.push(toInteger(deleteCount)); }
-            else { args[1] = toInteger(deleteCount); }
+            if (args.length < 2) {
+                args.push(toInteger(deleteCount));
+            } else {
+                args[1] = toInteger(deleteCount);
+            }
         }
         return array_splice.apply(this, args);
     };

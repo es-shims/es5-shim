@@ -9,7 +9,7 @@ describe('Object', function () {
             bool: true,
             num: 42,
             "null": null,
-            "undefined": undefined
+            undefined: undefined
         };
 
         var loopedValues = [];

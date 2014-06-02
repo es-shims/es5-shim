@@ -57,6 +57,9 @@ var isRegex = function (val) {
 var isArray = function isArray(obj) {
     return _toString.call(obj) === "[object Array]";
 };
+var isString = function isString(obj) {
+    return _toString.call(obj) === "[object String]";
+};
 var isArguments = function isArguments(value) {
     var str = _toString.call(value);
     var isArgs = str === '[object Arguments]';
@@ -336,9 +339,7 @@ var properlyBoxesContext = function properlyBoxed(method) {
 if (!Array.prototype.forEach || !properlyBoxesContext(Array.prototype.forEach)) {
     Array.prototype.forEach = function forEach(fun /*, thisp*/) {
         var object = toObject(this),
-            self = splitString && _toString.call(this) === "[object String]" ?
-                this.split("") :
-                object,
+            self = splitString && isString(this) ? this.split('') : object,
             thisp = arguments[1],
             i = -1,
             length = self.length >>> 0;
@@ -365,9 +366,7 @@ if (!Array.prototype.forEach || !properlyBoxesContext(Array.prototype.forEach)) 
 if (!Array.prototype.map || !properlyBoxesContext(Array.prototype.map)) {
     Array.prototype.map = function map(fun /*, thisp*/) {
         var object = toObject(this),
-            self = splitString && _toString.call(this) === "[object String]" ?
-                this.split("") :
-                object,
+            self = splitString && isString(this) ? this.split('') : object,
             length = self.length >>> 0,
             result = Array(length),
             thisp = arguments[1];
@@ -392,9 +391,7 @@ if (!Array.prototype.map || !properlyBoxesContext(Array.prototype.map)) {
 if (!Array.prototype.filter || !properlyBoxesContext(Array.prototype.filter)) {
     Array.prototype.filter = function filter(fun /*, thisp */) {
         var object = toObject(this),
-            self = splitString && _toString.call(this) === "[object String]" ?
-                this.split("") :
-                    object,
+            self = splitString && isString(this) ? this.split('') : object,
             length = self.length >>> 0,
             result = [],
             value,
@@ -423,9 +420,7 @@ if (!Array.prototype.filter || !properlyBoxesContext(Array.prototype.filter)) {
 if (!Array.prototype.every || !properlyBoxesContext(Array.prototype.every)) {
     Array.prototype.every = function every(fun /*, thisp */) {
         var object = toObject(this),
-            self = splitString && _toString.call(this) === "[object String]" ?
-                this.split("") :
-                object,
+            self = splitString && isString(this) ? this.split('') : object,
             length = self.length >>> 0,
             thisp = arguments[1];
 
@@ -449,9 +444,7 @@ if (!Array.prototype.every || !properlyBoxesContext(Array.prototype.every)) {
 if (!Array.prototype.some || !properlyBoxesContext(Array.prototype.some)) {
     Array.prototype.some = function some(fun /*, thisp */) {
         var object = toObject(this),
-            self = splitString && _toString.call(this) === "[object String]" ?
-                this.split("") :
-                object,
+            self = splitString && isString(this) ? this.split('') : object,
             length = self.length >>> 0,
             thisp = arguments[1];
 
@@ -479,9 +472,7 @@ if (Array.prototype.reduce) {
 if (!Array.prototype.reduce || !reduceCoercesToObject) {
     Array.prototype.reduce = function reduce(fun /*, initial*/) {
         var object = toObject(this),
-            self = splitString && _toString.call(this) === "[object String]" ?
-                this.split("") :
-                object,
+            self = splitString && isString(this) ? this.split('') : object,
             length = self.length >>> 0;
 
         // If no callback function or if callback is not a callable function
@@ -532,9 +523,7 @@ if (Array.prototype.reduceRight) {
 if (!Array.prototype.reduceRight || !reduceRightCoercesToObject) {
     Array.prototype.reduceRight = function reduceRight(fun /*, initial*/) {
         var object = toObject(this),
-            self = splitString && _toString.call(this) === "[object String]" ?
-                this.split("") :
-                object,
+            self = splitString && isString(this) ? this.split('') : object,
             length = self.length >>> 0;
 
         // If no callback function or if callback is not a callable function
@@ -583,9 +572,7 @@ if (!Array.prototype.reduceRight || !reduceRightCoercesToObject) {
 // https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Array/indexOf
 if (!Array.prototype.indexOf || ([0, 1].indexOf(1, 2) !== -1)) {
     Array.prototype.indexOf = function indexOf(sought /*, fromIndex */ ) {
-        var self = splitString && _toString.call(this) === "[object String]" ?
-                this.split("") :
-                toObject(this),
+        var self = splitString && isString(this) ? this.split('') : toObject(this),
             length = self.length >>> 0;
 
         if (!length) {
@@ -613,9 +600,7 @@ if (!Array.prototype.indexOf || ([0, 1].indexOf(1, 2) !== -1)) {
 // https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Array/lastIndexOf
 if (!Array.prototype.lastIndexOf || ([0, 1].lastIndexOf(0, -3) !== -1)) {
     Array.prototype.lastIndexOf = function lastIndexOf(sought /*, fromIndex */) {
-        var self = splitString && _toString.call(this) === "[object String]" ?
-                this.split("") :
-                toObject(this),
+        var self = splitString && isString(this) ? this.split('') : toObject(this),
             length = self.length >>> 0;
 
         if (!length) {
@@ -665,7 +650,7 @@ if (!Object.keys) {
         var isFn = isFunction(object),
             isArgs = isArguments(object),
             isObject = object !== null && typeof object === 'object',
-            isString = isObject && _toString.call(object) === '[object String]';
+            isStr = isObject && isString(object);
 
         if (!isObject && !isFn && !isArgs) {
             throw new TypeError("Object.keys called on a non-object");
@@ -673,7 +658,7 @@ if (!Object.keys) {
 
         var theKeys = [];
         var skipProto = hasProtoEnumBug && isFn;
-        if (isString || isArgs) {
+        if (isStr || isArgs) {
             for (var i = 0; i < object.length; ++i) {
                 theKeys.push(String(i));
             }

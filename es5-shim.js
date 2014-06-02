@@ -188,8 +188,8 @@ var ToUint32 = function ToUint32(x) {
 
 function Empty() {}
 
-if (!FunctionPrototype.bind) {
-    FunctionPrototype.bind = function bind(that) { // .length is 1
+defineProperties(FunctionPrototype, {
+    bind: function bind(that) { // .length is 1
         // 1. Let Target be the this value.
         var target = this;
         // 2. If IsCallable(Target) is false, throw a TypeError exception.
@@ -318,8 +318,8 @@ if (!FunctionPrototype.bind) {
 
         // 22. Return F.
         return bound;
-    };
-}
+    }
+});
 
 // _Please note: Shortcuts are defined after `Function.prototype.bind` as we
 // us it in defining shortcuts.
@@ -345,29 +345,30 @@ if ((supportsAccessors = owns(ObjectPrototype, "__defineGetter__"))) {
 
 // ES5 15.4.4.12
 // http://es5.github.com/#x15.4.4.12
+var spliceNoopReturnsEmptyArray = (function () {
+    var a = [1, 2];
+    var result = a.splice();
+    return a.length === 2 && isArray(result) && result.length === 0;
+}());
+// Safari 5.0 bug where .split() returns undefined
+defineProperties(ArrayPrototype, {
+    splice: function splice(start, deleteCount) {
+        if (arguments.length === 0) {
+            return [];
+        } else {
+            return array_splice.apply(this, arguments);
+        }
+    }
+}, spliceNoopReturnsEmptyArray);
+
 var spliceWorksWithEmptyObject = (function () {
     var obj = {};
     ArrayPrototype.splice.call(obj, 0, 0, 1);
     return obj.length === 1;
 }());
 var omittingSecondSpliceArgIsNoop = [1].splice(0).length === 0;
-var spliceNoopReturnsEmptyArray = (function () {
-    var a = [1, 2];
-    var result = a.splice();
-    return a.length === 2 && isArray(result) && result.length === 0;
-}());
-if (spliceNoopReturnsEmptyArray) {
-    // Safari 5.0 bug where .split() returns undefined
-    ArrayPrototype.splice = function splice(start, deleteCount) {
-        if (arguments.length === 0) {
-            return [];
-        } else {
-            return array_splice.apply(this, arguments);
-        }
-    };
-}
-if (!omittingSecondSpliceArgIsNoop || !spliceWorksWithEmptyObject) {
-    ArrayPrototype.splice = function splice(start, deleteCount) {
+defineProperties(ArrayPrototype, {
+    splice: function splice(start, deleteCount) {
         if (arguments.length === 0) { return []; }
         var args = arguments;
         this.length = Math.max(toInteger(this.length), 0);
@@ -380,27 +381,26 @@ if (!omittingSecondSpliceArgIsNoop || !spliceWorksWithEmptyObject) {
             }
         }
         return array_splice.apply(this, args);
-    };
-}
+    }
+}, !omittingSecondSpliceArgIsNoop || !spliceWorksWithEmptyObject);
 
 // ES5 15.4.4.12
 // http://es5.github.com/#x15.4.4.13
 // Return len+argCount.
 // [bugfix, ielt8]
 // IE < 8 bug: [].unshift(0) === undefined but should be "1"
-if ([].unshift(0) !== 1) {
-    ArrayPrototype.unshift = function () {
+var hasUnshiftReturnValueBug = [].unshift(0) !== 1;
+defineProperties(ArrayPrototype, {
+    unshift: function () {
         array_unshift.apply(this, arguments);
         return this.length;
-    };
-}
+    }
+}, hasUnshiftReturnValueBug);
 
 // ES5 15.4.3.2
 // http://es5.github.com/#x15.4.3.2
 // https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Array/isArray
-if (!Array.isArray) {
-    Array.isArray = isArray;
-}
+defineProperties(Array, { isArray: isArray });
 
 // The IsCallable() check in the Array functions
 // has been replaced with a strict check on the
@@ -440,8 +440,8 @@ var properlyBoxesContext = function properlyBoxed(method) {
     return !!method && properlyBoxesNonStrict && properlyBoxesStrict;
 };
 
-if (!ArrayPrototype.forEach || !properlyBoxesContext(ArrayPrototype.forEach)) {
-    ArrayPrototype.forEach = function forEach(fun /*, thisp*/) {
+defineProperties(ArrayPrototype, {
+    forEach: function forEach(fun /*, thisp*/) {
         var object = toObject(this),
             self = splitString && isString(this) ? this.split('') : object,
             thisp = arguments[1],
@@ -461,14 +461,14 @@ if (!ArrayPrototype.forEach || !properlyBoxesContext(ArrayPrototype.forEach)) {
                 fun.call(thisp, self[i], i, object);
             }
         }
-    };
-}
+    }
+}, !properlyBoxesContext(ArrayPrototype.forEach));
 
 // ES5 15.4.4.19
 // http://es5.github.com/#x15.4.4.19
 // https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Objects/Array/map
-if (!ArrayPrototype.map || !properlyBoxesContext(ArrayPrototype.map)) {
-    ArrayPrototype.map = function map(fun /*, thisp*/) {
+defineProperties(ArrayPrototype, {
+    map: function map(fun /*, thisp*/) {
         var object = toObject(this),
             self = splitString && isString(this) ? this.split('') : object,
             length = self.length >>> 0,
@@ -486,14 +486,14 @@ if (!ArrayPrototype.map || !properlyBoxesContext(ArrayPrototype.map)) {
             }
         }
         return result;
-    };
-}
+    }
+}, !properlyBoxesContext(ArrayPrototype.map));
 
 // ES5 15.4.4.20
 // http://es5.github.com/#x15.4.4.20
 // https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Objects/Array/filter
-if (!ArrayPrototype.filter || !properlyBoxesContext(ArrayPrototype.filter)) {
-    ArrayPrototype.filter = function filter(fun /*, thisp */) {
+defineProperties(ArrayPrototype, {
+    filter: function filter(fun /*, thisp */) {
         var object = toObject(this),
             self = splitString && isString(this) ? this.split('') : object,
             length = self.length >>> 0,
@@ -515,14 +515,14 @@ if (!ArrayPrototype.filter || !properlyBoxesContext(ArrayPrototype.filter)) {
             }
         }
         return result;
-    };
-}
+    }
+}, !properlyBoxesContext(ArrayPrototype.filter));
 
 // ES5 15.4.4.16
 // http://es5.github.com/#x15.4.4.16
 // https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Array/every
-if (!ArrayPrototype.every || !properlyBoxesContext(ArrayPrototype.every)) {
-    ArrayPrototype.every = function every(fun /*, thisp */) {
+defineProperties(ArrayPrototype, {
+    every: function every(fun /*, thisp */) {
         var object = toObject(this),
             self = splitString && isString(this) ? this.split('') : object,
             length = self.length >>> 0,
@@ -539,14 +539,14 @@ if (!ArrayPrototype.every || !properlyBoxesContext(ArrayPrototype.every)) {
             }
         }
         return true;
-    };
-}
+    }
+}, !properlyBoxesContext(ArrayPrototype.every));
 
 // ES5 15.4.4.17
 // http://es5.github.com/#x15.4.4.17
 // https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Array/some
-if (!ArrayPrototype.some || !properlyBoxesContext(ArrayPrototype.some)) {
-    ArrayPrototype.some = function some(fun /*, thisp */) {
+defineProperties(ArrayPrototype, {
+    some: function some(fun /*, thisp */) {
         var object = toObject(this),
             self = splitString && isString(this) ? this.split('') : object,
             length = self.length >>> 0,
@@ -563,8 +563,8 @@ if (!ArrayPrototype.some || !properlyBoxesContext(ArrayPrototype.some)) {
             }
         }
         return false;
-    };
-}
+    }
+}, !properlyBoxesContext(ArrayPrototype.some));
 
 // ES5 15.4.4.21
 // http://es5.github.com/#x15.4.4.21
@@ -573,8 +573,8 @@ var reduceCoercesToObject = false;
 if (ArrayPrototype.reduce) {
     reduceCoercesToObject = typeof ArrayPrototype.reduce.call('es5', function (_, __, ___, list) { return list; }) === 'object';
 }
-if (!ArrayPrototype.reduce || !reduceCoercesToObject) {
-    ArrayPrototype.reduce = function reduce(fun /*, initial*/) {
+defineProperties(ArrayPrototype, {
+    reduce: function reduce(fun /*, initial*/) {
         var object = toObject(this),
             self = splitString && isString(this) ? this.split('') : object,
             length = self.length >>> 0;
@@ -614,8 +614,8 @@ if (!ArrayPrototype.reduce || !reduceCoercesToObject) {
         }
 
         return result;
-    };
-}
+    }
+}, !reduceCoercesToObject);
 
 // ES5 15.4.4.22
 // http://es5.github.com/#x15.4.4.22
@@ -624,8 +624,8 @@ var reduceRightCoercesToObject = false;
 if (ArrayPrototype.reduceRight) {
     reduceRightCoercesToObject = typeof ArrayPrototype.reduceRight.call('es5', function (_, __, ___, list) { return list; }) === 'object';
 }
-if (!ArrayPrototype.reduceRight || !reduceRightCoercesToObject) {
-    ArrayPrototype.reduceRight = function reduceRight(fun /*, initial*/) {
+defineProperties(ArrayPrototype, {
+    reduceRight: function reduceRight(fun /*, initial*/) {
         var object = toObject(this),
             self = splitString && isString(this) ? this.split('') : object,
             length = self.length >>> 0;
@@ -668,14 +668,15 @@ if (!ArrayPrototype.reduceRight || !reduceRightCoercesToObject) {
         } while (i--);
 
         return result;
-    };
-}
+    }
+}, !reduceRightCoercesToObject);
 
 // ES5 15.4.4.14
 // http://es5.github.com/#x15.4.4.14
 // https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Array/indexOf
-if (!ArrayPrototype.indexOf || ([0, 1].indexOf(1, 2) !== -1)) {
-    ArrayPrototype.indexOf = function indexOf(sought /*, fromIndex */ ) {
+var hasFirefox2IndexOfBug = [0, 1].indexOf(1, 2) !== -1;
+defineProperties(ArrayPrototype, {
+    indexOf: function indexOf(sought /*, fromIndex */ ) {
         var self = splitString && isString(this) ? this.split('') : toObject(this),
             length = self.length >>> 0;
 
@@ -696,14 +697,15 @@ if (!ArrayPrototype.indexOf || ([0, 1].indexOf(1, 2) !== -1)) {
             }
         }
         return -1;
-    };
-}
+    }
+}, hasFirefox2IndexOfBug);
 
 // ES5 15.4.4.15
 // http://es5.github.com/#x15.4.4.15
 // https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Array/lastIndexOf
-if (!ArrayPrototype.lastIndexOf || ([0, 1].lastIndexOf(0, -3) !== -1)) {
-    ArrayPrototype.lastIndexOf = function lastIndexOf(sought /*, fromIndex */) {
+var hasFirefox2LastIndexOfBug = [0, 1].lastIndexOf(0, -3) !== -1;
+defineProperties(ArrayPrototype, {
+    lastIndexOf: function lastIndexOf(sought /*, fromIndex */) {
         var self = splitString && isString(this) ? this.split('') : toObject(this),
             length = self.length >>> 0;
 
@@ -722,8 +724,8 @@ if (!ArrayPrototype.lastIndexOf || ([0, 1].lastIndexOf(0, -3) !== -1)) {
             }
         }
         return -1;
-    };
-}
+    }
+}, hasFirefox2LastIndexOfBug);
 
 //
 // Object
@@ -732,25 +734,23 @@ if (!ArrayPrototype.lastIndexOf || ([0, 1].lastIndexOf(0, -3) !== -1)) {
 
 // ES5 15.2.3.14
 // http://es5.github.com/#x15.2.3.14
-var keysWorksWithArguments = Object.keys && (function () {
-    return Object.keys(arguments).length === 2;
-}(1, 2));
-if (!Object.keys) {
-    // http://whattheheadsaid.com/2010/10/a-safer-object-keys-compatibility-implementation
-    var hasDontEnumBug = !({'toString': null}).propertyIsEnumerable('toString'),
-        hasProtoEnumBug = (function () {}).propertyIsEnumerable('prototype'),
-        dontEnums = [
-            "toString",
-            "toLocaleString",
-            "valueOf",
-            "hasOwnProperty",
-            "isPrototypeOf",
-            "propertyIsEnumerable",
-            "constructor"
-        ],
-        dontEnumsLength = dontEnums.length;
 
-    Object.keys = function keys(object) {
+// http://whattheheadsaid.com/2010/10/a-safer-object-keys-compatibility-implementation
+var hasDontEnumBug = !({'toString': null}).propertyIsEnumerable('toString'),
+    hasProtoEnumBug = (function () {}).propertyIsEnumerable('prototype'),
+    dontEnums = [
+        "toString",
+        "toLocaleString",
+        "valueOf",
+        "hasOwnProperty",
+        "isPrototypeOf",
+        "propertyIsEnumerable",
+        "constructor"
+    ],
+    dontEnumsLength = dontEnums.length;
+
+defineProperties(Object, {
+    keys: function keys(object) {
         var isFn = isFunction(object),
             isArgs = isArguments(object),
             isObject = object !== null && typeof object === 'object',
@@ -785,18 +785,23 @@ if (!Object.keys) {
             }
         }
         return theKeys;
-    };
-} else if (!keysWorksWithArguments) {
+    }
+});
+
+var keysWorksWithArguments = Object.keys && (function () {
     // Safari 5.0 bug
-    var originalKeys = Object.keys;
-    Object.keys = function keys(object) {
+    return Object.keys(arguments).length === 2;
+}(1, 2));
+var originalKeys = Object.keys;
+defineProperties(Object, {
+    keys: function keys(object) {
         if (isArguments(object)) {
             return originalKeys(ArrayPrototype.slice.call(object));
         } else {
             return originalKeys(object);
         }
-    };
-}
+    }
+}, !keysWorksWithArguments);
 
 //
 // Date
@@ -810,13 +815,12 @@ if (!Object.keys) {
 // string format defined in 15.9.1.15. All fields are present in the String.
 // The time zone is always UTC, denoted by the suffix Z. If the time value of
 // this object is not a finite Number a RangeError exception is thrown.
-var negativeDate = -62198755200000,
-    negativeYearString = "-000001";
-if (
-    !Date.prototype.toISOString ||
-    (new Date(negativeDate).toISOString().indexOf(negativeYearString) === -1)
-) {
-    Date.prototype.toISOString = function toISOString() {
+var negativeDate = -62198755200000;
+var negativeYearString = "-000001";
+var hasNegativeDateBug = Date.prototype.toISOString && new Date(negativeDate).toISOString().indexOf(negativeYearString) === -1;
+
+defineProperties(Date.prototype, {
+    toISOString: function toISOString() {
         var result, length, value, year, month;
         if (!isFinite(this)) {
             throw new RangeError("Date.prototype.toISOString called on non-finite value.");
@@ -851,8 +855,8 @@ if (
             "T" + result.slice(2).join(":") + "." +
             ("000" + this.getUTCMilliseconds()).slice(-3) + "Z"
         );
-    };
-}
+    }
+}, hasNegativeDateBug);
 
 
 // ES5 15.9.5.44
@@ -1379,22 +1383,17 @@ if (!replaceReportsGroupsCorrectly) {
 // non-normative section suggesting uniform semantics and it should be
 // normalized across all browsers
 // [bugfix, IE lt 9] IE < 9 substr() with negative value not working in IE
-if ("".substr && "0b".substr(-1) !== "b") {
-    var string_substr = StringPrototype.substr;
-    /**
-     *  Get the substring of a string
-     *  @param  {integer}  start   where to start the substring
-     *  @param  {integer}  length  how many characters to return
-     *  @return {string}
-     */
-    StringPrototype.substr = function substr(start, length) {
+var string_substr = StringPrototype.substr;
+var hasNegativeSubstrBug = "".substr && "0b".substr(-1) !== "b";
+defineProperties(StringPrototype, {
+    substr: function substr(start, length) {
         return string_substr.call(
             this,
             start < 0 ? ((start = this.length + start) < 0 ? 0 : start) : start,
             length
         );
-    };
-}
+    }
+}, hasNegativeSubstrBug);
 
 // ES5 15.5.4.20
 // whitespace from: http://es5.github.io/#x15.5.4.20
@@ -1402,21 +1401,20 @@ var ws = "\x09\x0A\x0B\x0C\x0D\x20\xA0\u1680\u180E\u2000\u2001\u2002\u2003" +
     "\u2004\u2005\u2006\u2007\u2008\u2009\u200A\u202F\u205F\u3000\u2028" +
     "\u2029\uFEFF";
 var zeroWidth = '\u200b';
-if (!StringPrototype.trim || ws.trim() || !zeroWidth.trim()) {
+var wsRegexChars = "[" + ws + "]";
+var trimBeginRegexp = new RegExp("^" + wsRegexChars + wsRegexChars + "*");
+var trimEndRegexp = new RegExp(wsRegexChars + wsRegexChars + "*$");
+var hasTrimWhitespaceBug = StringPrototype.trim && (ws.trim() || !zeroWidth.trim());
+defineProperties(StringPrototype, {
     // http://blog.stevenlevithan.com/archives/faster-trim-javascript
     // http://perfectionkills.com/whitespace-deviations/
-    ws = "[" + ws + "]";
-    var trimBeginRegexp = new RegExp("^" + ws + ws + "*"),
-        trimEndRegexp = new RegExp(ws + ws + "*$");
-    StringPrototype.trim = function trim() {
+    trim: function trim() {
         if (this === void 0 || this === null) {
             throw new TypeError("can't convert " + this + " to object");
         }
-        return String(this)
-            .replace(trimBeginRegexp, "")
-            .replace(trimEndRegexp, "");
-    };
-}
+        return String(this).replace(trimBeginRegexp, "").replace(trimEndRegexp, "");
+    }
+}, hasTrimWhitespaceBug);
 
 // ES-5 15.1.2.2
 if (parseInt(ws + '08') !== 8 || parseInt(ws + '0x16') !== 22) {

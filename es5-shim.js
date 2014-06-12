@@ -350,8 +350,8 @@ var spliceNoopReturnsEmptyArray = (function () {
     var result = a.splice();
     return a.length === 2 && isArray(result) && result.length === 0;
 }());
-// Safari 5.0 bug where .split() returns undefined
 defineProperties(ArrayPrototype, {
+    // Safari 5.0 bug where .splice() returns undefined
     splice: function splice(start, deleteCount) {
         if (arguments.length === 0) {
             return [];

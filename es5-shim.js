@@ -674,7 +674,7 @@ defineProperties(ArrayPrototype, {
 // ES5 15.4.4.14
 // http://es5.github.com/#x15.4.4.14
 // https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Array/indexOf
-var hasFirefox2IndexOfBug = [0, 1].indexOf(1, 2) !== -1;
+var hasFirefox2IndexOfBug = Array.prototype.indexOf && [0, 1].indexOf(1, 2) !== -1;
 defineProperties(ArrayPrototype, {
     indexOf: function indexOf(sought /*, fromIndex */ ) {
         var self = splitString && isString(this) ? this.split('') : toObject(this),

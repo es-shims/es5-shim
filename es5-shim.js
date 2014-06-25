@@ -703,7 +703,7 @@ defineProperties(ArrayPrototype, {
 // ES5 15.4.4.15
 // http://es5.github.com/#x15.4.4.15
 // https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Array/lastIndexOf
-var hasFirefox2LastIndexOfBug = [0, 1].lastIndexOf(0, -3) !== -1;
+var hasFirefox2LastIndexOfBug = Array.prototype.lastIndexOf && [0, 1].lastIndexOf(0, -3) !== -1;
 defineProperties(ArrayPrototype, {
     lastIndexOf: function lastIndexOf(sought /*, fromIndex */) {
         var self = splitString && isString(this) ? this.split('') : toObject(this),

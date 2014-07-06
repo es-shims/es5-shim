@@ -35,9 +35,9 @@
     "lint": "jscs tests/helpers/*.js tests/spec/*.js es5-shim.js es5-sham.js"
   },
   "devDependencies": {
-    "jasmine-node": "~1.14.2",
-    "jscs": "~1.5.1",
-    "uglify-js": "~2.4.12"
+    "jasmine-node": "~1.14.3",
+    "jscs": "~1.5.8",
+    "uglify-js": "~2.4.14"
   },
   "engines": {
     "node": ">=0.4.0"

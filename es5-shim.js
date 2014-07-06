@@ -1082,7 +1082,7 @@ if (!Date.now) {
 // http://es5.github.com/#x15.7.4.5
 var hasToFixedBugs = NumberPrototype.toFixed && (
   (0.00008).toFixed(3) !== '0.000'
-  || (0.9).toFixed(0) === '0'
+  || (0.9).toFixed(0) !== '1'
   || (1.255).toFixed(2) !== '1.25'
   || (1000000000000000128).toFixed(0) !== "1000000000000000128"
 );

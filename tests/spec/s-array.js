@@ -1176,7 +1176,10 @@ describe('Array', function () {
             expect(Array.prototype.splice.length).toBe(2);
         });
 
-        it('treats undefined deleteCount as 0', function () {
+        /* This test is disabled, because ES6 normalizes actual
+         * browser behavior, contradicting ES5.
+         */
+        xit('treats undefined deleteCount as 0', function () {
             expect(test.splice(0).length).toBe(0);
             expect(test.splice(0)).toEqual(test.splice(0, 0));
         });

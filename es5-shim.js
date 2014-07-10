@@ -366,7 +366,6 @@ var spliceWorksWithEmptyObject = (function () {
     ArrayPrototype.splice.call(obj, 0, 0, 1);
     return obj.length === 1;
 }());
-var omittingSecondSpliceArgIsNoop = [1].splice(0).length === 0;
 defineProperties(ArrayPrototype, {
     splice: function splice(start, deleteCount) {
         if (arguments.length === 0) { return []; }
@@ -375,14 +374,14 @@ defineProperties(ArrayPrototype, {
         if (arguments.length > 0 && typeof deleteCount !== 'number') {
             args = _Array_slice_.call(arguments);
             if (args.length < 2) {
-                args.push(toInteger(deleteCount));
+                args.push(this.length - start);
             } else {
                 args[1] = toInteger(deleteCount);
             }
         }
         return array_splice.apply(this, args);
     }
-}, !omittingSecondSpliceArgIsNoop || !spliceWorksWithEmptyObject);
+}, !spliceWorksWithEmptyObject);
 
 // ES5 15.4.4.12
 // http://es5.github.com/#x15.4.4.13

@@ -1,3 +1,9 @@
+4.0.0
+  - No longer shim the ES5-spec behavior of splice when `deleteCount` is omitted - since no engines implement it, and ES6 changes it. (#255)
+  - Use Object.defineProperty where available, so that polyfills are non-enumerable when possible (#250)
+  - lots of internal refactoring
+  - Fixed a bug referencing String#indexOf and String#lastIndexOf before polyfilling it (#253, #254)
+
 3.4.0
   - Removed nonstandard SpiderMonkey extension to Array#splice - when `deleteCount` is omitted, it's now treated as 0. (#192, #239)
   - Fix Object.keys with Arguments objects in Safari 5.0

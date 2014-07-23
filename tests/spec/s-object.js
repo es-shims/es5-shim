@@ -29,6 +29,19 @@ describe('Object', function () {
                     expect(Object.keys(arguments)).toEqual(['0', '1', '2']);
                 }(1, 2, 3));
             });
+
+            it('works with a legacy arguments object', function () {
+                var FakeArguments = function (args) {
+                    args.forEach(function (arg, i) {
+                        this[i] = arg;
+                    }.bind(this));
+                };
+                FakeArguments.prototype.length = 3;
+                FakeArguments.prototype.callee = function () {};
+
+                var fakeOldArguments = new FakeArguments(['a', 'b', 'c']);
+                expect(Object.keys(fakeOldArguments)).toEqual(['0', '1', '2']);
+            });
         });
 
         it('should return an Array', function () {

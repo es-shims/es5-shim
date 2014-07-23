@@ -67,7 +67,7 @@ var isArguments = function isArguments(value) {
     var str = _toString.call(value);
     var isArgs = str === '[object Arguments]';
     if (!isArgs) {
-        isArgs = !isArray(str)
+        isArgs = !isArray(value)
             && value !== null
             && typeof value === 'object'
             && typeof value.length === 'number'

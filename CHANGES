@@ -1,3 +1,6 @@
+4.0.1
+  - Fix legacy arguments object detection in Object.keys (#260)
+
 4.0.0
   - No longer shim the ES5-spec behavior of splice when `deleteCount` is omitted - since no engines implement it, and ES6 changes it. (#255)
   - Use Object.defineProperty where available, so that polyfills are non-enumerable when possible (#250)

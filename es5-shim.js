@@ -42,7 +42,7 @@ var ObjectPrototype = Object.prototype;
 var FunctionPrototype = Function.prototype;
 var StringPrototype = String.prototype;
 var NumberPrototype = Number.prototype;
-var _Array_slice_ = ArrayPrototype.slice;
+var array_slice = ArrayPrototype.slice;
 var array_splice = ArrayPrototype.splice;
 var array_push = ArrayPrototype.push;
 var array_unshift = ArrayPrototype.unshift;
@@ -199,7 +199,7 @@ defineProperties(FunctionPrototype, {
         // 3. Let A be a new (possibly empty) internal list of all of the
         //   argument values provided after thisArg (arg1, arg2 etc), in order.
         // XXX slicedArgs will stand in for "A" if used
-        var args = _Array_slice_.call(arguments, 1); // for normal call
+        var args = array_slice.call(arguments, 1); // for normal call
         // 4. Let F be a new native ECMAScript object.
         // 11. Set the [[Prototype]] internal property of F to the standard
         //   built-in Function prototype object as specified in 15.3.3.1.
@@ -230,7 +230,7 @@ defineProperties(FunctionPrototype, {
 
                 var result = target.apply(
                     this,
-                    args.concat(_Array_slice_.call(arguments))
+                    args.concat(array_slice.call(arguments))
                 );
                 if (Object(result) === result) {
                     return result;
@@ -259,7 +259,7 @@ defineProperties(FunctionPrototype, {
                 // equiv: target.call(this, ...boundArgs, ...args)
                 return target.apply(
                     that,
-                    args.concat(_Array_slice_.call(arguments))
+                    args.concat(array_slice.call(arguments))
                 );
 
             }
@@ -372,7 +372,7 @@ defineProperties(ArrayPrototype, {
         var args = arguments;
         this.length = Math.max(toInteger(this.length), 0);
         if (arguments.length > 0 && typeof deleteCount !== 'number') {
-            args = _Array_slice_.call(arguments);
+            args = array_slice.call(arguments);
             if (args.length < 2) {
                 args.push(this.length - start);
             } else {

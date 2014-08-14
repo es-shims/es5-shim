@@ -1,3 +1,6 @@
+4.0.2
+  - Start including version numbers in minified files (#267)
+
 4.0.1
   - Fix legacy arguments object detection in Object.keys (#260)
 

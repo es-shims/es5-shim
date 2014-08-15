@@ -58,6 +58,14 @@
       "iphone/6.0..latest",
       "android-browser/4.2"
     ]
-  }
+  },
+  "keywords": [
+    "shim",
+    "es5",
+    "es5 shim",
+    "javascript",
+    "ecmascript",
+    "polyfill"
+  ]
 }
 

@@ -1,3 +1,8 @@
+4.0.3
+  - Fix keywords (#268)
+  - add some Date tests
+  - Note in README that the es5-sham requires the es5-shim (https://github.com/es-shims/es5-shim/issues/256#issuecomment-52875710)
+
 4.0.2
   - Start including version numbers in minified files (#267)
 

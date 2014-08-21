@@ -14,6 +14,7 @@ is not very close.  Many of these shams are intended only to allow code
 to be written to ES5 without causing run-time errors in older engines.
 In many cases, this means that these shams cause many ES5 methods to
 silently fail.  Decide carefully whether this is what you want.
+**Note:** `es5-sham.js` requires `es5-shim.js` to be able to work properly.
 
 
 ## Tests

@@ -154,11 +154,11 @@ To run the tests, navigate to <root-folder>/tests/.
 
 [1]: https://npmjs.org/package/es5-shim
 [2]: http://vb.teelaun.ch/es-shims/es5-shim.svg
-[3]: https://travis-ci.org/es-shims/es5-shim.png
+[3]: https://travis-ci.org/es-shims/es5-shim.svg
 [4]: https://travis-ci.org/es-shims/es5-shim
-[5]: https://david-dm.org/es-shims/es5-shim.png
+[5]: https://david-dm.org/es-shims/es5-shim.svg
 [6]: https://david-dm.org/es-shims/es5-shim
-[7]: https://david-dm.org/es-shims/es5-shim/dev-status.png
+[7]: https://david-dm.org/es-shims/es5-shim/dev-status.svg
 [8]: https://david-dm.org/es-shims/es5-shim#info=devDependencies
 [9]: https://nodei.co/npm/es5-shim.png?downloads=true&stars=true
 

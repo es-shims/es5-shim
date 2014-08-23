@@ -20,7 +20,8 @@ silently fail.  Decide carefully whether this is what you want.
 ## Tests
 
 The tests are written with the Jasmine BDD test framework.
-To run the tests, navigate to <root-folder>/tests/. 
+To run the tests, navigate to <root-folder>/tests/ , or,
+simply `npm install` and `npm test`.
 
 ## Shims
 

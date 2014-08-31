@@ -36,7 +36,7 @@
   },
   "devDependencies": {
     "jasmine-node": "~1.14.5",
-    "jscs": "~1.5.9",
+    "jscs": "~1.6.0",
     "uglify-js": "~2.4.15"
   },
   "engines": {

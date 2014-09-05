@@ -23,6 +23,14 @@ describe('String', function () {
             expect(groups.length).toBe(1);
             expect(groups[0]).toBeUndefined();
         });
+
+        it('should not fail in Firefox', function () {
+            expect(function () {
+                return "* alef\n* beth \n* gimel~0\n"
+                    .replace(/(\n)?(^[ \t]*)([*+-]|\d+[.])[ \t]+([^\r]+?(\n{1,2}))(?=\n*(~0|\2([*+-]|\d+[.])[ \t]+))/gm,
+                        function (match, m1, m2, m3, m4) { return '<li>' + m4 + '</li>\n'; });
+            }).not.toThrow();
+        });
     });
 
     describe("split", function () {

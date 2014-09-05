@@ -1366,7 +1366,7 @@ if (!replaceReportsGroupsCorrectly) {
                 var length = arguments.length;
                 var originalLastIndex = searchValue.lastIndex;
                 searchValue.lastIndex = 0;
-                var args = searchValue.exec(match);
+                var args = searchValue.exec(match) || [];
                 searchValue.lastIndex = originalLastIndex;
                 args.push(arguments[length - 2], arguments[length - 1]);
                 return replaceValue.apply(this, args);

@@ -3,8 +3,8 @@
 [![npm badge][9]][npm-url]
 
 [![Build Status][travis-svg]][travis-url]
-[![dependency status][5]][6]
-[![dev dependency status][7]][8]
+[![dependency status][deps-svg]][deps-url]
+[![dev dependency status][dev-deps-svg]][dev-deps-url]
 
 `es5-shim.js` and `es5-shim.min.js` monkey-patch a JavaScript context to
 contain all EcmaScript 5 methods that can be faithfully emulated with a
@@ -159,9 +159,9 @@ simply `npm install` and `npm test`.
 [npm-version-svg]: http://vb.teelaun.ch/es-shims/es5-shim.svg
 [travis-svg]: https://travis-ci.org/es-shims/es5-shim.svg
 [travis-url]: https://travis-ci.org/es-shims/es5-shim
-[5]: https://david-dm.org/es-shims/es5-shim.svg
-[6]: https://david-dm.org/es-shims/es5-shim
-[7]: https://david-dm.org/es-shims/es5-shim/dev-status.svg
-[8]: https://david-dm.org/es-shims/es5-shim#info=devDependencies
+[deps-svg]: https://david-dm.org/es-shims/es5-shim.svg
+[deps-url]: https://david-dm.org/es-shims/es5-shim
+[dev-deps-svg]: https://david-dm.org/es-shims/es5-shim/dev-status.svg
+[dev-deps-url]: https://david-dm.org/es-shims/es5-shim#info=devDependencies
 [9]: https://nodei.co/npm/es5-shim.png?downloads=true&stars=true
 

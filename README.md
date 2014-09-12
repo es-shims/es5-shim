@@ -1,6 +1,6 @@
-#es5-shim <sup>[![Version Badge][2]][1]</sup>
+#es5-shim <sup>[![Version Badge][npm-version-svg]][npm-url]</sup>
 
-[![npm badge][9]][1]
+[![npm badge][9]][npm-url]
 
 [![Build Status][3]][4] [![dependency status][5]][6]  [![dev dependency status][7]][8]
 
@@ -153,8 +153,8 @@ simply `npm install` and `npm test`.
     provisions of this method, which you cannot possibly
     obtain in legacy engines.
 
-[1]: https://npmjs.org/package/es5-shim
-[2]: http://vb.teelaun.ch/es-shims/es5-shim.svg
+[npm-url]: https://npmjs.org/package/es5-shim
+[npm-version-svg]: http://vb.teelaun.ch/es-shims/es5-shim.svg
 [3]: https://travis-ci.org/es-shims/es5-shim.svg
 [4]: https://travis-ci.org/es-shims/es5-shim
 [5]: https://david-dm.org/es-shims/es5-shim.svg

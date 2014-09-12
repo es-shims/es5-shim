@@ -1,6 +1,6 @@
 #es5-shim <sup>[![Version Badge][npm-version-svg]][npm-url]</sup>
 
-[![npm badge][9]][npm-url]
+[![npm badge][npm-badge-png]][npm-url]
 
 [![Build Status][travis-svg]][travis-url]
 [![dependency status][deps-svg]][deps-url]
@@ -163,5 +163,5 @@ simply `npm install` and `npm test`.
 [deps-url]: https://david-dm.org/es-shims/es5-shim
 [dev-deps-svg]: https://david-dm.org/es-shims/es5-shim/dev-status.svg
 [dev-deps-url]: https://david-dm.org/es-shims/es5-shim#info=devDependencies
-[9]: https://nodei.co/npm/es5-shim.png?downloads=true&stars=true
+[npm-badge-png]: https://nodei.co/npm/es5-shim.png?downloads=true&stars=true
 

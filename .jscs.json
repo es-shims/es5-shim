@@ -61,5 +61,7 @@
 
   "requireSpacesInNamedFunctionExpression": { "beforeOpeningCurlyBrace": true },
 
+  "requireParenthesesAroundIIFE": true,
+
   "validateLineBreaks": "LF"
 }

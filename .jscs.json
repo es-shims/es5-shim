@@ -33,6 +33,8 @@
 
   "disallowTrailingWhitespace": true,
 
+  "disallowTrailingComma": true,
+
   "excludeFiles": ["node_modules/**", "vendor/**"],
 
   "requireCommaBeforeLineBreak": true,

@@ -1,5 +1,5 @@
 describe('Function', function () {
-    "use strict";
+    'use strict';
 
     describe('apply', function () {
         it('works with arraylike objects', function () {
@@ -106,10 +106,10 @@ describe('Function', function () {
             expect(actualContext).not.toBe(expectedContext);
         });
         it('passes the correct arguments as a constructor', function () {
-            var ret, expected = { name: "Correct" };
+            var ret, expected = { name: 'Correct' };
             testSubject.func = function (arg) {
                 return arg;
-            }.bind({ name: "Incorrect" });
+            }.bind({ name: 'Incorrect' });
             ret = new testSubject.func(expected);
             expect(ret).toBe(expected);
         });
@@ -137,7 +137,7 @@ describe('Function', function () {
             result = new Subject();
             expect(result).toBe(oracle);
 
-            oracle = "asdf";
+            oracle = 'asdf';
             result = new Subject();
             expect(result).not.toBe(oracle);
 
@@ -155,9 +155,9 @@ describe('Function', function () {
         });
         it('returns the value that instance of original "class" when called as a constructor', function () {
             var ClassA = function (x) {
-                this.name = x || "A";
+                this.name = x || 'A';
             };
-            var ClassB = ClassA.bind(null, "B");
+            var ClassB = ClassA.bind(null, 'B');
 
             var result = new ClassB();
             expect(result instanceof ClassA).toBe(true);

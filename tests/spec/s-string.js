@@ -1,10 +1,10 @@
 describe('String', function () {
-    "use strict";
-    describe("trim", function () {
-        var test = "\x09\x0A\x0B\x0C\x0D\x20\xA0\u1680\u180E\u2000\u2001\u2002\u2003\u2004\u2005\u2006\u2007\u2008\u2009\u200A\u202F\u205F\u3000\u2028\u2029\uFEFFHello, World!\x09\x0A\x0B\x0C\x0D\x20\xA0\u1680\u180E\u2000\u2001\u2002\u2003\u2004\u2005\u2006\u2007\u2008\u2009\u200A\u202F\u205F\u3000\u2028\u2029\uFEFF";
+    'use strict';
+    describe('trim', function () {
+        var test = '\x09\x0A\x0B\x0C\x0D\x20\xA0\u1680\u180E\u2000\u2001\u2002\u2003\u2004\u2005\u2006\u2007\u2008\u2009\u200A\u202F\u205F\u3000\u2028\u2029\uFEFFHello, World!\x09\x0A\x0B\x0C\x0D\x20\xA0\u1680\u180E\u2000\u2001\u2002\u2003\u2004\u2005\u2006\u2007\u2008\u2009\u200A\u202F\u205F\u3000\u2028\u2029\uFEFF';
 
         it('trims all ES5 whitespace', function () {
-            expect(test.trim()).toEqual("Hello, World!");
+            expect(test.trim()).toEqual('Hello, World!');
             expect(test.trim().length).toBe(13);
         });
 
@@ -14,7 +14,7 @@ describe('String', function () {
         });
     });
 
-    describe("replace", function () {
+    describe('replace', function () {
         it('returns undefined for non-capturing groups', function () {
             var groups = [];
             'x'.replace(/x(.)?/g,function (m, group) {
@@ -26,7 +26,7 @@ describe('String', function () {
 
         it('should not fail in Firefox', function () {
             expect(function () {
-                return "* alef\n* beth \n* gimel~0\n".replace(
+                return '* alef\n* beth \n* gimel~0\n'.replace(
                     /(\n)?(^[ \t]*)([*+-]|\d+[.])[ \t]+([^\r]+?(\n{1,2}))(?=\n*(~0|\2([*+-]|\d+[.])[ \t]+))/gm,
                     function (match, m1, m2, m3, m4) { return '<li>' + m4 + '</li>\n'; }
                 );
@@ -34,8 +34,8 @@ describe('String', function () {
         });
     });
 
-    describe("split", function () {
-        var test = "ab";
+    describe('split', function () {
+        var test = 'ab';
 
         it('If "separator" is undefined must return Array with one String - "this" string', function () {
             expect(test.split()).toEqual([test]);

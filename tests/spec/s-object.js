@@ -1,14 +1,14 @@
 describe('Object', function () {
-    "use strict";
+    'use strict';
 
-    describe("Object.keys", function () {
+    describe('Object.keys', function () {
         var obj = {
-            str: "boz",
+            str: 'boz',
             obj: { },
             arr: [],
             bool: true,
             num: 42,
-            "null": null,
+            'null': null,
             undefined: undefined
         };
 
@@ -102,7 +102,7 @@ describe('Object', function () {
         });
     });
 
-    describe("Object.isExtensible", function () {
+    describe('Object.isExtensible', function () {
         var obj = { };
 
         it('should return true if object is extensible', function () {
@@ -133,7 +133,7 @@ describe('Object', function () {
         });
     });
 
-    describe("Object.defineProperty", function () {
+    describe('Object.defineProperty', function () {
         var obj;
 
         beforeEach(function () {
@@ -182,7 +182,7 @@ describe('Object', function () {
         });
     });
 
-    describe("Object.getOwnPropertyDescriptor", function () {
+    describe('Object.getOwnPropertyDescriptor', function () {
         it('should return undefined because the object does not own the property', function () {
             var descr = Object.getOwnPropertyDescriptor({}, 'name');
 

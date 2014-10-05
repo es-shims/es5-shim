@@ -1,7 +1,7 @@
 var toString = Object.prototype.toString;
 var canDistinguishSparseFromUndefined = 0 in [undefined]; // IE 6 - 8 have a bug where this returns false.
 var hasStrictMode = (function () {
-  "use strict";
+  'use strict';
    return !this;
 }());
 
@@ -305,7 +305,7 @@ describe('Array', function () {
     });
 
     describe('indexOf', function () {
-        "use strict";
+        'use strict';
         var actual, expected, testSubject;
 
         beforeEach(function () {
@@ -413,7 +413,7 @@ describe('Array', function () {
         });
     });
     describe('lastIndexOf', function () {
-        "use strict";
+        'use strict';
         var actual, expected, testSubject, testAL;
 
         beforeEach(function () {
@@ -1155,15 +1155,15 @@ describe('Array', function () {
     });
 
     describe('splice', function () {
-        var b = ["b"],
-            a = [1, "a", b],
+        var b = ['b'],
+            a = [1, 'a', b],
             test;
 
         var makeArray = function (l, prefix) {
-            prefix = prefix || "";
+            prefix = prefix || '';
             var a = [];
             while (l--) {
-                a.unshift(prefix + Array(l + 1).join(" ") + l);
+                a.unshift(prefix + Array(l + 1).join(' ') + l);
             }
             return a;
         };
@@ -1197,8 +1197,8 @@ describe('Array', function () {
             var array = [];
 
             array.splice(0, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20);
-            array.splice(1, 0, "F1", "F2", "F3", "F4", "F5", "F6", "F7", "F8", "F9", "F10", "F11", "F12", "F13", "F14", "F15", "F16", "F17", "F18", "F19", "F20", "F21","F22", "F23", "F24", "F25", "F26");
-            array.splice(5, 0, "XXX");
+            array.splice(1, 0, 'F1', 'F2', 'F3', 'F4', 'F5', 'F6', 'F7', 'F8', 'F9', 'F10', 'F11', 'F12', 'F13', 'F14', 'F15', 'F16', 'F17', 'F18', 'F19', 'F20', 'F21', 'F22', 'F23', 'F24', 'F25', 'F26');
+            array.splice(5, 0, 'XXX');
 
             expect(array).toEqual([1, 'F1', 'F2', 'F3', 'F4', 'XXX', 'F5', 'F6', 'F7', 'F8', 'F9', 'F10', 'F11', 'F12', 'F13', 'F14', 'F15', 'F16', 'F17', 'F18', 'F19', 'F20', 'F21', 'F22', 'F23', 'F24', 'F25', 'F26', 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]);
         });
@@ -1206,11 +1206,11 @@ describe('Array', function () {
         it('should return right result 2', function () {
             var array = makeArray(6);
 
-            array.splice(array.length - 1, 1, "");
+            array.splice(array.length - 1, 1, '');
             array.splice(0, 1, 1, 2, 3, 4);
             array.splice(0, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45);
 
-            array.splice(4, 0, "99999999999999");
+            array.splice(4, 0, '99999999999999');
 
             expect(array).toEqual([1, 2, 3, 4, '99999999999999', 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 1, 2, 3, 4, ' 1', '  2', '   3', '    4', '']);
         });
@@ -1220,12 +1220,12 @@ describe('Array', function () {
 
             array.splice(0, array.length);
             array.splice(0, 1, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
-            array.splice(1, 1, "F1", "F2", "F3", "F4", "F5", "F6", "F7", "F8", "F9", "F10", "F11", "F12", "F13", "F14", "F15", "F16", "F17", "F18", "F19", "F20", "F21","F22", "F23", "F24", "F25", "F26");
-            array.splice(5, 1, "YYY", "XXX");
+            array.splice(1, 1, 'F1', 'F2', 'F3', 'F4', 'F5', 'F6', 'F7', 'F8', 'F9', 'F10', 'F11', 'F12', 'F13', 'F14', 'F15', 'F16', 'F17', 'F18', 'F19', 'F20', 'F21', 'F22', 'F23', 'F24', 'F25', 'F26');
+            array.splice(5, 1, 'YYY', 'XXX');
             array.splice(0, 1);
             array.splice(0, 2);
             array.pop();
-            array.push.apply(array, makeArray(10, "-"));
+            array.push.apply(array, makeArray(10, '-'));
             array.splice(array.length - 2, 10);
             array.splice();
             array.splice(1, 1, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 4, 5, 6, 7, 8, 9);

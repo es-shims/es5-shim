@@ -122,8 +122,8 @@ var defineProperties = function (object, map, forceAssign) {
 // http://es5.github.com/#x9.4
 // http://jsperf.com/to-integer
 
-function toInteger(n) {
-    n = +n;
+function toInteger(num) {
+    var n = +num;
     if (n !== n) { // isNaN
         n = 0;
     } else if (n !== 0 && n !== (1 / 0) && n !== -(1 / 0)) {

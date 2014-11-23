@@ -325,19 +325,6 @@ defineProperties(FunctionPrototype, {
 // us it in defining shortcuts.
 var owns = call.bind(ObjectPrototype.hasOwnProperty);
 
-// If JS engine supports accessors creating shortcuts.
-var defineGetter;
-var defineSetter;
-var lookupGetter;
-var lookupSetter;
-var supportsAccessors;
-if ((supportsAccessors = owns(ObjectPrototype, '__defineGetter__'))) {
-    defineGetter = call.bind(ObjectPrototype.__defineGetter__);
-    defineSetter = call.bind(ObjectPrototype.__defineSetter__);
-    lookupGetter = call.bind(ObjectPrototype.__lookupGetter__);
-    lookupSetter = call.bind(ObjectPrototype.__lookupSetter__);
-}
-
 //
 // Array
 // =====

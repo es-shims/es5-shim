@@ -61,6 +61,23 @@
 	"validateQuoteMarks": {
 		"escape": true,
 		"mark": "'"
-	}
+	},
+
+	"disallowOperatorBeforeLineBreak": [],
+
+	"requireSpaceBeforeKeywords": [
+		"do",
+		"for",
+		"if",
+		"else",
+		"switch",
+		"case",
+		"try",
+		"catch",
+		"finally",
+		"while",
+		"with",
+		"return"
+	]
 }
 

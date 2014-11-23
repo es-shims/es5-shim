@@ -12,6 +12,8 @@
 // UMD (Universal Module Definition)
 // see https://github.com/umdjs/umd/blob/master/returnExports.js
 (function (root, factory) {
+    'use strict';
+    /*global define, exports, module */
     if (typeof define === 'function' && define.amd) {
         // AMD. Register as an anonymous module.
         define(factory);
@@ -113,7 +115,7 @@ if (!Object.getOwnPropertyDescriptor || getOwnPropertyDescriptorFallback) {
 
         // If object has a property then it's for sure both `enumerable` and
         // `configurable`.
-        var descriptor =  { enumerable: true, configurable: true };
+        var descriptor = { enumerable: true, configurable: true };
 
         // If JS engine supports accessor properties then property may be a
         // getter or setter.
@@ -175,13 +177,14 @@ if (!Object.create) {
 
     // Contributed by Brandon Benvie, October, 2012
     var createEmpty;
-    var supportsProto = !({__proto__:null} instanceof Object);
+    var supportsProto = !({ __proto__: null } instanceof Object);
                         // the following produces false positives
                         // in Opera Mini => not a reliable check
                         // Object.prototype.__proto__ === null
+    /*global document */
     if (supportsProto || typeof document === 'undefined') {
         createEmpty = function () {
-            return { '__proto__': null };
+            return { __proto__: null };
         };
     } else {
         // In old IE __proto__ can't be used to manually set `null`, nor does
@@ -321,9 +324,7 @@ if (!Object.defineProperty || definePropertyFallback) {
                 );
             */
 
-            if (supportsAccessors && (lookupGetter(object, property) ||
-                                      lookupSetter(object, property)))
-            {
+            if (supportsAccessors && (lookupGetter(object, property) || lookupSetter(object, property))) {
                 // As accessors are supported only on engines implementing
                 // `__proto__` we can safely override `__proto__` while defining
                 // a property to make sure that we don't hit an inherited
@@ -411,7 +412,7 @@ try {
                 return freezeObject(object);
             }
         };
-    })(Object.freeze);
+    }(Object.freeze));
 }
 
 // ES5 15.2.3.10
@@ -462,4 +463,3 @@ if (!Object.isExtensible) {
 }
 
 }));
-

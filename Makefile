@@ -11,7 +11,7 @@ endif
 CHANGES_ERROR = $(error No CHANGES specified)
 
 verify-changes:
-	@ (git status -sb --porcelain | grep -e ' M CHANGES' > /dev/null) || (echo no CHANGES specified && exit 2)
+	@ (git status -sb --porcelain | \grep -E '^( M|M ) CHANGES' > /dev/null) || (echo no CHANGES specified && exit 2)
 
 release: verify-changes verify-tag
 	@ OLD_TAG=`git describe --abbrev=0 --tags` && \

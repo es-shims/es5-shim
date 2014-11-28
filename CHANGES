@@ -1,3 +1,7 @@
+4.0.4
+  - Style/indentation/whitespace cleanups.
+  - README tweaks
+
 4.0.3
   - Fix keywords (#268)
   - add some Date tests

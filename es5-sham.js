@@ -382,6 +382,9 @@ if (!Object.defineProperties || definePropertiesFallback) {
 // http://es5.github.com/#x15.2.3.8
 if (!Object.seal) {
     Object.seal = function seal(object) {
+        if (Object(object) !== object) {
+            throw new TypeError('Object.seal can only be called on Objects.');
+        }
         // this is misleading and breaks feature-detection, but
         // allows "securable" code to "gracefully" degrade to working
         // but insecure code.
@@ -393,6 +396,9 @@ if (!Object.seal) {
 // http://es5.github.com/#x15.2.3.9
 if (!Object.freeze) {
     Object.freeze = function freeze(object) {
+        if (Object(object) !== object) {
+            throw new TypeError('Object.freeze can only be called on Objects.');
+        }
         // this is misleading and breaks feature-detection, but
         // allows "securable" code to "gracefully" degrade to working
         // but insecure code.
@@ -419,6 +425,9 @@ try {
 // http://es5.github.com/#x15.2.3.10
 if (!Object.preventExtensions) {
     Object.preventExtensions = function preventExtensions(object) {
+        if (Object(object) !== object) {
+            throw new TypeError('Object.preventExtensions can only be called on Objects.');
+        }
         // this is misleading and breaks feature-detection, but
         // allows "securable" code to "gracefully" degrade to working
         // but insecure code.
@@ -430,6 +439,9 @@ if (!Object.preventExtensions) {
 // http://es5.github.com/#x15.2.3.11
 if (!Object.isSealed) {
     Object.isSealed = function isSealed(object) {
+        if (Object(object) !== object) {
+            throw new TypeError('Object.isSealed can only be called on Objects.');
+        }
         return false;
     };
 }
@@ -438,6 +450,9 @@ if (!Object.isSealed) {
 // http://es5.github.com/#x15.2.3.12
 if (!Object.isFrozen) {
     Object.isFrozen = function isFrozen(object) {
+        if (Object(object) !== object) {
+            throw new TypeError('Object.isFrozen can only be called on Objects.');
+        }
         return false;
     };
 }
@@ -448,7 +463,7 @@ if (!Object.isExtensible) {
     Object.isExtensible = function isExtensible(object) {
         // 1. If Type(O) is not Object throw a TypeError exception.
         if (Object(object) !== object) {
-            throw new TypeError(); // TODO message
+            throw new TypeError('Object.isExtensible can only be called on Objects.');
         }
         // 2. Return the Boolean value of the [[Extensible]] internal property of O.
         var name = '';

@@ -32,7 +32,8 @@
     "minify-sham": "uglifyjs es5-sham.js --comments --source-map=es5-sham.map -m -b ascii_only=true,beautify=false > es5-sham.min.js",
     "test": "npm run lint && jasmine-node --matchall ./ tests/spec/",
     "test-native": "jasmine-node --matchall tests/spec/",
-    "lint": "jscs tests/helpers/*.js tests/spec/*.js es5-shim.js es5-sham.js"
+    "lint": "npm run jscs",
+    "jscs": "jscs tests/helpers/*.js tests/spec/*.js es5-shim.js es5-sham.js"
   },
   "devDependencies": {
     "jasmine-node": "~1.14.5",

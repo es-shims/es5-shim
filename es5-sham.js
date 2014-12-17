@@ -309,16 +309,16 @@ if (!Object.defineProperty || definePropertyFallback) {
         }
 
         // If it's a data property.
-        if (owns(descriptor, 'value')) {
+        if ('value' in descriptor) {
             // fail silently if 'writable', 'enumerable', or 'configurable'
             // are requested but not supported
             /*
             // alternate approach:
             if ( // can't implement these features; allow false but not true
-                !(owns(descriptor, 'writable') ? descriptor.writable : true) ||
-                !(owns(descriptor, 'enumerable') ? descriptor.enumerable : true) ||
-                !(owns(descriptor, 'configurable') ? descriptor.configurable : true)
-            )
+                ('writable' in descriptor && !descriptor.writable) ||
+                ('enumerable' in descriptor && !descriptor.enumerable) ||
+                ('configurable' in descriptor && !descriptor.configurable)
+            ))
                 throw new RangeError(
                     'This implementation of Object.defineProperty does not support configurable, enumerable, or writable.'
                 );
@@ -345,10 +345,10 @@ if (!Object.defineProperty || definePropertyFallback) {
                 throw new TypeError(ERR_ACCESSORS_NOT_SUPPORTED);
             }
             // If we got that far then getters and setters can be defined !!
-            if (owns(descriptor, 'get')) {
+            if ('get' in descriptor) {
                 defineGetter(object, property, descriptor.get);
             }
-            if (owns(descriptor, 'set')) {
+            if ('set' in descriptor) {
                 defineSetter(object, property, descriptor.set);
             }
         }

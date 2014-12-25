@@ -754,7 +754,9 @@ defineProperties(Object, {
             for (var i = 0; i < object.length; ++i) {
                 theKeys.push(String(i));
             }
-        } else {
+        }
+
+        if (!isArgs) {
             for (var name in object) {
                 if (!(skipProto && name === 'prototype') && owns(object, name)) {
                     theKeys.push(String(name));

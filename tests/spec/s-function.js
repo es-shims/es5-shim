@@ -47,21 +47,21 @@ describe('Function', function () {
             testSubject.func = function () {
                 a = Array.prototype.slice.call(arguments);
                 context = this;
-            }.bind(undefined, 1,2,3);
-            testSubject.func(1,2,3);
-            expect(a).toEqual([1,2,3,1,2,3]);
+            }.bind(undefined, 1, 2, 3);
+            testSubject.func(1, 2, 3);
+            expect(a).toEqual([1, 2, 3, 1, 2, 3]);
             expect(context).toBe(function () { return this; }.call());
         });
         it('binds a context properly', function () {
             testSubject.func = func.bind(actual);
-            testSubject.func(1,2,3);
-            expect(actual).toEqual([1,2,3]);
+            testSubject.func(1, 2, 3);
+            expect(actual).toEqual([1, 2, 3]);
             expect(testSubject.a).toEqual([]);
         });
         it('binds a context and supplies bound arguments', function () {
-            testSubject.func = func.bind(actual, 1,2,3);
-            testSubject.func(4,5,6);
-            expect(actual).toEqual([1,2,3,4,5,6]);
+            testSubject.func = func.bind(actual, 1, 2, 3);
+            testSubject.func(4, 5, 6);
+            expect(actual).toEqual([1, 2, 3, 4, 5, 6]);
             expect(testSubject.a).toEqual([]);
         });
 
@@ -77,22 +77,22 @@ describe('Function', function () {
             testSubject.func = function () {
                 context = this;
                 return Array.prototype.slice.call(arguments);
-            }.bind(undefined, 1,2,3);
-            actual = testSubject.func(1,2,3);
+            }.bind(undefined, 1, 2, 3);
+            actual = testSubject.func(1, 2, 3);
             expect(context).toBe(function () { return this; }.call());
-            expect(actual).toEqual([1,2,3,1,2,3]);
+            expect(actual).toEqual([1, 2, 3, 1, 2, 3]);
         });
         it('returns properly while binding a context properly', function () {
             var ret;
             testSubject.func = func.bind(actual);
-            ret = testSubject.func(1,2,3);
+            ret = testSubject.func(1, 2, 3);
             expect(ret).toBe(actual);
             expect(ret).not.toBe(testSubject);
         });
         it('returns properly while binding a context and supplies bound arguments', function () {
             var ret;
-            testSubject.func = func.bind(actual, 1,2,3);
-            ret = testSubject.func(4,5,6);
+            testSubject.func = func.bind(actual, 1, 2, 3);
+            ret = testSubject.func(4, 5, 6);
             expect(ret).toBe(actual);
             expect(ret).not.toBe(testSubject);
         });

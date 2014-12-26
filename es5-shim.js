@@ -726,6 +726,7 @@ defineProperties(ArrayPrototype, {
 // http://whattheheadsaid.com/2010/10/a-safer-object-keys-compatibility-implementation
 var hasDontEnumBug = !({'toString': null}).propertyIsEnumerable('toString'),
     hasProtoEnumBug = function () {}.propertyIsEnumerable('prototype'),
+    hasStringEnumBug = !'x'.propertyIsEnumerable('0'),
     dontEnums = [
         'toString',
         'toLocaleString',
@@ -750,7 +751,7 @@ defineProperties(Object, {
 
         var theKeys = [];
         var skipProto = hasProtoEnumBug && isFn;
-        if (isStr || isArgs) {
+        if ((isStr && hasStringEnumBug) || isArgs) {
             for (var i = 0; i < object.length; ++i) {
                 theKeys.push(String(i));
             }

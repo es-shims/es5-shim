@@ -74,17 +74,15 @@ describe('Object', function () {
         describe('enumerating over non-enumerable properties', function () {
              it('has no enumerable keys on a Function', function () {
                  var Foo = function () {};
-                 expect(Object.keys(Foo)).toEqual([]);
+                 expect(Object.keys(Foo.prototype)).toEqual([]);
              });
 
              it('has no enumerable keys on a boolean', function () {
-                 var bool = new Boolean();
-                 expect(Object.keys(bool)).toEqual([]);
+                 expect(Object.keys(Boolean.prototype)).toEqual([]);
              });
 
              it('has no enumerable keys on an object', function () {
-                 var obj = new Object();
-                 expect(Object.keys(obj)).toEqual([]);
+                 expect(Object.keys(Object.prototype)).toEqual([]);
              });
         });
 

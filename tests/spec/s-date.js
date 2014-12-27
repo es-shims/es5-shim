@@ -1,4 +1,7 @@
+/*global describe, it, expect, beforeEach */
+
 describe('Date', function () {
+    'use strict';
 
     describe('now', function () {
         it('should be the current time', function () {

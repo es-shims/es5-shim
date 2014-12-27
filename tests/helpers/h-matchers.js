@@ -1,4 +1,7 @@
+/*global beforeEach, expect */
+
 beforeEach(function () {
+    'use strict';
     this.addMatchers({
         toExactlyMatch: function (expected) {
             var a1, a2,
@@ -32,4 +35,3 @@ beforeEach(function () {
         }
     });
 });
-

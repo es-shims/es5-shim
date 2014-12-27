@@ -1,3 +1,5 @@
+/*global describe, it, expect */
+
 describe('global methods', function () {
     'use strict';
 
@@ -43,4 +45,3 @@ describe('global methods', function () {
        });
     });
 });
-

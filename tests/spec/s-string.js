@@ -1,3 +1,5 @@
+/*global describe, it, expect */
+
 describe('String', function () {
     'use strict';
     describe('trim', function () {

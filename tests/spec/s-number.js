@@ -1,3 +1,5 @@
+/*global describe, it, expect */
+
 describe('Number', function () {
     'use strict';
 

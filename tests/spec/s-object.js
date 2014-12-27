@@ -1,3 +1,5 @@
+/*global describe, it, expect, beforeEach */
+
 describe('Object', function () {
     'use strict';
 
@@ -57,14 +59,14 @@ describe('Object', function () {
         it('should return names which are enumerable', function () {
             keys.forEach(function (name) {
                 expect(loopedValues.indexOf(name)).toNotBe(-1);
-            })
+            });
         });
 
         it('should throw error for non object', function () {
             var e = {};
             expect(function () {
                 try {
-                    Object.keys(42)
+                    Object.keys(42);
                 } catch (err) {
                     throw e;
                 }
@@ -87,12 +89,11 @@ describe('Object', function () {
         });
 
         it('works with boxed primitives', function () {
-            expect(Object.keys(new String('hello'))).toEqual(['0', '1', '2', '3', '4']);
             expect(Object.keys(Object('hello'))).toEqual(['0', '1', '2', '3', '4']);
         });
 
         it('works with boxed primitives with extra properties', function () {
-            var x = new String('x');
+            var x = Object('x');
             x.y = 1;
             var actual = Object.keys(x);
             var expected = ['0', 'y'];
@@ -125,7 +126,7 @@ describe('Object', function () {
             var e1 = {};
             expect(function () {
                 try {
-                    Object.isExtensible(42)
+                    Object.isExtensible(42);
                 } catch (err) {
                     throw e1;
                 }
@@ -186,7 +187,7 @@ describe('Object', function () {
         it('should return undefined because the object does not own the property', function () {
             var descr = Object.getOwnPropertyDescriptor({}, 'name');
 
-            expect(descr).toBeUndefined()
+            expect(descr).toBeUndefined();
         });
 
         it('should return a data descriptor', function () {
@@ -202,7 +203,7 @@ describe('Object', function () {
         it('should return undefined because the object does not own the property', function () {
             var descr = Object.getOwnPropertyDescriptor(Object.create({name: 'Testing'}, {}), 'name');
 
-            expect(descr).toBeUndefined()
+            expect(descr).toBeUndefined();
         });
 
         it('should return a data descriptor', function () {

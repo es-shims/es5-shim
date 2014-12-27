@@ -1,3 +1,5 @@
+/*global describe, it, expect, beforeEach */
+
 describe('Function', function () {
     'use strict';
 
@@ -5,16 +7,15 @@ describe('Function', function () {
         it('works with arraylike objects', function () {
             var arrayLike = { length: 4, 0: 1, 2: 4, 3: true };
             var expectedArray = [1, undefined, 4, true];
-            var actualArray;
-            (function () {
-                actualArray = Array.prototype.slice.apply(arguments);
-            }).apply(null, arrayLike);
+            var actualArray = (function () {
+                return Array.prototype.slice.apply(arguments);
+            }.apply(null, arrayLike));
             expect(actualArray).toEqual(expectedArray);
         });
     });
 
     describe('bind', function () {
-        var actual, expected;
+        var actual;
 
         var testSubject = {
             push: function (o) {
@@ -103,19 +104,22 @@ describe('Function', function () {
                 actualContext = this;
             }.bind(expectedContext);
             var result = new testSubject.func();
+            expect(result).toBeTruthy();
             expect(actualContext).not.toBe(expectedContext);
         });
         it('passes the correct arguments as a constructor', function () {
-            var ret, expected = { name: 'Correct' };
+            var expected = { name: 'Correct' };
             testSubject.func = function (arg) {
+                expect(this.hasOwnProperty('name')).toBe(false);
                 return arg;
             }.bind({ name: 'Incorrect' });
-            ret = new testSubject.func(expected);
+            var ret = new testSubject.func(expected);
             expect(ret).toBe(expected);
         });
         it('returns the return value of the bound function when called as a constructor', function () {
             var oracle = [1, 2, 3];
             var Subject = function () {
+                expect(this).not.toBe(oracle);
                 return oracle;
             }.bind(null);
             var result = new Subject();
@@ -124,6 +128,7 @@ describe('Function', function () {
         it('returns the correct value if constructor returns primitive', function () {
             var oracle = [1, 2, 3];
             var Subject = function () {
+                expect(this).not.toBe(oracle);
                 return oracle;
             }.bind(null);
             var result = new Subject();
@@ -168,11 +173,11 @@ describe('Function', function () {
             expect(Subject.length).toBe(3);
         });
         it('sets a correct length with thisArg', function () {
-            var Subject = function (a, b, c) { return a + b + c; }.bind({});
+            var Subject = function (a, b, c) { return a + b + c + this.d; }.bind({ d: 1 });
             expect(Subject.length).toBe(3);
         });
         it('sets a correct length with thisArg and first argument', function () {
-            var Subject = function (a, b, c) { return a + b + c; }.bind({}, 1);
+            var Subject = function (a, b, c) { return a + b + c + this.d; }.bind({ d: 1 }, 1);
             expect(Subject.length).toBe(2);
         });
         it('sets a correct length without thisArg and first argument', function () {

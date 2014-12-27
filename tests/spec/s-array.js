@@ -1,5 +1,7 @@
-var toString = Object.prototype.toString;
-var canDistinguishSparseFromUndefined = 0 in [undefined]; // IE 6 - 8 have a bug where this returns false.
+/*global describe, it, expect, beforeEach, jasmine, xit */
+
+var toStr = Object.prototype.toString;
+// var canDistinguishSparseFromUndefined = 0 in [undefined]; // IE 6 - 8 have a bug where this returns false.
 var hasStrictMode = (function () {
   'use strict';
    return !this;
@@ -34,13 +36,13 @@ describe('Array', function () {
             expect(callback).toHaveBeenCalledWith('1', 0, array);
         });
         it('should not affect elements added to the array after it has begun', function () {
-            var arr = [1,2,3],
+            var arr = [1, 2, 3],
                 i = 0;
             arr.forEach(function (a) {
                 i++;
                 arr.push(a + 3);
             });
-            expect(arr).toEqual([1,2,3,4,5,6]);
+            expect(arr).toEqual([1, 2, 3, 4, 5, 6]);
             expect(i).toBe(3);
         });
 
@@ -105,7 +107,7 @@ describe('Array', function () {
                 actual = list;
             });
             expect(typeof actual).toBe('object');
-            expect(toString.call(actual)).toBe('[object String]');
+            expect(toStr.call(actual)).toBe('[object String]');
         });
         if (hasStrictMode) {
             it('does not autobox the content in strict mode', function () {
@@ -134,14 +136,14 @@ describe('Array', function () {
             expect(callback).toHaveBeenCalledWith('1', 0, array);
         });
         it('should not affect elements added to the array after it has begun', function () {
-            var arr = [1,2,3],
+            var arr = [1, 2, 3],
                 i = 0;
             arr.some(function (a) {
                 i++;
                 arr.push(a + 3);
                 return i > 3;
             });
-            expect(arr).toEqual([1,2,3,4,5,6]);
+            expect(arr).toEqual([1, 2, 3, 4, 5, 6]);
             expect(i).toBe(3);
         });
         it('should set the right context when given none', function () {
@@ -206,7 +208,7 @@ describe('Array', function () {
                 actual = list;
             });
             expect(typeof actual).toBe('object');
-            expect(toString.call(actual)).toBe('[object String]');
+            expect(toStr.call(actual)).toBe('[object String]');
         });
     });
     describe('every', function () {
@@ -225,14 +227,14 @@ describe('Array', function () {
             expect(callback).toHaveBeenCalledWith('1', 0, array);
         });
         it('should not affect elements added to the array after it has begun', function () {
-            var arr = [1,2,3],
+            var arr = [1, 2, 3],
                 i = 0;
             arr.every(function (a) {
                 i++;
                 arr.push(a + 3);
                 return i <= 3;
             });
-            expect(arr).toEqual([1,2,3,4,5,6]);
+            expect(arr).toEqual([1, 2, 3, 4, 5, 6]);
             expect(i).toBe(3);
         });
         it('should set the right context when given none', function () {
@@ -249,11 +251,11 @@ describe('Array', function () {
             expect(actual).toBeTruthy();
         });
         it('should return true if it runs to the end', function () {
-            actual = [1,2,3].every(function () { return true; });
+            actual = [1, 2, 3].every(function () { return true; });
             expect(actual).toBeTruthy();
         });
         it('should return false if it is stopped before the end', function () {
-            actual = [1,2,3].every(function () { return false; });
+            actual = [1, 2, 3].every(function () { return false; });
             expect(actual).toBeFalsy();
         });
 
@@ -300,7 +302,7 @@ describe('Array', function () {
                 actual = list;
             });
             expect(typeof actual).toBe('object');
-            expect(toString.call(actual)).toBe('[object String]');
+            expect(toStr.call(actual)).toBe('[object String]');
         });
     });
 
@@ -363,7 +365,7 @@ describe('Array', function () {
             beforeEach(function beforeEach() {
                 testAL = {};
                 testSubject = [2, 3, undefined, true, 'hej', null, 2, false, 0];
-                testSubject.forEach(function (o,i) {
+                testSubject.forEach(function (o, i) {
                     testAL[i] = o;
                 });
                 testAL.length = testSubject.length;
@@ -414,7 +416,7 @@ describe('Array', function () {
     });
     describe('lastIndexOf', function () {
         'use strict';
-        var actual, expected, testSubject, testAL;
+        var actual, expected, testSubject;
 
         beforeEach(function () {
             testSubject = [2, 3, undefined, true, 'hej', null, 2, 3, false, 0];
@@ -471,7 +473,7 @@ describe('Array', function () {
                 testAL;
             beforeEach(function () {
                 testAL = {};
-                testSubject.forEach(function (o,i) {
+                testSubject.forEach(function (o, i) {
                     testAL[i] = o;
                 });
                 testAL.length = testSubject.length;
@@ -523,7 +525,7 @@ describe('Array', function () {
 
     describe('filter', function () {
         var filteredArray,
-            callback = function callback(o, i, arr) {
+            callback = function callback(o, i) {
                 return i !== 3 && i !== 5;
             };
 
@@ -535,14 +537,14 @@ describe('Array', function () {
         describe('Array object', function () {
 
             it('should call the callback with the proper arguments', function () {
-                var callback = jasmine.createSpy('callback'),
-                    arr = ['1'];
+                var callback = jasmine.createSpy('callback');
+                var arr = ['1'];
                 arr.filter(callback);
                 expect(callback).toHaveBeenCalledWith('1', 0, arr);
             });
             it('should not affect elements added to the array after it has begun', function () {
-                var arr = [1,2,3],
-                    i = 0;
+                var arr = [1, 2, 3];
+                var i = 0;
                 arr.filter(function (a) {
                     i++;
                     if (i <= 4) {
@@ -550,12 +552,12 @@ describe('Array', function () {
                     }
                     return true;
                 });
-                expect(arr).toEqual([1,2,3,4,5,6]);
+                expect(arr).toEqual([1, 2, 3, 4, 5, 6]);
                 expect(i).toBe(3);
             });
             it('should skip non-set values', function () {
                 var passedValues = {};
-                testSubject = [1,2,3,4];
+                testSubject = [1, 2, 3, 4];
                 delete testSubject[1];
                 testSubject.filter(function (o, i) {
                     passedValues[i] = o;
@@ -565,7 +567,7 @@ describe('Array', function () {
             });
             it('should pass the right context to the filter', function () {
                 var passedValues = {};
-                testSubject = [1,2,3,4];
+                testSubject = [1, 2, 3, 4];
                 delete testSubject[1];
                 testSubject.filter(function (o, i) {
                     this[i] = o;
@@ -606,7 +608,7 @@ describe('Array', function () {
                 expect(callback).toHaveBeenCalledWith('1', 0, arr);
             });
             it('should not affect elements added to the array after it has begun', function () {
-                var arr = createArrayLikeFromArray([1,2,3]),
+                var arr = createArrayLikeFromArray([1, 2, 3]),
                     i = 0;
                 Array.prototype.filter.call(arr, function (a) {
                     i++;
@@ -616,12 +618,12 @@ describe('Array', function () {
                     return true;
                 });
                 delete arr.length;
-                expect(arr).toExactlyMatch([1,2,3,4,5,6]);
+                expect(arr).toExactlyMatch([1, 2, 3, 4, 5, 6]);
                 expect(i).toBe(3);
             });
             it('should skip non-set values', function () {
                 var passedValues = {};
-                testSubject = createArrayLikeFromArray([1,2,3,4]);
+                testSubject = createArrayLikeFromArray([1, 2, 3, 4]);
                 delete testSubject[1];
                 Array.prototype.filter.call(testSubject, function (o, i) {
                     passedValues[i] = o;
@@ -637,7 +639,7 @@ describe('Array', function () {
             });
             it('should pass the right context to the filter', function () {
                 var passedValues = {};
-                testSubject = createArrayLikeFromArray([1,2,3,4]);
+                testSubject = createArrayLikeFromArray([1, 2, 3, 4]);
                 delete testSubject[1];
                 Array.prototype.filter.call(testSubject, function (o, i) {
                     this[i] = o;
@@ -662,7 +664,7 @@ describe('Array', function () {
                 actual = list;
             });
             expect(typeof actual).toBe('object');
-            expect(toString.call(actual)).toBe('[object String]');
+            expect(toStr.call(actual)).toBe('[object String]');
         });
     });
     describe('map', function () {
@@ -682,14 +684,14 @@ describe('Array', function () {
             });
             it('should set the context correctly', function () {
                 var context = {};
-                testSubject.map(function (o,i) {
+                testSubject.map(function (o, i) {
                     this[i] = o;
                 }, context);
                 expect(context).toExactlyMatch(testSubject);
             });
             it('should set the right context when given none', function () {
                 var context;
-                [1].map(function () {context = this;});
+                [1].map(function () { context = this; });
                 expect(context).toBe(function () { return this; }.call());
             });
             it('should not change the array it is called on', function () {
@@ -698,7 +700,7 @@ describe('Array', function () {
                 expect(testSubject).toExactlyMatch(copy);
             });
             it('should only run for the number of objects in the array when it started', function () {
-                var arr = [1,2,3],
+                var arr = [1, 2, 3],
                     i = 0;
                 arr.map(function (o) {
                     arr.push(o + 3);
@@ -736,7 +738,7 @@ describe('Array', function () {
             });
             it('should set the context correctly', function () {
                 var context = {};
-                Array.prototype.map.call(testSubject, function (o,i) {
+                Array.prototype.map.call(testSubject, function (o, i) {
                     this[i] = o;
                 }, context);
                 delete testSubject.length;
@@ -761,17 +763,17 @@ describe('Array', function () {
                     return o;
                 });
                 delete arr.length;
-                expect(arr).toExactlyMatch([1,2,3,4,5,6]);
+                expect(arr).toExactlyMatch([1, 2, 3, 4, 5, 6]);
                 expect(i).toBe(3);
             });
             it('should properly translate the values as according to the callback', function () {
                 var result = Array.prototype.map.call(testSubject, callback),
-                    expected = [0,0,1,2,3,4,5,6];
+                    expected = [0, 0, 1, 2, 3, 4, 5, 6];
                 delete expected[1];
                 expect(result).toExactlyMatch(expected);
             });
             it('should skip non-existing values', function () {
-                var array = createArrayLikeFromArray([1,2,3,4]),
+                var array = createArrayLikeFromArray([1, 2, 3, 4]),
                     i = 0;
                 delete array[2];
                 Array.prototype.map.call(array, function () {
@@ -786,13 +788,13 @@ describe('Array', function () {
                 actual = list;
             });
             expect(typeof actual).toBe('object');
-            expect(toString.call(actual)).toBe('[object String]');
+            expect(toStr.call(actual)).toBe('[object String]');
         });
     });
 
     describe('reduce', function () {
         beforeEach(function () {
-            testSubject = [1,2,3];
+            testSubject = [1, 2, 3];
         });
 
         describe('Array', function () {
@@ -807,7 +809,7 @@ describe('Array', function () {
                 expect(spy.calls[0].args).toExactlyMatch([0, 1, 0, testSubject]);
             });
             it('should not affect elements added to the array after it has begun', function () {
-                var arr = [1,2,3],
+                var arr = [1, 2, 3],
                     i = 0;
                 arr.reduce(function (a, b) {
                     i++;
@@ -816,7 +818,7 @@ describe('Array', function () {
                     }
                     return b;
                 });
-                expect(arr).toEqual([1,2,3,4,5]);
+                expect(arr).toEqual([1, 2, 3, 4, 5]);
                 expect(i).toBe(2);
             });
             it('should work as expected for empty arrays', function () {
@@ -874,7 +876,7 @@ describe('Array', function () {
                 expect(spy.calls[0].args).toExactlyMatch([0, 1, 0, testSubject]);
             });
             it('should not affect elements added to the array after it has begun', function () {
-                var arr = createArrayLikeFromArray([1,2,3]),
+                var arr = createArrayLikeFromArray([1, 2, 3]),
                     i = 0;
                 Array.prototype.reduce.call(arr, function (a, b) {
                     i++;
@@ -915,7 +917,7 @@ describe('Array', function () {
                 testSubject.reduce(function (a, b) {
                     return a + b;
                 });
-                delete(testSubject.reduce);
+                delete testSubject.reduce;
                 expect(testSubject).toEqual(copy);
             });
             it('should skip non-set values', function () {
@@ -939,12 +941,12 @@ describe('Array', function () {
                 actual = list;
             });
             expect(typeof actual).toBe('object');
-            expect(toString.call(actual)).toBe('[object String]');
+            expect(toStr.call(actual)).toBe('[object String]');
         });
     });
     describe('reduceRight', function () {
         beforeEach(function () {
-            testSubject = [1,2,3];
+            testSubject = [1, 2, 3];
         });
 
         describe('Array', function () {
@@ -959,7 +961,7 @@ describe('Array', function () {
                 expect(spy.calls[0].args).toExactlyMatch([0, 3, 2, testSubject]);
             });
             it('should not affect elements added to the array after it has begun', function () {
-                var arr = [1,2,3],
+                var arr = [1, 2, 3],
                     i = 0;
                 arr.reduceRight(function (a, b) {
                     i++;
@@ -968,7 +970,7 @@ describe('Array', function () {
                     }
                     return b;
                 });
-                expect(arr).toEqual([1,2,3,6,5]);
+                expect(arr).toEqual([1, 2, 3, 6, 5]);
                 expect(i).toBe(2);
             });
             it('should work as expected for empty arrays', function () {
@@ -1034,7 +1036,7 @@ describe('Array', function () {
                 expect(spy.calls[0].args).toExactlyMatch([0, 3, 2, testSubject]);
             });
             it('should not affect elements added to the array after it has begun', function () {
-                var arr = createArrayLikeFromArray([1,2,3]),
+                var arr = createArrayLikeFromArray([1, 2, 3]),
                     i = 0;
                 Array.prototype.reduceRight.call(arr, function (a, b) {
                     i++;
@@ -1056,7 +1058,7 @@ describe('Array', function () {
             it('should work as expected for empty arrays', function () {
                 var spy = jasmine.createSpy();
                 expect(function () {
-                    Array.prototype.reduceRight.call({length:0}, spy);
+                    Array.prototype.reduceRight.call({ length: 0 }, spy);
                 }).toThrow();
                 expect(spy).not.toHaveBeenCalled();
             });
@@ -1075,7 +1077,7 @@ describe('Array', function () {
                 testSubject.reduceRight(function (a, b) {
                     return a + b;
                 });
-                delete(testSubject.reduceRight);
+                delete testSubject.reduceRight;
                 expect(testSubject).toEqual(copy);
             });
             it('should skip non-set values', function () {
@@ -1099,7 +1101,7 @@ describe('Array', function () {
                 actual = list;
             });
             expect(typeof actual).toBe('object');
-            expect(toString.call(actual)).toBe('[object String]');
+            expect(toStr.call(actual)).toBe('[object String]');
         });
     });
 
@@ -1140,6 +1142,7 @@ describe('Array', function () {
             });
         });
 
+        /*globals document */
         if (typeof document !== 'undefined') {
             it('should be false for an HTML element', function () {
                 var el = document.getElementsByTagName('div');

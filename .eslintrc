@@ -24,7 +24,7 @@
         "no-native-reassign": [0],
         "no-nested-ternary": [0],
         "no-reserved-keys": [2],
-        "no-shadow": [0],
+        "no-shadow": [2],
         "no-unused-vars": [1, { "vars": "all", "args": "after-used" }],
         "space-after-function-name": [2, "never"],
         "space-after-keywords": [2, "always", { "checkFunctionKeyword": true }],

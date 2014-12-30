@@ -102,21 +102,21 @@ describe('Array', function () {
             });
         });
         it('should have a boxed object as list argument of callback', function () {
-            var actual;
+            var listArg;
             Array.prototype.forEach.call('foo', function (item, index, list) {
-                actual = list;
+                listArg = list;
             });
-            expect(typeof actual).toBe('object');
-            expect(toStr.call(actual)).toBe('[object String]');
+            expect(typeof listArg).toBe('object');
+            expect(toStr.call(listArg)).toBe('[object String]');
         });
         if (hasStrictMode) {
             it('does not autobox the content in strict mode', function () {
-                var actual;
+                var context;
                 [1].forEach(function () {
                     'use strict';
-                    actual = this;
+                    context = this;
                 }, 'x');
-                expect(typeof actual).toBe('string');
+                expect(typeof context).toBe('string');
             });
         }
     });
@@ -203,12 +203,12 @@ describe('Array', function () {
             expect(actual).toExactlyMatch(expected);
         });
         it('should have a boxed object as list argument of callback', function () {
-            var actual;
+            var listArg;
             Array.prototype.some.call('foo', function (item, index, list) {
-                actual = list;
+                listArg = list;
             });
-            expect(typeof actual).toBe('object');
-            expect(toStr.call(actual)).toBe('[object String]');
+            expect(typeof listArg).toBe('object');
+            expect(toStr.call(listArg)).toBe('[object String]');
         });
     });
     describe('every', function () {
@@ -297,18 +297,18 @@ describe('Array', function () {
             expect(actual).toExactlyMatch(expected);
         });
         it('should have a boxed object as list argument of callback', function () {
-            var actual;
+            var listArg;
             Array.prototype.every.call('foo', function (item, index, list) {
-                actual = list;
+                listArg = list;
             });
-            expect(typeof actual).toBe('object');
-            expect(toStr.call(actual)).toBe('[object String]');
+            expect(typeof listArg).toBe('object');
+            expect(toStr.call(listArg)).toBe('[object String]');
         });
     });
 
     describe('indexOf', function () {
         'use strict';
-        var actual, expected, testSubject;
+        var actual, expected;
 
         beforeEach(function () {
             testSubject = [2, 3, undefined, true, 'hej', null, 2, false, 0];
@@ -416,7 +416,7 @@ describe('Array', function () {
     });
     describe('lastIndexOf', function () {
         'use strict';
-        var actual, expected, testSubject;
+        var actual, expected;
 
         beforeEach(function () {
             testSubject = [2, 3, undefined, true, 'hej', null, 2, 3, false, 0];
@@ -537,10 +537,10 @@ describe('Array', function () {
         describe('Array object', function () {
 
             it('should call the callback with the proper arguments', function () {
-                var callback = jasmine.createSpy('callback');
+                var predicate = jasmine.createSpy('predicate');
                 var arr = ['1'];
-                arr.filter(callback);
-                expect(callback).toHaveBeenCalledWith('1', 0, arr);
+                arr.filter(predicate);
+                expect(predicate).toHaveBeenCalledWith('1', 0, arr);
             });
             it('should not affect elements added to the array after it has begun', function () {
                 var arr = [1, 2, 3];
@@ -601,11 +601,11 @@ describe('Array', function () {
             beforeEach(function () {
                 testSubject = createArrayLikeFromArray(testSubject);
             });
-            it('should call the callback with the proper arguments', function () {
-                var callback = jasmine.createSpy('callback'),
-                    arr = createArrayLikeFromArray(['1']);
-                Array.prototype.filter.call(arr, callback);
-                expect(callback).toHaveBeenCalledWith('1', 0, arr);
+            it('should call the predicate with the proper arguments', function () {
+                var predicate = jasmine.createSpy('predicate');
+                var arr = createArrayLikeFromArray(['1']);
+                Array.prototype.filter.call(arr, predicate);
+                expect(predicate).toHaveBeenCalledWith('1', 0, arr);
             });
             it('should not affect elements added to the array after it has begun', function () {
                 var arr = createArrayLikeFromArray([1, 2, 3]),
@@ -676,11 +676,11 @@ describe('Array', function () {
             };
         });
         describe('Array object', function () {
-            it('should call callback with the right parameters', function () {
-                var callback = jasmine.createSpy('callback'),
-                    array = [1];
-                array.map(callback);
-                expect(callback).toHaveBeenCalledWith(1, 0, array);
+            it('should call mapper with the right parameters', function () {
+                var mapper = jasmine.createSpy('mapper');
+                var array = [1];
+                array.map(mapper);
+                expect(mapper).toHaveBeenCalledWith(1, 0, array);
             });
             it('should set the context correctly', function () {
                 var context = {};
@@ -730,11 +730,11 @@ describe('Array', function () {
             beforeEach(function () {
                 testSubject = createArrayLikeFromArray(testSubject);
             });
-            it('should call callback with the right parameters', function () {
-                var callback = jasmine.createSpy('callback'),
-                    array = createArrayLikeFromArray([1]);
-                Array.prototype.map.call(array, callback);
-                expect(callback).toHaveBeenCalledWith(1, 0, array);
+            it('should call mapper with the right parameters', function () {
+                var mapper = jasmine.createSpy('mapper');
+                var array = createArrayLikeFromArray([1]);
+                Array.prototype.map.call(array, mapper);
+                expect(mapper).toHaveBeenCalledWith(1, 0, array);
             });
             it('should set the context correctly', function () {
                 var context = {};
@@ -1158,17 +1158,17 @@ describe('Array', function () {
     });
 
     describe('splice', function () {
-        var b = ['b'],
-            a = [1, 'a', b],
-            test;
+        var b = ['b'];
+        var a = [1, 'a', b];
+        var test;
 
         var makeArray = function (l, prefix) {
             prefix = prefix || '';
-            var a = [];
+            var arr = [];
             while (l--) {
-                a.unshift(prefix + Array(l + 1).join(' ') + l);
+                arr.unshift(prefix + Array(l + 1).join(' ') + l);
             }
-            return a;
+            return arr;
         };
 
         beforeEach(function () {

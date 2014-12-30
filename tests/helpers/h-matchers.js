@@ -1,23 +1,23 @@
 /*global beforeEach, expect */
 
+var has = Object.prototype.hasOwnProperty;
+var getKeys = function (o) {
+    var key, a = [];
+    for (key in o) {
+        if (has.call(o, key)) {
+            a.push(key);
+        }
+    }
+    return a;
+};
+
 beforeEach(function () {
     'use strict';
     this.addMatchers({
         toExactlyMatch: function (expected) {
-            var a1, a2,
-                l, i,
-                key,
-                actual = this.actual;
+            var a1, a2, l, i, key;
+            var actual = this.actual;
 
-            var getKeys = function (o) {
-                var key, a = [];
-                for (key in o) {
-                    if (o.hasOwnProperty(key)) {
-                        a.push(key);
-                    }
-                }
-                return a;
-            };
             a1 = getKeys(actual);
             a2 = getKeys(expected);
 

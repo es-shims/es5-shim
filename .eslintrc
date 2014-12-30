@@ -1,9 +1,17 @@
 {
+    "env": {
+        "browser": false,
+        "node": false,
+        "amd": false,
+        "mocha": false,
+        "jasmine": false
+    },
     "rules": {
         "brace-style": [2, "1tbs", { "allowSingleLine": true }],
         "camelcase": [0],
         "comma-style": [2, "last"],
         "default-case": [2],
+        "dot-notation": [2, { "allowKeywords": true }],
         "eol-last": [2],
         "func-style": [0, "expression"],
         "quotes": [2, "single", "avoid-escape"],
@@ -18,6 +26,7 @@
         "no-reserved-keys": [2],
         "no-shadow": [0],
         "no-unused-vars": [1, { "vars": "all", "args": "after-used" }],
+        "space-after-function-name": [2, "never"],
         "space-after-keywords": [2, "always", { "checkFunctionKeyword": true }],
         "space-in-brackets": [0, "always", {
             "singleValue": false,
@@ -30,7 +39,7 @@
         "strict": [1],
         "wrap-iife": [2],
         "wrap-regex": [2],
-        "yoda": [1, "never", { "exceptRange": true }]
+        "yoda": [2, "never", { "exceptRange": true }]
     }
 }
 

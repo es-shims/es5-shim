@@ -7,9 +7,7 @@
 // vim: ts=4 sts=4 sw=4 expandtab
 
 // Add semicolon to prevent IIFE from being passed as argument to concatenated code.
-/*eslint-disable no-extra-semi */
 ;
-/*eslint-enable no-extra-semi */
 
 // UMD (Universal Module Definition)
 // see https://github.com/umdjs/umd/blob/master/returnExports.js
@@ -831,7 +829,7 @@ defineProperties(Date.prototype, {
         result = [month + 1, this.getUTCDate(), this.getUTCHours(), this.getUTCMinutes(), this.getUTCSeconds()];
         year = (
             (year < 0 ? '-' : (year > 9999 ? '+' : '')) +
-            ('00000' + Math.abs(year)).slice(0 <= year && year <= 9999 ? -4 : -6)
+            ('00000' + Math.abs(year)).slice((0 <= year && year <= 9999) ? -4 : -6)
         );
 
         length = result.length;

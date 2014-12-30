@@ -7,9 +7,7 @@
 // vim: ts=4 sts=4 sw=4 expandtab
 
 //Add semicolon to prevent IIFE from being passed as argument to concated code.
-/*eslint-disable no-extra-semi */
 ;
-/*eslint-enable no-extra-semi */
 
 // UMD (Universal Module Definition)
 // see https://github.com/umdjs/umd/blob/master/returnExports.js

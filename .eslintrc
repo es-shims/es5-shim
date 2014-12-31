@@ -11,7 +11,7 @@
         "camelcase": [0],
         "comma-style": [2, "last"],
         "default-case": [2],
-        "dot-notation": [2, { "allowKeywords": true }],
+        "dot-notation": [2, { "allowKeywords": false }],
         "eol-last": [2],
         "func-style": [0, "expression"],
         "quotes": [2, "single", "avoid-escape"],

@@ -66,7 +66,7 @@ simply `npm install` and `npm test`.
     engines.
 
     :warning: The second argument is passed to Object.defineProperties
-    which will probably fail either silently or with extreme predudice.
+    which will probably fail either silently or with extreme prejudice.
 
 * :warning: Object.getPrototypeOf
 
@@ -132,7 +132,7 @@ simply `npm install` and `npm test`.
 
 * :warning: Object.defineProperties
 
-    This uses the Object.defineProperty shim
+    This uses the Object.defineProperty shim.
 
 * Object.seal
 

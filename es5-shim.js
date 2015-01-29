@@ -53,18 +53,15 @@ var call = FunctionPrototype.call;
 // Having a toString local variable name breaks in Opera so use to_string.
 var to_string = ObjectPrototype.toString;
 
-var isFunction = function (val) {
-    return to_string.call(val) === '[object Function]';
-};
-var isRegex = function (val) {
-    return to_string.call(val) === '[object RegExp]';
-};
 var isArray = Array.isArray || function isArray(obj) {
     return to_string.call(obj) === '[object Array]';
 };
-var isString = function isString(obj) {
-    return to_string.call(obj) === '[object String]';
-};
+
+var hasToStringTag = typeof Symbol === 'function' && typeof Symbol.toStringTag === 'symbol';
+var isCallable; /* inlined from https://npmjs.com/is-callable */ var fnToStr = Function.prototype.toString, tryFunctionObject = function tryFunctionObject(value) { try { fnToStr.call(value); return true; } catch (e) { return false; } }, fnClass = '[object Function]', genClass = '[object GeneratorFunction]'; isCallable = function isCallable(value) { if (typeof value !== 'function') { return false; } if (hasToStringTag) { return tryFunctionObject(value); } var strClass = to_string.call(value); return strClass === fnClass || strClass === genClass; };
+var isRegex; /* inlined from https://npmjs.com/is-regex */ var regexExec = RegExp.prototype.exec, tryRegexExec = function tryRegexExec(value) { try { regexExec.call(value); return true; } catch (e) { return false; } }, regexClass = '[object RegExp]'; isRegex = function isRegex(value) { if (typeof value !== 'object') { return false; } return hasToStringTag ? tryRegexExec(value) : to_string.call(value) === regexClass; };
+var isString; /* inlined from https://npmjs.com/is-string */ var strValue = String.prototype.valueOf, tryStringObject = function tryStringObject(value) { try { strValue.call(value); return true; } catch (e) { return false; } }, stringClass = '[object String]'; isString = function isString(value) { if (typeof value === 'string') { return true; } if (typeof value !== 'object') { return false; } return hasToStringTag ? tryStringObject(value) : to_string.call(value) === stringClass; };
+
 var isArguments = function isArguments(value) {
     var str = to_string.call(value);
     var isArgs = str === '[object Arguments]';
@@ -74,7 +71,7 @@ var isArguments = function isArguments(value) {
           typeof value === 'object' &&
           typeof value.length === 'number' &&
           value.length >= 0 &&
-          isFunction(value.callee);
+          isCallable(value.callee);
     }
     return isArgs;
 };
@@ -155,14 +152,14 @@ var ES = {
             return input;
         }
         valueOf = input.valueOf;
-        if (isFunction(valueOf)) {
+        if (isCallable(valueOf)) {
             val = valueOf.call(input);
             if (isPrimitive(val)) {
                 return val;
             }
         }
         toStr = input.toString;
-        if (isFunction(toStr)) {
+        if (isCallable(toStr)) {
             val = toStr.call(input);
             if (isPrimitive(val)) {
                 return val;
@@ -203,7 +200,7 @@ defineProperties(FunctionPrototype, {
         // 1. Let Target be the this value.
         var target = this;
         // 2. If IsCallable(Target) is false, throw a TypeError exception.
-        if (!isFunction(target)) {
+        if (!isCallable(target)) {
             throw new TypeError('Function.prototype.bind called on incompatible ' + target);
         }
         // 3. Let A be a new (possibly empty) internal list of all of the
@@ -446,7 +443,7 @@ defineProperties(ArrayPrototype, {
             length = self.length >>> 0;
 
         // If no callback function or if callback is not a callable function
-        if (!isFunction(fun)) {
+        if (!isCallable(fun)) {
             throw new TypeError(); // TODO message
         }
 
@@ -473,7 +470,7 @@ defineProperties(ArrayPrototype, {
             thisp = arguments[1];
 
         // If no callback function or if callback is not a callable function
-        if (!isFunction(fun)) {
+        if (!isCallable(fun)) {
             throw new TypeError(fun + ' is not a function');
         }
 
@@ -499,7 +496,7 @@ defineProperties(ArrayPrototype, {
             thisp = arguments[1];
 
         // If no callback function or if callback is not a callable function
-        if (!isFunction(fun)) {
+        if (!isCallable(fun)) {
             throw new TypeError(fun + ' is not a function');
         }
 
@@ -526,7 +523,7 @@ defineProperties(ArrayPrototype, {
             thisp = arguments[1];
 
         // If no callback function or if callback is not a callable function
-        if (!isFunction(fun)) {
+        if (!isCallable(fun)) {
             throw new TypeError(fun + ' is not a function');
         }
 
@@ -550,7 +547,7 @@ defineProperties(ArrayPrototype, {
             thisp = arguments[1];
 
         // If no callback function or if callback is not a callable function
-        if (!isFunction(fun)) {
+        if (!isCallable(fun)) {
             throw new TypeError(fun + ' is not a function');
         }
 
@@ -577,7 +574,7 @@ defineProperties(ArrayPrototype, {
             length = self.length >>> 0;
 
         // If no callback function or if callback is not a callable function
-        if (!isFunction(fun)) {
+        if (!isCallable(fun)) {
             throw new TypeError(fun + ' is not a function');
         }
 
@@ -628,7 +625,7 @@ defineProperties(ArrayPrototype, {
             length = self.length >>> 0;
 
         // If no callback function or if callback is not a callable function
-        if (!isFunction(fun)) {
+        if (!isCallable(fun)) {
             throw new TypeError(fun + ' is not a function');
         }
 
@@ -749,7 +746,7 @@ var hasDontEnumBug = !({'toString': null}).propertyIsEnumerable('toString'),
 
 defineProperties(Object, {
     keys: function keys(object) {
-        var isFn = isFunction(object),
+        var isFn = isCallable(object),
             isArgs = isArguments(object),
             isObject = object !== null && typeof object === 'object',
             isStr = isObject && isString(object);
@@ -1365,7 +1362,7 @@ var replaceReportsGroupsCorrectly = (function () {
 
 if (!replaceReportsGroupsCorrectly) {
     StringPrototype.replace = function replace(searchValue, replaceValue) {
-        var isFn = isFunction(replaceValue);
+        var isFn = isCallable(replaceValue);
         var hasCapturingGroups = isRegex(searchValue) && (/\)[*?]/).test(searchValue.source);
         if (!isFn || !hasCapturingGroups) {
             return str_replace.call(this, searchValue, replaceValue);

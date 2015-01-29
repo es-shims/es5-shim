@@ -59,7 +59,7 @@ var isFunction = function (val) {
 var isRegex = function (val) {
     return to_string.call(val) === '[object RegExp]';
 };
-var isArray = function isArray(obj) {
+var isArray = Array.isArray || function isArray(obj) {
     return to_string.call(obj) === '[object Array]';
 };
 var isString = function isString(obj) {

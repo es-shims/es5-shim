@@ -1264,7 +1264,7 @@ if (
             }
 
             // If `separator` is not a regex, use native split
-            if (to_string.call(separator) !== '[object RegExp]') {
+            if (!isRegex(separator)) {
                 return string_split.call(this, separator, limit);
             }
 

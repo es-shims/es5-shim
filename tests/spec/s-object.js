@@ -62,7 +62,8 @@ describe('Object', function () {
             });
         });
 
-        it('should throw error for non object', function () {
+        // ES6 Object.keys does not require this throw
+        xit('should throw error for non object', function () {
             var e = {};
             expect(function () {
                 try {

@@ -123,6 +123,7 @@ var defineProperties = (function (has) {
 // ======
 //
 
+/* replaceable with https://npmjs.com/package/es-abstract /helpers/isPrimitive */
 function isPrimitive(input) {
     var type = typeof input;
     return input === null ||
@@ -172,6 +173,7 @@ var ES = {
 
     // ES5 9.9
     // http://es5.github.com/#x9.9
+    /* replaceable with https://npmjs.com/package/es-abstract ES5.ToObject */
     ToObject: function (o) {
         /*jshint eqnull: true */
         if (o == null) { // this matches both null and undefined
@@ -179,6 +181,8 @@ var ES = {
         }
         return Object(o);
     },
+
+    /* replaceable with https://npmjs.com/package/es-abstract ES5.ToUint32 */
     ToUint32: function ToUint32(x) {
         return x >>> 0;
     }

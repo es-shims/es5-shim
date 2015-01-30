@@ -123,20 +123,6 @@ var defineProperties = (function (has) {
 // ======
 //
 
-// ES5 9.4
-// http://es5.github.com/#x9.4
-// http://jsperf.com/to-integer
-
-function toInteger(num) {
-    var n = +num;
-    if (n !== n) { // isNaN
-        n = 0;
-    } else if (n !== 0 && n !== (1 / 0) && n !== -(1 / 0)) {
-        n = (n > 0 || -1) * Math.floor(Math.abs(n));
-    }
-    return n;
-}
-
 function isPrimitive(input) {
     var type = typeof input;
     return input === null ||
@@ -147,6 +133,20 @@ function isPrimitive(input) {
 }
 
 var ES = {
+    // ES5 9.4
+    // http://es5.github.com/#x9.4
+    // http://jsperf.com/to-integer
+    /* replaceable with https://npmjs.com/package/es-abstract ES5.ToInteger */
+    ToInteger: function ToInteger(num) {
+        var n = +num;
+        if (n !== n) { // isNaN
+            n = 0;
+        } else if (n !== 0 && n !== (1 / 0) && n !== -(1 / 0)) {
+            n = (n > 0 || -1) * Math.floor(Math.abs(n));
+        }
+        return n;
+    },
+
     /* replaceable with https://npmjs.com/package/es-abstract ES5.ToPrimitive */
     ToPrimitive: function ToPrimitive(input) {
         var val, valueOf, toStr;
@@ -364,13 +364,13 @@ defineProperties(ArrayPrototype, {
     splice: function splice(start, deleteCount) {
         if (arguments.length === 0) { return []; }
         var args = arguments;
-        this.length = Math.max(toInteger(this.length), 0);
+        this.length = Math.max(ES.ToInteger(this.length), 0);
         if (arguments.length > 0 && typeof deleteCount !== 'number') {
             args = array_slice.call(arguments);
             if (args.length < 2) {
                 args.push(this.length - start);
             } else {
-                args[1] = toInteger(deleteCount);
+                args[1] = ES.ToInteger(deleteCount);
             }
         }
         return array_splice.apply(this, args);
@@ -679,7 +679,7 @@ defineProperties(ArrayPrototype, {
 
         var i = 0;
         if (arguments.length > 1) {
-            i = toInteger(arguments[1]);
+            i = ES.ToInteger(arguments[1]);
         }
 
         // handle negative indices
@@ -707,7 +707,7 @@ defineProperties(ArrayPrototype, {
         }
         var i = length - 1;
         if (arguments.length > 1) {
-            i = Math.min(i, toInteger(arguments[1]));
+            i = Math.min(i, ES.ToInteger(arguments[1]));
         }
         // handle negative indices
         i = i >= 0 ? i : length - Math.abs(i);

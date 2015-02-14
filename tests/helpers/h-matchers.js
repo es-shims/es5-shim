@@ -2,6 +2,7 @@
 
 var has = Object.prototype.hasOwnProperty;
 var getKeys = function (o) {
+    'use strict';
     var key, a = [];
     for (key in o) {
         if (has.call(o, key)) {

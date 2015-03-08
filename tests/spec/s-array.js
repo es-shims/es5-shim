@@ -239,7 +239,7 @@ describe('Array', function () {
         });
         it('should set the right context when given none', function () {
             var context;
-            [1].every(function () {context = this;});
+            [1].every(function () { context = this; });
             expect(context).toBe(function () { return this; }.call());
         });
 
@@ -577,7 +577,7 @@ describe('Array', function () {
             });
             it('should set the right context when given none', function () {
                 var context;
-                [1].filter(function () {context = this;});
+                [1].filter(function () { context = this; });
                 expect(context).toBe(function () { return this; }.call());
             });
             it('should remove only the values for which the callback returns false', function () {
@@ -634,7 +634,7 @@ describe('Array', function () {
             });
             it('should set the right context when given none', function () {
                 var context;
-                Array.prototype.filter.call(createArrayLikeFromArray([1]), function () {context = this;}, undefined);
+                Array.prototype.filter.call(createArrayLikeFromArray([1]), function () { context = this; }, undefined);
                 expect(context).toBe(function () { return this; }.call());
             });
             it('should pass the right context to the filter', function () {
@@ -746,7 +746,7 @@ describe('Array', function () {
             });
             it('should set the right context when given none', function () {
                 var context;
-                Array.prototype.map.call(createArrayLikeFromArray([1]), function () {context = this;});
+                Array.prototype.map.call(createArrayLikeFromArray([1]), function () { context = this; });
                 expect(context).toBe(function () { return this; }.call());
             });
             it('should not change the array it is called on', function () {
@@ -1288,6 +1288,5 @@ describe('Array', function () {
             expect(obj[0]).toBe(1);
         });
     });
-
 
 });

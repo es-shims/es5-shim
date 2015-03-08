@@ -855,7 +855,6 @@ defineProperties(Date.prototype, {
     }
 }, hasNegativeDateBug);
 
-
 // ES5 15.9.5.44
 // http://es5.github.com/#x15.9.5.44
 // This function provides a String representation of a Date object for use by
@@ -1072,7 +1071,6 @@ if (!Date.now) {
     };
 }
 
-
 //
 // Number
 // ======
@@ -1225,7 +1223,6 @@ defineProperties(NumberPrototype, {
         return m;
     }
 }, hasToFixedBugs);
-
 
 //
 // String

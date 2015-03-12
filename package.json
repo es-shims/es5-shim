@@ -37,10 +37,10 @@
     "jscs": "jscs tests/helpers/*.js tests/spec/*.js es5-shim.js es5-sham.js"
   },
   "devDependencies": {
-    "eslint": "^0.16.0",
+    "eslint": "^0.16.2",
     "jasmine-node": "^1.14.5",
     "jscs": "^1.11.3",
-    "uglify-js": "^2.4.16"
+    "uglify-js": "^2.4.17"
   },
   "engines": {
     "node": ">=0.4.0"

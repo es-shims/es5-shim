@@ -1,4 +1,4 @@
-/*global describe, it, expect, beforeEach */
+/*global describe, it, xit, expect, beforeEach */
 
 describe('Object', function () {
     'use strict';

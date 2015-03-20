@@ -1,4 +1,4 @@
-/*global describe, it, xit, expect, beforeEach */
+/*global describe, it, xit, expect, beforeEach, jasmine */
 
 describe('Object', function () {
     'use strict';
@@ -124,14 +124,12 @@ describe('Object', function () {
         });
 
         it('should throw error for non object', function () {
-            var e1 = {};
-            expect(function () {
-                try {
-                    Object.isExtensible(42);
-                } catch (err) {
-                    throw e1;
-                }
-            }).toThrow(e1);
+            try {
+                // note: in ES6, this is expected to return false.
+                expect(Object.isExtensible(42)).toBe(false);
+            } catch (err) {
+                expect(err).toEqual(jasmine.any(TypeError));
+            }
         });
     });
 
@@ -227,9 +225,12 @@ describe('Object', function () {
         });
 
         it('should throw error for non object', function () {
-            expect(function () {
-                Object.getOwnPropertyDescriptor(42, 'name');
-            }).toThrow();
+            try {
+                // note: in ES6, we expect this to return undefined.
+                expect(Object.getOwnPropertyDescriptor(42, 'name')).toBeUndefined();
+            } catch (err) {
+                expect(err).toEqual(jasmine.any(TypeError));
+            }
         });
     });
 });

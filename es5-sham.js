@@ -235,7 +235,7 @@ if (!Object.create) {
     Object.create = function create(prototype, properties) {
 
         var object;
-        function Type() {}  // An empty constructor.
+        function Type() {} // An empty constructor.
 
         if (prototype === null) {
             object = createEmpty();

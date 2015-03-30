@@ -79,7 +79,7 @@ function doesGetOwnPropertyDescriptorWork(object) {
         object.sentinel = 0;
         return Object.getOwnPropertyDescriptor(object, 'sentinel').value === 0;
     } catch (exception) {
-        // returns falsy
+        return false;
     }
 }
 
@@ -284,7 +284,7 @@ function doesDefinePropertyWork(object) {
         Object.defineProperty(object, 'sentinel', {});
         return 'sentinel' in object;
     } catch (exception) {
-        // returns falsy
+        return false;
     }
 }
 

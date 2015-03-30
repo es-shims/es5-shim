@@ -859,20 +859,18 @@ defineProperties(Date.prototype, {
 // http://es5.github.com/#x15.9.5.44
 // This function provides a String representation of a Date object for use by
 // JSON.stringify (15.12.3).
-var dateToJSONIsSupported = false;
-try {
-    dateToJSONIsSupported = (
-        Date.prototype.toJSON &&
-        new Date(NaN).toJSON() === null &&
-        new Date(negativeDate).toJSON().indexOf(negativeYearString) !== -1 &&
-        Date.prototype.toJSON.call({ // generic
-            toISOString: function () {
-                return true;
-            }
-        })
-    );
-} catch (e) {
-}
+var dateToJSONIsSupported = (function () {
+    try {
+        return Date.prototype.toJSON &&
+            new Date(NaN).toJSON() === null &&
+            new Date(negativeDate).toJSON().indexOf(negativeYearString) !== -1 &&
+            Date.prototype.toJSON.call({ // generic
+                toISOString: function () { return true; }
+            });
+    } catch (e) {
+        return false;
+    }
+}());
 if (!dateToJSONIsSupported) {
     Date.prototype.toJSON = function toJSON(key) {
         // When the toJSON method is called with argument key, the following

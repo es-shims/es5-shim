@@ -1162,11 +1162,12 @@ describe('Array', function () {
         var a = [1, 'a', b];
         var test;
 
-        var makeArray = function (l, prefix) {
-            prefix = prefix || '';
+        var makeArray = function (l, givenPrefix) {
+            var prefix = givenPrefix || '';
+            var length = l;
             var arr = [];
-            while (l--) {
-                arr.unshift(prefix + Array(l + 1).join(' ') + l);
+            while (length--) {
+                arr.unshift(prefix + Array(length + 1).join(' ') + length);
             }
             return arr;
         };

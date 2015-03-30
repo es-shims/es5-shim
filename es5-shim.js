@@ -942,7 +942,7 @@ if (!Date.parse || doesNotParseY2KNewYear || acceptsInvalidDates || !supportsExt
                     length >= 1 ? new NativeDate(Y) :
                                   new NativeDate();
                 // Prevent mixups with unfixed Date object
-                date.constructor = Date;
+                defineProperties(date, { constructor: Date }, true);
                 return date;
             }
             return NativeDate.apply(this, arguments);

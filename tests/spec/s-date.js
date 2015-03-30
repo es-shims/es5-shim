@@ -1,4 +1,15 @@
-/*global describe, it, expect, beforeEach */
+/*global describe, it, xit, expect, beforeEach */
+
+var supportsDescriptors = Object.defineProperty && (function () {
+    try {
+        Object.defineProperty({}, 'x', {});
+        return true;
+    } catch (e) { /* this is ES3 */
+        return false;
+    }
+}());
+
+var ifSupportsDescriptorsIt = supportsDescriptors ? it : xit;
 
 describe('Date', function () {
     'use strict';
@@ -29,6 +40,10 @@ describe('Date', function () {
             expect(new Date('2034-03-01T00:00:00.000Z') -
                         new Date('2034-02-27T23:59:59.999Z')).toBe(86400001); //          86400001      86400001      86400001      86400001             1
 
+        });
+
+        ifSupportsDescriptorsIt('is not enumerable', function () {
+          expect(Object.keys(new Date())).not.toContain('constructor');
         });
     });
 

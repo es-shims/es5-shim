@@ -21,6 +21,10 @@
       "url": "http://github.com/es-shims/es5-shim/raw/master/LICENSE"
     }
   ],
+  "files": [
+    "es5-shim.js",
+    "es5-sham.js"
+  ],
   "main": "es5-shim.js",
   "repository": {
     "type": "git",
@@ -71,4 +75,3 @@
     "polyfill"
   ]
 }
-

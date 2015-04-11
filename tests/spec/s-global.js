@@ -1,9 +1,17 @@
-/*global describe, it, expect */
+/*global describe, it, xit, expect */
 
 describe('global methods', function () {
     'use strict';
 
+    var foo = function foo() {};
+    var functionsHaveNames = foo.name === 'foo';
+    var ifFunctionsHaveNamesIt = functionsHaveNames ? it : xit;
+
     describe('parseInt', function () {
+        ifFunctionsHaveNamesIt('has the right name', function () {
+          expect(parseInt.name).toBe('parseInt');
+        });
+
         it('accepts a radix', function () {
             for (var i = 2; i <= 36; ++i) {
                 expect(parseInt('10', i)).toBe(i);

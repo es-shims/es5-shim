@@ -1420,7 +1420,7 @@ if (parseInt(ws + '08') !== 8 || parseInt(ws + '0x16') !== 22) {
     /*global parseInt: true */
     parseInt = (function (origParseInt) {
         var hexRegex = /^0[xX]/;
-        return function parseIntES5(str, radix) {
+        return function parseInt(str, radix) {
             var string = String(str).trim();
             var defaultedRadix = Number(radix) || (hexRegex.test(string) ? 16 : 10);
             return origParseInt(string, defaultedRadix);

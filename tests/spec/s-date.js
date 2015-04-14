@@ -198,7 +198,7 @@ describe('Date', function () {
               json;
           try {
             json = date.toJSON();
-          } catch (e) {}
+          } catch (e) { /* invalid json */ }
           expect(json).toBe(null);
         });
 

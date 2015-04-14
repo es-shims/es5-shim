@@ -100,20 +100,20 @@ describe('Function', function () {
         it('has the new instance\'s context as a constructor', function () {
             var actualContext;
             var expectedContext = { foo: 'bar' };
-            testSubject.func = function () {
+            testSubject.Func = function () {
                 actualContext = this;
             }.bind(expectedContext);
-            var result = new testSubject.func();
+            var result = new testSubject.Func();
             expect(result).toBeTruthy();
             expect(actualContext).not.toBe(expectedContext);
         });
         it('passes the correct arguments as a constructor', function () {
             var expected = { name: 'Correct' };
-            testSubject.func = function (arg) {
+            testSubject.Func = function (arg) {
                 expect(this.hasOwnProperty('name')).toBe(false);
                 return arg;
             }.bind({ name: 'Incorrect' });
-            var ret = new testSubject.func(expected);
+            var ret = new testSubject.Func(expected);
             expect(ret).toBe(expected);
         });
         it('returns the return value of the bound function when called as a constructor', function () {

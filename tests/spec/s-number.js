@@ -13,4 +13,25 @@ describe('Number', function () {
         });
     });
 
+    describe('constants', function () {
+        it('should have MAX_VALUE', function () {
+            expect(Number.MAX_VALUE).toBe(1.7976931348623157e308);
+        });
+
+        it('should have MIN_VALUE', function () {
+            expect(Number.MIN_VALUE).toBe(5e-324);
+        });
+
+        it('should have NaN', function () {
+            expect(Number.NaN).not.toBe(Number.NaN);
+        });
+
+        it('should have POSITIVE_INFINITY', function () {
+            expect(Number.POSITIVE_INFINITY).toBe(Infinity);
+        });
+
+        it('should have NEGATIVE_INFINITY', function () {
+            expect(Number.NEGATIVE_INFINITY).toBe(-Infinity);
+        });
+    });
 });

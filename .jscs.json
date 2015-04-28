@@ -1,6 +1,12 @@
 {
 	"additionalRules": [],
 
+	"requireSemicolons": true,
+
+	"disallowMultipleSpaces": true,
+
+	"disallowIdentifierNames": [],
+
 	"requireCurlyBraces": ["if", "else", "for", "while", "do", "try", "catch"],
 
 	"requireSpaceAfterKeywords": ["if", "else", "for", "while", "do", "switch", "return", "try", "catch", "function"],
@@ -80,6 +86,19 @@
 		"while",
 		"with",
 		"return"
-	]
+	],
+
+	"validateAlignedFunctionParameters": {
+		"lineBreakAfterOpeningBraces": true,
+		"lineBreakBeforeClosingBraces": true
+	},
+
+	"requirePaddingNewLinesBeforeExport": true,
+
+	"validateNewlineAfterArrayElements": {
+		"maximum": 200
+	},
+
+	"requirePaddingNewLinesAfterUseStrict": true
 }
 

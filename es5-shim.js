@@ -13,6 +13,7 @@
 // see https://github.com/umdjs/umd/blob/master/returnExports.js
 (function (root, factory) {
     'use strict';
+
     /*global define, exports, module */
     if (typeof define === 'function' && define.amd) {
         // AMD. Register as an anonymous module.
@@ -424,6 +425,7 @@ var properlyBoxesContext = function properlyBoxed(method) {
 
         method.call([1], function () {
             'use strict';
+
             properlyBoxesStrict = typeof this === 'string';
         }, 'x');
     }
@@ -964,9 +966,7 @@ if (!Date.parse || doesNotParseY2KNewYear || acceptsInvalidDates || !supportsExt
             ')?)?)?)?' +
         '$');
 
-        var months = [
-            0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334, 365
-        ];
+        var months = [0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334, 365];
 
         var dayFromMonth = function dayFromMonth(year, month) {
             var t = month > 1 ? 1 : 0;

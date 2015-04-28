@@ -4,6 +4,7 @@ var toStr = Object.prototype.toString;
 // var canDistinguishSparseFromUndefined = 0 in [undefined]; // IE 6 - 8 have a bug where this returns false.
 var hasStrictMode = (function () {
   'use strict';
+
    return !this;
 }());
 
@@ -114,6 +115,7 @@ describe('Array', function () {
                 var context;
                 [1].forEach(function () {
                     'use strict';
+
                     context = this;
                 }, 'x');
                 expect(typeof context).toBe('string');
@@ -308,6 +310,7 @@ describe('Array', function () {
 
     describe('indexOf', function () {
         'use strict';
+
         var actual, expected;
 
         beforeEach(function () {
@@ -416,6 +419,7 @@ describe('Array', function () {
     });
     describe('lastIndexOf', function () {
         'use strict';
+
         var actual, expected;
 
         beforeEach(function () {

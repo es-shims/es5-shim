@@ -3,6 +3,7 @@
 var has = Object.prototype.hasOwnProperty;
 var getKeys = function (o) {
     'use strict';
+
     var key, a = [];
     for (key in o) {
         if (has.call(o, key)) {
@@ -14,6 +15,7 @@ var getKeys = function (o) {
 
 beforeEach(function () {
     'use strict';
+
     this.addMatchers({
         toExactlyMatch: function (expected) {
             var a1, a2, l, i, key;

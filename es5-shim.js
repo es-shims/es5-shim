@@ -123,11 +123,7 @@ var defineProperties = (function (has) {
 /* replaceable with https://npmjs.com/package/es-abstract /helpers/isPrimitive */
 var isPrimitive = function isPrimitive(input) {
     var type = typeof input;
-    return input === null ||
-        type === 'undefined' ||
-        type === 'boolean' ||
-        type === 'number' ||
-        type === 'string';
+    return input === null || (type !== 'object' && type !== 'function');
 };
 
 var ES = {

@@ -23,12 +23,12 @@ describe('Function', function () {
             }
         };
 
-        function func() {
+        var func = function func() {
             Array.prototype.forEach.call(arguments, function (a) {
                 this.push(a);
             }, this);
             return this;
-        }
+        };
 
         beforeEach(function () {
             actual = [];

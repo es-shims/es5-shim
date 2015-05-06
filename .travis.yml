@@ -1,5 +1,8 @@
 language: node_js
 node_js:
+  - "iojs-v2.0"
+  - "iojs-v1.8"
+  - "iojs-v1.7"
   - "iojs-v1.6"
   - "iojs-v1.5"
   - "iojs-v1.4"
@@ -19,6 +22,9 @@ before_install:
 matrix:
   fast_finish: true
   allow_failures:
+    - node_js: "iojs-v1.7"
+    - node_js: "iojs-v1.6"
+    - node_js: "iojs-v1.5"
     - node_js: "iojs-v1.4"
     - node_js: "iojs-v1.3"
     - node_js: "iojs-v1.2"

@@ -926,7 +926,7 @@ if (!Date.parse || doesNotParseY2KNewYear || acceptsInvalidDates || !supportsExt
             if (this instanceof NativeDate) {
                 date = length === 1 && String(Y) === Y ? // isString(Y)
                     // We explicitly pass it through parse:
-                    new NativeDate(Date.parse(Y)) :
+                    new NativeDate(DateShim.parse(Y)) :
                     // We have to manually make calls depending on argument
                     // length here
                     length >= 7 ? new NativeDate(Y, M, D, h, m, s, ms) :
@@ -941,7 +941,7 @@ if (!Date.parse || doesNotParseY2KNewYear || acceptsInvalidDates || !supportsExt
                 date = NativeDate.apply(this, arguments);
             }
             // Prevent mixups with unfixed Date object
-            defineProperties(date, { constructor: Date }, true);
+            defineProperties(date, { constructor: DateShim }, true);
             return date;
         };
 

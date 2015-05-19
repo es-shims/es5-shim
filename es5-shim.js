@@ -985,7 +985,9 @@ if (!Date.parse || doesNotParseY2KNewYear || acceptsInvalidDates || !supportsExt
 
         // Copy any custom methods a 3rd party library may have added
         for (var key in NativeDate) {
-            DateShim[key] = NativeDate[key];
+            if (owns(NativeDate, key)) {
+                DateShim[key] = NativeDate[key];
+            }
         }
 
         // Copy "native" methods explicitly; they may be non-enumerable

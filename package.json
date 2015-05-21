@@ -15,12 +15,7 @@
     "mail": "ljharb@gmail.com",
     "url": "http://github.com/es-shims/es5-shim/issues"
   },
-  "licenses": [
-    {
-      "type": "MIT",
-      "url": "http://github.com/es-shims/es5-shim/raw/master/LICENSE"
-    }
-  ],
+  "license": "MIT",
   "main": "es5-shim.js",
   "repository": {
     "type": "git",

@@ -1,3 +1,7 @@
+4.1.3
+  - Update `license` in `package.json` per https://docs.npmjs.com/files/package.json#license
+  - Update `uglify-js`, `eslint`
+
 4.1.2
   - In IE 6-8, `Date` inside the function expression does not reference `DateShim` (#303)
   - Date: Ensure all code paths have the correct `constructor` property

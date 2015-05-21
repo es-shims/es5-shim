@@ -1,3 +1,12 @@
+4.1.2
+  - In IE 6-8, `Date` inside the function expression does not reference `DateShim` (#303)
+  - Date: Ensure all code paths have the correct `constructor` property
+  - Date: Don't copy non-own properties from original `Date`
+  - Test up to `io.js` `v2.0.0`
+  - Simplify `isPrimitive` check.
+  - Adding sanity check tests for ES5 `Number` constants.
+  - Update `uglify-js`, `eslint`, `semver`
+
 4.1.1
   - Fix name of `parseInt` replacement.
   - Update copyright year

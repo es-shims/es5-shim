@@ -433,24 +433,30 @@ var properlyBoxesContext = function properlyBoxed(method) {
 };
 
 defineProperties(ArrayPrototype, {
-    forEach: function forEach(fun /*, thisp*/) {
-        var object = ES.ToObject(this),
-            self = splitString && isString(this) ? this.split('') : object,
-            thisp = arguments[1],
-            i = -1,
-            length = self.length >>> 0;
+    forEach: function forEach(callbackfn /*, thisArg*/) {
+        var object = ES.ToObject(this);
+        var self = splitString && isString(this) ? this.split('') : object;
+        var i = -1;
+        var length = self.length >>> 0;
+        var T;
+        if (arguments.length > 1) {
+          T = arguments[1];
+        }
 
         // If no callback function or if callback is not a callable function
-        if (!isCallable(fun)) {
-            throw new TypeError(); // TODO message
+        if (!isCallable(callbackfn)) {
+            throw new TypeError('Array.prototype.forEach callback must be a function');
         }
 
         while (++i < length) {
             if (i in self) {
                 // Invoke the callback function with call, passing arguments:
                 // context, property value, property key, thisArg object
-                // context
-                fun.call(thisp, self[i], i, object);
+                if (typeof T !== 'undefined') {
+                    callbackfn.call(T, self[i], i, object);
+                } else {
+                    callbackfn(self[i], i, object);
+                }
             }
         }
     }
@@ -460,21 +466,28 @@ defineProperties(ArrayPrototype, {
 // http://es5.github.com/#x15.4.4.19
 // https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Objects/Array/map
 defineProperties(ArrayPrototype, {
-    map: function map(fun /*, thisp*/) {
-        var object = ES.ToObject(this),
-            self = splitString && isString(this) ? this.split('') : object,
-            length = self.length >>> 0,
-            result = Array(length),
-            thisp = arguments[1];
+    map: function map(callbackfn/*, thisArg*/) {
+        var object = ES.ToObject(this);
+        var self = splitString && isString(this) ? this.split('') : object;
+        var length = self.length >>> 0;
+        var result = Array(length);
+        var T;
+        if (arguments.length > 1) {
+            T = arguments[1];
+        }
 
         // If no callback function or if callback is not a callable function
-        if (!isCallable(fun)) {
-            throw new TypeError(fun + ' is not a function');
+        if (!isCallable(callbackfn)) {
+            throw new TypeError('Array.prototype.map callback must be a function');
         }
 
         for (var i = 0; i < length; i++) {
             if (i in self) {
-                result[i] = fun.call(thisp, self[i], i, object);
+                if (typeof T !== 'undefined') {
+                    result[i] = callbackfn.call(T, self[i], i, object);
+                } else {
+                    result[i] = callbackfn(self[i], i, object);
+                }
             }
         }
         return result;
@@ -485,23 +498,26 @@ defineProperties(ArrayPrototype, {
 // http://es5.github.com/#x15.4.4.20
 // https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Objects/Array/filter
 defineProperties(ArrayPrototype, {
-    filter: function filter(fun /*, thisp */) {
-        var object = ES.ToObject(this),
-            self = splitString && isString(this) ? this.split('') : object,
-            length = self.length >>> 0,
-            result = [],
-            value,
-            thisp = arguments[1];
+    filter: function filter(callbackfn /*, thisArg*/) {
+        var object = ES.ToObject(this);
+        var self = splitString && isString(this) ? this.split('') : object;
+        var length = self.length >>> 0;
+        var result = [];
+        var value;
+        var T;
+        if (arguments.length > 1) {
+            T = arguments[1];
+        }
 
         // If no callback function or if callback is not a callable function
-        if (!isCallable(fun)) {
-            throw new TypeError(fun + ' is not a function');
+        if (!isCallable(callbackfn)) {
+            throw new TypeError('Array.prototype.filter callback must be a function');
         }
 
         for (var i = 0; i < length; i++) {
             if (i in self) {
                 value = self[i];
-                if (fun.call(thisp, value, i, object)) {
+                if (typeof T === 'undefined' ? callbackfn(value, i, object) : callbackfn.call(T, value, i, object)) {
                     result.push(value);
                 }
             }
@@ -514,19 +530,22 @@ defineProperties(ArrayPrototype, {
 // http://es5.github.com/#x15.4.4.16
 // https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Array/every
 defineProperties(ArrayPrototype, {
-    every: function every(fun /*, thisp */) {
-        var object = ES.ToObject(this),
-            self = splitString && isString(this) ? this.split('') : object,
-            length = self.length >>> 0,
-            thisp = arguments[1];
+    every: function every(callbackfn /*, thisArg*/) {
+        var object = ES.ToObject(this);
+        var self = splitString && isString(this) ? this.split('') : object;
+        var length = self.length >>> 0;
+        var T;
+        if (arguments.length > 1) {
+            T = arguments[1];
+        }
 
         // If no callback function or if callback is not a callable function
-        if (!isCallable(fun)) {
-            throw new TypeError(fun + ' is not a function');
+        if (!isCallable(callbackfn)) {
+            throw new TypeError('Array.prototype.every callback must be a function');
         }
 
         for (var i = 0; i < length; i++) {
-            if (i in self && !fun.call(thisp, self[i], i, object)) {
+            if (i in self && !(typeof T === 'undefined' ? callbackfn(self[i], i, object) : callbackfn.call(T, self[i], i, object))) {
                 return false;
             }
         }
@@ -538,19 +557,22 @@ defineProperties(ArrayPrototype, {
 // http://es5.github.com/#x15.4.4.17
 // https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Array/some
 defineProperties(ArrayPrototype, {
-    some: function some(fun /*, thisp */) {
-        var object = ES.ToObject(this),
-            self = splitString && isString(this) ? this.split('') : object,
-            length = self.length >>> 0,
-            thisp = arguments[1];
+    some: function some(callbackfn/*, thisArg */) {
+        var object = ES.ToObject(this);
+        var self = splitString && isString(this) ? this.split('') : object;
+        var length = self.length >>> 0;
+        var T;
+        if (arguments.length > 1) {
+            T = arguments[1];
+        }
 
         // If no callback function or if callback is not a callable function
-        if (!isCallable(fun)) {
-            throw new TypeError(fun + ' is not a function');
+        if (!isCallable(callbackfn)) {
+            throw new TypeError('Array.prototype.some callback must be a function');
         }
 
         for (var i = 0; i < length; i++) {
-            if (i in self && fun.call(thisp, self[i], i, object)) {
+            if (i in self && (typeof T === 'undefined' ? callbackfn(self[i], i, object) : callbackfn.call(T, self[i], i, object))) {
                 return true;
             }
         }
@@ -566,18 +588,18 @@ if (ArrayPrototype.reduce) {
     reduceCoercesToObject = typeof ArrayPrototype.reduce.call('es5', function (_, __, ___, list) { return list; }) === 'object';
 }
 defineProperties(ArrayPrototype, {
-    reduce: function reduce(fun /*, initial*/) {
-        var object = ES.ToObject(this),
-            self = splitString && isString(this) ? this.split('') : object,
-            length = self.length >>> 0;
+    reduce: function reduce(callbackfn /*, initialValue*/) {
+        var object = ES.ToObject(this);
+        var self = splitString && isString(this) ? this.split('') : object;
+        var length = self.length >>> 0;
 
         // If no callback function or if callback is not a callable function
-        if (!isCallable(fun)) {
-            throw new TypeError(fun + ' is not a function');
+        if (!isCallable(callbackfn)) {
+            throw new TypeError('Array.prototype.reduce callback must be a function');
         }
 
         // no value to return if no initial value and an empty array
-        if (!length && arguments.length === 1) {
+        if (length === 0 && arguments.length === 1) {
             throw new TypeError('reduce of empty array with no initial value');
         }
 
@@ -601,7 +623,7 @@ defineProperties(ArrayPrototype, {
 
         for (; i < length; i++) {
             if (i in self) {
-                result = fun.call(void 0, result, self[i], i, object);
+                result = callbackfn(result, self[i], i, object);
             }
         }
 
@@ -617,22 +639,23 @@ if (ArrayPrototype.reduceRight) {
     reduceRightCoercesToObject = typeof ArrayPrototype.reduceRight.call('es5', function (_, __, ___, list) { return list; }) === 'object';
 }
 defineProperties(ArrayPrototype, {
-    reduceRight: function reduceRight(fun /*, initial*/) {
-        var object = ES.ToObject(this),
-            self = splitString && isString(this) ? this.split('') : object,
-            length = self.length >>> 0;
+    reduceRight: function reduceRight(callbackfn/*, initial*/) {
+        var object = ES.ToObject(this);
+        var self = splitString && isString(this) ? this.split('') : object;
+        var length = self.length >>> 0;
 
         // If no callback function or if callback is not a callable function
-        if (!isCallable(fun)) {
-            throw new TypeError(fun + ' is not a function');
+        if (!isCallable(callbackfn)) {
+            throw new TypeError('Array.prototype.reduceRight callback must be a function');
         }
 
         // no value to return if no initial value, empty array
-        if (!length && arguments.length === 1) {
+        if (length === 0 && arguments.length === 1) {
             throw new TypeError('reduceRight of empty array with no initial value');
         }
 
-        var result, i = length - 1;
+        var result;
+        var i = length - 1;
         if (arguments.length >= 2) {
             result = arguments[1];
         } else {
@@ -655,7 +678,7 @@ defineProperties(ArrayPrototype, {
 
         do {
             if (i in self) {
-                result = fun.call(void 0, result, self[i], i, object);
+                result = callbackfn(result, self[i], i, object);
             }
         } while (i--);
 
@@ -668,11 +691,11 @@ defineProperties(ArrayPrototype, {
 // https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Array/indexOf
 var hasFirefox2IndexOfBug = Array.prototype.indexOf && [0, 1].indexOf(1, 2) !== -1;
 defineProperties(ArrayPrototype, {
-    indexOf: function indexOf(sought /*, fromIndex */) {
-        var self = splitString && isString(this) ? this.split('') : ES.ToObject(this),
-            length = self.length >>> 0;
+    indexOf: function indexOf(searchElement /*, fromIndex */) {
+        var self = splitString && isString(this) ? this.split('') : ES.ToObject(this);
+        var length = self.length >>> 0;
 
-        if (!length) {
+        if (length === 0) {
             return -1;
         }
 
@@ -684,7 +707,7 @@ defineProperties(ArrayPrototype, {
         // handle negative indices
         i = i >= 0 ? i : Math.max(0, length + i);
         for (; i < length; i++) {
-            if (i in self && self[i] === sought) {
+            if (i in self && self[i] === searchElement) {
                 return i;
             }
         }
@@ -697,11 +720,11 @@ defineProperties(ArrayPrototype, {
 // https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Array/lastIndexOf
 var hasFirefox2LastIndexOfBug = Array.prototype.lastIndexOf && [0, 1].lastIndexOf(0, -3) !== -1;
 defineProperties(ArrayPrototype, {
-    lastIndexOf: function lastIndexOf(sought /*, fromIndex */) {
-        var self = splitString && isString(this) ? this.split('') : ES.ToObject(this),
-            length = self.length >>> 0;
+    lastIndexOf: function lastIndexOf(searchElement /*, fromIndex */) {
+        var self = splitString && isString(this) ? this.split('') : ES.ToObject(this);
+        var length = self.length >>> 0;
 
-        if (!length) {
+        if (length === 0) {
             return -1;
         }
         var i = length - 1;
@@ -711,7 +734,7 @@ defineProperties(ArrayPrototype, {
         // handle negative indices
         i = i >= 0 ? i : length - Math.abs(i);
         for (; i >= 0; i--) {
-            if (i in self && sought === self[i]) {
+            if (i in self && searchElement === self[i]) {
                 return i;
             }
         }

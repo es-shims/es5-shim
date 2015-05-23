@@ -61,7 +61,7 @@
         "no-eq-null": [0],
         "no-eval": [2],
         "no-ex-assign": [2],
-        "no-extend-native": [1],
+        "no-extend-native": [2, {"exceptions": ["Date"]}],
         "no-extra-bind": [2],
         "no-extra-boolean-cast": [2],
         "no-extra-parens": [0],

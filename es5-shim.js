@@ -49,6 +49,7 @@ var array_slice = ArrayPrototype.slice;
 var array_splice = ArrayPrototype.splice;
 var array_push = ArrayPrototype.push;
 var array_unshift = ArrayPrototype.unshift;
+var array_concat = ArrayPrototype.concat;
 var call = FunctionPrototype.call;
 
 // Having a toString local variable name breaks in Opera so use to_string.
@@ -235,7 +236,7 @@ defineProperties(FunctionPrototype, {
 
                 var result = target.apply(
                     this,
-                    args.concat(array_slice.call(arguments))
+                    array_concat.call(args, array_slice.call(arguments))
                 );
                 if (Object(result) === result) {
                     return result;
@@ -264,7 +265,7 @@ defineProperties(FunctionPrototype, {
                 // equiv: target.call(this, ...boundArgs, ...args)
                 return target.apply(
                     that,
-                    args.concat(array_slice.call(arguments))
+                    array_concat.call(args, array_slice.call(arguments))
                 );
 
             }

@@ -1019,10 +1019,14 @@ if (!Date.parse || doesNotParseY2KNewYear || acceptsInvalidDates || !supportsExt
         }
 
         // Copy "native" methods explicitly; they may be non-enumerable
-        DateShim.now = NativeDate.now;
-        DateShim.UTC = NativeDate.UTC;
+        defineProperties(DateShim, {
+            now: NativeDate.now,
+            UTC: NativeDate.UTC
+        }, true);
         DateShim.prototype = NativeDate.prototype;
-        DateShim.prototype.constructor = DateShim;
+        defineProperties(DateShim.prototype, {
+            constructor: DateShim
+        }, true);
 
         // Upgrade Date.parse to handle simplified ISO 8601 strings
         DateShim.parse = function parse(string) {

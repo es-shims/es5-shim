@@ -233,4 +233,17 @@ describe('Object', function () {
             }
         });
     });
+
+    describe('Object.defineProperties', function () {
+        it('should define the constructor property', function () {
+            var target = {};
+            var newProperties = {
+                constructor: {
+                  value: 'new constructor'
+                }
+            };
+            Object.defineProperties(target, newProperties);
+            expect(target.constructor).toEqual('new constructor');
+        });
+    });
 });

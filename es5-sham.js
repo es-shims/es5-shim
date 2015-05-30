@@ -386,11 +386,11 @@ if (!Object.defineProperties || definePropertiesFallback) {
             }
         }
 
-        for (var property in properties) {
-            if (owns(properties, property) && property !== '__proto__') {
+        Object.keys(properties).forEach(function (property) {
+            if (property !== '__proto__') {
                 Object.defineProperty(object, property, properties[property]);
             }
-        }
+        });
         return object;
     };
 }

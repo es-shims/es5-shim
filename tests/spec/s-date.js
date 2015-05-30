@@ -2,8 +2,10 @@
 
 var supportsDescriptors = Object.defineProperty && (function () {
     try {
-        Object.defineProperty({}, 'x', {});
-        return true;
+        var obj = {};
+        Object.defineProperty(obj, 'x', { enumerable: false, value: obj });
+        for (var _ in obj) { return false; }
+        return obj.x === obj;
     } catch (e) { /* this is ES3 */
         return false;
     }

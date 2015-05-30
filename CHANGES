@@ -1,3 +1,11 @@
+4.1.4
+  - Make sure copied `Date` properties remain non-enumerable.
+  - Using a more reliable check for supported property descriptors in non-IE ES3
+  - Fix 'constructor' in Object.defineProperties sham in ES3 (#252, #305)
+  - Use a reference to `Array#concat` rather than relying on the runtime environment's `concat`.
+  - Test on `io.js` `v2.1`
+  - Clean up `Array.prototype` iteration methods
+
 4.1.3
   - Update `license` in `package.json` per https://docs.npmjs.com/files/package.json#license
   - Update `uglify-js`, `eslint`

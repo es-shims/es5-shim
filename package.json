@@ -32,12 +32,12 @@
     "jscs": "jscs tests/helpers/*.js tests/spec/*.js es5-shim.js es5-sham.js"
   },
   "devDependencies": {
-    "eslint": "^0.21.2",
+    "eslint": "^0.22.1",
     "jasmine-node": "^1.14.5",
     "jscs": "^1.13.1",
     "uglify-js": "^2.4.23",
     "replace": "^0.3.0",
-    "semver": "^4.3.4"
+    "semver": "^4.3.6"
   },
   "engines": {
     "node": ">=0.4.0"

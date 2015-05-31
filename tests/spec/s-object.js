@@ -190,7 +190,7 @@ describe('Object', function () {
         });
 
         it('should return a data descriptor', function () {
-            var descr = Object.getOwnPropertyDescriptor({name: 'Testing'}, 'name');
+            var descr = Object.getOwnPropertyDescriptor({ name: 'Testing' }, 'name');
 
             expect(descr).not.toBeUndefined();
             expect(descr.value).toBe('Testing');
@@ -200,7 +200,7 @@ describe('Object', function () {
         });
 
         it('should return undefined because the object does not own the property', function () {
-            var descr = Object.getOwnPropertyDescriptor(Object.create({name: 'Testing'}, {}), 'name');
+            var descr = Object.getOwnPropertyDescriptor(Object.create({ name: 'Testing' }, {}), 'name');
 
             expect(descr).toBeUndefined();
         });

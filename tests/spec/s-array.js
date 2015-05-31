@@ -27,7 +27,7 @@ describe('Array', function () {
         var expected, actual;
 
         beforeEach(function () {
-            expected = {0: 2, 2: undefined, 3: true, 4: 'hej', 5: null, 6: false, 7: 0 };
+            expected = { 0: 2, 2: undefined, 3: true, 4: 'hej', 5: null, 6: false, 7: 0 };
             actual = {};
         });
         it('should pass the right parameters', function () {
@@ -126,7 +126,7 @@ describe('Array', function () {
         var actual, expected, numberOfRuns;
 
         beforeEach(function () {
-            expected = {0: 2, 2: undefined, 3: true };
+            expected = { 0: 2, 2: undefined, 3: true };
             actual = {};
             numberOfRuns = 0;
         });
@@ -902,7 +902,7 @@ describe('Array', function () {
             it('should work as expected for empty arrays', function () {
                 var spy = jasmine.createSpy();
                 expect(function () {
-                    Array.prototype.reduce.call({length: 0}, spy);
+                    Array.prototype.reduce.call({ length: 0 }, spy);
                 }).toThrow();
                 expect(spy).not.toHaveBeenCalled();
             });

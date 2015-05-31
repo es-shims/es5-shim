@@ -427,7 +427,7 @@ if (!Object.freeze) {
 try {
     Object.freeze(function () {});
 } catch (exception) {
-    Object.freeze = (function freeze(freezeObject) {
+    Object.freeze = (function (freezeObject) {
         return function freeze(object) {
             if (typeof object === 'function') {
                 return object;

@@ -1,6 +1,6 @@
 {
     "name": "es5-shim",
-    "version": "4.1.4",
+    "version": "4.1.5",
     "main": "es5-shim.js",
     "repository": {
         "type": "git",

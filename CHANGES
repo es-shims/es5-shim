@@ -1,3 +1,8 @@
+4.1.5
+  - Add a failing runtime check for Safari 8 `Date.parse`
+  - Update `eslint`, `semver`
+  - Test on `io.js` `v2.2`
+
 4.1.4
   - Make sure copied `Date` properties remain non-enumerable.
   - Using a more reliable check for supported property descriptors in non-IE ES3

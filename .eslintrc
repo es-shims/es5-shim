@@ -89,7 +89,7 @@
         "no-multi-spaces": [2],
         "no-multi-str": [2],
         "no-multiple-empty-lines": [2, {"max": 1}],
-        "no-native-reassign": [1, {"exceptions": ["Date", "parseInt"]}],
+        "no-native-reassign": [2, {"exceptions": ["Date", "parseInt"]}],
         "no-negated-in-lhs": [2],
         "no-nested-ternary": [0],
         "no-new": [2],

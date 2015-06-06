@@ -190,6 +190,64 @@ if (!Object.create) {
                         // the following produces false positives
                         // in Opera Mini => not a reliable check
                         // Object.prototype.__proto__ === null
+
+    // Check for document.domain and active x support
+    // No need to use active x approach when document.domain is not set
+    // see https://github.com/es-shims/es5-shim/issues/150
+    // variation of https://github.com/kitcambridge/es5-shim/commit/4f738ac066346
+    /*global ActiveXObject */
+    var shouldUseActiveX = function shouldUseActiveX() {
+        // return early if document.domain not set
+        if (!document.domain) {
+            return false;
+        }
+
+        try {
+            return !!new ActiveXObject('htmlfile');
+        } catch (exception) {
+            return false;
+        }
+    };
+
+    // This supports IE8 when document.domain is used
+    // see https://github.com/es-shims/es5-shim/issues/150
+    // variation of https://github.com/kitcambridge/es5-shim/commit/4f738ac066346
+    var getEmptyViaActiveX = function getEmptyViaActiveX() {
+        var empty;
+        var xDoc;
+
+        xDoc = new ActiveXObject('htmlfile');
+
+        xDoc.write('<script><\/script>');
+        xDoc.close();
+
+        empty = xDoc.parentWindow.Object.prototype;
+        xDoc = null;
+
+        return empty;
+    };
+
+    // The original implementation using an iframe
+    // before the activex approach was added
+    // see https://github.com/es-shims/es5-shim/issues/150
+    var getEmptyViaIFrame = function getEmptyViaIFrame() {
+        var iframe = document.createElement('iframe');
+        var parent = document.body || document.documentElement;
+        var empty;
+
+        iframe.style.display = 'none';
+        parent.appendChild(iframe);
+        /*eslint-disable no-script-url */
+        iframe.src = 'javascript:';
+        /*eslint-enable no-script-url */
+
+        empty = iframe.contentWindow.Object.prototype;
+        parent.removeChild(iframe);
+        iframe = null;
+
+        return empty;
+    };
+
     /*global document */
     if (supportsProto || typeof document === 'undefined') {
         createEmpty = function () {
@@ -202,16 +260,10 @@ if (!Object.create) {
         // object and *steal* its Object.prototype and strip it bare. This is
         // used as the prototype to create nullary objects.
         createEmpty = function () {
-            var iframe = document.createElement('iframe');
-            var parent = document.body || document.documentElement;
-            iframe.style.display = 'none';
-            parent.appendChild(iframe);
-            /*eslint-disable no-script-url */
-            iframe.src = 'javascript:';
-            /*eslint-enable no-script-url */
-            var empty = iframe.contentWindow.Object.prototype;
-            parent.removeChild(iframe);
-            iframe = null;
+            // Determine which approach to use
+            // see https://github.com/es-shims/es5-shim/issues/150
+            var empty = shouldUseActiveX() ? getEmptyViaActiveX() : getEmptyViaIFrame();
+
             delete empty.constructor;
             delete empty.hasOwnProperty;
             delete empty.propertyIsEnumerable;

@@ -1,4 +1,4 @@
-/*global describe, it, xit, expect, beforeEach, jasmine */
+/* global describe, it, xit, expect, beforeEach, jasmine */
 
 describe('Object', function () {
     'use strict';

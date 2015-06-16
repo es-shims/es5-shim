@@ -1,4 +1,4 @@
-/*global describe, it, xit, expect */
+/* global describe, it, xit, expect */
 
 describe('global methods', function () {
     'use strict';

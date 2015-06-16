@@ -1,4 +1,4 @@
-/*global describe, it, expect, beforeEach, jasmine, xit */
+/* global describe, it, expect, beforeEach, jasmine, xit */
 
 var toStr = Object.prototype.toString;
 // var canDistinguishSparseFromUndefined = 0 in [undefined]; // IE 6 - 8 have a bug where this returns false.
@@ -1146,7 +1146,7 @@ describe('Array', function () {
             });
         });
 
-        /*globals document */
+        /* globals document */
         if (typeof document !== 'undefined') {
             it('should be false for an HTML element', function () {
                 var el = document.getElementsByTagName('div');

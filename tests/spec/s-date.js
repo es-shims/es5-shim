@@ -1,4 +1,4 @@
-/*global describe, it, xit, expect, beforeEach */
+/* global describe, it, xit, expect, beforeEach */
 
 var supportsDescriptors = Object.defineProperty && (function () {
     try {

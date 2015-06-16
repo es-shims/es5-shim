@@ -1,4 +1,4 @@
-/*global beforeEach, expect */
+/* global beforeEach, expect */
 
 var has = Object.prototype.hasOwnProperty;
 var getKeys = function (o) {

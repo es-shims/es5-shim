@@ -1,4 +1,4 @@
-/*global describe, it, expect */
+/* global describe, it, expect */
 
 describe('Number', function () {
     'use strict';

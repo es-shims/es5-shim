@@ -52,6 +52,10 @@ describe('Date', function () {
     describe('parse', function () {
         // TODO: Write the rest of the test.
 
+        ifSupportsDescriptorsIt('is not enumerable', function () {
+          expect(Object.getOwnPropertyDescriptor(Date, 'parse').enumerable).toBe(false);
+        });
+
         it('should support extended years', function () {
             expect(Date.parse('0001-01-01T00:00:00Z')).toBe(-62135596800000);
             expect(Date.parse('+275760-09-13T00:00:00.000Z')).toBe(8.64e15);

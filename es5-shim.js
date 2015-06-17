@@ -1029,7 +1029,7 @@ if (!Date.parse || doesNotParseY2KNewYear || acceptsInvalidDates || !supportsExt
         }, true);
 
         // Upgrade Date.parse to handle simplified ISO 8601 strings
-        DateShim.parse = function parse(string) {
+        var parseShim = function parse(string) {
             var match = isoDateExpression.exec(string);
             if (match) {
                 // parse months, days, hours, minutes, seconds, and milliseconds
@@ -1084,6 +1084,7 @@ if (!Date.parse || doesNotParseY2KNewYear || acceptsInvalidDates || !supportsExt
             }
             return NativeDate.parse.apply(this, arguments);
         };
+        defineProperties(DateShim, { parse: parseShim });
 
         return DateShim;
     }(Date));

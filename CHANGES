@@ -1,3 +1,6 @@
+4.1.7
+  - Make sure `Date.parse` is not enumerable (#310)
+
 4.1.6
   - Support IE 8 when `document.domain` is set (#306, #150)
   - Remove version from `bower.json` (#307)

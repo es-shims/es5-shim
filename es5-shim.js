@@ -1014,20 +1014,20 @@ if (!Date.parse || doesNotParseY2KNewYear || acceptsInvalidDates || !supportsExt
         // Upgrade Date.parse to handle simplified ISO 8601 strings
         var DateShimParse = function parse(string) {
             
-            var match, year, month, day, hour, minute, second, millisecond
-               ,isLocalTime, signOffset, hourOffset, minuteOffset, result;
-               
-            if (match = isoDateExpression.exec(string)) {
+            var match, year, month, day, hour, minute, second, millisecond, isLocalTime, signOffset, hourOffset, minuteOffset, result;
+                match = isoDateExpression.exec(string);
+                
+            if (match) {
                 
                 // parse months, days, hours, minutes, seconds, and milliseconds
                 // provide default values if necessary
                 // parse the UTC offset component
-                year    = Number(match[1]);
-                month   = Number(match[2] || 1) - 1;
-                day     = Number(match[3] || 1) - 1;
-                hour    = Number(match[4] || 0);
-                minute  = Number(match[5] || 0);
-                second  = Number(match[6] || 0);
+                year = Number(match[1]);
+                month = Number(match[2] || 1) - 1;
+                day = Number(match[3] || 1) - 1;
+                hour = Number(match[4] || 0);
+                minute = Number(match[5] || 0);
+                second = Number(match[6] || 0);
                 
                 millisecond = Math.floor(
                     Number(match[7] || 0) * 1e3
@@ -1036,7 +1036,7 @@ if (!Date.parse || doesNotParseY2KNewYear || acceptsInvalidDates || !supportsExt
                 // When time zone is missed, local offset should be used
                 // (ES 5.1 bug)
                 // see https://bugs.ecmascript.org/show_bug.cgi?id=112
-                isLocalTime = Boolean(match[4] && !match[8]);
+                isLocalTime = !!(match[4] && !match[8]);
                 signOffset = match[9] === '-' ? 1 : -1;
                 hourOffset = Number(match[10] || 0);
                 minuteOffset = Number(match[11] || 0);
@@ -1058,9 +1058,9 @@ if (!Date.parse || doesNotParseY2KNewYear || acceptsInvalidDates || !supportsExt
                     // Get Days
                     result = dayFromMonth(year, month) + day;
                     
-                    result = /* Days    -> Hours        */ result * 24  + hour   + hourOffset   * signOffset;
-                    result = /* Hours   -> Minutes      */ result * 60  + minute + minuteOffset * signOffset;
-                    result = /* Minutes -> Seconds      */ result * 60  + second;
+                    result = /* Days -> Hours */ result * 24 + hour + hourOffset * signOffset;
+                    result = /* Hours -> Minutes */ result * 60 + minute + minuteOffset * signOffset;
+                    result = /* Minutes -> Seconds */ result * 60 + second;
                     result = /* Seconds -> Milliseconds */ result * 1e3 + millisecond;
 
                     if (isLocalTime) result = toUTC(result);

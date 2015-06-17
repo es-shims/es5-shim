@@ -1013,12 +1013,9 @@ if (!Date.parse || doesNotParseY2KNewYear || acceptsInvalidDates || !supportsExt
         
         // Upgrade Date.parse to handle simplified ISO 8601 strings
         var DateShimParse = function parse(string) {
-            
-            var match, year, month, day, hour, minute, second, millisecond, isLocalTime, signOffset, hourOffset, minuteOffset, result;
-                match = isoDateExpression.exec(string);
-                
+            var match = isoDateExpression.exec(string);
             if (match) {
-                
+                var year, month, day, hour, minute, second, millisecond, isLocalTime, signOffset, hourOffset, minuteOffset, result;
                 // parse months, days, hours, minutes, seconds, and milliseconds
                 // provide default values if necessary
                 // parse the UTC offset component

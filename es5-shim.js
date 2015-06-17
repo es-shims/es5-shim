@@ -1010,6 +1010,63 @@ if (!Date.parse || doesNotParseY2KNewYear || acceptsInvalidDates || !supportsExt
         var toUTC = function toUTC(t) {
             return Number(new NativeDate(1970, 0, 1, 0, 0, 0, t));
         };
+        
+        // Upgrade Date.parse to handle simplified ISO 8601 strings
+        var DateShimParse = function parse(string) {
+            var match = isoDateExpression.exec(string);
+            if (match) {
+                var year, month, day, hour, minute, second, millisecond, isLocalTime, signOffset, hourOffset, minuteOffset, result;
+                // parse months, days, hours, minutes, seconds, and milliseconds
+                // provide default values if necessary
+                // parse the UTC offset component
+                year = Number(match[1]);
+                month = Number(match[2] || 1) - 1;
+                day = Number(match[3] || 1) - 1;
+                hour = Number(match[4] || 0);
+                minute = Number(match[5] || 0);
+                second = Number(match[6] || 0);
+                
+                millisecond = Math.floor(
+                    Number(match[7] || 0) * 1e3
+                );
+                
+                // When time zone is missed, local offset should be used
+                // (ES 5.1 bug)
+                // see https://bugs.ecmascript.org/show_bug.cgi?id=112
+                isLocalTime = !!(match[4] && !match[8]);
+                signOffset = match[9] === '-' ? 1 : -1;
+                hourOffset = Number(match[10] || 0);
+                minuteOffset = Number(match[11] || 0);
+                
+                if (
+                    hour < (minute > 0 || second > 0 || millisecond > 0 ? 24 : 25) 
+                    && minute < 60 
+                    && second < 60 
+                    && millisecond < 1e3 
+                    && month > -1 
+                    && month < 12
+                    // detect invalid offsets
+                    && hourOffset < 24 
+                    && minuteOffset < 60 
+                    && day > -1 
+                    && day < (dayFromMonth(year, month + 1) - dayFromMonth(year, month))
+                ) 
+                {
+                    // Get Days
+                    result = dayFromMonth(year, month) + day;
+                    
+                    result = /* Days -> Hours */ result * 24 + hour + hourOffset * signOffset;
+                    result = /* Hours -> Minutes */ result * 60 + minute + minuteOffset * signOffset;
+                    result = /* Minutes -> Seconds */ result * 60 + second;
+                    result = /* Seconds -> Milliseconds */ result * 1e3 + millisecond;
+
+                    if (isLocalTime) result = toUTC(result);
+                    if (Math.abs(result) <= 864e13) return result;
+                }
+                return NaN;
+            }
+            return NativeDate.parse.apply(this, arguments);
+        };
 
         // Copy any custom methods a 3rd party library may have added
         for (var key in NativeDate) {
@@ -1019,71 +1076,11 @@ if (!Date.parse || doesNotParseY2KNewYear || acceptsInvalidDates || !supportsExt
         }
 
         // Copy "native" methods explicitly; they may be non-enumerable
-        defineProperties(DateShim, {
-            now: NativeDate.now,
-            UTC: NativeDate.UTC
-        }, true);
+        defineProperties(DateShim, { now: NativeDate.now, UTC: NativeDate.UTC }, true);
+        defineProperties(DateShim, { parse: DateShimParse }, true);
+        
         DateShim.prototype = NativeDate.prototype;
-        defineProperties(DateShim.prototype, {
-            constructor: DateShim
-        }, true);
-
-        // Upgrade Date.parse to handle simplified ISO 8601 strings
-        DateShim.parse = function parse(string) {
-            var match = isoDateExpression.exec(string);
-            if (match) {
-                // parse months, days, hours, minutes, seconds, and milliseconds
-                // provide default values if necessary
-                // parse the UTC offset component
-                var year = Number(match[1]),
-                    month = Number(match[2] || 1) - 1,
-                    day = Number(match[3] || 1) - 1,
-                    hour = Number(match[4] || 0),
-                    minute = Number(match[5] || 0),
-                    second = Number(match[6] || 0),
-                    millisecond = Math.floor(Number(match[7] || 0) * 1000),
-                    // When time zone is missed, local offset should be used
-                    // (ES 5.1 bug)
-                    // see https://bugs.ecmascript.org/show_bug.cgi?id=112
-                    isLocalTime = Boolean(match[4] && !match[8]),
-                    signOffset = match[9] === '-' ? 1 : -1,
-                    hourOffset = Number(match[10] || 0),
-                    minuteOffset = Number(match[11] || 0),
-                    result;
-                if (
-                    hour < (
-                        minute > 0 || second > 0 || millisecond > 0 ?
-                        24 : 25
-                    ) &&
-                    minute < 60 && second < 60 && millisecond < 1000 &&
-                    month > -1 && month < 12 && hourOffset < 24 &&
-                    minuteOffset < 60 && // detect invalid offsets
-                    day > -1 &&
-                    day < (
-                        dayFromMonth(year, month + 1) -
-                        dayFromMonth(year, month)
-                    )
-                ) {
-                    result = (
-                        (dayFromMonth(year, month) + day) * 24 +
-                        hour +
-                        hourOffset * signOffset
-                    ) * 60;
-                    result = (
-                        (result + minute + minuteOffset * signOffset) * 60 +
-                        second
-                    ) * 1000 + millisecond;
-                    if (isLocalTime) {
-                        result = toUTC(result);
-                    }
-                    if (-8.64e15 <= result && result <= 8.64e15) {
-                        return result;
-                    }
-                }
-                return NaN;
-            }
-            return NativeDate.parse.apply(this, arguments);
-        };
+        defineProperties(DateShim.prototype, { constructor: DateShim }, true);
 
         return DateShim;
     }(Date));

@@ -55,28 +55,10 @@ var call = FunctionPrototype.call;
 // Having a toString local variable name breaks in Opera so use to_string.
 var to_string = ObjectPrototype.toString;
 
-var isArray = Array.isArray || function isArray(obj) {
-    return to_string.call(obj) === '[object Array]';
-};
-
 var hasToStringTag = typeof Symbol === 'function' && typeof Symbol.toStringTag === 'symbol';
 var isCallable; /* inlined from https://npmjs.com/is-callable */ var fnToStr = Function.prototype.toString, tryFunctionObject = function tryFunctionObject(value) { try { fnToStr.call(value); return true; } catch (e) { return false; } }, fnClass = '[object Function]', genClass = '[object GeneratorFunction]'; isCallable = function isCallable(value) { if (typeof value !== 'function') { return false; } if (hasToStringTag) { return tryFunctionObject(value); } var strClass = to_string.call(value); return strClass === fnClass || strClass === genClass; };
 var isRegex; /* inlined from https://npmjs.com/is-regex */ var regexExec = RegExp.prototype.exec, tryRegexExec = function tryRegexExec(value) { try { regexExec.call(value); return true; } catch (e) { return false; } }, regexClass = '[object RegExp]'; isRegex = function isRegex(value) { if (typeof value !== 'object') { return false; } return hasToStringTag ? tryRegexExec(value) : to_string.call(value) === regexClass; };
 var isString; /* inlined from https://npmjs.com/is-string */ var strValue = String.prototype.valueOf, tryStringObject = function tryStringObject(value) { try { strValue.call(value); return true; } catch (e) { return false; } }, stringClass = '[object String]'; isString = function isString(value) { if (typeof value === 'string') { return true; } if (typeof value !== 'object') { return false; } return hasToStringTag ? tryStringObject(value) : to_string.call(value) === stringClass; };
-
-var isArguments = function isArguments(value) {
-    var str = to_string.call(value);
-    var isArgs = str === '[object Arguments]';
-    if (!isArgs) {
-        isArgs = !isArray(value) &&
-          value !== null &&
-          typeof value === 'object' &&
-          typeof value.length === 'number' &&
-          value.length >= 0 &&
-          isCallable(value.callee);
-    }
-    return isArgs;
-};
 
 /* inlined from http://npmjs.com/define-properties */
 var defineProperties = (function (has) {
@@ -337,6 +319,10 @@ var owns = call.bind(ObjectPrototype.hasOwnProperty);
 // Array
 // =====
 //
+
+var isArray = Array.isArray || function isArray(obj) {
+    return to_string.call(obj) === '[object Array]';
+};
 
 // ES5 15.4.4.12
 // http://es5.github.com/#x15.4.4.12
@@ -754,19 +740,33 @@ defineProperties(ArrayPrototype, {
 // http://es5.github.com/#x15.2.3.14
 
 // http://whattheheadsaid.com/2010/10/a-safer-object-keys-compatibility-implementation
-var hasDontEnumBug = !({ 'toString': null }).propertyIsEnumerable('toString'),
-    hasProtoEnumBug = function () {}.propertyIsEnumerable('prototype'),
-    hasStringEnumBug = !owns('x', '0'),
-    dontEnums = [
-        'toString',
-        'toLocaleString',
-        'valueOf',
-        'hasOwnProperty',
-        'isPrototypeOf',
-        'propertyIsEnumerable',
-        'constructor'
-    ],
-    dontEnumsLength = dontEnums.length;
+var hasDontEnumBug = !({ 'toString': null }).propertyIsEnumerable('toString');
+var hasProtoEnumBug = function () {}.propertyIsEnumerable('prototype');
+var hasStringEnumBug = !owns('x', '0');
+var dontEnums = [
+    'toString',
+    'toLocaleString',
+    'valueOf',
+    'hasOwnProperty',
+    'isPrototypeOf',
+    'propertyIsEnumerable',
+    'constructor'
+];
+var dontEnumsLength = dontEnums.length;
+
+var isArguments = function isArguments(value) {
+    var str = to_string.call(value);
+    var isArgs = str === '[object Arguments]';
+    if (!isArgs) {
+        isArgs = !isArray(value) &&
+          value !== null &&
+          typeof value === 'object' &&
+          typeof value.length === 'number' &&
+          value.length >= 0 &&
+          isCallable(value.callee);
+    }
+    return isArgs;
+};
 
 defineProperties(Object, {
     keys: function keys(object) {

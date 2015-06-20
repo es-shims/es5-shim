@@ -1292,6 +1292,30 @@ describe('Array', function () {
             expect(obj.length).toBe(3);
             expect(obj[0]).toBe(1);
         });
+
+        it('should not break on sparse arrays in Opera', function () {
+            // test from https://github.com/wikimedia/VisualEditor/blob/d468b00311e69c2095b9da360c5745153342a5c3/src/ve.utils.js#L182-L196
+            var n = 256;
+            var arr = [];
+            arr[n] = 'a';
+            arr.splice(n + 1, 0, 'b');
+            expect(arr[n]).toBe('a');
+        });
+
+        it('should not break on sparse arrays in Safari 7/8', function () {
+            // test from https://github.com/wikimedia/VisualEditor/blob/d468b00311e69c2095b9da360c5745153342a5c3/src/ve.utils.js#L182-L196
+            var justFine = new Array(1e5 - 1);
+            justFine[10] = 'x';
+            var tooBig = new Array(1e5);
+            tooBig[8] = 'x';
+
+            justFine.splice(1, 1);
+			expect(8 in justFine).toBe(false);
+            expect(justFine.indexOf('x')).toBe(9);
+            tooBig.splice(1, 1);
+			expect(6 in tooBig).toBe(false);
+            expect(tooBig.indexOf('x')).toBe(7);
+        });
     });
 
 });

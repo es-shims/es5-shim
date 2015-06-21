@@ -173,6 +173,25 @@ describe('Date', function () {
         });
     });
 
+    describe('getUTCDate', function () {
+        it('should return the right value for negative dates', function () {
+            // Opera 10.6/11.61/Opera 12 bug
+            expect(new Date(-3509827334573292).getUTCDate()).toBe(1);
+        });
+    });
+
+    describe('getUTCMonth', function () {
+        it('should return the right value for negative dates', function () {
+            // Opera 10.6/11.61/Opera 12 bug
+            expect(new Date(-3509827334573292).getUTCMonth()).toBe(0);
+        });
+
+        it('should return correct values', function () {
+            expect(new Date(8.64e15).getUTCMonth()).toBe(8);
+            expect(new Date(0).getUTCMonth()).toBe(0);
+        });
+    });
+
     describe('toISOString', function () {
         // TODO: write the rest of the test.
 

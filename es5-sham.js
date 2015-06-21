@@ -32,6 +32,7 @@
 var call = Function.prototype.call;
 var prototypeOfObject = Object.prototype;
 var owns = call.bind(prototypeOfObject.hasOwnProperty);
+var propertyIsEnumerable = call.bind(prototypeOfObject.propertyIsEnumerable);
 
 // If JS engine supports accessors creating shortcuts.
 var defineGetter;
@@ -120,9 +121,12 @@ if (!Object.getOwnPropertyDescriptor || getOwnPropertyDescriptorFallback) {
             return descriptor;
         }
 
-        // If object has a property then it's for sure both `enumerable` and
-        // `configurable`.
-        descriptor = { enumerable: true, configurable: true };
+        // If object has a property then it's for sure `configurable`, and
+        // probably `enumerable`. Detect enumerability though.
+        descriptor = {
+            enumerable: propertyIsEnumerable(object, property),
+            configurable: true
+        };
 
         // If JS engine supports accessor properties then property may be a
         // getter or setter.

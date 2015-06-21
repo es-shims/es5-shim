@@ -928,6 +928,7 @@ defineProperties($Object, {
 var negativeDate = -62198755200000;
 var negativeYearString = '-000001';
 var hasNegativeDateBug = Date.prototype.toISOString && new Date(negativeDate).toISOString().indexOf(negativeYearString) === -1;
+var hasSafari51DateBug = Date.prototype.toISOString && new Date(-1).toISOString() !== '1969-12-31T23:59:59.999Z';
 
 defineProperties(Date.prototype, {
     toISOString: function toISOString() {
@@ -966,7 +967,7 @@ defineProperties(Date.prototype, {
             strSlice('000' + this.getUTCMilliseconds(), -3) + 'Z'
         );
     }
-}, hasNegativeDateBug);
+}, hasNegativeDateBug || hasSafari51DateBug);
 
 // ES5 15.9.5.44
 // http://es5.github.com/#x15.9.5.44

@@ -335,126 +335,6 @@ var isArray = $Array.isArray || function isArray(obj) {
 };
 
 // ES5 15.4.4.12
-// http://es5.github.com/#x15.4.4.12
-var spliceNoopReturnsEmptyArray = (function () {
-    var a = [1, 2];
-    var result = a.splice();
-    return a.length === 2 && isArray(result) && result.length === 0;
-}());
-defineProperties(ArrayPrototype, {
-    // Safari 5.0 bug where .splice() returns undefined
-    splice: function splice(start, deleteCount) {
-        if (arguments.length === 0) {
-            return [];
-        } else {
-            return array_splice.apply(this, arguments);
-        }
-    }
-}, !spliceNoopReturnsEmptyArray);
-
-var spliceWorksWithEmptyObject = (function () {
-    var obj = {};
-    ArrayPrototype.splice.call(obj, 0, 0, 1);
-    return obj.length === 1;
-}());
-defineProperties(ArrayPrototype, {
-    splice: function splice(start, deleteCount) {
-        if (arguments.length === 0) { return []; }
-        var args = arguments;
-        this.length = max(ES.ToInteger(this.length), 0);
-        if (arguments.length > 0 && typeof deleteCount !== 'number') {
-            args = array_slice.call(arguments);
-            if (args.length < 2) {
-                array_push.call(args, this.length - start);
-            } else {
-                args[1] = ES.ToInteger(deleteCount);
-            }
-        }
-        return array_splice.apply(this, args);
-    }
-}, !spliceWorksWithEmptyObject);
-var spliceWorksWithLargeSparseArrays = (function () {
-    // Per https://github.com/es-shims/es5-shim/issues/295
-    // Safari 7/8 breaks with sparse arrays of size 1e5 or greater
-    var arr = new $Array(1e5);
-    // note: the index MUST be 8 or larger or the test will false pass
-    arr[8] = 'x';
-    arr.splice(1, 1);
-    return arr.indexOf('x') === 7;
-}());
-var spliceWorksWithSmallSparseArrays = (function () {
-    // Per https://github.com/es-shims/es5-shim/issues/295
-    // Opera 12.15 breaks on this, no idea why.
-    var n = 256;
-    var arr = [];
-    arr[n] = 'a';
-    arr.splice(n + 1, 0, 'b');
-    return arr[n] === 'a';
-}());
-defineProperties(ArrayPrototype, {
-    splice: function splice(start, deleteCount) {
-        var O = ES.ToObject(this);
-        var A = [];
-        var len = ES.ToUint32(O.length);
-        var relativeStart = ES.ToInteger(start);
-        var actualStart = relativeStart < 0 ? max((len + relativeStart), 0) : min(relativeStart, len);
-        var actualDeleteCount = min(max(ES.ToInteger(deleteCount), 0), len - actualStart);
-
-        var k = 0;
-        var from;
-        while (k < actualDeleteCount) {
-            from = $String(actualStart + k);
-            if (owns(O, from)) {
-                A[k] = O[from];
-            }
-            k += 1;
-        }
-
-        var items = array_slice.call(arguments, 2);
-        var itemCount = items.length;
-        var to;
-        if (itemCount < actualDeleteCount) {
-            k = actualStart;
-            while (k < (len - actualDeleteCount)) {
-                from = $String(k + actualDeleteCount);
-                to = $String(k + itemCount);
-                if (owns(O, from)) {
-                    O[to] = O[from];
-                } else {
-                    delete O[to];
-                }
-                k += 1;
-            }
-            k = len;
-            while (k > (len - actualDeleteCount + itemCount)) {
-                delete O[k - 1];
-                k -= 1;
-            }
-        } else if (itemCount > actualDeleteCount) {
-            k = len - actualDeleteCount;
-            while (k > actualStart) {
-                from = $String(k + actualDeleteCount - 1);
-                to = $String(k + itemCount - 1);
-                if (owns(O, from)) {
-                    O[to] = O[from];
-                } else {
-                    delete O[to];
-                }
-                k -= 1;
-            }
-        }
-        k = actualStart;
-        for (var i = 0; i < items.length; ++i) {
-            O[k] = items[i];
-            k += 1;
-        }
-        O.length = len - actualDeleteCount + itemCount;
-
-        return A;
-    }
-}, !spliceWorksWithLargeSparseArrays || !spliceWorksWithSmallSparseArrays);
-
-// ES5 15.4.4.12
 // http://es5.github.com/#x15.4.4.13
 // Return len+argCount.
 // [bugfix, ielt8]
@@ -820,6 +700,128 @@ defineProperties(ArrayPrototype, {
         return -1;
     }
 }, hasFirefox2LastIndexOfBug);
+
+// ES5 15.4.4.12
+// http://es5.github.com/#x15.4.4.12
+var spliceNoopReturnsEmptyArray = (function () {
+    var a = [1, 2];
+    var result = a.splice();
+    return a.length === 2 && isArray(result) && result.length === 0;
+}());
+defineProperties(ArrayPrototype, {
+    // Safari 5.0 bug where .splice() returns undefined
+    splice: function splice(start, deleteCount) {
+        if (arguments.length === 0) {
+            return [];
+        } else {
+            return array_splice.apply(this, arguments);
+        }
+    }
+}, !spliceNoopReturnsEmptyArray);
+
+var spliceWorksWithEmptyObject = (function () {
+    var obj = {};
+    ArrayPrototype.splice.call(obj, 0, 0, 1);
+    return obj.length === 1;
+}());
+defineProperties(ArrayPrototype, {
+    splice: function splice(start, deleteCount) {
+        if (arguments.length === 0) { return []; }
+        var args = arguments;
+        this.length = max(ES.ToInteger(this.length), 0);
+        if (arguments.length > 0 && typeof deleteCount !== 'number') {
+            args = array_slice.call(arguments);
+            if (args.length < 2) {
+                array_push.call(args, this.length - start);
+            } else {
+                args[1] = ES.ToInteger(deleteCount);
+            }
+        }
+        return array_splice.apply(this, args);
+    }
+}, !spliceWorksWithEmptyObject);
+var spliceWorksWithLargeSparseArrays = (function () {
+    // Per https://github.com/es-shims/es5-shim/issues/295
+    // Safari 7/8 breaks with sparse arrays of size 1e5 or greater
+    var arr = new $Array(1e5);
+    // note: the index MUST be 8 or larger or the test will false pass
+    arr[8] = 'x';
+    arr.splice(1, 1);
+    // note: this test must be defined *after* the indexOf shim
+    // per https://github.com/es-shims/es5-shim/issues/313
+    return arr.indexOf('x') === 7;
+}());
+var spliceWorksWithSmallSparseArrays = (function () {
+    // Per https://github.com/es-shims/es5-shim/issues/295
+    // Opera 12.15 breaks on this, no idea why.
+    var n = 256;
+    var arr = [];
+    arr[n] = 'a';
+    arr.splice(n + 1, 0, 'b');
+    return arr[n] === 'a';
+}());
+defineProperties(ArrayPrototype, {
+    splice: function splice(start, deleteCount) {
+        var O = ES.ToObject(this);
+        var A = [];
+        var len = ES.ToUint32(O.length);
+        var relativeStart = ES.ToInteger(start);
+        var actualStart = relativeStart < 0 ? max((len + relativeStart), 0) : min(relativeStart, len);
+        var actualDeleteCount = min(max(ES.ToInteger(deleteCount), 0), len - actualStart);
+
+        var k = 0;
+        var from;
+        while (k < actualDeleteCount) {
+            from = $String(actualStart + k);
+            if (owns(O, from)) {
+                A[k] = O[from];
+            }
+            k += 1;
+        }
+
+        var items = array_slice.call(arguments, 2);
+        var itemCount = items.length;
+        var to;
+        if (itemCount < actualDeleteCount) {
+            k = actualStart;
+            while (k < (len - actualDeleteCount)) {
+                from = $String(k + actualDeleteCount);
+                to = $String(k + itemCount);
+                if (owns(O, from)) {
+                    O[to] = O[from];
+                } else {
+                    delete O[to];
+                }
+                k += 1;
+            }
+            k = len;
+            while (k > (len - actualDeleteCount + itemCount)) {
+                delete O[k - 1];
+                k -= 1;
+            }
+        } else if (itemCount > actualDeleteCount) {
+            k = len - actualDeleteCount;
+            while (k > actualStart) {
+                from = $String(k + actualDeleteCount - 1);
+                to = $String(k + itemCount - 1);
+                if (owns(O, from)) {
+                    O[to] = O[from];
+                } else {
+                    delete O[to];
+                }
+                k -= 1;
+            }
+        }
+        k = actualStart;
+        for (var i = 0; i < items.length; ++i) {
+            O[k] = items[i];
+            k += 1;
+        }
+        O.length = len - actualDeleteCount + itemCount;
+
+        return A;
+    }
+}, !spliceWorksWithLargeSparseArrays || !spliceWorksWithSmallSparseArrays);
 
 //
 // Object

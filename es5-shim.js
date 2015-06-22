@@ -323,6 +323,7 @@ defineProperties(FunctionPrototype, {
 var owns = call.bind(ObjectPrototype.hasOwnProperty);
 var toStr = call.bind(ObjectPrototype.toString);
 var strSlice = call.bind(StringPrototype.slice);
+var strSplit = call.bind(StringPrototype.split);
 
 //
 // Array
@@ -513,7 +514,7 @@ var properlyBoxesContext = function properlyBoxed(method) {
 defineProperties(ArrayPrototype, {
     forEach: function forEach(callbackfn /*, thisArg*/) {
         var object = ES.ToObject(this);
-        var self = splitString && isString(this) ? this.split('') : object;
+        var self = splitString && isString(this) ? strSplit(this, '') : object;
         var i = -1;
         var length = self.length >>> 0;
         var T;
@@ -546,7 +547,7 @@ defineProperties(ArrayPrototype, {
 defineProperties(ArrayPrototype, {
     map: function map(callbackfn/*, thisArg*/) {
         var object = ES.ToObject(this);
-        var self = splitString && isString(this) ? this.split('') : object;
+        var self = splitString && isString(this) ? strSplit(this, '') : object;
         var length = self.length >>> 0;
         var result = $Array(length);
         var T;
@@ -578,7 +579,7 @@ defineProperties(ArrayPrototype, {
 defineProperties(ArrayPrototype, {
     filter: function filter(callbackfn /*, thisArg*/) {
         var object = ES.ToObject(this);
-        var self = splitString && isString(this) ? this.split('') : object;
+        var self = splitString && isString(this) ? strSplit(this, '') : object;
         var length = self.length >>> 0;
         var result = [];
         var value;
@@ -610,7 +611,7 @@ defineProperties(ArrayPrototype, {
 defineProperties(ArrayPrototype, {
     every: function every(callbackfn /*, thisArg*/) {
         var object = ES.ToObject(this);
-        var self = splitString && isString(this) ? this.split('') : object;
+        var self = splitString && isString(this) ? strSplit(this, '') : object;
         var length = self.length >>> 0;
         var T;
         if (arguments.length > 1) {
@@ -637,7 +638,7 @@ defineProperties(ArrayPrototype, {
 defineProperties(ArrayPrototype, {
     some: function some(callbackfn/*, thisArg */) {
         var object = ES.ToObject(this);
-        var self = splitString && isString(this) ? this.split('') : object;
+        var self = splitString && isString(this) ? strSplit(this, '') : object;
         var length = self.length >>> 0;
         var T;
         if (arguments.length > 1) {
@@ -668,7 +669,7 @@ if (ArrayPrototype.reduce) {
 defineProperties(ArrayPrototype, {
     reduce: function reduce(callbackfn /*, initialValue*/) {
         var object = ES.ToObject(this);
-        var self = splitString && isString(this) ? this.split('') : object;
+        var self = splitString && isString(this) ? strSplit(this, '') : object;
         var length = self.length >>> 0;
 
         // If no callback function or if callback is not a callable function
@@ -719,7 +720,7 @@ if (ArrayPrototype.reduceRight) {
 defineProperties(ArrayPrototype, {
     reduceRight: function reduceRight(callbackfn/*, initial*/) {
         var object = ES.ToObject(this);
-        var self = splitString && isString(this) ? this.split('') : object;
+        var self = splitString && isString(this) ? strSplit(this, '') : object;
         var length = self.length >>> 0;
 
         // If no callback function or if callback is not a callable function
@@ -770,7 +771,7 @@ defineProperties(ArrayPrototype, {
 var hasFirefox2IndexOfBug = ArrayPrototype.indexOf && [0, 1].indexOf(1, 2) !== -1;
 defineProperties(ArrayPrototype, {
     indexOf: function indexOf(searchElement /*, fromIndex */) {
-        var self = splitString && isString(this) ? this.split('') : ES.ToObject(this);
+        var self = splitString && isString(this) ? strSplit(this, '') : ES.ToObject(this);
         var length = self.length >>> 0;
 
         if (length === 0) {
@@ -799,7 +800,7 @@ defineProperties(ArrayPrototype, {
 var hasFirefox2LastIndexOfBug = ArrayPrototype.lastIndexOf && [0, 1].lastIndexOf(0, -3) !== -1;
 defineProperties(ArrayPrototype, {
     lastIndexOf: function lastIndexOf(searchElement /*, fromIndex */) {
-        var self = splitString && isString(this) ? this.split('') : ES.ToObject(this);
+        var self = splitString && isString(this) ? strSplit(this, '') : ES.ToObject(this);
         var length = self.length >>> 0;
 
         if (length === 0) {
@@ -1364,7 +1365,6 @@ defineProperties(NumberPrototype, {
 //    ''.split(/.?/) should be [], not [""]
 //    '.'.split(/()()/) should be ["."], not ["", "", "."]
 
-var string_split = StringPrototype.split;
 if (
     'ab'.split(/(?:ab)*/).length !== 2 ||
     '.'.split(/(.?)(.?)/).length !== 4 ||
@@ -1384,7 +1384,7 @@ if (
 
             // If `separator` is not a regex, use native split
             if (!isRegex(separator)) {
-                return string_split.call(this, separator, limit);
+                return strSplit(this, separator, limit);
             }
 
             var output = [];
@@ -1464,7 +1464,7 @@ if (
 } else if ('0'.split(void 0, 0).length) {
     StringPrototype.split = function split(separator, limit) {
         if (typeof separator === 'undefined' && limit === 0) { return []; }
-        return string_split.call(this, separator, limit);
+        return strSplit(this, separator, limit);
     };
 }
 

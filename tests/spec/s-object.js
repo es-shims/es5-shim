@@ -180,6 +180,12 @@ describe('Object', function () {
                 Object.defineProperty(42, 'name', {});
             }).toThrow();
         });
+
+        it('should not throw error for empty descriptor', function () {
+            expect(function () {
+                Object.defineProperty({}, 'name', {});
+            }).not.toThrow();
+        });
     });
 
     describe('Object.getOwnPropertyDescriptor', function () {

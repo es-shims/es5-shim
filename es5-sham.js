@@ -413,7 +413,7 @@ if (!Object.defineProperty || definePropertyFallback) {
                 object[property] = descriptor.value;
             }
         } else {
-            if (!supportsAccessors) {
+            if (!supportsAccessors && (('get' in descriptor) || ('set' in descriptor))) {
                 throw new TypeError(ERR_ACCESSORS_NOT_SUPPORTED);
             }
             // If we got that far then getters and setters can be defined !!

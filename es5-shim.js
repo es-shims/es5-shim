@@ -862,10 +862,10 @@ var isArguments = function isArguments(value) {
 
 defineProperties($Object, {
     keys: function keys(object) {
-        var isFn = isCallable(object),
-            isArgs = isArguments(object),
-            isObject = object !== null && typeof object === 'object',
-            isStr = isObject && isString(object);
+        var isFn = isCallable(object);
+        var isArgs = isArguments(object);
+        var isObject = object !== null && typeof object === 'object';
+        var isStr = isObject && isString(object);
 
         if (!isObject && !isFn && !isArgs) {
             throw new TypeError('Object.keys called on a non-object');
@@ -888,8 +888,8 @@ defineProperties($Object, {
         }
 
         if (hasDontEnumBug) {
-            var ctor = object.constructor,
-                skipConstructor = ctor && ctor.prototype === object;
+            var ctor = object.constructor;
+            var skipConstructor = ctor && ctor.prototype === object;
             for (var j = 0; j < dontEnumsLength; j++) {
                 var dontEnum = dontEnums[j];
                 if (!(skipConstructor && dontEnum === 'constructor') && owns(object, dontEnum)) {

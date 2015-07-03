@@ -835,6 +835,25 @@ defineProperties(ArrayPrototype, {
 var hasDontEnumBug = !({ 'toString': null }).propertyIsEnumerable('toString');
 var hasProtoEnumBug = function () {}.propertyIsEnumerable('prototype');
 var hasStringEnumBug = !owns('x', '0');
+var equalsConstructorPrototype = function (o) {
+    var ctor = o.constructor;
+    return ctor && ctor.prototype === o;
+};
+var blacklistedKeys = ['window', 'console', 'parent', 'self', 'frames'];
+var hasAutomationEqualityBug = (function () {
+    /* globals window */
+    if (typeof window === 'undefined') { return false; }
+    for (var k in window) {
+        if (blacklistedKeys.indexOf(k) === -1 && owns(window, k) && window[k] !== null && typeof window[k] === 'object') {
+            try {
+                equalsConstructorPrototype(window[k]);
+            } catch (e) {
+                return true;
+            }
+        }
+    }
+    return false;
+}());
 var dontEnums = [
     'toString',
     'toLocaleString',
@@ -888,8 +907,7 @@ defineProperties($Object, {
         }
 
         if (hasDontEnumBug) {
-            var ctor = object.constructor;
-            var skipConstructor = ctor && ctor.prototype === object;
+            var skipConstructor = hasAutomationEqualityBug || equalsConstructorPrototype(object);
             for (var j = 0; j < dontEnumsLength; j++) {
                 var dontEnum = dontEnums[j];
                 if (!(skipConstructor && dontEnum === 'constructor') && owns(object, dontEnum)) {

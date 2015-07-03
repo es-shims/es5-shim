@@ -1,9 +1,11 @@
-/* global describe, it, xit, expect, beforeEach, jasmine */
+/* global describe, it, xit, expect, beforeEach, jasmine, window */
+
+var ifWindowIt = typeof window === 'undefined' ? xit : it;
 
 describe('Object', function () {
     'use strict';
 
-    describe('Object.keys', function () {
+    describe('.keys()', function () {
         var obj = {
             str: 'boz',
             obj: { },
@@ -101,6 +103,24 @@ describe('Object', function () {
             actual.sort();
             expected.sort();
             expect(actual).toEqual(expected);
+        });
+
+        ifWindowIt('can serialize all objects on the `window`', function () {
+          var has = Object.prototype.hasOwnProperty;
+          var keys, exception;
+          var blacklistedKeys = ['window', 'console', 'parent', 'self', 'frames'];
+          for (var k in window) {
+              keys = exception = void 0;
+              if (blacklistedKeys.indexOf(k) === -1 && has.call(window, k) && window[k] !== null && typeof window[k] === 'object') {
+                     try {
+                         keys = Object.keys(window[k]);
+                     } catch (e) {
+                         exception = e;
+                     }
+                     expect(Array.isArray(keys)).toEqual(true);
+                     expect(exception).toBeUndefined();
+              }
+          }
         });
     });
 

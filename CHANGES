@@ -1,3 +1,13 @@
+4.1.8
+  - [Fix] Fix an `Object.keys` IE 8 bug where `localStorage.prototype.constructor === localStorage` would throw (#275)
+  - [Fix] Shimmed `Object.defineProperty` should not throw for an empty descriptor (#315)
+  - [Fix] Fix `Date#toISOString` in Safari 5.1 (#243)
+  - [Fix] Use `Object#propertyIsEnumerable` to default the initial "enumerable" value in `Object.getOwnPropertyDescriptor` sham (#289)
+  - [Fix] Fix `Array#splice` with large sparse arrays in Safari 7/8, and Opera 12.15 (#295)
+  - [Robustness] Safely use and reference many builtins internally (also see #313)
+  - [Tests] Add `Date#{getUTCDate,getUTCMonth}` tests to expose Opera 10.6/11.61/12 `Date` bugs
+  - [Dev Deps] Update `eslint`
+
 4.1.7
   - Make sure `Date.parse` is not enumerable (#310)
 

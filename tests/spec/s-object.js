@@ -260,6 +260,38 @@ describe('Object', function () {
         });
     });
 
+    describe('Object.getPrototypeOf', function () {
+        it('should return the [[Prototype]] of an object', function () {
+            var Foo = function () {};
+
+            var proto = Object.getPrototypeOf(new Foo());
+
+            expect(proto).toBe(Foo.prototype);
+        });
+
+        it('should shamone to the `Object.prototype` if `object.constructor` is not a function', function () {
+            var Foo = function () {};
+            Foo.prototype.constructor = 1;
+
+            var proto = Object.getPrototypeOf(new Foo()),
+                fnToString = Function.prototype.toString;
+
+            if (fnToString.call(Object.getPrototypeOf).indexOf('[native code]') < 0) {
+                expect(proto).toBe(Object.prototype);
+            } else {
+                expect(proto).toBe(Foo.prototype);
+            }
+        });
+
+        it('should throw error for non object', function () {
+            try {
+                expect(Object.getPrototypeOf(1)).toBeUndefined();
+            } catch (err) {
+                expect(err).toEqual(jasmine.any(TypeError));
+            }
+        });
+    });
+
     describe('Object.defineProperties', function () {
         it('should define the constructor property', function () {
             var target = {};

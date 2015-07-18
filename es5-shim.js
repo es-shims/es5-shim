@@ -839,7 +839,7 @@ var equalsConstructorPrototype = function (o) {
     var ctor = o.constructor;
     return ctor && ctor.prototype === o;
 };
-var blacklistedKeys = ['window', 'console', 'parent', 'self', 'frames'];
+var blacklistedKeys = ['window', 'console', 'parent', 'self', 'frames', 'webkitIndexedDB', 'webkitStorageInfo'];
 var hasAutomationEqualityBug = (function () {
     /* globals window */
     if (typeof window === 'undefined') { return false; }

@@ -28,16 +28,16 @@
     "test": "npm run lint && jasmine-node --matchall ./ tests/spec/",
     "test-native": "jasmine-node --matchall tests/spec/",
     "lint": "npm run jscs && npm run eslint",
-    "eslint": "eslint --reset tests/helpers/*.js tests/spec/*.js es5-shim.js es5-sham.js",
+    "eslint": "eslint tests/helpers/*.js tests/spec/*.js es5-shim.js es5-sham.js",
     "jscs": "jscs tests/helpers/*.js tests/spec/*.js es5-shim.js es5-sham.js"
   },
   "devDependencies": {
-    "eslint": "^0.24.0",
+    "eslint": "^1.0.0-rc-1",
     "jasmine-node": "^1.14.5",
     "jscs": "^1.13.1",
     "uglify-js": "^2.4.23",
     "replace": "^0.3.0",
-    "semver": "^4.3.6"
+    "semver": "^5.0.1"
   },
   "engines": {
     "node": ">=0.4.0"

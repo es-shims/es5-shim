@@ -854,6 +854,14 @@ var hasAutomationEqualityBug = (function () {
     }
     return false;
 }());
+var equalsConstructorPrototypeIfNotBuggy = function (object) {
+    if (typeof window === 'undefined' || !hasAutomationEqualityBug) { return equalsConstructorPrototype(object); }
+    try {
+        return equalsConstructorPrototype(object);
+    } catch (e) {
+        return false;
+    }
+};
 var dontEnums = [
     'toString',
     'toLocaleString',
@@ -907,7 +915,7 @@ defineProperties($Object, {
         }
 
         if (hasDontEnumBug) {
-            var skipConstructor = hasAutomationEqualityBug || equalsConstructorPrototype(object);
+            var skipConstructor = equalsConstructorPrototypeIfNotBuggy(object);
             for (var j = 0; j < dontEnumsLength; j++) {
                 var dontEnum = dontEnums[j];
                 if (!(skipConstructor && dontEnum === 'constructor') && owns(object, dontEnum)) {

@@ -51,6 +51,7 @@ describe('Object', function () {
             it('works with an arguments object', function () {
                 (function () {
                     expect(arguments.length).toBe(3);
+                    expect(Object.keys(arguments).length).toBe(arguments.length);
                     expect(Object.keys(arguments)).toEqual(['0', '1', '2']);
                 }(1, 2, 3));
             });

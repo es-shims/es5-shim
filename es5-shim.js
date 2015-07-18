@@ -839,12 +839,20 @@ var equalsConstructorPrototype = function (o) {
     var ctor = o.constructor;
     return ctor && ctor.prototype === o;
 };
-var blacklistedKeys = ['window', 'console', 'parent', 'self', 'frames', 'webkitIndexedDB', 'webkitStorageInfo'];
+var blacklistedKeys = {
+    $window: true,
+    $console: true,
+    $parent: true,
+    $self: true,
+    $frames: true,
+    $webkitIndexedDB: true,
+    $webkitStorageInfo: true
+};
 var hasAutomationEqualityBug = (function () {
     /* globals window */
     if (typeof window === 'undefined') { return false; }
     for (var k in window) {
-        if (blacklistedKeys.indexOf(k) === -1 && owns(window, k) && window[k] !== null && typeof window[k] === 'object') {
+        if (!blacklistedKeys['$' + k] && owns(window, k) && window[k] !== null && typeof window[k] === 'object') {
             try {
                 equalsConstructorPrototype(window[k]);
             } catch (e) {

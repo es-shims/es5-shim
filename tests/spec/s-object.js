@@ -1,6 +1,27 @@
 /* global describe, it, xit, expect, beforeEach, jasmine, window */
 
 var ifWindowIt = typeof window === 'undefined' ? xit : it;
+var extensionsPreventible = typeof Object.preventExtensions === 'function' && (function () {
+    var obj = {};
+    Object.preventExtensions(obj);
+    obj.a = 3;
+    return obj.a !== 3;
+}());
+var ifExtensionsPreventibleIt = extensionsPreventible ? it : xit;
+var canSeal = typeof Object.seal === 'function' && (function () {
+    var obj = { a: 3 };
+    Object.seal(obj);
+    delete obj.a;
+    return obj.a === 3;
+}());
+var ifCanSealIt = canSeal ? it : xit;
+var canFreeze = typeof Object.freeze === 'function' && (function () {
+    var obj = {};
+    Object.freeze(obj);
+    obj.a = 3;
+    return obj.a !== 3;
+}());
+var ifCanFreezeIt = canFreeze ? it : xit;
 
 describe('Object', function () {
     'use strict';
@@ -131,15 +152,15 @@ describe('Object', function () {
             expect(Object.isExtensible(obj)).toBe(true);
         });
 
-        it('should return false if object is not extensible', function () {
+        ifExtensionsPreventibleIt('should return false if object is not extensible', function () {
             expect(Object.isExtensible(Object.preventExtensions(obj))).toBe(false);
         });
 
-        it('should return false if object is seal', function () {
+        ifCanSealIt('should return false if object is sealed', function () {
             expect(Object.isExtensible(Object.seal(obj))).toBe(false);
         });
 
-        it('should return false if object is freeze', function () {
+        ifCanFreezeIt('should return false if object is frozen', function () {
             expect(Object.isExtensible(Object.freeze(obj))).toBe(false);
         });
 

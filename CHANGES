@@ -1,3 +1,11 @@
+4.1.9
+  - [Fix] Remove "extended", add "unicode" in `String#split` shim, to match ES6
+  - [Fix] Object.keys: Preserve the IE 8 dontEnum bugfix, and the automation equality bugfix.
+  - [Fix] Object.keys: Prevent a deprecation message from showing up in Chrome.
+  - [Performance] Speed up blacklisted key check for Object.keys automation equality bug.
+  - [Tests] Test on `io.js` `v2.4`
+  - [Dev Deps] Update `eslint`, `semver`
+
 4.1.8
   - [Fix] Fix an `Object.keys` IE 8 bug where `localStorage.prototype.constructor === localStorage` would throw (#275)
   - [Fix] Shimmed `Object.defineProperty` should not throw for an empty descriptor (#315)

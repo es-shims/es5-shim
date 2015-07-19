@@ -1,20 +1,19 @@
 /* global describe, it, xit, expect, beforeEach, jasmine */
 
-var supportsDescriptors = Object.defineProperty && (function () {
-    try {
-        var obj = {};
-        Object.defineProperty(obj, 'x', { enumerable: false, value: obj });
-        for (var _ in obj) { return false; }
-        return obj.x === obj;
-    } catch (e) { /* this is ES3 */
-        return false;
-    }
-}());
-
-var ifSupportsDescriptorsIt = supportsDescriptors ? it : xit;
-
 describe('Date', function () {
     'use strict';
+
+    var supportsDescriptors = Object.defineProperty && (function () {
+        try {
+            var obj = {};
+            Object.defineProperty(obj, 'x', { enumerable: false, value: obj });
+            for (var _ in obj) { return false; }
+            return obj.x === obj;
+        } catch (e) { /* this is ES3 */
+            return false;
+        }
+    }());
+    var ifSupportsDescriptorsIt = supportsDescriptors ? it : xit;
 
     describe('now', function () {
         it('should be the current time', function () {

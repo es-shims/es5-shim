@@ -1,4 +1,4 @@
-/* global describe, it, xit, expect, beforeEach */
+/* global describe, it, xit, expect, beforeEach, jasmine */
 
 var supportsDescriptors = Object.defineProperty && (function () {
     try {
@@ -223,7 +223,10 @@ describe('Date', function () {
               json;
           try {
             json = date.toJSON();
-          } catch (e) { /* invalid json */ }
+          } catch (e) {
+            /* invalid json */
+            expect(e).not.toEqual(jasmine.any(Error));
+          }
           expect(json).toBe(null);
         });
 

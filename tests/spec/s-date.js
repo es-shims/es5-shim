@@ -56,14 +56,6 @@ describe('Date', function () {
           expect(Object.getOwnPropertyDescriptor(Date, 'parse').enumerable).toBe(false);
         });
 
-        it('should support extended years', function () {
-            expect(Date.parse('0001-01-01T00:00:00Z')).toBe(-62135596800000);
-            expect(Date.parse('+275760-09-13T00:00:00.000Z')).toBe(8.64e15);
-            expect(Date.parse('+033658-09-27T01:46:40.000Z')).toBe(1e15);
-            expect(Date.parse('-000001-01-01T00:00:00Z')).toBe(-62198755200000);
-            expect(Date.parse('+002009-12-15T00:00:00Z')).toBe(1260835200000);
-        });
-
         it('should be an invalid date', function () {
                                                                         //            Chrome 19     Opera 12      Firefox 11    IE 9          Safari 5.1.1
             expect(Date.parse('2012-11-31T23:59:59.000Z')).toBeFalsy(); //            1354406399000 NaN           NaN           1354406399000 NaN
@@ -106,28 +98,32 @@ describe('Date', function () {
         });
 
         it('should support extended years', function () {
-                                                                               //      Chrome 19     Opera 12      Firefox 11    IE 9          Safari 5.1.1
-            expect(Date.parse('0000-01-01T00:00:00.000Z')).toBe(-621672192e5); //      -621672192e5  -621672192e5  -621672192e5  -621672192e5  -621672192e5
-            expect(Date.parse('+275760-09-13T00:00:00.000Z')).toBe(8.64e15); //        8.64e15       NaN           8.64e15       8.64e15       8.64e15
-            expect(Date.parse('-271821-04-20T00:00:00.000Z')).toBe(-8.64e15); //       -8.64e15      NaN           -8.64e15      -8.64e15      -8.6400000864e15
-            expect(Date.parse('+275760-09-13T00:00:00.001Z')).toBeFalsy(); //          NaN           NaN           NaN           8.64e15 + 1   8.64e15 + 1
-            expect(Date.parse('-271821-04-19T23:59:59.999Z')).toBeFalsy(); //          NaN           NaN           NaN           -8.64e15 - 1  -8.6400000864e15 - 1
+                                                                               //    Chrome 19     Opera 12      Firefox 11    IE 9          Safari 5.1.1
+            expect(Date.parse('0000-01-01T00:00:00.000Z')).toBe(-621672192e5); //   -621672192e5  -621672192e5  -621672192e5  -621672192e5  -621672192e5
+            expect(Date.parse('0001-01-01T00:00:00Z')).toBe(-621355968e5); //       -621355968e5  -621355968e5  -621355968e5   8.64e15      -621355968e5
+            expect(Date.parse('+275760-09-13T00:00:00.000Z')).toBe(8.64e15); //      8.64e15       NaN           8.64e15       8.64e15       8.64e15
+            expect(Date.parse('-271821-04-20T00:00:00.000Z')).toBe(-8.64e15); //    -8.64e15       NaN          -8.64e15      -8.64e15      -8.6400000864e15
+            expect(Date.parse('+275760-09-13T00:00:00.001Z')).toBeFalsy(); //        NaN           NaN           NaN           8.64e15 + 1   8.64e15 + 1
+            expect(Date.parse('-271821-04-19T23:59:59.999Z')).toBeFalsy(); //        NaN           NaN           NaN          -8.64e15 - 1  -8.6400000864e15 - 1
+            expect(Date.parse('+033658-09-27T01:46:40.000Z')).toBe(1e15); //         1e15          NaN           1e15          1e15          9999999136e5
+            expect(Date.parse('-000001-01-01T00:00:00Z')).toBe(-621987552e5); //    -621987552e5   NaN          -621987552e5  -621987552e5  -621987552e5
+            expect(Date.parse('+002009-12-15T00:00:00Z')).toBe(12608352e5); //       12608352e5    NaN           12608352e5    12608352e5    12608352e5
         });
 
         it('works with timezone offsets', function () {
-                                                                                   // Chrome 19   Opera 12     Firefox 11   IE 9            Safari 5.1.1
-            expect(Date.parse('2012-01-29T12:00:00.000+01:00')).toBe(132783480e4); // 132783480e4 132783480e4  132783480e4  132783480e4     132783480e4
-            expect(Date.parse('2012-01-29T12:00:00.000-00:00')).toBe(132783840e4); // 132783840e4 132783840e4  132783840e4  132783840e4     132783840e4
-            expect(Date.parse('2012-01-29T12:00:00.000+00:00')).toBe(132783840e4); // 132783840e4 132783840e4  132783840e4  132783840e4     132783840e4
-            expect(Date.parse('2012-01-29T12:00:00.000+23:59')).toBe(132775206e4); // 132775206e4 132775206e4  132775206e4  132775206e4     132775206e4
-            expect(Date.parse('2012-01-29T12:00:00.000-23:59')).toBe(132792474e4); // 132792474e4 132792474e4  132792474e4  132792474e4     132792474e4
-            expect(Date.parse('2012-01-29T12:00:00.000+24:00')).toBeFalsy(); //       NaN         1327752e6    NaN          1327752000000   1327752000000
-            expect(Date.parse('2012-01-29T12:00:00.000+24:01')).toBeFalsy(); //       NaN         NaN          NaN          1327751940000   1327751940000
-            expect(Date.parse('2012-01-29T12:00:00.000+24:59')).toBeFalsy(); //       NaN         NaN          NaN          1327748460000   1327748460000
-            expect(Date.parse('2012-01-29T12:00:00.000+25:00')).toBeFalsy(); //       NaN         NaN          NaN          NaN             NaN
-            expect(Date.parse('2012-01-29T12:00:00.000+00:60')).toBeFalsy(); //       NaN         NaN          NaN          NaN             NaN
-            expect(Date.parse('-271821-04-20T00:00:00.000+00:01')).toBeFalsy(); //    NaN         NaN          NaN          -864000000006e4 -864000008646e4
-            expect(Date.parse('-271821-04-20T00:01:00.000+00:01')).toBe(-8.64e15); // -8.64e15    NaN          -8.64e15     -8.64e15        -864000008640e4
+                                                                                   //  Chrome 19   Opera 12     Firefox 11   IE 9             Safari 5.1.1
+            expect(Date.parse('2012-01-29T12:00:00.000+01:00')).toBe(132783480e4); //  132783480e4 132783480e4  132783480e4  132783480e4      132783480e4
+            expect(Date.parse('2012-01-29T12:00:00.000-00:00')).toBe(132783840e4); //  132783840e4 132783840e4  132783840e4  132783840e4      132783840e4
+            expect(Date.parse('2012-01-29T12:00:00.000+00:00')).toBe(132783840e4); //  132783840e4 132783840e4  132783840e4  132783840e4      132783840e4
+            expect(Date.parse('2012-01-29T12:00:00.000+23:59')).toBe(132775206e4); //  132775206e4 132775206e4  132775206e4  132775206e4      132775206e4
+            expect(Date.parse('2012-01-29T12:00:00.000-23:59')).toBe(132792474e4); //  132792474e4 132792474e4  132792474e4  132792474e4      132792474e4
+            expect(Date.parse('2012-01-29T12:00:00.000+24:00')).toBeFalsy(); //        NaN         1327752e6    NaN          1327752000000    1327752000000
+            expect(Date.parse('2012-01-29T12:00:00.000+24:01')).toBeFalsy(); //        NaN         NaN          NaN          1327751940000    1327751940000
+            expect(Date.parse('2012-01-29T12:00:00.000+24:59')).toBeFalsy(); //        NaN         NaN          NaN          1327748460000    1327748460000
+            expect(Date.parse('2012-01-29T12:00:00.000+25:00')).toBeFalsy(); //        NaN         NaN          NaN          NaN              NaN
+            expect(Date.parse('2012-01-29T12:00:00.000+00:60')).toBeFalsy(); //        NaN         NaN          NaN          NaN              NaN
+            expect(Date.parse('-271821-04-20T00:00:00.000+00:01')).toBeFalsy(); //     NaN         NaN          NaN         -864000000006e4 -864000008646e4
+            expect(Date.parse('-271821-04-20T00:01:00.000+00:01')).toBe(-8.64e15); // -8.64e15     NaN         -8.64e15     -8.64e15        -864000008640e4
 
             // When time zone is missed, local offset should be used (ES 5.1 bug)
             // see https://bugs.ecmascript.org/show_bug.cgi?id=112

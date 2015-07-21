@@ -1,3 +1,14 @@
+4.1.10
+  - [Fix] Fix IE 8 issue with `window.frameElement` access in a child iframe (#322)
+  - [Tests] Consolidating `Date.parse` extended year tests
+  - [Tests] Account for a `Date.parse` precision variance in Safari 8
+  - [Tests] DRY up some Date.parse tests
+  - [Tests] Don't create globals in Date tests
+  - [Tests] Better failure output when an invalid date's toJSON throws
+  - [Tests] Also compare lengths of array-likes
+  - [Tests] Extra check on Object.keys(arguments)
+  - [Tests] Skip appropriate tests when objects aren't extensible/freezeable/sealable
+
 4.1.9
   - [Fix] Remove "extended", add "unicode" in `String#split` shim, to match ES6
   - [Fix] Object.keys: Preserve the IE 8 dontEnum bugfix, and the automation equality bugfix.

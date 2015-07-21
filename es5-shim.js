@@ -845,6 +845,7 @@ var blacklistedKeys = {
     $parent: true,
     $self: true,
     $frames: true,
+    $frameElement: true,
     $webkitIndexedDB: true,
     $webkitStorageInfo: true
 };

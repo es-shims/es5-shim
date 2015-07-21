@@ -130,7 +130,7 @@ describe('Object', function () {
         ifWindowIt('can serialize all objects on the `window`', function () {
           var has = Object.prototype.hasOwnProperty;
           var keys, exception;
-          var blacklistedKeys = ['window', 'console', 'parent', 'self', 'frames'];
+          var blacklistedKeys = ['window', 'console', 'parent', 'self', 'frames', 'frameElement'];
           for (var k in window) {
               keys = exception = void 0;
               if (blacklistedKeys.indexOf(k) === -1 && has.call(window, k) && window[k] !== null && typeof window[k] === 'object') {

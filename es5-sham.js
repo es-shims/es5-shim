@@ -33,6 +33,7 @@ var call = Function.prototype.call;
 var prototypeOfObject = Object.prototype;
 var owns = call.bind(prototypeOfObject.hasOwnProperty);
 var propertyIsEnumerable = call.bind(prototypeOfObject.propertyIsEnumerable);
+var toStr = call.bind(prototypeOfObject.toString);
 
 // If JS engine supports accessors creating shortcuts.
 var defineGetter;
@@ -65,11 +66,10 @@ if (!Object.getPrototypeOf) {
         /* eslint-enable no-proto */
         if (proto || proto === null) {
             return proto;
-        } else if (object.constructor) {
+        } else if (toStr(object.constructor) === '[object Function]') {
             return object.constructor.prototype;
-        } else {
-            return prototypeOfObject;
         }
+        return prototypeOfObject;
     };
 }
 

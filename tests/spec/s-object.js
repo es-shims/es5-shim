@@ -307,7 +307,7 @@ describe('Object', function () {
 
         it('should throw error for non object', function () {
             try {
-                expect(Object.getPrototypeOf(1)).toBeUndefined();
+                expect(Object.getPrototypeOf(1)).toBe(Number.prototype); // ES6 behavior
             } catch (err) {
                 expect(err).toEqual(jasmine.any(TypeError));
             }

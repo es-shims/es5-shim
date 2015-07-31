@@ -274,9 +274,6 @@ if (!Object.create) {
             delete empty.toLocaleString;
             delete empty.toString;
             delete empty.valueOf;
-            /* eslint-disable no-proto */
-            empty.__proto__ = null;
-            /* eslint-enable no-proto */
 
             var Empty = function Empty() {};
             Empty.prototype = empty;

@@ -1,4 +1,6 @@
 {
+	"es3": true,
+
 	"additionalRules": [],
 
 	"requireSemicolons": true,
@@ -12,6 +14,17 @@
 	"requireSpaceAfterKeywords": ["if", "else", "for", "while", "do", "switch", "return", "try", "catch", "function"],
 
 	"disallowSpaceAfterKeywords": [],
+
+	"disallowSpaceBeforeComma": true,
+	"disallowSpaceBeforeSemicolon": true,
+
+	"disallowNodeTypes": [
+		"DebuggerStatement",
+		"LabeledStatement",
+		"SwitchCase",
+		"SwitchStatement",
+		"WithStatement"
+	],
 
 	"requireSpacesInAnonymousFunctionExpression": { "beforeOpeningRoundBrace": true, "beforeOpeningCurlyBrace": true },
 	"requireSpacesInNamedFunctionExpression": { "beforeOpeningCurlyBrace": true },

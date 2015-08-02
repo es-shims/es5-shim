@@ -1,5 +1,6 @@
 language: node_js
 node_js:
+  - "iojs-v2.5"
   - "iojs-v2.4"
   - "iojs-v2.3"
   - "iojs-v2.2"
@@ -27,6 +28,7 @@ sudo: false
 matrix:
   fast_finish: true
   allow_failures:
+    - node_js: "iojs-v2.4"
     - node_js: "iojs-v2.3"
     - node_js: "iojs-v2.2"
     - node_js: "iojs-v2.1"

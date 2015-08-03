@@ -312,6 +312,12 @@ describe('Object', function () {
                 expect(err).toEqual(jasmine.any(TypeError));
             }
         });
+
+        it('should return null on Object.create(null)', function () {
+            var obj = Object.create(null);
+
+            expect(Object.getPrototypeOf(obj)).toBe(null);
+        });
     });
 
     describe('Object.defineProperties', function () {
@@ -324,6 +330,26 @@ describe('Object', function () {
             };
             Object.defineProperties(target, newProperties);
             expect(target.constructor).toEqual('new constructor');
+        });
+    });
+
+    describe('Object.create', function () {
+        it('should create objects with no properties when called as `Object.create(null)`', function () {
+            var obj = Object.create(null);
+
+            expect('hasOwnProperty' in obj).toBe(false);
+            expect('toString' in obj).toBe(false);
+            expect('constructor' in obj).toBe(false);
+
+            var protoIsEnumerable = false;
+            for (var k in obj) {
+                if (k === '__proto__') {
+                    protoIsEnumerable = true;
+                }
+            }
+            expect(protoIsEnumerable).toBe(false);
+
+            expect(obj instanceof Object).toBe(false);
         });
     });
 });

@@ -1093,8 +1093,6 @@ if (!Date.parse || doesNotParseY2KNewYear || acceptsInvalidDates || !supportsExt
             } else {
                 date = NativeDate.apply(this, arguments);
             }
-            // Prevent mixups with unfixed Date object
-            defineProperties(date, { constructor: DateShim }, true);
             return date;
         };
 

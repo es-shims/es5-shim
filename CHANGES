@@ -1,3 +1,13 @@
+4.1.11
+  - [shim: fix] Object.keys in Safari 9 has some bugs. (Already fixed in Webkit Nightly)
+  - [shim: fix] Omit !Date.parse check in the if statement (#323)
+  - [sham: fix] Fix Object.create sham to not set __proto__ (#301)
+  - [sham: fix] Add a typeof check to Object.getPrototypeOf (#319, #320)
+  - [Tests] up to `io.js` `v3.1`
+  - [Tests] Make sure `Object.getPrototypeOf` tests don't fail when engines implement ES6 semantics
+  - [Docs] Switch from vb.teelaun.ch to versionbadg.es for the npm version badge SVG (#318)
+  - [Dev Deps] Update `eslint`, `uglify-js`, `jscs`; use my personal shared `eslint` config
+
 4.1.10
   - [Fix] Fix IE 8 issue with `window.frameElement` access in a child iframe (#322)
   - [Tests] Consolidating `Date.parse` extended year tests

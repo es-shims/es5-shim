@@ -940,6 +940,10 @@ var keysWorksWithArguments = $Object.keys && (function () {
     // Safari 5.0 bug
     return $Object.keys(arguments).length === 2;
 }(1, 2));
+var keysHasArgumentsLengthBug = $Object.keys && (function () {
+    var argKeys = $Object.keys(arguments);
+	return arguments.length !== 1 || argKeys.length !== 1 || argKeys[0] !== 1;
+}(1));
 var originalKeys = $Object.keys;
 defineProperties($Object, {
     keys: function keys(object) {
@@ -949,7 +953,7 @@ defineProperties($Object, {
             return originalKeys(object);
         }
     }
-}, !keysWorksWithArguments);
+}, !keysWorksWithArguments || keysHasArgumentsLengthBug);
 
 //
 // Date

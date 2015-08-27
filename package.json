@@ -23,8 +23,8 @@
   },
   "scripts": {
     "minify": "npm run minify-shim && npm run minify-sham",
-    "minify-shim": "uglifyjs es5-shim.js --comments --source-map=es5-shim.map -m -b ascii_only=true,beautify=false > es5-shim.min.js",
-    "minify-sham": "uglifyjs es5-sham.js --comments --source-map=es5-sham.map -m -b ascii_only=true,beautify=false > es5-sham.min.js",
+    "minify-shim": "uglifyjs es5-shim.js --keep-fnames --comments --source-map=es5-shim.map -m -b ascii_only=true,beautify=false > es5-shim.min.js",
+    "minify-sham": "uglifyjs es5-sham.js --keep-fnames --comments --source-map=es5-sham.map -m -b ascii_only=true,beautify=false > es5-sham.min.js",
     "test": "npm run lint && jasmine-node --matchall ./ tests/spec/",
     "test-native": "jasmine-node --matchall tests/spec/",
     "lint": "npm run jscs && npm run eslint",

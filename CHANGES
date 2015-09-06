@@ -1,3 +1,9 @@
+4.1.12
+  - [fix] Make sure uglify doesn't remove function names
+  - [shim: fix] Use `is-arguments` implementation; don't call down legacy code path in modern engines (#325)
+  - [Tests] up to `io.js` `v3.3`
+  - [Dev Deps] update `eslint`, `@ljharb/eslint-config`
+
 4.1.11
   - [shim: fix] Object.keys in Safari 9 has some bugs. (Already fixed in Webkit Nightly)
   - [shim: fix] Omit !Date.parse check in the if statement (#323)

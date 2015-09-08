@@ -1,3 +1,6 @@
+4.1.13
+  - [shim: fix] Fix a bug where `Date(x)` threw instead of equalling `String(Date(x))` (#326)
+
 4.1.12
   - [fix] Make sure uglify doesn't remove function names
   - [shim: fix] Use `is-arguments` implementation; don't call down legacy code path in modern engines (#325)

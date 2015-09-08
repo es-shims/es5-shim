@@ -47,6 +47,11 @@ describe('Date', function () {
         ifSupportsDescriptorsIt('is not enumerable', function () {
           expect(Object.keys(new Date())).not.toContain('constructor');
         });
+
+        it('works as a function', function () {
+          expect(Date(0)).toBe(String(Date(0)));
+          expect(Date(1441705534578)).toBe(String(Date(1441705534578)));
+        });
     });
 
     describe('parse', function () {

@@ -943,7 +943,7 @@ var keysWorksWithArguments = $Object.keys && (function () {
 }(1, 2));
 var keysHasArgumentsLengthBug = $Object.keys && (function () {
     var argKeys = $Object.keys(arguments);
-	return arguments.length !== 1 || argKeys.length !== 1 || argKeys[0] !== 1;
+    return arguments.length !== 1 || argKeys.length !== 1 || argKeys[0] !== 1;
 }(1));
 var originalKeys = $Object.keys;
 defineProperties($Object, {

@@ -1,5 +1,7 @@
 language: node_js
 node_js:
+  - "4.1"
+  - "4.0"
   - "iojs-v3.3"
   - "iojs-v3.2"
   - "iojs-v3.1"
@@ -32,6 +34,7 @@ sudo: false
 matrix:
   fast_finish: true
   allow_failures:
+    - node_js: "4.0"
     - node_js: "iojs-v3.2"
     - node_js: "iojs-v3.1"
     - node_js: "iojs-v3.0"

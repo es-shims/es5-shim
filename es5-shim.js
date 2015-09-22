@@ -853,12 +853,12 @@ var hasAutomationEqualityBug = (function () {
     /* globals window */
     if (typeof window === 'undefined') { return false; }
     for (var k in window) {
-        if (!blacklistedKeys['$' + k] && owns(window, k) && window[k] !== null && typeof window[k] === 'object') {
-            try {
+        try {
+            if (!blacklistedKeys['$' + k] && owns(window, k) && window[k] !== null && typeof window[k] === 'object') {
                 equalsConstructorPrototype(window[k]);
-            } catch (e) {
-                return true;
             }
+        } catch (e) {
+            return true;
         }
     }
     return false;

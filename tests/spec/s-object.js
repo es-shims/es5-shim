@@ -131,6 +131,9 @@ describe('Object', function () {
           var has = Object.prototype.hasOwnProperty;
           var keys, exception;
           var blacklistedKeys = ['window', 'console', 'parent', 'self', 'frames', 'frameElement'];
+          if (Object.defineProperty) {
+              Object.defineProperty(window, 'thrower', { configurable: true, get: function () { throw new RangeError('thrower!'); } });
+          }
           for (var k in window) {
               keys = exception = void 0;
               if (blacklistedKeys.indexOf(k) === -1 && has.call(window, k) && window[k] !== null && typeof window[k] === 'object') {
@@ -143,6 +146,7 @@ describe('Object', function () {
                      expect(exception).toBeUndefined();
               }
           }
+          delete window.thrower;
         });
     });
 

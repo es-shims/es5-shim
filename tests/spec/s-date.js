@@ -50,7 +50,8 @@ describe('Date', function () {
 
         it('works as a function', function () {
           expect(Date(0)).toBe(String(Date(0)));
-          expect(Date(1441705534578)).toBe(String(Date(1441705534578)));
+          var value = Date(1441705534578);
+          expect(value).toBe(String(value));
         });
     });
 

@@ -1,3 +1,9 @@
+4.1.14
+  - [shim: fix] Wrap more things in a try/catch, because IE sucks and sometimes throws on [[Get]] of window.localStorage (#327)
+  - [Refactor] Use `ES.ToUint32` instead of inline `>>>`
+  - [Tests] up to `node` `v4.1`
+  - [Dev Deps] update `eslint`, `@ljharb/eslint-config`, `semver`, `jscs`
+
 4.1.13
   - [shim: fix] Fix a bug where `Date(x)` threw instead of equalling `String(Date(x))` (#326)
 

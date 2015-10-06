@@ -119,6 +119,8 @@ var isPrimitive = function isPrimitive(input) {
     return input === null || (type !== 'object' && type !== 'function');
 };
 
+var isActualNaN = $Number.isNaN || function (x) { return x !== x; };
+
 var ES = {
     // ES5 9.4
     // http://es5.github.com/#x9.4
@@ -126,7 +128,7 @@ var ES = {
     /* replaceable with https://npmjs.com/package/es-abstract ES5.ToInteger */
     ToInteger: function ToInteger(num) {
         var n = +num;
-        if (n !== n) { // isNaN
+        if (isActualNaN(n)) {
             n = 0;
         } else if (n !== 0 && n !== (1 / 0) && n !== -(1 / 0)) {
             n = (n > 0 || -1) * Math.floor(Math.abs(n));
@@ -411,10 +413,10 @@ defineProperties(ArrayPrototype, {
             if (i in self) {
                 // Invoke the callback function with call, passing arguments:
                 // context, property value, property key, thisArg object
-                if (typeof T !== 'undefined') {
-                    callbackfn.call(T, self[i], i, object);
-                } else {
+                if (typeof T === 'undefined') {
                     callbackfn(self[i], i, object);
+                } else {
+                    callbackfn.call(T, self[i], i, object);
                 }
             }
         }
@@ -442,10 +444,10 @@ defineProperties(ArrayPrototype, {
 
         for (var i = 0; i < length; i++) {
             if (i in self) {
-                if (typeof T !== 'undefined') {
-                    result[i] = callbackfn.call(T, self[i], i, object);
-                } else {
+                if (typeof T === 'undefined') {
                     result[i] = callbackfn(self[i], i, object);
+                } else {
+                    result[i] = callbackfn.call(T, self[i], i, object);
                 }
             }
         }
@@ -1303,7 +1305,7 @@ defineProperties(NumberPrototype, {
 
         // Test for NaN and round fractionDigits down
         f = $Number(fractionDigits);
-        f = f !== f ? 0 : Math.floor(f);
+        f = isActualNaN(f) ? 0 : Math.floor(f);
 
         if (f < 0 || f > 20) {
             throw new RangeError('Number.toFixed called with invalid number of decimals');
@@ -1311,8 +1313,7 @@ defineProperties(NumberPrototype, {
 
         x = $Number(this);
 
-        // Test for NaN
-        if (x !== x) {
+        if (isActualNaN(x)) {
             return 'NaN';
         }
 

@@ -68,14 +68,14 @@ if (!Object.getPrototypeOf) {
             return proto;
         } else if (toStr(object.constructor) === '[object Function]') {
             return object.constructor.prototype;
-        } else if (!(object instanceof Object)) {
+        } else if (object instanceof Object) {
+          return prototypeOfObject;
+        } else {
           // Correctly return null for Objects created with `Object.create(null)`
           // (shammed or native) or `{ __proto__: null}`.  Also returns null for
           // cross-realm objects on browsers that lack `__proto__` support (like
           // IE <11), but that's the best we can do.
           return null;
-        } else {
-          return prototypeOfObject;
         }
     };
 }

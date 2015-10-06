@@ -38,8 +38,8 @@ describe('Object', function () {
         };
 
         var loopedValues = [];
-        for (var k in obj) {
-            loopedValues.push(k);
+        for (var key in obj) {
+            loopedValues.push(key);
         }
 
         var keys = Object.keys(obj);
@@ -129,20 +129,20 @@ describe('Object', function () {
 
         ifWindowIt('can serialize all objects on the `window`', function () {
           var has = Object.prototype.hasOwnProperty;
-          var keys, exception;
+          var windowItemKeys, exception;
           var blacklistedKeys = ['window', 'console', 'parent', 'self', 'frames', 'frameElement'];
           if (Object.defineProperty) {
               Object.defineProperty(window, 'thrower', { configurable: true, get: function () { throw new RangeError('thrower!'); } });
           }
           for (var k in window) {
-              keys = exception = void 0;
+              windowItemKeys = exception = void 0;
               if (blacklistedKeys.indexOf(k) === -1 && has.call(window, k) && window[k] !== null && typeof window[k] === 'object') {
                      try {
-                         keys = Object.keys(window[k]);
+                         windowItemKeys = Object.keys(window[k]);
                      } catch (e) {
                          exception = e;
                      }
-                     expect(Array.isArray(keys)).toEqual(true);
+                     expect(Array.isArray(windowItemKeys)).toEqual(true);
                      expect(exception).toBeUndefined();
               }
           }

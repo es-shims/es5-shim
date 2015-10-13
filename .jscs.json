@@ -120,6 +120,12 @@
 
 	"disallowMultiLineTernary": false,
 
-	"validateOrderInObjectKeys": false
+	"validateOrderInObjectKeys": false,
+
+	"disallowIdenticalDestructuringNames": true,
+
+	"disallowNestedTernaries": { "maxLevel": 7 },
+
+	"requireSpaceAfterComma": true
 }
 

@@ -156,7 +156,7 @@ simply `npm install` and `npm test`.
     obtain in legacy engines.
 
 [npm-url]: https://npmjs.org/package/es5-shim
-[npm-version-svg]: http://vb.teelaun.ch/es-shims/es5-shim.svg
+[npm-version-svg]: http://versionbadg.es/es-shims/es5-shim.svg
 [travis-svg]: https://travis-ci.org/es-shims/es5-shim.svg
 [travis-url]: https://travis-ci.org/es-shims/es5-shim
 [deps-svg]: https://david-dm.org/es-shims/es5-shim.svg

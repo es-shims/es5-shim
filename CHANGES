@@ -1,3 +1,57 @@
+4.1.14
+  - [shim: fix] Wrap more things in a try/catch, because IE sucks and sometimes throws on [[Get]] of window.localStorage (#327)
+  - [Refactor] Use `ES.ToUint32` instead of inline `>>>`
+  - [Tests] up to `node` `v4.1`
+  - [Dev Deps] update `eslint`, `@ljharb/eslint-config`, `semver`, `jscs`
+
+4.1.13
+  - [shim: fix] Fix a bug where `Date(x)` threw instead of equalling `String(Date(x))` (#326)
+
+4.1.12
+  - [fix] Make sure uglify doesn't remove function names
+  - [shim: fix] Use `is-arguments` implementation; don't call down legacy code path in modern engines (#325)
+  - [Tests] up to `io.js` `v3.3`
+  - [Dev Deps] update `eslint`, `@ljharb/eslint-config`
+
+4.1.11
+  - [shim: fix] Object.keys in Safari 9 has some bugs. (Already fixed in Webkit Nightly)
+  - [shim: fix] Omit !Date.parse check in the if statement (#323)
+  - [sham: fix] Fix Object.create sham to not set __proto__ (#301)
+  - [sham: fix] Add a typeof check to Object.getPrototypeOf (#319, #320)
+  - [Tests] up to `io.js` `v3.1`
+  - [Tests] Make sure `Object.getPrototypeOf` tests don't fail when engines implement ES6 semantics
+  - [Docs] Switch from vb.teelaun.ch to versionbadg.es for the npm version badge SVG (#318)
+  - [Dev Deps] Update `eslint`, `uglify-js`, `jscs`; use my personal shared `eslint` config
+
+4.1.10
+  - [Fix] Fix IE 8 issue with `window.frameElement` access in a child iframe (#322)
+  - [Tests] Consolidating `Date.parse` extended year tests
+  - [Tests] Account for a `Date.parse` precision variance in Safari 8
+  - [Tests] DRY up some Date.parse tests
+  - [Tests] Don't create globals in Date tests
+  - [Tests] Better failure output when an invalid date's toJSON throws
+  - [Tests] Also compare lengths of array-likes
+  - [Tests] Extra check on Object.keys(arguments)
+  - [Tests] Skip appropriate tests when objects aren't extensible/freezeable/sealable
+
+4.1.9
+  - [Fix] Remove "extended", add "unicode" in `String#split` shim, to match ES6
+  - [Fix] Object.keys: Preserve the IE 8 dontEnum bugfix, and the automation equality bugfix.
+  - [Fix] Object.keys: Prevent a deprecation message from showing up in Chrome.
+  - [Performance] Speed up blacklisted key check for Object.keys automation equality bug.
+  - [Tests] Test on `io.js` `v2.4`
+  - [Dev Deps] Update `eslint`, `semver`
+
+4.1.8
+  - [Fix] Fix an `Object.keys` IE 8 bug where `localStorage.prototype.constructor === localStorage` would throw (#275)
+  - [Fix] Shimmed `Object.defineProperty` should not throw for an empty descriptor (#315)
+  - [Fix] Fix `Date#toISOString` in Safari 5.1 (#243)
+  - [Fix] Use `Object#propertyIsEnumerable` to default the initial "enumerable" value in `Object.getOwnPropertyDescriptor` sham (#289)
+  - [Fix] Fix `Array#splice` with large sparse arrays in Safari 7/8, and Opera 12.15 (#295)
+  - [Robustness] Safely use and reference many builtins internally (also see #313)
+  - [Tests] Add `Date#{getUTCDate,getUTCMonth}` tests to expose Opera 10.6/11.61/12 `Date` bugs
+  - [Dev Deps] Update `eslint`
+
 4.1.7
   - Make sure `Date.parse` is not enumerable (#310)
 

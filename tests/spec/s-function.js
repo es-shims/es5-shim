@@ -125,38 +125,22 @@ describe('Function', function () {
             var result = new Subject();
             expect(result).toBe(oracle);
         });
+
         it('returns the correct value if constructor returns primitive', function () {
-            var oracle = [1, 2, 3];
-            var Subject = function () {
+            var Subject = function (oracle) {
                 expect(this).not.toBe(oracle);
                 return oracle;
             }.bind(null);
-            var result = new Subject();
-            expect(result).toBe(oracle);
 
-            oracle = {};
-            result = new Subject();
-            expect(result).toBe(oracle);
+            var primitives = ['asdf', null, true, 1];
+            for (var i = 0; i < primitives.length; ++i) {
+                expect(new Subject(primitives[i])).not.toBe(primitives[i]);
+            }
 
-            oracle = function () {};
-            result = new Subject();
-            expect(result).toBe(oracle);
-
-            oracle = 'asdf';
-            result = new Subject();
-            expect(result).not.toBe(oracle);
-
-            oracle = null;
-            result = new Subject();
-            expect(result).not.toBe(oracle);
-
-            oracle = true;
-            result = new Subject();
-            expect(result).not.toBe(oracle);
-
-            oracle = 1;
-            result = new Subject();
-            expect(result).not.toBe(oracle);
+            var objects = [[1, 2, 3], {}, function () {}];
+            for (var j = 0; j < objects.length; ++j) {
+                expect(new Subject(objects[j])).toBe(objects[j]);
+            }
         });
         it('returns the value that instance of original "class" when called as a constructor', function () {
             var ClassA = function (x) {

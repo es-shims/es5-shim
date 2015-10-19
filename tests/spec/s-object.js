@@ -1,9 +1,32 @@
-/* global describe, it, xit, expect, beforeEach, jasmine */
+/* global describe, it, xit, expect, beforeEach, jasmine, window */
+
+var ifWindowIt = typeof window === 'undefined' ? xit : it;
+var extensionsPreventible = typeof Object.preventExtensions === 'function' && (function () {
+    var obj = {};
+    Object.preventExtensions(obj);
+    obj.a = 3;
+    return obj.a !== 3;
+}());
+var ifExtensionsPreventibleIt = extensionsPreventible ? it : xit;
+var canSeal = typeof Object.seal === 'function' && (function () {
+    var obj = { a: 3 };
+    Object.seal(obj);
+    delete obj.a;
+    return obj.a === 3;
+}());
+var ifCanSealIt = canSeal ? it : xit;
+var canFreeze = typeof Object.freeze === 'function' && (function () {
+    var obj = {};
+    Object.freeze(obj);
+    obj.a = 3;
+    return obj.a !== 3;
+}());
+var ifCanFreezeIt = canFreeze ? it : xit;
 
 describe('Object', function () {
     'use strict';
 
-    describe('Object.keys', function () {
+    describe('.keys()', function () {
         var obj = {
             str: 'boz',
             obj: { },
@@ -15,8 +38,8 @@ describe('Object', function () {
         };
 
         var loopedValues = [];
-        for (var k in obj) {
-            loopedValues.push(k);
+        for (var key in obj) {
+            loopedValues.push(key);
         }
 
         var keys = Object.keys(obj);
@@ -28,6 +51,7 @@ describe('Object', function () {
             it('works with an arguments object', function () {
                 (function () {
                     expect(arguments.length).toBe(3);
+                    expect(Object.keys(arguments).length).toBe(arguments.length);
                     expect(Object.keys(arguments)).toEqual(['0', '1', '2']);
                 }(1, 2, 3));
             });
@@ -102,6 +126,28 @@ describe('Object', function () {
             expected.sort();
             expect(actual).toEqual(expected);
         });
+
+        ifWindowIt('can serialize all objects on the `window`', function () {
+          var has = Object.prototype.hasOwnProperty;
+          var windowItemKeys, exception;
+          var blacklistedKeys = ['window', 'console', 'parent', 'self', 'frames', 'frameElement'];
+          if (Object.defineProperty) {
+              Object.defineProperty(window, 'thrower', { configurable: true, get: function () { throw new RangeError('thrower!'); } });
+          }
+          for (var k in window) {
+              windowItemKeys = exception = void 0;
+              if (blacklistedKeys.indexOf(k) === -1 && has.call(window, k) && window[k] !== null && typeof window[k] === 'object') {
+                     try {
+                         windowItemKeys = Object.keys(window[k]);
+                     } catch (e) {
+                         exception = e;
+                     }
+                     expect(Array.isArray(windowItemKeys)).toEqual(true);
+                     expect(exception).toBeUndefined();
+              }
+          }
+          delete window.thrower;
+        });
     });
 
     describe('Object.isExtensible', function () {
@@ -111,15 +157,15 @@ describe('Object', function () {
             expect(Object.isExtensible(obj)).toBe(true);
         });
 
-        it('should return false if object is not extensible', function () {
+        ifExtensionsPreventibleIt('should return false if object is not extensible', function () {
             expect(Object.isExtensible(Object.preventExtensions(obj))).toBe(false);
         });
 
-        it('should return false if object is seal', function () {
+        ifCanSealIt('should return false if object is sealed', function () {
             expect(Object.isExtensible(Object.seal(obj))).toBe(false);
         });
 
-        it('should return false if object is freeze', function () {
+        ifCanFreezeIt('should return false if object is frozen', function () {
             expect(Object.isExtensible(Object.freeze(obj))).toBe(false);
         });
 
@@ -240,6 +286,44 @@ describe('Object', function () {
         });
     });
 
+    describe('Object.getPrototypeOf', function () {
+        it('should return the [[Prototype]] of an object', function () {
+            var Foo = function () {};
+
+            var proto = Object.getPrototypeOf(new Foo());
+
+            expect(proto).toBe(Foo.prototype);
+        });
+
+        it('should shamone to the `Object.prototype` if `object.constructor` is not a function', function () {
+            var Foo = function () {};
+            Foo.prototype.constructor = 1;
+
+            var proto = Object.getPrototypeOf(new Foo()),
+                fnToString = Function.prototype.toString;
+
+            if (fnToString.call(Object.getPrototypeOf).indexOf('[native code]') < 0) {
+                expect(proto).toBe(Object.prototype);
+            } else {
+                expect(proto).toBe(Foo.prototype);
+            }
+        });
+
+        it('should throw error for non object', function () {
+            try {
+                expect(Object.getPrototypeOf(1)).toBe(Number.prototype); // ES6 behavior
+            } catch (err) {
+                expect(err).toEqual(jasmine.any(TypeError));
+            }
+        });
+
+        it('should return null on Object.create(null)', function () {
+            var obj = Object.create(null);
+
+            expect(Object.getPrototypeOf(obj)).toBe(null);
+        });
+    });
+
     describe('Object.defineProperties', function () {
         it('should define the constructor property', function () {
             var target = {};
@@ -250,6 +334,26 @@ describe('Object', function () {
             };
             Object.defineProperties(target, newProperties);
             expect(target.constructor).toEqual('new constructor');
+        });
+    });
+
+    describe('Object.create', function () {
+        it('should create objects with no properties when called as `Object.create(null)`', function () {
+            var obj = Object.create(null);
+
+            expect('hasOwnProperty' in obj).toBe(false);
+            expect('toString' in obj).toBe(false);
+            expect('constructor' in obj).toBe(false);
+
+            var protoIsEnumerable = false;
+            for (var k in obj) {
+                if (k === '__proto__') {
+                    protoIsEnumerable = true;
+                }
+            }
+            expect(protoIsEnumerable).toBe(false);
+
+            expect(obj instanceof Object).toBe(false);
         });
     });
 });

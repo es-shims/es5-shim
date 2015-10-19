@@ -618,23 +618,23 @@ describe('Array', function () {
                     i++;
                     if (i <= 4) {
                         arr[i + 2] = a + 3;
+                        arr.length += 1;
                     }
                     return true;
                 });
-                delete arr.length;
-                expect(arr).toExactlyMatch([1, 2, 3, 4, 5, 6]);
+                expect(arr).toEqual([1, 2, 3, 4, 5, 6]);
                 expect(i).toBe(3);
             });
             it('should skip non-set values', function () {
-                var passedValues = {};
+                var passedValues = createArrayLikeFromArray([]);
                 testSubject = createArrayLikeFromArray([1, 2, 3, 4]);
                 delete testSubject[1];
                 Array.prototype.filter.call(testSubject, function (o, i) {
                     passedValues[i] = o;
+                    passedValues.length = i + 1;
                     return true;
                 });
-                delete testSubject.length;
-                expect(passedValues).toExactlyMatch(testSubject);
+                expect(passedValues).toEqual(testSubject);
             });
             it('should set the right context when given none', function () {
                 var context;
@@ -647,10 +647,10 @@ describe('Array', function () {
                 delete testSubject[1];
                 Array.prototype.filter.call(testSubject, function (o, i) {
                     this[i] = o;
+                    this.length = i + 1;
                     return true;
                 }, passedValues);
-                delete testSubject.length;
-                expect(passedValues).toExactlyMatch(testSubject);
+                expect(passedValues).toEqual(testSubject);
             });
             it('should remove only the values for which the callback returns false', function () {
                 var result = Array.prototype.filter.call(testSubject, callback);
@@ -744,9 +744,9 @@ describe('Array', function () {
                 var context = {};
                 Array.prototype.map.call(testSubject, function (o, i) {
                     this[i] = o;
+                    this.length = i + 1;
                 }, context);
-                delete testSubject.length;
-                expect(context).toExactlyMatch(testSubject);
+                expect(context).toEqual(testSubject);
             });
             it('should set the right context when given none', function () {
                 var context;
@@ -766,8 +766,7 @@ describe('Array', function () {
                     i++;
                     return o;
                 });
-                delete arr.length;
-                expect(arr).toExactlyMatch([1, 2, 3, 4, 5, 6]);
+                expect(arr).toEqual([1, 2, 3, 4, 5, 6]);
                 expect(i).toBe(3);
             });
             it('should properly translate the values as according to the callback', function () {

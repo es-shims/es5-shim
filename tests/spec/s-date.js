@@ -53,6 +53,26 @@ describe('Date', function () {
           var value = Date(1441705534578);
           expect(value).toBe(String(value));
         });
+
+        it('fixes this Safari 8/9 bug', function () {
+          var offset = new Date(1970).getTimezoneOffset() * 60e3;
+
+          var timestamp = 2147483647; // Math.pow(2, 31) - 1
+          var date = new Date(1970, 0, 1, 0, 0, 0, timestamp);
+          var expectedTimestamp = timestamp + offset;
+          expect(date.getTime()).toBe(expectedTimestamp);
+
+          var brokenTimestamp = 2147483648; // Math.pow(2, 31)
+          var brokenDate = new Date(1970, 0, 1, 0, 0, 0, brokenTimestamp);
+          var expectedBrokenTimestamp = brokenTimestamp + offset;
+          expect(brokenDate.getTime()).toBe(expectedBrokenTimestamp); // NaN in Safari 8/9
+
+          var veryBrokenTS = 1435734000000;
+          var veryBrokenDate = new Date(1970, 0, 1, 0, 0, 0, veryBrokenTS);
+          var largeDate = new Date('Wed Jul 01 2015 07:00:00 GMT-0700 (PDT)');
+          var expectedVeryBrokenTS = veryBrokenTS + (largeDate.getTimezoneOffset() * 60e3);
+          expect(veryBrokenDate.getTime()).toBe(expectedVeryBrokenTS); // NaN in Safari 8/9
+        });
     });
 
     describe('parse', function () {
@@ -101,6 +121,11 @@ describe('Date', function () {
             expect(Date.parse('2034-03-01T00:00:00.000Z') -
                         Date.parse('2034-02-27T23:59:59.999Z')).toBe(86400001); //         86400001      86400001      86400001      86400001             1
 
+        });
+
+        it('fixes a Safari 8/9 bug with parsing in UTC instead of local time', function () {
+            var offset = new Date('2015-07-01').getTimezoneOffset() * 60e3;
+            expect(Date.parse('2015-07-01T00:00:00')).toBe(1435708800000 + offset); // Safari 8/9 give NaN
         });
 
         it('should support extended years', function () {

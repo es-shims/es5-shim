@@ -846,6 +846,7 @@ var blacklistedKeys = {
     $console: true,
     $parent: true,
     $self: true,
+    $frame: true,
     $frames: true,
     $frameElement: true,
     $webkitIndexedDB: true,
@@ -1078,6 +1079,9 @@ if (doesNotParseY2KNewYear || acceptsInvalidDates || !supportsExtendedYears) {
     // an alternate object for the context.
     /* global Date: true */
     /* eslint-disable no-undef */
+    var maxSafeUnsigned32Bit = Math.pow(2, 31) - 1;
+    var secondsWithinMaxSafeUnsigned32Bit = Math.floor(maxSafeUnsigned32Bit / 1e3);
+    var hasSafariSignedIntBug = isActualNaN(new Date(1970, 0, 1, 0, 0, 0, maxSafeUnsigned32Bit + 1).getTime());
     Date = (function (NativeDate) {
     /* eslint-enable no-undef */
         // Date.length === 7
@@ -1085,13 +1089,22 @@ if (doesNotParseY2KNewYear || acceptsInvalidDates || !supportsExtendedYears) {
             var length = arguments.length;
             var date;
             if (this instanceof NativeDate) {
+                var seconds = s;
+                var millis = ms;
+                if (hasSafariSignedIntBug && length >= 7 && ms > maxSafeUnsigned32Bit) {
+                    // work around a Safari 8/9 bug where it treats the seconds as signed
+                    var msToShift = Math.floor(ms / maxSafeUnsigned32Bit) * maxSafeUnsigned32Bit;
+                    var sToShift = Math.floor(msToShift / 1e3);
+                    seconds += sToShift;
+                    millis -= sToShift * 1e3;
+                }
                 date = length === 1 && $String(Y) === Y ? // isString(Y)
                     // We explicitly pass it through parse:
                     new NativeDate(DateShim.parse(Y)) :
                     // We have to manually make calls depending on argument
                     // length here
-                    length >= 7 ? new NativeDate(Y, M, D, h, m, s, ms) :
-                    length >= 6 ? new NativeDate(Y, M, D, h, m, s) :
+                    length >= 7 ? new NativeDate(Y, M, D, h, m, seconds, millis) :
+                    length >= 6 ? new NativeDate(Y, M, D, h, m, seconds) :
                     length >= 5 ? new NativeDate(Y, M, D, h, m) :
                     length >= 4 ? new NativeDate(Y, M, D, h) :
                     length >= 3 ? new NativeDate(Y, M, D) :
@@ -1145,7 +1158,16 @@ if (doesNotParseY2KNewYear || acceptsInvalidDates || !supportsExtendedYears) {
         };
 
         var toUTC = function toUTC(t) {
-            return $Number(new NativeDate(1970, 0, 1, 0, 0, 0, t));
+            var s = 0;
+            var ms = t;
+            if (hasSafariSignedIntBug && ms > maxSafeUnsigned32Bit) {
+                // work around a Safari 8/9 bug where it treats the seconds as signed
+                var msToShift = Math.floor(ms / maxSafeUnsigned32Bit) * maxSafeUnsigned32Bit;
+                var sToShift = Math.floor(msToShift / 1e3);
+                s += sToShift;
+                ms -= sToShift * 1e3;
+            }
+            return $Number(new NativeDate(1970, 0, 1, 0, 0, s, ms));
         };
 
         // Copy any custom methods a 3rd party library may have added

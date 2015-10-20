@@ -1,3 +1,10 @@
+4.1.15
+  - [shim: fix] new Date + Date.parse: Fix a Safari 8 & 9 bug where the `ms` arg is treated as a signed instead of unsigned int (#329)
+  - [shim: fix] add 'frame' to blacklisted keys (#330)
+  - [Dev Deps] update `eslint`, `@ljharb/eslint-config`, `jscs`, `uglify-js`
+  - [Tests] on `node` `v4.2`
+  - [Tests] Date: prevent nondeterminism in the tests - this sometime produced values that are one ms off
+
 4.1.14
   - [shim: fix] Wrap more things in a try/catch, because IE sucks and sometimes throws on [[Get]] of window.localStorage (#327)
   - [Refactor] Use `ES.ToUint32` instead of inline `>>>`

@@ -26,7 +26,7 @@
 		"WithStatement"
 	],
 
-	"requireObjectKeysOnNewLine": false,
+	"requireObjectKeysOnNewLine": { "allExcept": ["sameLine"] },
 
 	"requireSpacesInAnonymousFunctionExpression": { "beforeOpeningRoundBrace": true, "beforeOpeningCurlyBrace": true },
 	"requireSpacesInNamedFunctionExpression": { "beforeOpeningCurlyBrace": true },
@@ -75,7 +75,7 @@
 
 	"disallowMultipleLineStrings": true,
 
-	"requireDotNotation": true,
+	"requireDotNotation": { "allExcept": ["keywords"] },
 
 	"requireParenthesesAroundIIFE": true,
 
@@ -126,6 +126,7 @@
 
 	"disallowNestedTernaries": { "maxLevel": 7 },
 
-	"requireSpaceAfterComma": true
+	"requireSpaceAfterComma": true,
+	"requireAlignedMultilineParams": false
 }
 

@@ -229,4 +229,37 @@ describe('String', function () {
             });
         });
     });
+
+    describe('#indexOf()', function () {
+      it('has basic support', function () {
+          expect('abcab'.indexOf('a')).toEqual(0);
+          expect('abcab'.indexOf('a', 1)).toEqual(3);
+          expect('abcab'.indexOf('a', 4)).toEqual(-1);
+      });
+
+      it('works with unicode', function () {
+          expect('あいabcあいabc'.indexOf('あい')).toEqual(0);
+          expect('あいabcあいabc'.indexOf('あい', 0)).toEqual(0);
+          expect('あいabcあいabc'.indexOf('あい', 1)).toEqual(5);
+          expect('あいabcあいabc'.indexOf('あい', 6)).toEqual(-1);
+      });
+    });
+
+    describe('#lastIndexOf()', function () {
+      it('has the right length', function () {
+          expect(String.prototype.lastIndexOf.length).toEqual(1);
+      });
+
+      it('has basic support', function () {
+          expect('abcd'.lastIndexOf('d')).toEqual(3);
+          expect('abcd'.lastIndexOf('d', 3)).toEqual(3);
+          expect('abcd'.lastIndexOf('d', 2)).toEqual(-1);
+      });
+
+      it('works with unicode', function () {
+          expect('abcあい'.lastIndexOf('あい')).toEqual(3);
+          expect('abcあい'.lastIndexOf('あい', 3)).toEqual(3);
+          expect('abcあい'.lastIndexOf('あい', 2)).toEqual(-1);
+      });
+    });
 });

@@ -326,6 +326,7 @@ var owns = call.bind(ObjectPrototype.hasOwnProperty);
 var toStr = call.bind(ObjectPrototype.toString);
 var strSlice = call.bind(StringPrototype.slice);
 var strSplit = call.bind(StringPrototype.split);
+var strIndexOf = call.bind(StringPrototype.indexOf);
 
 //
 // Array
@@ -1596,6 +1597,30 @@ defineProperties(StringPrototype, {
         return $String(this).replace(trimBeginRegexp, '').replace(trimEndRegexp, '');
     }
 }, hasTrimWhitespaceBug);
+
+var hasLastIndexBug = String.prototype.lastIndexOf && 'abcあい'.lastIndexOf('あい', 2) !== -1;
+defineProperties(StringPrototype, {
+    lastIndexOf: function lastIndexOf(searchString) {
+        if (typeof this === 'undefined' || this === null) {
+            throw new TypeError("can't convert " + this + ' to object');
+        }
+        var S = $String(this);
+        var searchStr = $String(searchString);
+        var numPos = arguments.length > 1 ? $Number(arguments[1]) : NaN;
+        var pos = isActualNaN(numPos) ? Infinity : ES.ToInteger(numPos);
+        var start = min(max(pos, 0), S.length);
+        var searchLen = searchStr.length;
+        var k = start + searchLen;
+        while (k > 0) {
+            k = max(0, k - searchLen);
+            var index = strIndexOf(strSlice(S, k, start + searchLen), searchStr);
+            if (index !== -1) {
+                return k + index;
+            }
+        }
+        return -1;
+    }
+}, hasLastIndexBug);
 
 // ES-5 15.1.2.2
 if (parseInt(ws + '08') !== 8 || parseInt(ws + '0x16') !== 22) {

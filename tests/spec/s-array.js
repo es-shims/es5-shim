@@ -40,7 +40,7 @@ describe('Array', function () {
             var arr = [1, 2, 3],
                 i = 0;
             arr.forEach(function (a) {
-                i++;
+                i += 1;
                 arr.push(a + 3);
             });
             expect(arr).toEqual([1, 2, 3, 4, 5, 6]);
@@ -141,7 +141,7 @@ describe('Array', function () {
             var arr = [1, 2, 3],
                 i = 0;
             arr.some(function (a) {
-                i++;
+                i += 1;
                 arr.push(a + 3);
                 return i > 3;
             });
@@ -232,7 +232,7 @@ describe('Array', function () {
             var arr = [1, 2, 3],
                 i = 0;
             arr.every(function (a) {
-                i++;
+                i += 1;
                 arr.push(a + 3);
                 return i <= 3;
             });
@@ -550,7 +550,7 @@ describe('Array', function () {
                 var arr = [1, 2, 3];
                 var i = 0;
                 arr.filter(function (a) {
-                    i++;
+                    i += 1;
                     if (i <= 4) {
                         arr.push(a + 3);
                     }
@@ -615,7 +615,7 @@ describe('Array', function () {
                 var arr = createArrayLikeFromArray([1, 2, 3]),
                     i = 0;
                 Array.prototype.filter.call(arr, function (a) {
-                    i++;
+                    i += 1;
                     if (i <= 4) {
                         arr[i + 2] = a + 3;
                         arr.length += 1;
@@ -708,7 +708,7 @@ describe('Array', function () {
                     i = 0;
                 arr.map(function (o) {
                     arr.push(o + 3);
-                    i++;
+                    i += 1;
                     return o;
                 });
                 expect(arr).toExactlyMatch([1, 2, 3, 4, 5, 6]);
@@ -725,7 +725,7 @@ describe('Array', function () {
                     i = 0;
                 delete array[2];
                 array.map(function () {
-                    i++;
+                    i += 1;
                 });
                 expect(i).toBe(3);
             });
@@ -763,7 +763,7 @@ describe('Array', function () {
                     i = 0;
                 Array.prototype.map.call(arr, function (o) {
                     Array.prototype.push.call(arr, o + 3);
-                    i++;
+                    i += 1;
                     return o;
                 });
                 expect(arr).toEqual([1, 2, 3, 4, 5, 6]);
@@ -780,7 +780,7 @@ describe('Array', function () {
                     i = 0;
                 delete array[2];
                 Array.prototype.map.call(array, function () {
-                    i++;
+                    i += 1;
                 });
                 expect(i).toBe(3);
             });
@@ -815,7 +815,7 @@ describe('Array', function () {
                 var arr = [1, 2, 3],
                     i = 0;
                 arr.reduce(function (a, b) {
-                    i++;
+                    i += 1;
                     if (i <= 4) {
                         arr.push(a + 3);
                     }
@@ -882,7 +882,7 @@ describe('Array', function () {
                 var arr = createArrayLikeFromArray([1, 2, 3]),
                     i = 0;
                 Array.prototype.reduce.call(arr, function (a, b) {
-                    i++;
+                    i += 1;
                     if (i <= 4) {
                         arr[i + 2] = a + 3;
                     }
@@ -967,7 +967,7 @@ describe('Array', function () {
                 var arr = [1, 2, 3],
                     i = 0;
                 arr.reduceRight(function (a, b) {
-                    i++;
+                    i += 1;
                     if (i <= 4) {
                         arr.push(a + 3);
                     }
@@ -1042,7 +1042,7 @@ describe('Array', function () {
                 var arr = createArrayLikeFromArray([1, 2, 3]),
                     i = 0;
                 Array.prototype.reduceRight.call(arr, function (a, b) {
-                    i++;
+                    i += 1;
                     if (i <= 4) {
                         arr[i + 2] = a + 3;
                     }

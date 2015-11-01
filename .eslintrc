@@ -27,6 +27,7 @@
 		"no-magic-numbers": [0],
 		"no-native-reassign": [2, {"exceptions": ["Date", "parseInt"]}],
 		"no-new-func": [1],
+		"no-plusplus": [1],
 		"no-restricted-syntax": [2, "ContinueStatement", "DebuggerStatement", "LabeledStatement", "WithStatement"],
 		"no-shadow": [1],
 		"no-unused-vars": [1, { "vars": "all", "args": "after-used" }],

@@ -51,5 +51,12 @@ describe('global methods', function () {
            expect(parseInt('08', fakeZero)).toBe(parseInt('08', 10));
            expect(parseInt('0x16', fakeZero)).toBe(parseInt('0x16', 16));
        });
+
+       it('allows sign-prefixed hex values', function () {
+           expect(parseInt('-0xF')).toBe(-15);
+           expect(parseInt('-0xF', 16)).toBe(-15);
+           expect(parseInt('+0xF')).toBe(15);
+           expect(parseInt('+0xF', 16)).toBe(15);
+       });
     });
 });

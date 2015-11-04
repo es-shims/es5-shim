@@ -1626,7 +1626,7 @@ defineProperties(StringPrototype, {
 if (parseInt(ws + '08') !== 8 || parseInt(ws + '0x16') !== 22) {
     /* global parseInt: true */
     parseInt = (function (origParseInt) {
-        var hexRegex = /^0[xX]/;
+        var hexRegex = /^[\-+]?0[xX]/;
         return function parseInt(str, radix) {
             var string = $String(str).trim();
             var defaultedRadix = $Number(radix) || (hexRegex.test(string) ? 16 : 10);

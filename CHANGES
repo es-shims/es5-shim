@@ -1,3 +1,25 @@
+4.3.0
+  - [New] `Array#push`: in IE <= 7, `Array#push` was not generic (#336)
+  - [New] `Array#push` in Opera `10.6` has a super weird bug when pushing `undefined`
+  - [New] `Array#join`: In IE <= 7, passing `undefined` didn't use the default separator (#333)
+  - [New] `Error#toString`: prints out the proper message in IE 7 and below (#334)
+  - [New] `Number#toPrecision`: IE 7 and below incorrectly throw when an explicit `undefined` precision is passed (#340)
+  - [Fix] `String#lastIndexOf`: ensure the correct length in IE 8
+  - [Fix] ensure `parseInt` accepts negative and plus-prefixed hex values (#332)
+  - [Robustness] Use a bound `Array#push` instead of relying on `Function#call`
+  - [Dev Deps] update `eslint`, `@ljharb/eslint-config`, `jscs`
+  - [Tests] Add some conditionals to avoid impossible-to-fix test failures in IE 6-8, due to it being unable to distinguish between `undefined` and an absent index (#114)
+  - [Tests] Fix false negatives in IE 6-8 with jasmine comparing arrays to arraylikes (#114)
+  - [Tests] add additional `Array#shift` tests (#337)
+  - [Tests] Add additional `Array#splice` tests (#339)
+  - [Tests] Add `Array#pop` tests, just in case (#338)
+  - [Tests] include `global` tests in HTML test files
+  - [Tests] Make sure the HTML tests run with the right charset
+  - [Tests] ensure `node` `v0.8` tests stay passing.
+  - [Tests] Prevent nondeterminism in the tests - this sometime produced values that are one ms off
+  - [Tests] on `node` `v5.0`
+  - [Tests] fix npm upgrades for older nodes
+
 4.2.0
   - [shim: new] Overwrite `String#lastIndexOf` in IE 9, 10, 11, and Edge, so it has proper unicode support.
   - [Dev Deps] update `eslint`, `jscs`

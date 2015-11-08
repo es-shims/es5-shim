@@ -1611,7 +1611,7 @@ defineProperties(StringPrototype, {
     }
 }, hasTrimWhitespaceBug);
 
-var hasLastIndexBug = String.prototype.lastIndexOf && 'abcあい'.lastIndexOf('あい', 2) !== -1;
+var hasLastIndexBug = StringPrototype.lastIndexOf && 'abcあい'.lastIndexOf('あい', 2) !== -1;
 defineProperties(StringPrototype, {
     lastIndexOf: function lastIndexOf(searchString) {
         if (typeof this === 'undefined' || this === null) {
@@ -1634,6 +1634,13 @@ defineProperties(StringPrototype, {
         return -1;
     }
 }, hasLastIndexBug);
+
+var originalLastIndexOf = StringPrototype.lastIndexOf;
+defineProperties(StringPrototype, {
+    lastIndexOf: function lastIndexOf(searchString) {
+        return originalLastIndexOf.apply(this, arguments);
+    }
+}, StringPrototype.lastIndexOf.length !== 1);
 
 // ES-5 15.1.2.2
 if (parseInt(ws + '08') !== 8 || parseInt(ws + '0x16') !== 22) {

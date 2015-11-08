@@ -835,6 +835,18 @@ defineProperties(ArrayPrototype, {
     }
 }, hasJoinUndefinedBug);
 
+var pushShim = function push(item) {
+    var O = ES.ToObject(this);
+    var n = ES.ToUint32(O.length);
+    var i = 0;
+    while (i < arguments.length) {
+        O[n + i] = arguments[i];
+        i += 1;
+    }
+    O.length = n + i;
+    return n + i;
+};
+
 var pushIsNotGeneric = (function () {
     var obj = {};
     var result = Array.prototype.push.call(obj, undefined);
@@ -842,20 +854,20 @@ var pushIsNotGeneric = (function () {
 }());
 defineProperties(ArrayPrototype, {
     push: function push(item) {
-        var O = ES.ToObject(this);
-        if (isArray(O)) {
-            return array_push.apply(O, arguments);
+        if (isArray(this)) {
+            return array_push.apply(this, arguments);
         }
-        var n = ES.ToUint32(O.length);
-        var i = 0;
-        while (i < arguments.length) {
-            O[n + i] = arguments[i];
-            i += 1;
-        }
-        O.length = n + i;
-        return n + i;
+        return pushShim.apply(this, arguments);
     }
 }, pushIsNotGeneric);
+
+// This fixes a very weird bug in Opera 10.6 when pushing `undefined
+var pushUndefinedIsWeird = (function () {
+    var arr = [];
+    var result = arr.push(undefined);
+    return result !== 1 || arr.length !== 1 || typeof arr[0] !== 'undefined' || !owns(arr, 0);
+}());
+defineProperties(ArrayPrototype, { push: pushShim }, pushUndefinedIsWeird);
 
 //
 // Object

@@ -1322,91 +1322,90 @@ var toFixedHelpers = {
   }
 };
 
-defineProperties(NumberPrototype, {
-    toFixed: function toFixed(fractionDigits) {
-        var f, x, s, m, e, z, j, k;
+var toFixedShim = function toFixed(fractionDigits) {
+    var f, x, s, m, e, z, j, k;
 
-        // Test for NaN and round fractionDigits down
-        f = $Number(fractionDigits);
-        f = isActualNaN(f) ? 0 : Math.floor(f);
+    // Test for NaN and round fractionDigits down
+    f = $Number(fractionDigits);
+    f = isActualNaN(f) ? 0 : Math.floor(f);
 
-        if (f < 0 || f > 20) {
-            throw new RangeError('Number.toFixed called with invalid number of decimals');
-        }
-
-        x = $Number(this);
-
-        if (isActualNaN(x)) {
-            return 'NaN';
-        }
-
-        // If it is too big or small, return the string value of the number
-        if (x <= -1e21 || x >= 1e21) {
-            return $String(x);
-        }
-
-        s = '';
-
-        if (x < 0) {
-            s = '-';
-            x = -x;
-        }
-
-        m = '0';
-
-        if (x > 1e-21) {
-            // 1e-21 < x < 1e21
-            // -70 < log2(x) < 70
-            e = toFixedHelpers.log(x * toFixedHelpers.pow(2, 69, 1)) - 69;
-            z = (e < 0 ? x * toFixedHelpers.pow(2, -e, 1) : x / toFixedHelpers.pow(2, e, 1));
-            z *= 0x10000000000000; // Math.pow(2, 52);
-            e = 52 - e;
-
-            // -18 < e < 122
-            // x = z / 2 ^ e
-            if (e > 0) {
-                toFixedHelpers.multiply(0, z);
-                j = f;
-
-                while (j >= 7) {
-                    toFixedHelpers.multiply(1e7, 0);
-                    j -= 7;
-                }
-
-                toFixedHelpers.multiply(toFixedHelpers.pow(10, j, 1), 0);
-                j = e - 1;
-
-                while (j >= 23) {
-                    toFixedHelpers.divide(1 << 23);
-                    j -= 23;
-                }
-
-                toFixedHelpers.divide(1 << j);
-                toFixedHelpers.multiply(1, 1);
-                toFixedHelpers.divide(2);
-                m = toFixedHelpers.numToString();
-            } else {
-                toFixedHelpers.multiply(0, z);
-                toFixedHelpers.multiply(1 << (-e), 0);
-                m = toFixedHelpers.numToString() + strSlice('0.00000000000000000000', 2, 2 + f);
-            }
-        }
-
-        if (f > 0) {
-            k = m.length;
-
-            if (k <= f) {
-                m = s + strSlice('0.0000000000000000000', 0, f - k + 2) + m;
-            } else {
-                m = s + strSlice(m, 0, k - f) + '.' + strSlice(m, k - f);
-            }
-        } else {
-            m = s + m;
-        }
-
-        return m;
+    if (f < 0 || f > 20) {
+        throw new RangeError('Number.toFixed called with invalid number of decimals');
     }
-}, hasToFixedBugs);
+
+    x = $Number(this);
+
+    if (isActualNaN(x)) {
+        return 'NaN';
+    }
+
+    // If it is too big or small, return the string value of the number
+    if (x <= -1e21 || x >= 1e21) {
+        return $String(x);
+    }
+
+    s = '';
+
+    if (x < 0) {
+        s = '-';
+        x = -x;
+    }
+
+    m = '0';
+
+    if (x > 1e-21) {
+        // 1e-21 < x < 1e21
+        // -70 < log2(x) < 70
+        e = toFixedHelpers.log(x * toFixedHelpers.pow(2, 69, 1)) - 69;
+        z = (e < 0 ? x * toFixedHelpers.pow(2, -e, 1) : x / toFixedHelpers.pow(2, e, 1));
+        z *= 0x10000000000000; // Math.pow(2, 52);
+        e = 52 - e;
+
+        // -18 < e < 122
+        // x = z / 2 ^ e
+        if (e > 0) {
+            toFixedHelpers.multiply(0, z);
+            j = f;
+
+            while (j >= 7) {
+                toFixedHelpers.multiply(1e7, 0);
+                j -= 7;
+            }
+
+            toFixedHelpers.multiply(toFixedHelpers.pow(10, j, 1), 0);
+            j = e - 1;
+
+            while (j >= 23) {
+                toFixedHelpers.divide(1 << 23);
+                j -= 23;
+            }
+
+            toFixedHelpers.divide(1 << j);
+            toFixedHelpers.multiply(1, 1);
+            toFixedHelpers.divide(2);
+            m = toFixedHelpers.numToString();
+        } else {
+            toFixedHelpers.multiply(0, z);
+            toFixedHelpers.multiply(1 << (-e), 0);
+            m = toFixedHelpers.numToString() + strSlice('0.00000000000000000000', 2, 2 + f);
+        }
+    }
+
+    if (f > 0) {
+        k = m.length;
+
+        if (k <= f) {
+            m = s + strSlice('0.0000000000000000000', 0, f - k + 2) + m;
+        } else {
+            m = s + strSlice(m, 0, k - f) + '.' + strSlice(m, k - f);
+        }
+    } else {
+        m = s + m;
+    }
+
+    return m;
+};
+defineProperties(NumberPrototype, { toFixed: toFixedShim }, hasToFixedBugs);
 
 var hasToPrecisionUndefinedBug = (function () {
     try {

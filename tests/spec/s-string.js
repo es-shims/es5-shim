@@ -4,16 +4,18 @@ describe('String', function () {
     'use strict';
 
     describe('trim', function () {
-        var test = '\x09\x0A\x0B\x0C\x0D\x20\xA0\u1680\u180E\u2000\u2001\u2002\u2003\u2004\u2005\u2006\u2007\u2008\u2009\u200A\u202F\u205F\u3000\u2028\u2029\uFEFFHello, World!\x09\x0A\x0B\x0C\x0D\x20\xA0\u1680\u180E\u2000\u2001\u2002\u2003\u2004\u2005\u2006\u2007\u2008\u2009\u200A\u202F\u205F\u3000\u2028\u2029\uFEFF';
+        var wsp = '\t\n\v\f\r \xA0\u1680\u180E\u2000\u2001\u2002\u2003\u2004\u2005' +
+          '\u2006\u2007\u2008\u2009\u200A\u200B\u2028\u2029\u202F\u205F\u3000\uFEFF';
+        var test = [wsp, 'Hello, World!', wsp].join('');
 
         it('trims all ES5 whitespace', function () {
             expect(test.trim()).toEqual('Hello, World!');
             expect(test.trim().length).toBe(13);
         });
 
-        it('does not trim the zero-width space', function () {
-            expect('\u200b'.trim()).toBe('\u200b');
-            expect('\u200b'.trim().length).toBe(1);
+        it('does not trim the next-line character', function () {
+            expect('\x85'.trim()).toBe('\x85');
+            expect('\x85'.trim().length).toBe(1);
         });
     });
 

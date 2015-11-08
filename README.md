@@ -48,6 +48,7 @@ simply `npm install` and `npm test`.
     * :warning: Caveat: bound functions don't have checks in ``call`` and
       ``apply`` to avoid executing as a constructor.
 * Number.prototype.toFixed
+* Number.prototype.toPrecision
 * Object.keys
 * String.prototype.split
 * String.prototype.trim

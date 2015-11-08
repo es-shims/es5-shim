@@ -10,10 +10,12 @@ var hasStrictMode = (function () {
 
 describe('Array', function () {
     var testSubject;
+
     beforeEach(function () {
         testSubject = [2, 3, undefined, true, 'hej', null, false, 0];
         delete testSubject[1];
     });
+
     var createArrayLikeFromArray = function createArrayLikeFromArray(arr) {
         var o = {};
         Array.prototype.forEach.call(arr, function (e, i) {
@@ -30,15 +32,17 @@ describe('Array', function () {
             expected = { 0: 2, 2: undefined, 3: true, 4: 'hej', 5: null, 6: false, 7: 0 };
             actual = {};
         });
+
         it('should pass the right parameters', function () {
-            var callback = jasmine.createSpy('callback'),
-                array = ['1'];
+            var callback = jasmine.createSpy('callback');
+            var array = ['1'];
             array.forEach(callback);
             expect(callback).toHaveBeenCalledWith('1', 0, array);
         });
+
         it('should not affect elements added to the array after it has begun', function () {
-            var arr = [1, 2, 3],
-                i = 0;
+            var arr = [1, 2, 3];
+            var i = 0;
             arr.forEach(function (a) {
                 i += 1;
                 arr.push(a + 3);
@@ -52,12 +56,14 @@ describe('Array', function () {
             [1].forEach(function () { context = this; });
             expect(context).toBe(function () { return this; }.call());
         });
+
         it('should iterate all', function () {
             testSubject.forEach(function (obj, index) {
                 actual[index] = obj;
             });
             expect(actual).toExactlyMatch(expected);
         });
+
         it('should iterate all using a context', function () {
             var o = { a: actual };
 
@@ -74,9 +80,10 @@ describe('Array', function () {
             });
             expect(actual).toExactlyMatch(expected);
         });
+
         it('should iterate all in an array-like object using a context', function () {
-            var ts = createArrayLikeFromArray(testSubject),
-                o = { a: actual };
+            var ts = createArrayLikeFromArray(testSubject);
+            var o = { a: actual };
 
             Array.prototype.forEach.call(ts, function (obj, index) {
                 this.a[index] = obj;
@@ -86,6 +93,7 @@ describe('Array', function () {
 
         describe('strings', function () {
             var str = 'Hello, World!';
+
             it('should iterate all in a string', function () {
                 actual = [];
                 Array.prototype.forEach.call(str, function (item, index) {
@@ -93,6 +101,7 @@ describe('Array', function () {
                 });
                 expect(actual).toExactlyMatch(str.split(''));
             });
+
             it('should iterate all in a string using a context', function () {
                 actual = [];
                 var o = { a: actual };
@@ -102,6 +111,7 @@ describe('Array', function () {
                 expect(actual).toExactlyMatch(str.split(''));
             });
         });
+
         it('should have a boxed object as list argument of callback', function () {
             var listArg;
             Array.prototype.forEach.call('foo', function (item, index, list) {
@@ -110,6 +120,7 @@ describe('Array', function () {
             expect(typeof listArg).toBe('object');
             expect(toStr.call(listArg)).toBe('[object String]');
         });
+
         if (hasStrictMode) {
             it('does not autobox the content in strict mode', function () {
                 var context;
@@ -137,9 +148,10 @@ describe('Array', function () {
             array.some(callback);
             expect(callback).toHaveBeenCalledWith('1', 0, array);
         });
+
         it('should not affect elements added to the array after it has begun', function () {
-            var arr = [1, 2, 3],
-                i = 0;
+            var arr = [1, 2, 3];
+            var i = 0;
             arr.some(function (a) {
                 i += 1;
                 arr.push(a + 3);
@@ -148,6 +160,7 @@ describe('Array', function () {
             expect(arr).toEqual([1, 2, 3, 4, 5, 6]);
             expect(i).toBe(3);
         });
+
         it('should set the right context when given none', function () {
             var context;
             [1].some(function () { context = this; });
@@ -158,10 +171,12 @@ describe('Array', function () {
             actual = testSubject.some(function () {});
             expect(actual).toBeFalsy();
         });
+
         it('should return true if it is stopped somewhere', function () {
             actual = testSubject.some(function () { return true; });
             expect(actual).toBeTruthy();
         });
+
         it('should return false if there are no elements', function () {
             actual = [].some(function () { return true; });
             expect(actual).toBeFalsy();
@@ -175,6 +190,7 @@ describe('Array', function () {
             });
             expect(actual).toExactlyMatch(expected);
         });
+
         it('should stop after 3 elements using a context', function () {
             var o = { a: actual };
             testSubject.some(function (obj, index) {
@@ -194,6 +210,7 @@ describe('Array', function () {
             });
             expect(actual).toExactlyMatch(expected);
         });
+
         it('should stop after 3 elements in an array-like object using a context', function () {
             var ts = createArrayLikeFromArray(testSubject);
             var o = { a: actual };
@@ -204,6 +221,7 @@ describe('Array', function () {
             }, o);
             expect(actual).toExactlyMatch(expected);
         });
+
         it('should have a boxed object as list argument of callback', function () {
             var listArg;
             Array.prototype.some.call('foo', function (item, index, list) {
@@ -228,9 +246,10 @@ describe('Array', function () {
             array.every(callback);
             expect(callback).toHaveBeenCalledWith('1', 0, array);
         });
+
         it('should not affect elements added to the array after it has begun', function () {
-            var arr = [1, 2, 3],
-                i = 0;
+            var arr = [1, 2, 3];
+            var i = 0;
             arr.every(function (a) {
                 i += 1;
                 arr.push(a + 3);
@@ -239,6 +258,7 @@ describe('Array', function () {
             expect(arr).toEqual([1, 2, 3, 4, 5, 6]);
             expect(i).toBe(3);
         });
+
         it('should set the right context when given none', function () {
             var context;
             [1].every(function () { context = this; });
@@ -252,10 +272,12 @@ describe('Array', function () {
             actual = [].every(function () { return false; });
             expect(actual).toBeTruthy();
         });
+
         it('should return true if it runs to the end', function () {
             actual = [1, 2, 3].every(function () { return true; });
             expect(actual).toBeTruthy();
         });
+
         it('should return false if it is stopped before the end', function () {
             actual = [1, 2, 3].every(function () { return false; });
             expect(actual).toBeFalsy();
@@ -269,6 +291,7 @@ describe('Array', function () {
             });
             expect(actual).toExactlyMatch(expected);
         });
+
         it('should stop after 3 elements using a context', function () {
             var o = { a: actual };
             testSubject.every(function (obj, index) {
@@ -288,6 +311,7 @@ describe('Array', function () {
             });
             expect(actual).toExactlyMatch(expected);
         });
+
         it('should stop after 3 elements in an array-like object using a context', function () {
             var ts = createArrayLikeFromArray(testSubject);
             var o = { a: actual };
@@ -298,6 +322,7 @@ describe('Array', function () {
             }, o);
             expect(actual).toExactlyMatch(expected);
         });
+
         it('should have a boxed object as list argument of callback', function () {
             var listArg;
             Array.prototype.every.call('foo', function (item, index, list) {
@@ -316,7 +341,6 @@ describe('Array', function () {
         beforeEach(function () {
             testSubject = [2, 3, undefined, true, 'hej', null, 2, false, 0];
             delete testSubject[1];
-
         });
 
         it('should find the element', function () {
@@ -324,21 +348,25 @@ describe('Array', function () {
             actual = testSubject.indexOf('hej');
             expect(actual).toBe(expected);
         });
+
         it('should not find the element', function () {
             expected = -1;
             actual = testSubject.indexOf('mus');
             expect(actual).toBe(expected);
         });
+
         it('should find undefined as well', function () {
             expected = -1;
             actual = testSubject.indexOf(undefined);
             expect(actual).not.toBe(expected);
         });
+
         it('should skip unset indexes', function () {
             expected = 2;
             actual = testSubject.indexOf(undefined);
             expect(actual).toBe(expected);
         });
+
         it('should use a strict test', function () {
             actual = testSubject.indexOf(null);
             expect(actual).toBe(5);
@@ -346,25 +374,30 @@ describe('Array', function () {
             actual = testSubject.indexOf('2');
             expect(actual).toBe(-1);
         });
+
         it('should skip the first if fromIndex is set', function () {
             expect(testSubject.indexOf(2, 2)).toBe(6);
             expect(testSubject.indexOf(2, 0)).toBe(0);
             expect(testSubject.indexOf(2, 6)).toBe(6);
         });
+
         it('should work with negative fromIndex', function () {
             expect(testSubject.indexOf(2, -3)).toBe(6);
             expect(testSubject.indexOf(2, -9)).toBe(0);
         });
+
         it('should work with fromIndex being greater than the length', function () {
             expect(testSubject.indexOf(0, 20)).toBe(-1);
         });
+
         it('should work with fromIndex being negative and greater than the length', function () {
             expect(testSubject.indexOf('hej', -20)).toBe(4);
         });
 
         describe('Array-like', function ArrayLike() {
-            var indexOf = Array.prototype.indexOf,
-                testAL;
+            var indexOf = Array.prototype.indexOf;
+            var testAL;
+
             beforeEach(function beforeEach() {
                 testAL = {};
                 testSubject = [2, 3, undefined, true, 'hej', null, 2, false, 0];
@@ -373,26 +406,31 @@ describe('Array', function () {
                 });
                 testAL.length = testSubject.length;
             });
+
             it('should find the element (array-like)', function () {
                 expected = 4;
                 actual = indexOf.call(testAL, 'hej');
                 expect(actual).toBe(expected);
             });
+
             it('should not find the element (array-like)', function () {
                 expected = -1;
                 actual = indexOf.call(testAL, 'mus');
                 expect(actual).toBe(expected);
             });
+
             it('should find undefined as well (array-like)', function () {
                 expected = -1;
                 actual = indexOf.call(testAL, undefined);
                 expect(actual).not.toBe(expected);
             });
+
             it('should skip unset indexes (array-like)', function () {
                 expected = 2;
                 actual = indexOf.call(testAL, undefined);
                 expect(actual).toBe(expected);
             });
+
             it('should use a strict test (array-like)', function () {
                 actual = Array.prototype.indexOf.call(testAL, null);
                 expect(actual).toBe(5);
@@ -400,18 +438,22 @@ describe('Array', function () {
                 actual = Array.prototype.indexOf.call(testAL, '2');
                 expect(actual).toBe(-1);
             });
+
             it('should skip the first if fromIndex is set (array-like)', function () {
                 expect(indexOf.call(testAL, 2, 2)).toBe(6);
                 expect(indexOf.call(testAL, 2, 0)).toBe(0);
                 expect(indexOf.call(testAL, 2, 6)).toBe(6);
             });
+
             it('should work with negative fromIndex (array-like)', function () {
                 expect(indexOf.call(testAL, 2, -3)).toBe(6);
                 expect(indexOf.call(testAL, 2, -9)).toBe(0);
             });
+
             it('should work with fromIndex being greater than the length (array-like)', function () {
                 expect(indexOf.call(testAL, 0, 20)).toBe(-1);
             });
+
             it('should work with fromIndex being negative and greater than the length (array-like)', function () {
                 expect(indexOf.call(testAL, 'hej', -20)).toBe(4);
             });
@@ -427,17 +469,20 @@ describe('Array', function () {
             delete testSubject[1];
             delete testSubject[7];
         });
+
         describe('Array', function () {
             it('should find the element', function () {
                 expected = 4;
                 actual = testSubject.lastIndexOf('hej');
                 expect(actual).toBe(expected);
             });
+
             it('should not find the element', function () {
                 expected = -1;
                 actual = testSubject.lastIndexOf('mus');
                 expect(actual).toBe(expected);
             });
+
             it('should find undefined as well', function () {
                 expected = -1;
                 actual = testSubject.lastIndexOf(undefined);
@@ -448,6 +493,7 @@ describe('Array', function () {
                 actual = testSubject.lastIndexOf(undefined);
                 expect(actual).toBe(expected);
             });
+
             it('should use a strict test', function () {
                 actual = testSubject.lastIndexOf(null);
                 expect(actual).toBe(5);
@@ -455,26 +501,31 @@ describe('Array', function () {
                 actual = testSubject.lastIndexOf('2');
                 expect(actual).toBe(-1);
             });
+
             it('should skip the first if fromIndex is set', function () {
                 expect(testSubject.lastIndexOf(2, 2)).toBe(0);
                 expect(testSubject.lastIndexOf(2, 0)).toBe(0);
                 expect(testSubject.lastIndexOf(2, 6)).toBe(6);
             });
+
             it('should work with negative fromIndex', function () {
                 expect(testSubject.lastIndexOf(2, -3)).toBe(6);
                 expect(testSubject.lastIndexOf(2, -9)).toBe(0);
             });
+
             it('should work with fromIndex being greater than the length', function () {
                 expect(testSubject.lastIndexOf(2, 20)).toBe(6);
             });
+
             it('should work with fromIndex being negative and greater than the length', function () {
                 expect(testSubject.lastIndexOf(2, -20)).toBe(-1);
             });
         });
 
         describe('Array like', function () {
-            var lastIndexOf = Array.prototype.lastIndexOf,
-                testAL;
+            var lastIndexOf = Array.prototype.lastIndexOf;
+            var testAL;
+
             beforeEach(function () {
                 testAL = {};
                 testSubject.forEach(function (o, i) {
@@ -482,26 +533,31 @@ describe('Array', function () {
                 });
                 testAL.length = testSubject.length;
             });
+
             it('should find the element (array-like)', function () {
                 expected = 4;
                 actual = lastIndexOf.call(testAL, 'hej');
                 expect(actual).toBe(expected);
             });
+
             it('should not find the element (array-like)', function () {
                 expected = -1;
                 actual = lastIndexOf.call(testAL, 'mus');
                 expect(actual).toBe(expected);
             });
+
             it('should find undefined as well (array-like)', function () {
                 expected = -1;
                 actual = lastIndexOf.call(testAL, undefined);
                 expect(actual).not.toBe(expected);
             });
+
             it('should skip unset indexes (array-like)', function () {
                 expected = 2;
                 actual = lastIndexOf.call(testAL, undefined);
                 expect(actual).toBe(expected);
             });
+
             it('should use a strict test (array-like)', function () {
                 actual = lastIndexOf.call(testAL, null);
                 expect(actual).toBe(5);
@@ -509,18 +565,22 @@ describe('Array', function () {
                 actual = lastIndexOf.call(testAL, '2');
                 expect(actual).toBe(-1);
             });
+
             it('should skip the first if fromIndex is set', function () {
                 expect(lastIndexOf.call(testAL, 2, 2)).toBe(0);
                 expect(lastIndexOf.call(testAL, 2, 0)).toBe(0);
                 expect(lastIndexOf.call(testAL, 2, 6)).toBe(6);
             });
+
             it('should work with negative fromIndex', function () {
                 expect(lastIndexOf.call(testAL, 2, -3)).toBe(6);
                 expect(lastIndexOf.call(testAL, 2, -9)).toBe(0);
             });
+
             it('should work with fromIndex being greater than the length', function () {
                 expect(lastIndexOf.call(testAL, 2, 20)).toBe(6);
             });
+
             it('should work with fromIndex being negative and greater than the length', function () {
                 expect(lastIndexOf.call(testAL, 2, -20)).toBe(-1);
             });
@@ -528,10 +588,10 @@ describe('Array', function () {
     });
 
     describe('#filter()', function () {
-        var filteredArray,
-            callback = function callback(o, i) {
-                return i !== 3 && i !== 5;
-            };
+        var filteredArray;
+        var callback = function callback(o, i) {
+            return i !== 3 && i !== 5;
+        };
 
         beforeEach(function () {
             testSubject = [2, 3, undefined, true, 'hej', 3, null, false, 0];
@@ -539,13 +599,13 @@ describe('Array', function () {
             filteredArray = [2, undefined, 'hej', null, false, 0];
         });
         describe('Array object', function () {
-
             it('should call the callback with the proper arguments', function () {
                 var predicate = jasmine.createSpy('predicate');
                 var arr = ['1'];
                 arr.filter(predicate);
                 expect(predicate).toHaveBeenCalledWith('1', 0, arr);
             });
+
             it('should not affect elements added to the array after it has begun', function () {
                 var arr = [1, 2, 3];
                 var i = 0;
@@ -559,6 +619,7 @@ describe('Array', function () {
                 expect(arr).toEqual([1, 2, 3, 4, 5, 6]);
                 expect(i).toBe(3);
             });
+
             it('should skip non-set values', function () {
                 var passedValues = {};
                 testSubject = [1, 2, 3, 4];
@@ -569,6 +630,7 @@ describe('Array', function () {
                 });
                 expect(passedValues).toExactlyMatch(testSubject);
             });
+
             it('should pass the right context to the filter', function () {
                 var passedValues = {};
                 testSubject = [1, 2, 3, 4];
@@ -579,20 +641,24 @@ describe('Array', function () {
                 }, passedValues);
                 expect(passedValues).toExactlyMatch(testSubject);
             });
+
             it('should set the right context when given none', function () {
                 var context;
                 [1].filter(function () { context = this; });
                 expect(context).toBe(function () { return this; }.call());
             });
+
             it('should remove only the values for which the callback returns false', function () {
                 var result = testSubject.filter(callback);
                 expect(result).toExactlyMatch(filteredArray);
             });
+
             it('should leave the original array untouched', function () {
                 var copy = testSubject.slice();
                 testSubject.filter(callback);
                 expect(testSubject).toExactlyMatch(copy);
             });
+
             it('should not be affected by same-index mutation', function () {
                 var results = [1, 2, 3].filter(function (value, index, array) {
                     array[index] = 'a';
@@ -601,19 +667,22 @@ describe('Array', function () {
                 expect(results).toEqual([1, 2, 3]);
             });
         });
+
         describe('Array like', function () {
             beforeEach(function () {
                 testSubject = createArrayLikeFromArray(testSubject);
             });
+
             it('should call the predicate with the proper arguments', function () {
                 var predicate = jasmine.createSpy('predicate');
                 var arr = createArrayLikeFromArray(['1']);
                 Array.prototype.filter.call(arr, predicate);
                 expect(predicate).toHaveBeenCalledWith('1', 0, arr);
             });
+
             it('should not affect elements added to the array after it has begun', function () {
-                var arr = createArrayLikeFromArray([1, 2, 3]),
-                    i = 0;
+                var arr = createArrayLikeFromArray([1, 2, 3]);
+                var i = 0;
                 Array.prototype.filter.call(arr, function (a) {
                     i += 1;
                     if (i <= 4) {
@@ -625,6 +694,7 @@ describe('Array', function () {
                 expect(arr).toEqual([1, 2, 3, 4, 5, 6]);
                 expect(i).toBe(3);
             });
+
             it('should skip non-set values', function () {
                 var passedValues = createArrayLikeFromArray([]);
                 testSubject = createArrayLikeFromArray([1, 2, 3, 4]);
@@ -636,11 +706,13 @@ describe('Array', function () {
                 });
                 expect(passedValues).toEqual(testSubject);
             });
+
             it('should set the right context when given none', function () {
                 var context;
                 Array.prototype.filter.call(createArrayLikeFromArray([1]), function () { context = this; }, undefined);
                 expect(context).toBe(function () { return this; }.call());
             });
+
             it('should pass the right context to the filter', function () {
                 var passedValues = {};
                 testSubject = createArrayLikeFromArray([1, 2, 3, 4]);
@@ -652,16 +724,19 @@ describe('Array', function () {
                 }, passedValues);
                 expect(passedValues).toEqual(testSubject);
             });
+
             it('should remove only the values for which the callback returns false', function () {
                 var result = Array.prototype.filter.call(testSubject, callback);
                 expect(result).toExactlyMatch(filteredArray);
             });
+
             it('should leave the original array untouched', function () {
                 var copy = createArrayLikeFromArray(testSubject);
                 Array.prototype.filter.call(testSubject, callback);
                 expect(testSubject).toExactlyMatch(copy);
             });
         });
+
         it('should have a boxed object as list argument of callback', function () {
             var actual;
             Array.prototype.filter.call('foo', function (item, index, list) {
@@ -686,6 +761,7 @@ describe('Array', function () {
                 array.map(mapper);
                 expect(mapper).toHaveBeenCalledWith(1, 0, array);
             });
+
             it('should set the context correctly', function () {
                 var context = {};
                 testSubject.map(function (o, i) {
@@ -693,19 +769,22 @@ describe('Array', function () {
                 }, context);
                 expect(context).toExactlyMatch(testSubject);
             });
+
             it('should set the right context when given none', function () {
                 var context;
                 [1].map(function () { context = this; });
                 expect(context).toBe(function () { return this; }.call());
             });
+
             it('should not change the array it is called on', function () {
                 var copy = testSubject.slice();
                 testSubject.map(callback);
                 expect(testSubject).toExactlyMatch(copy);
             });
+
             it('should only run for the number of objects in the array when it started', function () {
-                var arr = [1, 2, 3],
-                    i = 0;
+                var arr = [1, 2, 3];
+                var i = 0;
                 arr.map(function (o) {
                     arr.push(o + 3);
                     i += 1;
@@ -714,15 +793,17 @@ describe('Array', function () {
                 expect(arr).toExactlyMatch([1, 2, 3, 4, 5, 6]);
                 expect(i).toBe(3);
             });
+
             it('should properly translate the values as according to the callback', function () {
-                var result = testSubject.map(callback),
-                    expected = [0, 0, 1, 2, 3, 4, 5, 6];
+                var result = testSubject.map(callback);
+                var expected = [0, 0, 1, 2, 3, 4, 5, 6];
                 delete expected[1];
                 expect(result).toExactlyMatch(expected);
             });
+
             it('should skip non-existing values', function () {
-                var array = [1, 2, 3, 4],
-                    i = 0;
+                var array = [1, 2, 3, 4];
+                var i = 0;
                 delete array[2];
                 array.map(function () {
                     i += 1;
@@ -734,12 +815,14 @@ describe('Array', function () {
             beforeEach(function () {
                 testSubject = createArrayLikeFromArray(testSubject);
             });
+
             it('should call mapper with the right parameters', function () {
                 var mapper = jasmine.createSpy('mapper');
                 var array = createArrayLikeFromArray([1]);
                 Array.prototype.map.call(array, mapper);
                 expect(mapper).toHaveBeenCalledWith(1, 0, array);
             });
+
             it('should set the context correctly', function () {
                 var context = {};
                 Array.prototype.map.call(testSubject, function (o, i) {
@@ -748,19 +831,22 @@ describe('Array', function () {
                 }, context);
                 expect(context).toEqual(testSubject);
             });
+
             it('should set the right context when given none', function () {
                 var context;
                 Array.prototype.map.call(createArrayLikeFromArray([1]), function () { context = this; });
                 expect(context).toBe(function () { return this; }.call());
             });
+
             it('should not change the array it is called on', function () {
                 var copy = createArrayLikeFromArray(testSubject);
                 Array.prototype.map.call(testSubject, callback);
                 expect(testSubject).toExactlyMatch(copy);
             });
+
             it('should only run for the number of objects in the array when it started', function () {
-                var arr = createArrayLikeFromArray([1, 2, 3]),
-                    i = 0;
+                var arr = createArrayLikeFromArray([1, 2, 3]);
+                var i = 0;
                 Array.prototype.map.call(arr, function (o) {
                     Array.prototype.push.call(arr, o + 3);
                     i += 1;
@@ -769,15 +855,17 @@ describe('Array', function () {
                 expect(arr).toEqual([1, 2, 3, 4, 5, 6]);
                 expect(i).toBe(3);
             });
+
             it('should properly translate the values as according to the callback', function () {
-                var result = Array.prototype.map.call(testSubject, callback),
-                    expected = [0, 0, 1, 2, 3, 4, 5, 6];
+                var result = Array.prototype.map.call(testSubject, callback);
+                var expected = [0, 0, 1, 2, 3, 4, 5, 6];
                 delete expected[1];
                 expect(result).toExactlyMatch(expected);
             });
+
             it('should skip non-existing values', function () {
-                var array = createArrayLikeFromArray([1, 2, 3, 4]),
-                    i = 0;
+                var array = createArrayLikeFromArray([1, 2, 3, 4]);
+                var i = 0;
                 delete array[2];
                 Array.prototype.map.call(array, function () {
                     i += 1;
@@ -785,6 +873,7 @@ describe('Array', function () {
                 expect(i).toBe(3);
             });
         });
+
         it('should have a boxed object as list argument of callback', function () {
             var actual;
             Array.prototype.map.call('foo', function (item, index, list) {
@@ -806,14 +895,16 @@ describe('Array', function () {
                 testSubject.reduce(spy);
                 expect(spy.calls[0].args).toExactlyMatch([1, 2, 1, testSubject]);
             });
+
             it('should start with the right initialValue', function () {
                 var spy = jasmine.createSpy().andReturn(0);
                 testSubject.reduce(spy, 0);
                 expect(spy.calls[0].args).toExactlyMatch([0, 1, 0, testSubject]);
             });
+
             it('should not affect elements added to the array after it has begun', function () {
-                var arr = [1, 2, 3],
-                    i = 0;
+                var arr = [1, 2, 3];
+                var i = 0;
                 arr.reduce(function (a, b) {
                     i += 1;
                     if (i <= 4) {
@@ -824,6 +915,7 @@ describe('Array', function () {
                 expect(arr).toEqual([1, 2, 3, 4, 5]);
                 expect(i).toBe(2);
             });
+
             it('should work as expected for empty arrays', function () {
                 var spy = jasmine.createSpy();
                 expect(function () {
@@ -831,16 +923,19 @@ describe('Array', function () {
                 }).toThrow();
                 expect(spy).not.toHaveBeenCalled();
             });
+
             it('should throw correctly if no callback is given', function () {
                 expect(function () {
                     testSubject.reduce();
                 }).toThrow();
             });
+
             it('should return the expected result', function () {
                 expect(testSubject.reduce(function (a, b) {
                     return String(a || '') + String(b || '');
                 })).toEqual(testSubject.join(''));
             });
+
             it('should not directly affect the passed array', function () {
                 var copy = testSubject.slice();
                 testSubject.reduce(function (a, b) {
@@ -848,6 +943,7 @@ describe('Array', function () {
                 });
                 expect(testSubject).toEqual(copy);
             });
+
             it('should skip non-set values', function () {
                 delete testSubject[1];
                 var visited = {};
@@ -859,6 +955,7 @@ describe('Array', function () {
 
                 expect(visited).toEqual({ 1: true, 3: true });
             });
+
             it('should have the right length', function () {
                 expect(testSubject.reduce.length).toBe(1);
             });
@@ -868,19 +965,22 @@ describe('Array', function () {
                 testSubject = createArrayLikeFromArray(testSubject);
                 testSubject.reduce = Array.prototype.reduce;
             });
+
             it('should pass the correct arguments to the callback', function () {
                 var spy = jasmine.createSpy().andReturn(0);
                 testSubject.reduce(spy);
                 expect(spy.calls[0].args).toExactlyMatch([1, 2, 1, testSubject]);
             });
+
             it('should start with the right initialValue', function () {
                 var spy = jasmine.createSpy().andReturn(0);
                 testSubject.reduce(spy, 0);
                 expect(spy.calls[0].args).toExactlyMatch([0, 1, 0, testSubject]);
             });
+
             it('should not affect elements added to the array after it has begun', function () {
-                var arr = createArrayLikeFromArray([1, 2, 3]),
-                    i = 0;
+                var arr = createArrayLikeFromArray([1, 2, 3]);
+                var i = 0;
                 Array.prototype.reduce.call(arr, function (a, b) {
                     i += 1;
                     if (i <= 4) {
@@ -898,6 +998,7 @@ describe('Array', function () {
                 });
                 expect(i).toBe(2);
             });
+
             it('should work as expected for empty arrays', function () {
                 var spy = jasmine.createSpy();
                 expect(function () {
@@ -905,16 +1006,19 @@ describe('Array', function () {
                 }).toThrow();
                 expect(spy).not.toHaveBeenCalled();
             });
+
             it('should throw correctly if no callback is given', function () {
                 expect(function () {
                     testSubject.reduce();
                 }).toThrow();
             });
+
             it('should return the expected result', function () {
                 expect(testSubject.reduce(function (a, b) {
                     return String(a || '') + String(b || '');
                 })).toEqual('123');
             });
+
             it('should not directly affect the passed array', function () {
                 var copy = createArrayLikeFromArray(testSubject);
                 testSubject.reduce(function (a, b) {
@@ -923,6 +1027,7 @@ describe('Array', function () {
                 delete testSubject.reduce;
                 expect(testSubject).toEqual(copy);
             });
+
             it('should skip non-set values', function () {
                 delete testSubject[1];
                 var visited = {};
@@ -934,10 +1039,12 @@ describe('Array', function () {
 
                 expect(visited).toEqual({ 1: true, 3: true });
             });
+
             it('should have the right length', function () {
                 expect(testSubject.reduce.length).toBe(1);
             });
         });
+
         it('should have a boxed object as list argument of callback', function () {
             var actual;
             Array.prototype.reduce.call('foo', function (accumulator, item, index, list) {
@@ -958,14 +1065,16 @@ describe('Array', function () {
                 testSubject.reduceRight(spy);
                 expect(spy.calls[0].args).toExactlyMatch([3, 2, 1, testSubject]);
             });
+
             it('should start with the right initialValue', function () {
                 var spy = jasmine.createSpy().andReturn(0);
                 testSubject.reduceRight(spy, 0);
                 expect(spy.calls[0].args).toExactlyMatch([0, 3, 2, testSubject]);
             });
+
             it('should not affect elements added to the array after it has begun', function () {
-                var arr = [1, 2, 3],
-                    i = 0;
+                var arr = [1, 2, 3];
+                var i = 0;
                 arr.reduceRight(function (a, b) {
                     i += 1;
                     if (i <= 4) {
@@ -976,6 +1085,7 @@ describe('Array', function () {
                 expect(arr).toEqual([1, 2, 3, 6, 5]);
                 expect(i).toBe(2);
             });
+
             it('should work as expected for empty arrays', function () {
                 var spy = jasmine.createSpy();
                 expect(function () {
@@ -983,24 +1093,28 @@ describe('Array', function () {
                 }).toThrow();
                 expect(spy).not.toHaveBeenCalled();
             });
+
             it('should work as expected for empty arrays with an initial value', function () {
-                var spy = jasmine.createSpy(),
-                    result;
+                var spy = jasmine.createSpy();
+                var result;
 
                 result = [].reduceRight(spy, '');
                 expect(spy).not.toHaveBeenCalled();
                 expect(result).toBe('');
             });
+
             it('should throw correctly if no callback is given', function () {
                 expect(function () {
                     testSubject.reduceRight();
                 }).toThrow();
             });
+
             it('should return the expected result', function () {
                 expect(testSubject.reduceRight(function (a, b) {
                     return String(a || '') + String(b || '');
                 })).toBe('321');
             });
+
             it('should not directly affect the passed array', function () {
                 var copy = testSubject.slice();
                 testSubject.reduceRight(function (a, b) {
@@ -1008,6 +1122,7 @@ describe('Array', function () {
                 });
                 expect(testSubject).toEqual(copy);
             });
+
             it('should skip non-set values', function () {
                 delete testSubject[1];
                 var visited = {};
@@ -1019,6 +1134,7 @@ describe('Array', function () {
 
                 expect(visited).toEqual({ 1: true, 3: true });
             });
+
             it('should have the right length', function () {
                 expect(testSubject.reduceRight.length).toBe(1);
             });
@@ -1028,19 +1144,22 @@ describe('Array', function () {
                 testSubject = createArrayLikeFromArray(testSubject);
                 testSubject.reduceRight = Array.prototype.reduceRight;
             });
+
             it('should pass the correct arguments to the callback', function () {
                 var spy = jasmine.createSpy().andReturn(0);
                 testSubject.reduceRight(spy);
                 expect(spy.calls[0].args).toExactlyMatch([3, 2, 1, testSubject]);
             });
+
             it('should start with the right initialValue', function () {
                 var spy = jasmine.createSpy().andReturn(0);
                 testSubject.reduceRight(spy, 0);
                 expect(spy.calls[0].args).toExactlyMatch([0, 3, 2, testSubject]);
             });
+
             it('should not affect elements added to the array after it has begun', function () {
-                var arr = createArrayLikeFromArray([1, 2, 3]),
-                    i = 0;
+                var arr = createArrayLikeFromArray([1, 2, 3]);
+                var i = 0;
                 Array.prototype.reduceRight.call(arr, function (a, b) {
                     i += 1;
                     if (i <= 4) {
@@ -1058,6 +1177,7 @@ describe('Array', function () {
                 });
                 expect(i).toBe(2);
             });
+
             it('should work as expected for empty arrays', function () {
                 var spy = jasmine.createSpy();
                 expect(function () {
@@ -1065,16 +1185,19 @@ describe('Array', function () {
                 }).toThrow();
                 expect(spy).not.toHaveBeenCalled();
             });
+
             it('should throw correctly if no callback is given', function () {
                 expect(function () {
                     testSubject.reduceRight();
                 }).toThrow();
             });
+
             it('should return the expected result', function () {
                 expect(testSubject.reduceRight(function (a, b) {
                     return String(a || '') + String(b || '');
                 })).toEqual('321');
             });
+
             it('should not directly affect the passed array', function () {
                 var copy = createArrayLikeFromArray(testSubject);
                 testSubject.reduceRight(function (a, b) {
@@ -1083,6 +1206,7 @@ describe('Array', function () {
                 delete testSubject.reduceRight;
                 expect(testSubject).toEqual(copy);
             });
+
             it('should skip non-set values', function () {
                 delete testSubject[1];
                 var visited = {};
@@ -1094,10 +1218,12 @@ describe('Array', function () {
 
                 expect(visited).toEqual({ 1: true, 3: true });
             });
+
             it('should have the right length', function () {
                 expect(testSubject.reduceRight.length).toBe(1);
             });
         });
+
         it('should have a boxed object as list argument of callback', function () {
             var actual;
             Array.prototype.reduceRight.call('foo', function (accumulator, item, index, list) {

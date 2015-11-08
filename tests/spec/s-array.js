@@ -694,7 +694,7 @@ describe('Array', function () {
                     }
                     return true;
                 });
-                expect(arr).toEqual([1, 2, 3, 4, 5, 6]);
+                expect(Array.prototype.slice.call(arr)).toEqual([1, 2, 3, 4, 5, 6]);
                 expect(i).toBe(3);
             });
 
@@ -855,7 +855,7 @@ describe('Array', function () {
                     i += 1;
                     return o;
                 });
-                expect(arr).toEqual([1, 2, 3, 4, 5, 6]);
+                expect(Array.prototype.slice.call(arr)).toEqual([1, 2, 3, 4, 5, 6]);
                 expect(i).toBe(3);
             });
 

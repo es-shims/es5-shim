@@ -1655,4 +1655,34 @@ if (parseInt(ws + '08') !== 8 || parseInt(ws + '0x16') !== 22) {
     }(parseInt));
 }
 
+if (String(new RangeError('test')) !== 'RangeError: test') {
+    var originalErrorToString = Error.prototype.toString;
+    var errorToStringShim = function toString() {
+        if (typeof this === 'undefined' || this === null) {
+            throw new TypeError("can't convert " + this + ' to object');
+        }
+        var name = this.name;
+        if (typeof name === 'undefined') {
+            name = 'Error';
+        } else if (typeof name !== 'string') {
+            name = $String(name);
+        }
+        var msg = this.message;
+        if (typeof msg === 'undefined') {
+            msg = '';
+        } else if (typeof msg !== 'string') {
+            msg = $String(msg);
+        }
+        if (!name) {
+            return msg;
+        }
+        if (!msg) {
+            return name;
+        }
+        return name + ': ' + msg;
+    };
+    // can't use defineProperties here because of toString enumeration issue in IE <= 8
+    Error.prototype.toString = errorToStringShim;
+}
+
 }));

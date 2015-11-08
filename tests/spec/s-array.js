@@ -1317,4 +1317,13 @@ describe('Array', function () {
         });
     });
 
+    describe('#join()', function () {
+        it('defaults to a comma separator when none is provided', function () {
+            expect([1, 2].join()).toBe('1,2');
+        });
+
+        it('defaults to a comma separator when undefined is provided', function () {
+            expect([1, 2].join(undefined)).toBe('1,2');
+        });
+    });
 });

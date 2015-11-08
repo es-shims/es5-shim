@@ -826,6 +826,14 @@ defineProperties(ArrayPrototype, {
     }
 }, !spliceWorksWithLargeSparseArrays || !spliceWorksWithSmallSparseArrays);
 
+var hasJoinUndefinedBug = [1, 2].join(undefined) !== '1,2';
+var originalJoin = ArrayPrototype.join;
+defineProperties(ArrayPrototype, {
+    join: function join(separator) {
+        return originalJoin.call(this, typeof separator === 'undefined' ? ',' : separator);
+    }
+}, hasJoinUndefinedBug);
+
 //
 // Object
 // ======

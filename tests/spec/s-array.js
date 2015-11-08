@@ -1158,6 +1158,28 @@ describe('Array', function () {
         it('should return length', function () {
             expect([].unshift(0)).toBe(1);
         });
+
+        it('works on arrays', function () {
+            var arr = [1];
+            var result = arr.unshift(undefined);
+            expect(result).toBe(2);
+            expect(arr.length).toBe(2);
+            expect(Object.prototype.hasOwnProperty.call(arr, 0)).toBe(true);
+            expect(Object.prototype.hasOwnProperty.call(arr, 1)).toBe(true);
+            expect(arr[0]).toBeUndefined();
+            expect(arr[1]).toBe(1);
+        });
+
+        it('is generic', function () {
+            var obj = { 0: 1, length: 1 };
+            var result = Array.prototype.unshift.call(obj, undefined);
+            expect(result).toBe(2);
+            expect(obj.length).toBe(2);
+            expect(Object.prototype.hasOwnProperty.call(obj, 0)).toBe(true);
+            expect(Object.prototype.hasOwnProperty.call(obj, 1)).toBe(true);
+            expect(obj[0]).toBeUndefined();
+            expect(obj[1]).toBe(1);
+        });
     });
 
     describe('#splice()', function () {

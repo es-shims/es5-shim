@@ -1,7 +1,9 @@
 /* global describe, it, expect, beforeEach, jasmine, xit */
 
 var toStr = Object.prototype.toString;
-// var canDistinguishSparseFromUndefined = 0 in [undefined]; // IE 6 - 8 have a bug where this returns false.
+var canDistinguishSparseFromUndefined = 0 in [undefined]; // IE 6 - 8 have a bug where this returns false.
+var ifHasDenseUndefinedsIt = canDistinguishSparseFromUndefined ? it : xit;
+var undefinedIfNoSparseBug = canDistinguishSparseFromUndefined ? undefined : { valueOf: function () { return 0; } };
 var hasStrictMode = (function () {
   'use strict';
 
@@ -12,7 +14,7 @@ describe('Array', function () {
     var testSubject;
 
     beforeEach(function () {
-        testSubject = [2, 3, undefined, true, 'hej', null, false, 0];
+        testSubject = [2, 3, undefinedIfNoSparseBug, true, 'hej', null, false, 0];
         delete testSubject[1];
     });
 
@@ -29,7 +31,7 @@ describe('Array', function () {
         var expected, actual;
 
         beforeEach(function () {
-            expected = { 0: 2, 2: undefined, 3: true, 4: 'hej', 5: null, 6: false, 7: 0 };
+            expected = { 0: 2, 2: undefinedIfNoSparseBug, 3: true, 4: 'hej', 5: null, 6: false, 7: 0 };
             actual = {};
         });
 
@@ -137,7 +139,7 @@ describe('Array', function () {
         var actual, expected, numberOfRuns;
 
         beforeEach(function () {
-            expected = { 0: 2, 2: undefined, 3: true };
+            expected = { 0: 2, 2: undefinedIfNoSparseBug, 3: true };
             actual = {};
             numberOfRuns = 0;
         });
@@ -235,7 +237,7 @@ describe('Array', function () {
         var actual, expected, numberOfRuns;
 
         beforeEach(function () {
-            expected = { 0: 2, 2: undefined, 3: true };
+            expected = { 0: 2, 2: undefinedIfNoSparseBug, 3: true };
             actual = {};
             numberOfRuns = 0;
         });
@@ -339,7 +341,7 @@ describe('Array', function () {
         var actual, expected;
 
         beforeEach(function () {
-            testSubject = [2, 3, undefined, true, 'hej', null, 2, false, 0];
+            testSubject = [2, 3, undefinedIfNoSparseBug, true, 'hej', null, 2, false, 0];
             delete testSubject[1];
         });
 
@@ -355,13 +357,13 @@ describe('Array', function () {
             expect(actual).toBe(expected);
         });
 
-        it('should find undefined as well', function () {
+        ifHasDenseUndefinedsIt('should find undefined as well', function () {
             expected = -1;
             actual = testSubject.indexOf(undefined);
             expect(actual).not.toBe(expected);
         });
 
-        it('should skip unset indexes', function () {
+        ifHasDenseUndefinedsIt('should skip unset indexes', function () {
             expected = 2;
             actual = testSubject.indexOf(undefined);
             expect(actual).toBe(expected);
@@ -400,7 +402,7 @@ describe('Array', function () {
 
             beforeEach(function beforeEach() {
                 testAL = {};
-                testSubject = [2, 3, undefined, true, 'hej', null, 2, false, 0];
+                testSubject = [2, 3, undefinedIfNoSparseBug, true, 'hej', null, 2, false, 0];
                 testSubject.forEach(function (o, i) {
                     testAL[i] = o;
                 });
@@ -419,13 +421,13 @@ describe('Array', function () {
                 expect(actual).toBe(expected);
             });
 
-            it('should find undefined as well (array-like)', function () {
+            ifHasDenseUndefinedsIt('should find undefined as well (array-like)', function () {
                 expected = -1;
                 actual = indexOf.call(testAL, undefined);
                 expect(actual).not.toBe(expected);
             });
 
-            it('should skip unset indexes (array-like)', function () {
+            ifHasDenseUndefinedsIt('should skip unset indexes (array-like)', function () {
                 expected = 2;
                 actual = indexOf.call(testAL, undefined);
                 expect(actual).toBe(expected);
@@ -465,7 +467,7 @@ describe('Array', function () {
         var actual, expected;
 
         beforeEach(function () {
-            testSubject = [2, 3, undefined, true, 'hej', null, 2, 3, false, 0];
+            testSubject = [2, 3, undefinedIfNoSparseBug, true, 'hej', null, 2, 3, false, 0];
             delete testSubject[1];
             delete testSubject[7];
         });
@@ -483,12 +485,13 @@ describe('Array', function () {
                 expect(actual).toBe(expected);
             });
 
-            it('should find undefined as well', function () {
+            ifHasDenseUndefinedsIt('should find undefined as well', function () {
                 expected = -1;
                 actual = testSubject.lastIndexOf(undefined);
                 expect(actual).not.toBe(expected);
             });
-            it('should skip unset indexes', function () {
+
+            ifHasDenseUndefinedsIt('should skip unset indexes', function () {
                 expected = 2;
                 actual = testSubject.lastIndexOf(undefined);
                 expect(actual).toBe(expected);
@@ -546,13 +549,13 @@ describe('Array', function () {
                 expect(actual).toBe(expected);
             });
 
-            it('should find undefined as well (array-like)', function () {
+            ifHasDenseUndefinedsIt('should find undefined as well (array-like)', function () {
                 expected = -1;
                 actual = lastIndexOf.call(testAL, undefined);
                 expect(actual).not.toBe(expected);
             });
 
-            it('should skip unset indexes (array-like)', function () {
+            ifHasDenseUndefinedsIt('should skip unset indexes (array-like)', function () {
                 expected = 2;
                 actual = lastIndexOf.call(testAL, undefined);
                 expect(actual).toBe(expected);
@@ -594,9 +597,9 @@ describe('Array', function () {
         };
 
         beforeEach(function () {
-            testSubject = [2, 3, undefined, true, 'hej', 3, null, false, 0];
+            testSubject = [2, 3, undefinedIfNoSparseBug, true, 'hej', 3, null, false, 0];
             delete testSubject[1];
-            filteredArray = [2, undefined, 'hej', null, false, 0];
+            filteredArray = [2, undefinedIfNoSparseBug, 'hej', null, false, 0];
         });
         describe('Array object', function () {
             it('should call the callback with the proper arguments', function () {
@@ -620,7 +623,7 @@ describe('Array', function () {
                 expect(i).toBe(3);
             });
 
-            it('should skip non-set values', function () {
+            ifHasDenseUndefinedsIt('should skip unset values', function () {
                 var passedValues = {};
                 testSubject = [1, 2, 3, 4];
                 delete testSubject[1];
@@ -1440,7 +1443,7 @@ describe('Array', function () {
             expect(obj[0]).toBe(1);
         });
 
-        it('should not break on sparse arrays in Opera', function () {
+        ifHasDenseUndefinedsIt('should not break on sparse arrays in Opera', function () {
             // test from https://github.com/wikimedia/VisualEditor/blob/d468b00311e69c2095b9da360c5745153342a5c3/src/ve.utils.js#L182-L196
             var n = 256;
             var arr = [];
@@ -1449,7 +1452,7 @@ describe('Array', function () {
             expect(arr[n]).toBe('a');
         });
 
-        it('should not break on sparse arrays in Safari 7/8', function () {
+        ifHasDenseUndefinedsIt('should not break on sparse arrays in Safari 7/8', function () {
             // test from https://github.com/wikimedia/VisualEditor/blob/d468b00311e69c2095b9da360c5745153342a5c3/src/ve.utils.js#L182-L196
             var justFine = new Array(1e5 - 1);
             justFine[10] = 'x';

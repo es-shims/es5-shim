@@ -1326,4 +1326,24 @@ describe('Array', function () {
             expect([1, 2].join(undefined)).toBe('1,2');
         });
     });
+
+    describe('#push()', function () {
+        it('works on arrays', function () {
+            var arr = [];
+            var result = arr.push(undefined);
+            expect(result).toBe(1);
+            expect(arr.length).toBe(1);
+            expect(Object.prototype.hasOwnProperty.call(arr, 0)).toBe(true);
+            expect(arr[0]).toBeUndefined();
+        });
+
+        it('is generic', function () {
+            var obj = {};
+            var result = Array.prototype.push.call(obj, undefined);
+            expect(result).toBe(1);
+            expect(obj.length).toBe(1);
+            expect(Object.prototype.hasOwnProperty.call(obj, 0)).toBe(true);
+            expect(obj[0]).toBeUndefined();
+        });
+    });
 });

@@ -835,6 +835,28 @@ defineProperties(ArrayPrototype, {
     }
 }, hasJoinUndefinedBug);
 
+var pushIsNotGeneric = (function () {
+    var obj = {};
+    var result = Array.prototype.push.call(obj, undefined);
+    return result !== 1 || obj.length !== 1 || typeof obj[0] !== 'undefined' || !owns(obj, 0);
+}());
+defineProperties(ArrayPrototype, {
+    push: function push(item) {
+        var O = ES.ToObject(this);
+        if (isArray(O)) {
+            return array_push.apply(O, arguments);
+        }
+        var n = ES.ToUint32(O.length);
+        var i = 0;
+        while (i < arguments.length) {
+            O[n + i] = arguments[i];
+            i += 1;
+        }
+        O.length = n + i;
+        return n + i;
+    }
+}, pushIsNotGeneric);
+
 //
 // Object
 // ======

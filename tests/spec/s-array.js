@@ -1283,6 +1283,30 @@ describe('Array', function () {
         }
     });
 
+    describe('#shift()', function () {
+        it('works on arrays', function () {
+            var arr = [1, 2];
+            var result = arr.shift();
+            expect(result).toBe(1);
+            expect(arr.length).toBe(1);
+            expect(Object.prototype.hasOwnProperty.call(arr, 0)).toBe(true);
+            expect(Object.prototype.hasOwnProperty.call(arr, 1)).toBe(false);
+            expect(arr[0]).toBe(2);
+            expect(arr[1]).toBeUndefined();
+        });
+
+        it('is generic', function () {
+            var obj = { 0: 1, 1: 2, length: 2 };
+            var result = Array.prototype.shift.call(obj);
+            expect(result).toBe(1);
+            expect(obj.length).toBe(1);
+            expect(Object.prototype.hasOwnProperty.call(obj, 0)).toBe(true);
+            expect(Object.prototype.hasOwnProperty.call(obj, 1)).toBe(false);
+            expect(obj[0]).toBe(2);
+            expect(obj[1]).toBeUndefined();
+        });
+    });
+
     describe('#unshift()', function () {
         it('should return length', function () {
             expect([].unshift(0)).toBe(1);

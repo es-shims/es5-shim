@@ -1346,4 +1346,24 @@ describe('Array', function () {
             expect(obj[0]).toBeUndefined();
         });
     });
+
+    describe('#pop()', function () {
+        it('works on arrays', function () {
+            var arr = [1, 2, 3];
+            var result = arr.pop();
+            expect(result).toBe(3);
+            expect(arr.length).toBe(2);
+            expect(Object.prototype.hasOwnProperty.call(arr, 2)).toBe(false);
+            expect(arr[2]).toBeUndefined();
+        });
+
+        it('is generic', function () {
+            var obj = { 0: 1, 1: 2, 2: 3, length: 3 };
+            var result = Array.prototype.pop.call(obj);
+            expect(result).toBe(3);
+            expect(obj.length).toBe(2);
+            expect(Object.prototype.hasOwnProperty.call(obj, 2)).toBe(false);
+            expect(obj[2]).toBeUndefined();
+        });
+    });
 });

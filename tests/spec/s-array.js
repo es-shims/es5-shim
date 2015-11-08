@@ -23,7 +23,7 @@ describe('Array', function () {
         return o;
     };
 
-    describe('forEach', function () {
+    describe('#forEach()', function () {
         var expected, actual;
 
         beforeEach(function () {
@@ -122,7 +122,7 @@ describe('Array', function () {
             });
         }
     });
-    describe('some', function () {
+    describe('#some()', function () {
         var actual, expected, numberOfRuns;
 
         beforeEach(function () {
@@ -213,7 +213,7 @@ describe('Array', function () {
             expect(toStr.call(listArg)).toBe('[object String]');
         });
     });
-    describe('every', function () {
+    describe('#every()', function () {
         var actual, expected, numberOfRuns;
 
         beforeEach(function () {
@@ -308,7 +308,7 @@ describe('Array', function () {
         });
     });
 
-    describe('indexOf', function () {
+    describe('#indexOf()', function () {
         'use strict';
 
         var actual, expected;
@@ -417,7 +417,7 @@ describe('Array', function () {
             });
         });
     });
-    describe('lastIndexOf', function () {
+    describe('#lastIndexOf()', function () {
         'use strict';
 
         var actual, expected;
@@ -527,7 +527,7 @@ describe('Array', function () {
         });
     });
 
-    describe('filter', function () {
+    describe('#filter()', function () {
         var filteredArray,
             callback = function callback(o, i) {
                 return i !== 3 && i !== 5;
@@ -671,7 +671,7 @@ describe('Array', function () {
             expect(toStr.call(actual)).toBe('[object String]');
         });
     });
-    describe('map', function () {
+    describe('#map()', function () {
         var callback;
         beforeEach(function () {
             var i = 0;
@@ -795,7 +795,7 @@ describe('Array', function () {
         });
     });
 
-    describe('reduce', function () {
+    describe('#reduce()', function () {
         beforeEach(function () {
             testSubject = [1, 2, 3];
         });
@@ -947,7 +947,7 @@ describe('Array', function () {
             expect(toStr.call(actual)).toBe('[object String]');
         });
     });
-    describe('reduceRight', function () {
+    describe('#reduceRight()', function () {
         beforeEach(function () {
             testSubject = [1, 2, 3];
         });
@@ -1108,7 +1108,7 @@ describe('Array', function () {
         });
     });
 
-    describe('isArray', function () {
+    describe('.isArray()', function () {
         it('should be true for Array', function () {
             expect(Array.isArray([])).toBe(true);
         });
@@ -1154,13 +1154,13 @@ describe('Array', function () {
         }
     });
 
-    describe('unshift', function () {
+    describe('#unshift()', function () {
         it('should return length', function () {
             expect([].unshift(0)).toBe(1);
         });
     });
 
-    describe('splice', function () {
+    describe('#splice()', function () {
         var b = ['b'];
         var a = [1, 'a', b];
         var test;

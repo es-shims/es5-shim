@@ -150,7 +150,7 @@ describe('Object', function () {
         });
     });
 
-    describe('Object.isExtensible', function () {
+    describe('.isExtensible()', function () {
         var obj = { };
 
         it('should return true if object is extensible', function () {
@@ -179,7 +179,7 @@ describe('Object', function () {
         });
     });
 
-    describe('Object.defineProperty', function () {
+    describe('.defineProperty()', function () {
         var obj;
 
         beforeEach(function () {
@@ -234,7 +234,7 @@ describe('Object', function () {
         });
     });
 
-    describe('Object.getOwnPropertyDescriptor', function () {
+    describe('.getOwnPropertyDescriptor()', function () {
         it('should return undefined because the object does not own the property', function () {
             var descr = Object.getOwnPropertyDescriptor({}, 'name');
 
@@ -286,7 +286,7 @@ describe('Object', function () {
         });
     });
 
-    describe('Object.getPrototypeOf', function () {
+    describe('.getPrototypeOf()', function () {
         it('should return the [[Prototype]] of an object', function () {
             var Foo = function () {};
 
@@ -324,7 +324,7 @@ describe('Object', function () {
         });
     });
 
-    describe('Object.defineProperties', function () {
+    describe('.defineProperties()', function () {
         it('should define the constructor property', function () {
             var target = {};
             var newProperties = {
@@ -337,7 +337,7 @@ describe('Object', function () {
         });
     });
 
-    describe('Object.create', function () {
+    describe('.create()', function () {
         it('should create objects with no properties when called as `Object.create(null)`', function () {
             var obj = Object.create(null);
 

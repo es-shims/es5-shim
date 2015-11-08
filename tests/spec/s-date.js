@@ -16,7 +16,7 @@ describe('Date', function () {
     var ifSupportsDescriptorsIt = supportsDescriptors ? it : xit;
     var has = Object.prototype.hasOwnProperty;
 
-    describe('now', function () {
+    describe('.now()', function () {
         it('should be the current time', function () {
             var before = (new Date()).getTime();
             var middle = Date.now();
@@ -76,7 +76,7 @@ describe('Date', function () {
         });
     });
 
-    describe('parse', function () {
+    describe('.parse()', function () {
         // TODO: Write the rest of the test.
 
         ifSupportsDescriptorsIt('is not enumerable', function () {
@@ -174,7 +174,7 @@ describe('Date', function () {
 
     });
 
-    describe('toString', function () {
+    describe('#toString()', function () {
         var actual;
 
         beforeEach(function () {
@@ -189,7 +189,7 @@ describe('Date', function () {
         });
     });
 
-    describe('valueOf', function () {
+    describe('#valueOf()', function () {
         // Note that new Date(1970, 0).valueOf() is 0 in UTC timezone.
         // Check check that it's a number (and an int), not that it's "truthy".
         var actual;
@@ -208,14 +208,14 @@ describe('Date', function () {
         });
     });
 
-    describe('getUTCDate', function () {
+    describe('#getUTCDate()', function () {
         it('should return the right value for negative dates', function () {
             // Opera 10.6/11.61/Opera 12 bug
             expect(new Date(-3509827334573292).getUTCDate()).toBe(1);
         });
     });
 
-    describe('getUTCMonth', function () {
+    describe('#getUTCMonth()', function () {
         it('should return the right value for negative dates', function () {
             // Opera 10.6/11.61/Opera 12 bug
             expect(new Date(-3509827334573292).getUTCMonth()).toBe(0);
@@ -227,7 +227,7 @@ describe('Date', function () {
         });
     });
 
-    describe('toISOString', function () {
+    describe('#toISOString()', function () {
         // TODO: write the rest of the test.
 
         it('should support extended years', function () {
@@ -242,7 +242,7 @@ describe('Date', function () {
 
     });
 
-    describe('toJSON', function () {
+    describe('#toJSON()', function () {
 
         // Opera 11.6x/12 bug
         it('should call toISOString', function () {

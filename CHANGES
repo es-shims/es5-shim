@@ -1,3 +1,8 @@
+4.3.1
+  - [Fix] `String#split`: revert part of dcce96ae21185a69d2d40e67416e7496b73e8e47 which broke in older browsers (#342)
+  - [Dev Deps] update `eslint`, `@ljharb/eslint-config`, `jscs`
+  - [Tests] Firefox allows `Number#toPrecision` values of [1,100], which the spec permits
+
 4.3.0
   - [New] `Array#push`: in IE <= 7, `Array#push` was not generic (#336)
   - [New] `Array#push` in Opera `10.6` has a super weird bug when pushing `undefined`

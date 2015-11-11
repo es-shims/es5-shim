@@ -8,6 +8,8 @@ describe('global methods', function () {
     var ifFunctionsHaveNamesIt = functionsHaveNames ? it : xit;
 
     describe('parseInt', function () {
+        /* eslint-disable radix */
+
         ifFunctionsHaveNamesIt('has the right name', function () {
           expect(parseInt.name).toBe('parseInt');
         });
@@ -46,17 +48,18 @@ describe('global methods', function () {
             expect(parseInt(ws + '0x16')).toBe(parseInt('0x16', 16));
         });
 
-       it('defaults the radix properly when not a true number', function () {
-           var fakeZero = { valueOf: function () { return 0; } };
-           expect(parseInt('08', fakeZero)).toBe(parseInt('08', 10));
-           expect(parseInt('0x16', fakeZero)).toBe(parseInt('0x16', 16));
-       });
+        it('defaults the radix properly when not a true number', function () {
+            var fakeZero = { valueOf: function () { return 0; } };
+            expect(parseInt('08', fakeZero)).toBe(parseInt('08', 10));
+            expect(parseInt('0x16', fakeZero)).toBe(parseInt('0x16', 16));
+        });
 
-       it('allows sign-prefixed hex values', function () {
-           expect(parseInt('-0xF')).toBe(-15);
-           expect(parseInt('-0xF', 16)).toBe(-15);
-           expect(parseInt('+0xF')).toBe(15);
-           expect(parseInt('+0xF', 16)).toBe(15);
-       });
+        it('allows sign-prefixed hex values', function () {
+            expect(parseInt('-0xF')).toBe(-15);
+            expect(parseInt('-0xF', 16)).toBe(-15);
+            expect(parseInt('+0xF')).toBe(15);
+            expect(parseInt('+0xF', 16)).toBe(15);
+        });
+        /* eslint-enable radix */
     });
 });

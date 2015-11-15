@@ -9,6 +9,7 @@ var hasStrictMode = (function () {
 
    return !this;
 }());
+var ifHasStrictIt = hasStrictMode ? it : xit;
 
 describe('Array', function () {
     var testSubject;
@@ -123,17 +124,15 @@ describe('Array', function () {
             expect(toStr.call(listArg)).toBe('[object String]');
         });
 
-        if (hasStrictMode) {
-            it('does not autobox the content in strict mode', function () {
-                var context;
-                [1].forEach(function () {
-                    'use strict';
+        ifHasStrictIt('does not autobox the content in strict mode', function () {
+            var context;
+            [1].forEach(function () {
+                'use strict';
 
-                    context = this;
-                }, 'x');
-                expect(typeof context).toBe('string');
-            });
-        }
+                context = this;
+            }, 'x');
+            expect(typeof context).toBe('string');
+        });
     });
     describe('#some()', function () {
         var actual, expected, numberOfRuns;

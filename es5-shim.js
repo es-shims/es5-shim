@@ -56,6 +56,7 @@ var array_push = ArrayPrototype.push;
 var array_unshift = ArrayPrototype.unshift;
 var array_concat = ArrayPrototype.concat;
 var call = FunctionPrototype.call;
+var apply = FunctionPrototype.apply;
 var max = Math.max;
 var min = Math.min;
 
@@ -163,7 +164,6 @@ var ES = {
     // http://es5.github.com/#x9.9
     /* replaceable with https://npmjs.com/package/es-abstract ES5.ToObject */
     ToObject: function (o) {
-        /* jshint eqnull: true */
         if (o == null) { // this matches both null and undefined
             throw new TypeError("can't convert " + o + ' to object');
         }
@@ -180,6 +180,68 @@ var ES = {
 // Function
 // ========
 //
+
+// Tests for inconsistent or buggy `[[Class]]` strings.
+/* eslint-disable no-useless-call */
+var hasToStringTagBasicBug = to_string.call() !== '[object Undefined]' || to_string.call(null) !== '[object Null]';
+/* eslint-enable no-useless-call */
+var hasToStringTagLegacyArguments = to_string.call(arguments) !== '[object Arguments]';
+var hasToStringTagInconsistency = hasToStringTagBasicBug || hasToStringTagLegacyArguments;
+// Others that could be fixed:
+// Older ES3 native functions like `alert` return `[object Object]`.
+// Inconsistent `[[Class]]` strings for `window` or `global`.
+
+if (hasToStringTagInconsistency) {
+    // To prevent recursion when `Function#call` is patched. Robustness.
+    call.call = call;
+}
+
+if (hasToStringTagLegacyArguments) {
+    // This function is for use within `call` only.
+    // To avoid any possibility of `call` recursion we use original `hasOwnProperty`.
+    var isDuckTypeArguments = (function (hasOwnProperty) {
+      return function (value) {
+          return value != null && // Checks `null` or `undefined`.
+              typeof value === 'object' &&
+              call.call(hasOwnProperty, value, 'length') &&
+              typeof value.length === 'number' &&
+              value.length >= 0 &&
+              !call.call(hasOwnProperty, value, 'arguments') &&
+              call.call(hasOwnProperty, value, 'callee');
+              // Using `isCallable` here is dangerous as it can cause recursion.
+              // Unless modified to use `call.call`.
+              // A typeof check would be ok if necessary.
+        };
+    }(ObjectPrototype.hasOwnProperty));
+}
+
+// ES-5 15.3.4.4
+// http://es5.github.io/#x15.3.4.4
+// The call() method calls a function with a given this value and arguments
+// provided individually.
+defineProperties(FunctionPrototype, {
+  call: function (thisArg) {
+      // If `this` is `Object#toString`.
+      if (this === to_string) {
+          // Add whatever fixes for getting `[[Class]]` strings here.
+          if (thisArg === null) {
+              return '[object Null]';
+          }
+          if (typeof thisArg === 'undefined') {
+              return '[object Undefined]';
+          }
+          if (hasToStringTagLegacyArguments && isDuckTypeArguments(thisArg)) {
+              return '[object Arguments]';
+          }
+          return call.call(to_string, thisArg);
+      }
+      // All other calls.
+      // `array_slice` is safe to use here, no known issue at present.
+      // Could probably use eval/Function here to spread the arguments, then use
+      // `call.call` to avoid `apply` altogether.
+      return this.apply(thisArg, call.call(array_slice, arguments, 1));
+  }
+}, hasToStringTagInconsistency);
 
 // ES-5 15.3.4.5
 // http://es5.github.com/#x15.3.4.5
@@ -321,7 +383,7 @@ defineProperties(FunctionPrototype, {
 });
 
 // _Please note: Shortcuts are defined after `Function.prototype.bind` as we
-// us it in defining shortcuts.
+// use it in defining shortcuts.
 var owns = call.bind(ObjectPrototype.hasOwnProperty);
 var toStr = call.bind(ObjectPrototype.toString);
 var strSlice = call.bind(StringPrototype.slice);

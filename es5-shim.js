@@ -55,6 +55,7 @@ var array_splice = ArrayPrototype.splice;
 var array_push = ArrayPrototype.push;
 var array_unshift = ArrayPrototype.unshift;
 var array_concat = ArrayPrototype.concat;
+var str_split = StringPrototype.split;
 var call = FunctionPrototype.call;
 var apply = FunctionPrototype.apply;
 var max = Math.max;
@@ -175,10 +176,142 @@ var ES = {
     }
 };
 
+// Check failure of by-index access of string characters (IE < 9)
+// and failure of `0 in boxedString` (Rhino)
+var boxedString = $Object('a');
+var splitString = boxedString[0] !== 'a' || !(0 in boxedString);
+
 //
 // Function
 // ========
 //
+
+// Tests for inconsistent or buggy `[[Class]]` strings.
+/* eslint-disable no-useless-call */
+var hasToStringTagBasicBug = to_string.call() !== '[object Undefined]' || to_string.call(null) !== '[object Null]';
+/* eslint-enable no-useless-call */
+var hasToStringTagLegacyArguments = to_string.call(arguments) !== '[object Arguments]';
+var hasToStringTagInconsistency = hasToStringTagBasicBug || hasToStringTagLegacyArguments;
+// Others that could be fixed:
+// Older ES3 native functions like `alert` return `[object Object]`.
+// Inconsistent `[[Class]]` strings for `window` or `global`.
+
+var hasApplyArrayLikeDeficiency = (function () {
+    var arrayLike = { length: 4, 0: 1, 2: 4, 3: true };
+    var expectedArray = [1, undefined, 4, true];
+    var actualArray;
+    try {
+        actualArray = (function () {
+            // `array_slice` is safe to use here, no known issue at present.
+            return array_slice.apply(arguments);
+        }.apply(null, arrayLike));
+    } catch (e) {
+        if (to_string.call(actualArray) !== '[object Array]' || actualArray.length !== arrayLike.length) {
+            return true;
+        }
+        while (expectedArray.length) {
+            if (actualArray.pop() !== expectedArray.pop()) {
+                return true;
+            }
+        }
+    }
+    return false;
+}());
+
+var shouldPatchCallApply = hasToStringTagInconsistency || hasApplyArrayLikeDeficiency;
+
+if (shouldPatchCallApply) {
+    // To prevent recursion when `call` and `apply` are patched. Robustness.
+    call.call = call;
+    call.apply = apply;
+    apply.call = call;
+    apply.apply = apply;
+}
+
+// This function is for use within `call` and `apply` only.
+// To avoid any possibility of `call` recursion we use original `hasOwnProperty`.
+var isDuckTypeArguments = hasToStringTagLegacyArguments && (function (hasOwnProperty) {
+  return function (value) {
+      if (value != null) { // Checks `null` or `undefined`.
+          if (typeof value === 'object' && call.call(hasOwnProperty, value, 'length')) {
+              var length = value.length;
+              // Constant. ES3 maximum array length. 2^32-1
+              if (length > -1 && length % 1 === 0 && length <= 4294967295) {
+                  return !call.call(hasOwnProperty, value, 'arguments') && call.call(hasOwnProperty, value, 'callee');
+              }
+          }
+      }
+      return false;
+  };
+}(ObjectPrototype.hasOwnProperty));
+
+// For use with `call` and `apply` fixes.
+var toStringTag = shouldPatchCallApply && function (value) {
+    // Add whatever fixes for getting `[[Class]]` strings here.
+    if (value === null) {
+        return '[object Null]';
+    }
+    if (typeof value === 'undefined') {
+        return '[object Undefined]';
+    }
+    if (hasToStringTagLegacyArguments && isDuckTypeArguments(value)) {
+        return '[object Arguments]';
+    }
+    // `to_string` is safe to use here, no known issue at present.
+    return call.call(to_string, value);
+};
+
+defineProperties(FunctionPrototype, {
+    // ES-5 15.3.4.3
+    // http://es5.github.io/#x15.3.4.3
+    // The apply() method calls a function with a given this value and arguments
+    // provided as an array (or an array-like object).
+    apply: function (thisArg) {
+        var argsArray = arguments[1];
+        var type = typeof argsArray;
+        if (arguments.length > 1) {
+            // IE9 (though fix not needed) has a problem here for some reason!!!
+            // Pretty much any function here causes error `SCRIPT5007: Object expected`.
+            if (type !== 'undefined' && type !== 'object' && type !== 'function') {
+                throw new TypeError('Function.prototype.apply: Arguments list has wrong type');
+            }
+        }
+        // If `this` is `Object#toString`, captured or modified.
+        if (this === to_string || this === Object.prototype.toString) {
+            return toStringTag(thisArg);
+        }
+        // All other applys.
+        if (arguments.length > 1 && type === 'object' && argsArray && argsArray.length > 0) {
+            // Boxed string access bug fix.
+            if (splitString && to_string.call(argsArray) === '[object String]') {
+                // `str_split` is safe to use here, no known issue at present.
+                argsArray = call.call(str_split, argsArray, '');
+            } else {
+                // `array_slice` is safe to use here, no known issue at present.
+                argsArray = call.call(array_slice, argsArray);
+            }
+        } else {
+            // `argsArray` was `undefined` (not present), `== null` or not an object.
+            argsArray = [];
+        }
+
+        return apply.call(this, thisArg, argsArray);
+    },
+
+    // ES-5 15.3.4.4
+    // http://es5.github.io/#x15.3.4.4
+    // The call() method calls a function with a given this value and arguments
+    // provided individually.
+    call: function (thisArg) {
+        // If `this` is `Object#toString`, captured or modified.
+        if (this === to_string || this === Object.prototype.toString) {
+            return toStringTag(thisArg);
+        }
+        // All other calls.
+        // `array_slice` is safe to use here, no known issue at present.
+        return apply.call(this, thisArg, call.call(array_slice, arguments, 1));
+    }
+}, shouldPatchCallApply);
 
 // ES-5 15.3.4.5
 // http://es5.github.com/#x15.3.4.5
@@ -374,11 +507,6 @@ defineProperties($Array, { isArray: isArray });
 // ES5 15.4.4.18
 // http://es5.github.com/#x15.4.4.18
 // https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/array/forEach
-
-// Check failure of by-index access of string characters (IE < 9)
-// and failure of `0 in boxedString` (Rhino)
-var boxedString = $Object('a');
-var splitString = boxedString[0] !== 'a' || !(0 in boxedString);
 
 var properlyBoxesContext = function properlyBoxed(method) {
     // Check node 0.6.21 bug where third parameter is not boxed

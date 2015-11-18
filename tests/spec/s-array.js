@@ -1540,4 +1540,32 @@ describe('Array', function () {
             expect(obj[2]).toBeUndefined();
         });
     });
+
+    describe('#slice()', function () {
+        it('works on arrays', function () {
+            var arr = [1, 2, 3, 4];
+            var result = arr.slice(1, 3);
+            expect(result).toEqual([2, 3]);
+        });
+
+        it('is generic', function () {
+            var obj = { 0: 1, 1: 2, 2: 3, 3: 4, length: 4 };
+            var result = Array.prototype.slice.call(obj, 1, 3);
+            expect(result).toEqual([2, 3]);
+        });
+
+        it('works with arguments', function () {
+            var obj = (function () {
+              return arguments;
+            }(1, 2, 3, 4));
+            var result = Array.prototype.slice.call(obj, 1, 3);
+            expect(result).toEqual([2, 3]);
+        });
+
+        it('boxed string access', function () {
+            var obj = '1234';
+            var result = Array.prototype.slice.call(obj, 1, 3);
+            expect(result).toEqual(['2', '3']);
+        });
+    });
 });

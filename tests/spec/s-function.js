@@ -1,7 +1,84 @@
-/* global describe, it, expect, beforeEach */
+/* global describe, it, xit,  expect, beforeEach */
+var hasStrictMode = (function () {
+    'use strict';
+
+    return !this;
+}());
+var ifHasStrictIt = hasStrictMode ? it : xit;
+var global = Function('return this')();
 
 describe('Function', function () {
-    'use strict';
+    describe('#call()', function () {
+        it('should pass correct arguments', function () {
+            // https://github.com/es-shims/es5-shim/pull/345#discussion_r44878754
+            var result;
+            var testFn = function () {
+                return Array.prototype.slice.call(arguments);
+            };
+            var argsExpected = [null, '1', 1, true, testFn];
+            /* eslint-disable no-useless-call */
+            result = testFn.call(undefined, null, '1', 1, true, testFn);
+            expect(result).toEqual(argsExpected);
+            result = testFn.call(null, null, '1', 1, true, testFn);
+            expect(result).toEqual(argsExpected);
+            /* eslint-enable no-useless-call */
+            result = testFn.call('a', null, '1', 1, true, testFn);
+            expect(result).toEqual(argsExpected);
+            result = testFn.call(1, null, '1', 1, true, testFn);
+            expect(result).toEqual(argsExpected);
+            result = testFn.call(true, null, '1', 1, true, testFn);
+            expect(result).toEqual(argsExpected);
+            result = testFn.call(testFn, null, '1', 1, true, testFn);
+            expect(result).toEqual(argsExpected);
+            result = testFn.call(new Date(), null, '1', 1, true, testFn);
+            expect(result).toEqual(argsExpected);
+        });
+        // https://github.com/es-shims/es5-shim/pull/345#discussion_r44878771
+        ifHasStrictIt('should have correct context in strict mode', function () {
+            'use strict';
+
+            var subject;
+            var testFn = function () {
+                return this;
+            };
+            expect(testFn.call()).toBe(undefined);
+            /* eslint-disable no-useless-call */
+            expect(testFn.call(undefined)).toBe(undefined);
+            expect(testFn.call(null)).toBe(null);
+            /* eslint-enable no-useless-call */
+            expect(testFn.call('a')).toBe('a');
+            expect(testFn.call(1)).toBe(1);
+            expect(testFn.call(true)).toBe(true);
+            expect(testFn.call(testFn)).toBe(testFn);
+            subject = new Date();
+            expect(testFn.call(subject)).toBe(subject);
+        });
+        it('should have correct context in non-strict mode', function () {
+            var result;
+            var subject;
+            var testFn = function () {
+                return this;
+            };
+
+            expect(testFn.call()).toBe(global);
+            /* eslint-disable no-useless-call */
+            expect(testFn.call(undefined)).toBe(global);
+            expect(testFn.call(null)).toBe(global);
+            /* eslint-enable no-useless-call */
+            result = testFn.call('a');
+            expect(typeof result).toBe('object');
+            expect(String(result)).toBe('a');
+            result = testFn.call(1);
+            expect(typeof result).toBe('object');
+            expect(Number(result)).toBe(1);
+            result = testFn.call(true);
+            expect(typeof result).toBe('object');
+            expect(Boolean(result)).toBe(true);
+            expect(testFn.call(testFn)).toBe(testFn);
+            subject = new Date();
+            expect(testFn.call(subject)).toBe(subject);
+        });
+    });
 
     describe('#apply()', function () {
         it('works with arraylike objects', function () {

@@ -1,4 +1,6 @@
-/* global describe, it, xit, expect, beforeEach, jasmine, window */
+/* global describe, it, xit, expect, beforeEach, jasmine, window,
+  ArrayBuffer, Float32Array, Float64Array, Int8Array, Int16Array,
+  Int32Array, Uint8Array, Uint8ClampedArray, Uint16Array, Uint32Array */
 
 var ifWindowIt = typeof window === 'undefined' ? xit : it;
 var extensionsPreventible = typeof Object.preventExtensions === 'function' && (function () {
@@ -22,7 +24,14 @@ var canFreeze = typeof Object.freeze === 'function' && (function () {
     return obj.a !== 3;
 }());
 var ifCanFreezeIt = canFreeze ? it : xit;
-
+var toStr = Object.prototype.toString;
+var noop = function () {};
+var hasIteratorTag = typeof Symbol === 'function' && typeof Symbol.iterator === 'symbol';
+var ifHasIteratorTag = hasIteratorTag ? it : xit;
+var hasArrayBuffer = typeof ArrayBuffer === 'function';
+var ifHasArrayBuffer = hasArrayBuffer ? it : xit;
+var hasUint8ClampedArray = typeof Uint8ClampedArray === 'function';
+var ifHasUint8ClampedArray = hasUint8ClampedArray ? it : xit;
 describe('Object', function () {
     'use strict';
 
@@ -354,6 +363,61 @@ describe('Object', function () {
             expect(protoIsEnumerable).toBe(false);
 
             expect(obj instanceof Object).toBe(false);
+        });
+    });
+
+    describe('#toString', function () {
+        it('basic', function () {
+            expect(toStr.call()).toBe('[object Undefined]');
+            /* eslint-disable no-useless-call */
+            expect(toStr.call(undefined)).toBe('[object Undefined]');
+            expect(toStr.call(null)).toBe('[object Null]');
+            /* eslint-enable no-useless-call */
+            expect(toStr.call(1)).toBe('[object Number]');
+            expect(toStr.call(true)).toBe('[object Boolean]');
+            expect(toStr.call('x')).toBe('[object String]');
+            expect(toStr.call([1, 2, 3])).toBe('[object Array]');
+            expect(toStr.call(arguments)).toBe('[object Arguments]');
+            expect(toStr.call({})).toBe('[object Object]');
+            expect(toStr.call(noop)).toBe('[object Function]');
+            expect(toStr.call(new RegExp('c'))).toBe('[object RegExp]');
+            expect(toStr.call(new Date())).toBe('[object Date]');
+            expect(toStr.call(new Error('x'))).toBe('[object Error]');
+        });
+        ifHasArrayBuffer('Typed Arrays', function () {
+            var buffer = new ArrayBuffer(8);
+            expect(toStr.call(buffer)).toBe('[object ArrayBuffer]');
+            expect(toStr.call(new Float32Array(buffer))).toBe('[object Float32Array]');
+            expect(toStr.call(new Float64Array(buffer))).toBe('[object Float64Array]');
+            expect(toStr.call(new Int8Array(buffer))).toBe('[object Int8Array]');
+            expect(toStr.call(new Int16Array(buffer))).toBe('[object Int16Array]');
+            expect(toStr.call(new Int32Array(buffer))).toBe('[object Int32Array]');
+            expect(toStr.call(new Uint8Array(buffer))).toBe('[object Uint8Array]');
+            expect(toStr.call(new Uint16Array(buffer))).toBe('[object Uint16Array]');
+            expect(toStr.call(new Uint32Array(buffer))).toBe('[object Uint32Array]');
+        });
+        ifHasUint8ClampedArray('Uint8ClampedArray', function () {
+            var buffer = new ArrayBuffer(8);
+            expect(toStr.call(new Uint32Array(buffer))).toBe('[object Uint32Array]');
+        });
+        ifHasIteratorTag('Symbol.iterator', function () {
+            expect(toStr.call(Symbol.iterator)).toBe('[object Symbol]');
+        });
+        // https://github.com/es-shims/es5-shim/pull/345#discussion_r44878834
+        it('prototypes', function () {
+            expect(toStr.call(Object.prototype)).toBe('[object Object]');
+            expect(toStr.call(Array.prototype)).toBe('[object Array]');
+            expect(toStr.call(Boolean.prototype)).toBe('[object Boolean]');
+            expect(toStr.call(Function.prototype)).toBe('[object Function]');
+        });
+        // In ES6, many prototype objects stop being instances of themselves,
+        // and instead would return '[object Object]'.
+        xit('prototypes', function () {
+            expect(toStr.call(Number.prototype)).toBe('[object Number]');
+            expect(toStr.call(String.prototype)).toBe('[object String]');
+            expect(toStr.call(Error.prototype)).toBe('[object Error]');
+            expect(toStr.call(Date.prototype)).toBe('[object Date]');
+            expect(toStr.call(RegExp.prototype)).toBe('[object RegExp]');
         });
     });
 });

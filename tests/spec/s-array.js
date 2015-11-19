@@ -1499,6 +1499,34 @@ describe('Array', function () {
         it('defaults to a comma separator when undefined is provided', function () {
             expect([1, 2].join(undefined)).toBe('1,2');
         });
+
+        it('works, extended', function () {
+            expect([].join()).toBe('');
+            expect([undefined].join()).toBe('');
+            expect([undefined, undefined].join()).toBe(',');
+            expect([null, null].join()).toBe(',');
+            expect([undefined, undefined].join('|')).toBe('|');
+            expect([null, null].join('|')).toBe('|');
+            expect([1, 2, 3].join('|')).toBe('1|2|3');
+            expect([1, 2, 3].join(null)).toBe('1null2null3');
+            expect([1, 2, 3].join({})).toBe('1[object Object]2[object Object]3');
+            expect([1, 2, 3].join('')).toBe('123');
+        });
+
+        it('is generic', function () {
+            var obj = { 0: 1, 1: 2, 2: 3, 3: 4, length: 3 };
+            expect(Array.prototype.join.call(obj, ',')).toBe('1,2,3');
+        });
+
+        it('works with a string literal', function () {
+            var str = '123';
+            expect(Array.prototype.join.call(str, ',')).toBe('1,2,3');
+        });
+
+        it('works with `arguments`', function () {
+            var args = (function () { return arguments; }(1, 2, 3));
+            expect(Array.prototype.join.call(args, ',')).toBe('1,2,3');
+        });
     });
 
     describe('#push()', function () {
@@ -1554,7 +1582,7 @@ describe('Array', function () {
             expect(result).toEqual([2, 3]);
         });
 
-        it('works with arguments', function () {
+        it('works with `arguments`', function () {
             var obj = (function () {
               return arguments;
             }(1, 2, 3, 4));

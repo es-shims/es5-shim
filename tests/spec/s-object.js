@@ -355,5 +355,12 @@ describe('Object', function () {
 
             expect(obj instanceof Object).toBe(false);
         });
+        // https://support.microsoft.com/en-gb/kb/2980015
+        it('has Microsoft bug (2980015)', function () {
+            var obj = Object.create({});
+            obj[0] = 1;
+            expect(obj.hasOwnProperty('0')).toBe(true);
+            expect(obj.propertyIsEnumerable('0')).toBe(true);
+        });
     });
 });

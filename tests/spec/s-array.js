@@ -1596,4 +1596,376 @@ describe('Array', function () {
             expect(result).toEqual(['2', '3']);
         });
     });
+
+    describe('#sort()', function () {
+        describe('usage', function () {
+            it('requires a function or undefined as first argument', function () {
+                var actual = [];
+                expect(actual.sort()).toBe(actual);
+                expect(actual.sort(undefined)).toBe(actual);
+                expect(actual.sort(function () { return 0; })).toBe(actual);
+            });
+
+            it('requires a non-function or non-undefined to throw a `TypeError`', function () {
+                expect(function () { [].sort(null); }).toThrow();
+                expect(function () { [].sort(1); }).toThrow();
+                expect(function () { [].sort(''); }).toThrow();
+                expect(function () { [].sort(true); }).toThrow();
+                expect(function () { [].sort({}); }).toThrow();
+                expect(function () { [].sort([]); }).toThrow();
+                expect(function () { [].sort(new Date()); }).toThrow();
+                expect(function () { [].sort(/pattern/); }).toThrow();
+            });
+        });
+
+        describe('ascending', function () {
+            it('[5,2,4,6,1,3] should result in [1,2,3,4,5,6]', function () {
+                var actual = [5, 2, 4, 6, 1, 3];
+                var expected = [1, 2, 3, 4, 5, 6];
+                actual.sort();
+                expect(actual).toEqual(expected);
+            });
+
+            it('[5,2,2,6,1,3] should result in [1,2,2,3,5,6]', function () {
+                var actual = [5, 2, 2, 6, 1, 3];
+                var expected = [1, 2, 2, 3, 5, 6];
+                actual.sort();
+                expect(actual).toEqual(expected);
+            });
+
+            it('[0,0,0,0,0,1] should result in [0,0,0,0,0,1]', function () {
+                var actual = [0, 0, 0, 0, 0, 1];
+                var expected = [0, 0, 0, 0, 0, 1];
+                actual.sort();
+                expect(actual).toEqual(expected);
+            });
+
+            it('[0,0,0,0,0,-1] should result in [-1,0,0,0,0,0]', function () {
+                var actual = [0, 0, 0, 0, 0, -1];
+                var expected = [-1, 0, 0, 0, 0, 0];
+                actual.sort();
+                expect(actual).toEqual(expected);
+            });
+
+            it('[f,e,d,a,c,b] should result in [a,b,c,d,e,f]', function () {
+                var actual = ['f', 'e', 'd', 'a', 'c', 'b'];
+                var expected = ['a', 'b', 'c', 'd', 'e', 'f'];
+                actual.sort();
+                expect(actual).toEqual(expected);
+            });
+
+            it('[f,e,d,,,,a,c,b] should result in [a,b,c,d,e,f,,,]', function () {
+                var actual = ['f', 'e', 'd', 1, 2, 'a', 'c', 'b'];
+                delete actual[3];
+                delete actual[4];
+                var expected = ['a', 'b', 'c', 'd', 'e', 'f'];
+                expected.length = 8;
+                actual.sort();
+                expect(actual).toEqual(expected);
+            });
+
+            it('[f,e,d,,null,,a,c,b] should result in [a,b,c,d,e,f,null,,,]', function () {
+                var actual = ['f', 'e', 'd', 1, null, 2, 'a', 'c', 'b'];
+                delete actual[3];
+                delete actual[5];
+                var expected = ['a', 'b', 'c', 'd', 'e', 'f', null];
+                expected.length = 9;
+                actual.sort();
+                expect(actual).toEqual(expected);
+            });
+
+            it('[f,e,d,,null,undefined,a,c,b] should result in [a,b,c,d,e,f,null,undefined,,]', function () {
+                var actual = ['f', 'e', 'd', 1, null, undefined, 'a', 'c', 'b'];
+                delete actual[3];
+                var expected = ['a', 'b', 'c', 'd', 'e', 'f', null, undefined];
+                expected.length = 9;
+                actual.sort();
+                expect(actual).toEqual(expected);
+            });
+
+            it('[] should result in []', function () {
+                var actual = [];
+                var expected = [];
+                actual.sort();
+                expect(actual).toEqual(expected);
+            });
+
+            it('[1] should result in [1]', function () {
+                var actual = [1];
+                var expected = [1];
+                actual.sort();
+                expect(actual).toEqual(expected);
+            });
+
+            it('result should find only greater or equal values', function () {
+                var actual = [];
+                var i;
+                for (i = 0; i < 100; i += 1) {
+                    actual.push(('00' + (Math.random() * 100).toFixed(0)).slice(-3));
+                }
+                actual.sort();
+                for (i = 0; i < actual.length - 1; i += 1) {
+                    expect(actual[i] <= actual[i + 1]).toBe(true);
+                }
+            });
+        });
+
+        describe('descending', function () {
+            var descending;
+
+            beforeEach(function () {
+                descending = function (left, right) {
+                    var leftS = String(left);
+                    var rightS = String(right);
+                    if (leftS === rightS) {
+                        return +0;
+                    }
+                    if (leftS < rightS) {
+                        return 1;
+                    }
+                    return -1;
+                };
+            });
+
+            it('[5,2,4,6,1,3] should result in [6,5,4,3,2,1]', function () {
+                var actual = [5, 2, 4, 6, 1, 3];
+                var expected = [6, 5, 4, 3, 2, 1];
+                actual.sort(descending);
+                expect(actual).toEqual(expected);
+            });
+
+            it('[5,2,2,6,1,3] should result in [6,5,4,2,2,1]', function () {
+                var actual = [5, 2, 2, 6, 1, 3];
+                var expected = [6, 5, 3, 2, 2, 1];
+                actual.sort(descending);
+                expect(actual).toEqual(expected);
+            });
+
+            it('[0,0,0,0,0,1] should result in [1,0,0,0,0,0]', function () {
+                var actual = [0, 0, 0, 0, 0, 1];
+                var expected = [1, 0, 0, 0, 0, 0];
+                actual.sort(descending);
+                expect(actual).toEqual(expected);
+            });
+
+            it('[0,0,0,0,0,-1] should result in [0,0,0,0,0,-1]', function () {
+                var actual = [0, 0, 0, 0, 0, -1];
+                var expected = [0, 0, 0, 0, 0, -1];
+                actual.sort(descending);
+                expect(actual).toEqual(expected);
+            });
+
+            it('[f,e,d,a,c,b] should result in [f,e,d,c,b,a]', function () {
+                var actual = ['f', 'e', 'd', 'a', 'c', 'b'];
+                var expected = ['f', 'e', 'd', 'c', 'b', 'a'];
+                actual.sort(descending);
+                expect(actual).toEqual(expected);
+            });
+
+            it('[f,e,d,,,a,c,b] should result in [f,e,d,c,b,a,,,]', function () {
+                var actual = ['f', 'e', 'd', 1, 2, 'a', 'c', 'b'];
+                delete actual[3];
+                delete actual[4];
+                var expected = ['f', 'e', 'd', 'c', 'b', 'a'];
+                expected.length = 8;
+                actual.sort(descending);
+                expect(actual).toEqual(expected);
+            });
+
+            it('[f,e,d,,null,,a,c,b] should result in [null,f,e,d,c,b,a,,,]', function () {
+                var actual = ['f', 'e', 'd', 1, null, 2, 'a', 'c', 'b'];
+                delete actual[3];
+                delete actual[5];
+                var expected = [null, 'f', 'e', 'd', 'c', 'b', 'a'];
+                expected.length = 9;
+                actual.sort(descending);
+                expect(actual).toEqual(expected);
+            });
+
+            it('[f,e,d,undefined,null,,a,c,b] should result in [null,f,e,d,c,b,a,undefined,,]', function () {
+                var actual = ['f', 'e', 'd', undefined, null, 2, 'a', 'c', 'b'];
+                delete actual[5];
+                var expected = [null, 'f', 'e', 'd', 'c', 'b', 'a', undefined];
+                expected.length = 9;
+                actual.sort(descending);
+                expect(actual).toEqual(expected);
+            });
+
+            it('[] should result in []', function () {
+                var actual = [];
+                var expected = [];
+                actual.sort(descending);
+                expect(actual).toEqual(expected);
+            });
+
+            it('[1] should result in [1]', function () {
+                var actual = [1];
+                var expected = [1];
+                actual.sort(descending);
+                expect(actual).toEqual(expected);
+            });
+
+            it('result should find only lesser or equal values', function () {
+                var actual = [];
+                var i;
+                for (i = 0; i < 100; i += 1) {
+                    actual.push(('00' + (Math.random() * 100).toFixed(0)).slice(-3));
+                }
+                actual.sort(descending);
+                for (i = 0; i < actual.length - 1; i += 1) {
+                    expect(actual[i] >= actual[i + 1]).toBe(true);
+                }
+            });
+        });
+
+        describe('returned value', function () {
+            it('should be the source object', function () {
+                var actual = [1, 3, 2];
+                expect(actual.sort()).toBe(actual);
+            });
+        });
+
+        describe('when used generically', function () {
+            var descending;
+            var args;
+
+            beforeEach(function () {
+                descending = function (left, right) {
+                    var leftS = String(left);
+                    var rightS = String(right);
+                    if (leftS === rightS) {
+                        return +0;
+                    }
+                    if (leftS < rightS) {
+                        return 1;
+                    }
+                    return -1;
+                };
+
+                args = function () {
+                    return arguments;
+                };
+            });
+
+            it('should not sort objects without length', function () {
+                var actual = {
+                    0: 5,
+                    1: 2,
+                    2: 4,
+                    3: 6,
+                    4: 1,
+                    5: 3
+                };
+                var expected = {
+                    0: 5,
+                    1: 2,
+                    2: 4,
+                    3: 6,
+                    4: 1,
+                    5: 3
+                };
+                Array.prototype.sort.call(actual);
+                expect(actual).toEqual(expected);
+                Array.prototype.sort.call(actual, descending);
+                expect(actual).toEqual(expected);
+            });
+
+            it('should sort objects ascending with length', function () {
+                    var actual = {
+                        0: 5,
+                        1: 2,
+                        2: 4,
+                        3: 6,
+                        4: 1,
+                        5: 3,
+                        length: 6
+                    };
+                    var expected = {
+                        0: 1,
+                        1: 2,
+                        2: 3,
+                        3: 4,
+                        4: 5,
+                        5: 6,
+                        length: 6
+                    };
+                    Array.prototype.sort.call(actual);
+                    expect(actual).toEqual(expected);
+            });
+
+            it('should sort objects descending with length', function () {
+                    var actual = {
+                        0: 5,
+                        1: 2,
+                        2: 4,
+                        3: 6,
+                        4: 1,
+                        5: 3,
+                        length: 6
+                    };
+                    var expected = {
+                        0: 6,
+                        1: 5,
+                        2: 4,
+                        3: 3,
+                        4: 2,
+                        5: 1,
+                        length: 6
+                    };
+                    Array.prototype.sort.call(actual, descending);
+                    expect(actual).toEqual(expected);
+            });
+
+            it('should sort objects descending with mixed content types and with length', function () {
+                var actual = {
+                    0: 5,
+                    1: 2,
+                    2: 4,
+                    4: null,
+                    6: 1,
+                    7: 3,
+                    length: 8
+                };
+                var expected = {
+                    0: null,
+                    1: 5,
+                    2: 4,
+                    3: 3,
+                    4: 2,
+                    5: 1,
+                    length: 8
+                };
+                Array.prototype.sort.call(actual, descending);
+                expect(actual).toEqual(expected);
+            });
+
+            it('should sort `arguments` object ascending', function () {
+                var actual = args(5, 2, 4, 6, 1, 3);
+                var expected = args(1, 2, 3, 4, 5, 6);
+                Array.prototype.sort.call(actual);
+                expect(actual).toEqual(expected);
+            });
+
+            it('should sort `arguments` object ascending with mixed content types', function () {
+                var actual = args(5, 2, 4, null, 1, 3);
+                var expected = args(1, 2, 3, 4, 5, null);
+                Array.prototype.sort.call(actual);
+                expect(actual).toEqual(expected);
+            });
+
+            it('should sort `arguments` object descending', function () {
+                var actual = args(5, 2, 4, 6, 1, 3);
+                var expected = args(6, 5, 4, 3, 2, 1);
+                Array.prototype.sort.call(actual, descending);
+                expect(actual).toEqual(expected);
+            });
+
+            it('should sort `arguments` object descending with mixed content types', function () {
+                var actual = args(5, 2, 4, null, 1, 3);
+                var expected = args(null, 5, 4, 3, 2, 1);
+                Array.prototype.sort.call(actual, descending);
+                expect(actual).toEqual(expected);
+            });
+        });
+    });
 });

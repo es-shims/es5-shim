@@ -192,57 +192,626 @@ describe('Object', function () {
     });
 
     describe('.defineProperty()', function () {
-        var obj;
+        describe('original tests', function () {
+            // No tests to check default properties or if they work?
+            var obj;
 
-        beforeEach(function () {
-           obj = {};
+            beforeEach(function () {
+               obj = {};
 
-           Object.defineProperty(obj, 'name', {
-               value: 'Testing',
-               configurable: true,
-               enumerable: true,
-               writable: true
-           });
-        });
-
-        it('should return the initial value', function () {
-            expect(obj.hasOwnProperty('name')).toBeTruthy();
-            expect(obj.name).toBe('Testing');
-        });
-
-        it('should be setable', function () {
-            obj.name = 'Other';
-            expect(obj.name).toBe('Other');
-        });
-
-        it('should return the parent initial value', function () {
-            var child = Object.create(obj, {});
-
-            expect(child.name).toBe('Testing');
-            expect(child.hasOwnProperty('name')).toBeFalsy();
-        });
-
-        it('should not override the parent value', function () {
-            var child = Object.create(obj, {});
-
-            Object.defineProperty(child, 'name', {
-                value: 'Other'
+               Object.defineProperty(obj, 'name', {
+                   value: 'Testing',
+                   configurable: true,
+                   enumerable: true,
+                   writable: true
+               });
             });
 
-            expect(obj.name).toBe('Testing');
-            expect(child.name).toBe('Other');
+            it('should return the initial value', function () {
+                expect(obj.hasOwnProperty('name')).toBeTruthy();
+                expect(obj.name).toBe('Testing');
+            });
+
+            it('should be setable', function () {
+                obj.name = 'Other';
+                expect(obj.name).toBe('Other');
+            });
+
+            it('should return the parent initial value', function () {
+                var child = Object.create(obj, {});
+
+                expect(child.name).toBe('Testing');
+                expect(child.hasOwnProperty('name')).toBeFalsy();
+            });
+
+            it('should not override the parent value', function () {
+                var child = Object.create(obj, {});
+
+                Object.defineProperty(child, 'name', {
+                    value: 'Other'
+                });
+
+                expect(obj.name).toBe('Testing');
+                expect(child.name).toBe('Other');
+            });
+
+            it('should throw error for non object', function () {
+                expect(function () {
+                    Object.defineProperty(42, 'name', {});
+                }).toThrow();
+            });
+
+            it('should not throw error for empty descriptor', function () {
+                expect(function () {
+                    Object.defineProperty({}, 'name', {});
+                }).not.toThrow();
+            });
+
+            it('should throw a TypeError in each case', function () {
+                expect(function () {
+                    Object.defineProperty();
+                }).toThrow();
+                expect(function () {
+                    Object.defineProperty(undefined);
+                }).toThrow();
+                expect(function () {
+                    Object.defineProperty(null);
+                }).toThrow();
+                expect(function () {
+                    Object.defineProperty({}, 'foo');
+                }).toThrow();
+                expect(function () {
+                    Object.defineProperty({}, 'foo', undefined);
+                }).toThrow();
+                expect(function () {
+                    Object.defineProperty({}, 'foo', null);
+                }).toThrow();
+                expect(function () {
+                    Object.defineProperty({}, 'foo', true);
+                }).toThrow();
+                expect(function () {
+                    Object.defineProperty({}, 'foo', 1);
+                }).toThrow();
+            });
         });
 
-        it('should throw error for non object', function () {
-            expect(function () {
-                Object.defineProperty(42, 'name', {});
-            }).toThrow();
+        describe('extended tests', function () {
+            var noop;
+            beforeEach(function () {
+                noop = function () {};
+            });
+
+            describe('defining properties on objects', function () {
+                it('without `value` should define own property and have a value of `undefined`', function () {
+                    var obj = Object.defineProperty({}, 'foo', {
+                        enumerable: true,
+                        writable: true,
+                        configurable: true
+                    });
+                    expect(Object.prototype.hasOwnProperty.call(obj, 'foo')).toBe(true);
+                    expect(obj.foo).toBe(undefined);
+                });
+
+                it('with `value` as `undefined` should define own property and have a value of `undefined`', function () {
+                    var obj = Object.defineProperty({}, 'foo', {
+                        value: undefined,
+                        enumerable: true,
+                        writable: true,
+                        configurable: true
+                    });
+                    expect(Object.prototype.hasOwnProperty.call(obj, 'foo')).toBe(true);
+                    expect(obj.foo).toBe(undefined);
+                });
+
+                it('with `value` as `null` should define own property and have a value of `null`', function () {
+                    var obj = Object.defineProperty({}, 'foo', {
+                        value: null,
+                        enumerable: true,
+                        writable: true,
+                        configurable: true
+                    });
+                    expect(Object.prototype.hasOwnProperty.call(obj, 'foo')).toBe(true);
+                    expect(obj.foo).toBe(null);
+                });
+
+                it('with `value` as `1` should define own property and have a value of `1`', function () {
+                    var obj = Object.defineProperty({}, 'foo', {
+                        value: 1,
+                        enumerable: true,
+                        writable: true,
+                        configurable: true
+                    });
+                    expect(Object.prototype.hasOwnProperty.call(obj, 'foo')).toBe(true);
+                    expect(obj.foo).toBe(1);
+                });
+
+                it('with `value` as `true` should define own property and have a value of `true`', function () {
+                    var obj = Object.defineProperty({}, 'foo', {
+                        value: true,
+                        enumerable: true,
+                        writable: true,
+                        configurable: true
+                    });
+                    expect(Object.prototype.hasOwnProperty.call(obj, 'foo')).toBe(true);
+                    expect(obj.foo).toBe(true);
+                });
+
+                it('with `value` as `` should define own property and have a value of ``', function () {
+                    var obj = Object.defineProperty({}, 'foo', {
+                        value: '',
+                        enumerable: true,
+                        writable: true,
+                        configurable: true
+                    });
+                    expect(Object.prototype.hasOwnProperty.call(obj, 'foo')).toBe(true);
+                    expect(obj.foo).toBe('');
+                });
+
+                it('with `value` as `{}` should define own property and have a value of `{}`', function () {
+                    var obj = Object.defineProperty({}, 'foo', {
+                        value: {},
+                        enumerable: true,
+                        writable: true,
+                        configurable: true
+                    });
+                    expect(Object.prototype.hasOwnProperty.call(obj, 'foo')).toBe(true);
+                    expect(obj.foo).toEqual({});
+                });
+
+                it('with `value` as `[]` should define own property and have a value of `[]`', function () {
+                    var obj = Object.defineProperty({}, 'foo', {
+                        value: [],
+                        enumerable: true,
+                        writable: true,
+                        configurable: true
+                    });
+                    expect(Object.prototype.hasOwnProperty.call(obj, 'foo')).toBe(true);
+                    expect(obj.foo).toEqual([]);
+                });
+
+                it('with `value` as `function` should define own property and have a value of `function`', function () {
+                    var obj = Object.defineProperty({}, 'foo', {
+                        value: noop,
+                        enumerable: true,
+                        writable: true,
+                        configurable: true
+                    });
+                    expect(Object.prototype.hasOwnProperty.call(obj, 'foo')).toBe(true);
+                    expect(obj.foo).toBe(noop);
+                });
+            });
+
+            it('should not throw an error redefinining properties on plain objects', function () {
+                var obj = {
+                    foo: 10
+                };
+                Object.defineProperty(obj, 'foo', {
+                    enumerable: true,
+                    writable: true,
+                    configurable: true
+                });
+                expect(Object.prototype.hasOwnProperty.call(obj, 'foo')).toBe(true);
+                expect(obj.foo).toBe(10);
+
+                Object.defineProperty(obj, 'foo', {
+                    enumerable: false,
+                    writable: false,
+                    configurable: false
+                });
+                expect(Object.prototype.hasOwnProperty.call(obj, 'foo')).toBe(true);
+                expect(obj.foo).toBe(10);
+            });
         });
 
-        it('should not throw error for empty descriptor', function () {
-            expect(function () {
-                Object.defineProperty({}, 'name', {});
-            }).not.toThrow();
+        describe('defining non-item properties on arrays', function () {
+            it('property without `value` should be own property with value of `undefined`', function () {
+                var obj = Object.defineProperty([], 'foo', {
+                    enumerable: true,
+                    writable: true,
+                    configurable: true
+                });
+                expect(Object.prototype.hasOwnProperty.call(obj, 'foo')).toBe(true);
+                expect(obj.foo).toBe(undefined);
+            });
+
+            it('property with `value` of `undefined` should be own property with value of `undefined`', function () {
+                var obj = Object.defineProperty([], 'foo', {
+                    value: undefined,
+                    enumerable: true,
+                    writable: true,
+                    configurable: true
+                });
+                expect(Object.prototype.hasOwnProperty.call(obj, 'foo')).toBe(true);
+                expect(obj.foo).toBe(undefined);
+            });
+
+            it('property with `value` of `null` should be own property with value of `null`', function () {
+                var obj = Object.defineProperty([], 'foo', {
+                    value: null,
+                    enumerable: true,
+                    writable: true,
+                    configurable: true
+                });
+                expect(Object.prototype.hasOwnProperty.call(obj, 'foo')).toBe(true);
+                expect(obj.foo).toBe(null);
+            });
+
+            it('property with `value` of `1` should be own property with value of `1`', function () {
+                var obj = Object.defineProperty([], 'foo', {
+                    value: 1,
+                    enumerable: true,
+                    writable: true,
+                    configurable: true
+                });
+                expect(Object.prototype.hasOwnProperty.call(obj, 'foo')).toBe(true);
+                expect(obj.foo).toBe(1);
+            });
+
+            it('property with `value` of `true` should be own property with value of `true`', function () {
+                var obj = Object.defineProperty([], 'foo', {
+                    value: true,
+                    enumerable: true,
+                    writable: true,
+                    configurable: true
+                });
+                expect(Object.prototype.hasOwnProperty.call(obj, 'foo')).toBe(true);
+                expect(obj.foo).toBe(true);
+            });
+
+            it('property with `value` of `[]` should be own property with value of `[]`', function () {
+                var obj = Object.defineProperty([], 'foo', {
+                    value: '',
+                    enumerable: true,
+                    writable: true,
+                    configurable: true
+                });
+                expect(Object.prototype.hasOwnProperty.call(obj, 'foo')).toBe(true);
+                expect(obj.foo).toBe('');
+            });
+
+            it('property with `value` of `function` should be own property with value of `function`', function () {
+                var noop = function () {};
+                var obj = Object.defineProperty([], 'foo', {
+                    value: noop,
+                    enumerable: true,
+                    writable: true,
+                    configurable: true
+                });
+                expect(Object.prototype.hasOwnProperty.call(obj, 'foo')).toBe(true);
+                expect(obj.foo).toBe(noop);
+            });
+        });
+
+        describe('defining items on arrays, string property name', function () {
+            it('with `value` not defined', function () {
+                var obj = Object.defineProperty([], '0', {
+                    enumerable: true,
+                    writable: true,
+                    configurable: true
+                });
+                expect(obj.length).toBe(1);
+                expect(Object.prototype.hasOwnProperty.call(obj, '0')).toBe(true);
+                expect(obj[0]).toBe(undefined);
+            });
+
+            it('with `value` of `undefined`', function () {
+                var obj = Object.defineProperty([], '0', {
+                    value: undefined,
+                    enumerable: true,
+                    writable: true,
+                    configurable: true
+                });
+                expect(obj.length).toBe(1);
+                expect(Object.prototype.hasOwnProperty.call(obj, '0')).toBe(true);
+                expect(obj[0]).toBe(undefined);
+            });
+
+            it('with `value` of `null`', function () {
+                var obj = Object.defineProperty([], '0', {
+                    value: null,
+                    enumerable: true,
+                    writable: true,
+                    configurable: true
+                });
+                expect(Object.prototype.hasOwnProperty.call(obj, '0')).toBe(true);
+                expect(obj.length).toBe(1);
+                expect(obj[0]).toBe(null);
+            });
+        });
+
+        describe('defining items on arrays, number as property name', function () {
+            it('with `value` not defined', function () {
+                var obj = Object.defineProperty([], 0, {
+                    enumerable: true,
+                    writable: true,
+                    configurable: true
+                });
+                expect(obj.length).toBe(1);
+                expect(obj[0]).toBe(undefined);
+            });
+
+            it('with `value` of `undefined`', function () {
+                var obj = Object.defineProperty([], 0, {
+                    value: undefined,
+                    enumerable: true,
+                    writable: true,
+                    configurable: true
+                });
+                expect(obj.length).toBe(1);
+                expect(obj[0]).toBe(undefined);
+            });
+
+            it('with `value` of `null`', function () {
+                var obj = Object.defineProperty([], 0, {
+                    value: null,
+                    enumerable: true,
+                    writable: true,
+                    configurable: true
+                });
+                expect(Object.prototype.hasOwnProperty.call(obj, 0)).toBe(true);
+                expect(obj.length).toBe(1);
+                expect(obj[0]).toBe(null);
+            });
+
+            describe('sparse', function () {
+                it('with `value` not defined', function () {
+                    var obj = Object.defineProperty([], 1, {
+                        enumerable: true,
+                        writable: true,
+                        configurable: true
+                    });
+                    expect(obj.length).toBe(2);
+                    expect(obj[1]).toBe(undefined);
+                });
+
+                it('with `value` of `undefined`', function () {
+                    var obj = Object.defineProperty([], 1, {
+                        value: undefined,
+                        enumerable: true,
+                        writable: true,
+                        configurable: true
+                    });
+                    expect(obj.length).toBe(2);
+                    expect(obj[1]).toBe(undefined);
+                });
+
+                it('with `value` of `null`', function () {
+                    var obj = Object.defineProperty([], 1, {
+                        value: null,
+                        enumerable: true,
+                        writable: true,
+                        configurable: true
+                    });
+                    expect(Object.prototype.hasOwnProperty.call(obj, 1)).toBe(true);
+                    expect(obj.length).toBe(2);
+                    expect(obj[1]).toBe(null);
+                });
+            });
+
+            describe('using a float as property name', function () {
+                it('`value` not defined should be a property and not an item', function () {
+                    var obj = Object.defineProperty([], 1.1, {
+                        enumerable: true,
+                        writable: true,
+                        configurable: true
+                    });
+                    expect(Object.prototype.hasOwnProperty.call(obj, 1.1)).toBe(true);
+                    expect(obj.length).toBe(0);
+                    expect(obj[1.1]).toBe(undefined);
+                });
+
+                it('`value` of `undefined` should be a property and not an item', function () {
+                    var obj = Object.defineProperty([], 1.1, {
+                        value: undefined,
+                        enumerable: true,
+                        writable: true,
+                        configurable: true
+                    });
+                    expect(Object.prototype.hasOwnProperty.call(obj, 1.1)).toBe(true);
+                    expect(obj.length).toBe(0);
+                    expect(obj[1.1]).toBe(undefined);
+                });
+
+                it('`value` of `null` should be a property and not an item', function () {
+                    var obj = Object.defineProperty([], 1.1, {
+                        value: null,
+                        enumerable: true,
+                        writable: true,
+                        configurable: true
+                    });
+                    expect(Object.prototype.hasOwnProperty.call(obj, 1.1)).toBe(true);
+                    expect(obj.length).toBe(0);
+                    expect(obj[1.1]).toBe(null);
+                });
+            });
+
+            describe('using a float string as property name', function () {
+                it('`value` not defined should be a property and not an item', function () {
+                    var obj = Object.defineProperty([], '1.', {
+                        enumerable: true,
+                        writable: true,
+                        configurable: true
+                    });
+                    expect(Object.prototype.hasOwnProperty.call(obj, '1.')).toBe(true);
+                    expect(obj.length).toBe(0);
+                    expect(obj['1.']).toBe(undefined);
+                });
+
+                it('`value` of `undefined` should be a property and not an item', function () {
+                    var obj = Object.defineProperty([], '1.', {
+                        value: undefined,
+                        enumerable: true,
+                        writable: true,
+                        configurable: true
+                    });
+                    expect(Object.prototype.hasOwnProperty.call(obj, '1.')).toBe(true);
+                    expect(obj.length).toBe(0);
+                    expect(obj['1.']).toBe(undefined);
+                });
+
+                it('`value` of `null` should be a property and not an item', function () {
+                    var obj = Object.defineProperty([], '1.', {
+                        value: null,
+                        enumerable: true,
+                        writable: true,
+                        configurable: true
+                    });
+                    expect(Object.prototype.hasOwnProperty.call(obj, '1.')).toBe(true);
+                    expect(obj.length).toBe(0);
+                    expect(obj['1.']).toBe(null);
+                });
+
+                it('`value` of `true` should be a property and not an item', function () {
+                    var obj = Object.defineProperty([], '1.', {
+                        value: true,
+                        enumerable: true,
+                        writable: true,
+                        configurable: true
+                    });
+                    expect(Object.prototype.hasOwnProperty.call(obj, '1.')).toBe(true);
+                    expect(obj.length).toBe(0);
+                    expect(obj['1.']).toBe(true);
+                });
+            });
+
+            describe('using a hex string as property name', function () {
+                it('name of `01` should be a property and not an item', function () {
+                    var obj = Object.defineProperty([], '01', {
+                        value: true,
+                        enumerable: true,
+                        writable: true,
+                        configurable: true
+                    });
+                    expect(Object.prototype.hasOwnProperty.call(obj, '01')).toBe(true);
+                    expect(obj.length).toBe(0);
+                    expect(obj['01']).toBe(true);
+                });
+
+                it('name of `0x1` should be a property and not an item', function () {
+                    var obj = Object.defineProperty([], '0x1', {
+                        value: true,
+                        enumerable: true,
+                        writable: true,
+                        configurable: true
+                    });
+                    expect(Object.prototype.hasOwnProperty.call(obj, '0x1')).toBe(true);
+                    expect(obj.length).toBe(0);
+                    expect(obj['0x1']).toBe(true);
+                });
+            });
+        });
+
+        describe('redefining descriptors on arrays', function () {
+            it('elements on arrays', function () {
+                var result = Object.defineProperty([10], '0', {
+                    enumerable: true,
+                    writable: true,
+                    configurable: true
+                });
+                expect(result.length).toBe(1);
+                expect(result[0]).toBe(10);
+            });
+        });
+
+        describe('defining properties on functions', function () {
+            it('with `value` not defined', function () {
+                var obj = Object.defineProperty(function () { return; }, 'foo', {
+                    enumerable: true,
+                    writable: true,
+                    configurable: true
+                });
+                expect(Object.prototype.hasOwnProperty.call(obj, 'foo')).toBe(true);
+                expect(obj.foo).toBe(undefined);
+            });
+
+            it('with `value` of `undefined`', function () {
+                var obj = Object.defineProperty(function () { return; }, 'foo', {
+                    value: undefined,
+                    enumerable: true,
+                    writable: true,
+                    configurable: true
+                });
+                expect(Object.prototype.hasOwnProperty.call(obj, 'foo')).toBe(true);
+                expect(obj.foo).toBe(undefined);
+            });
+
+            it('with `value` of `null`', function () {
+                var obj = Object.defineProperty(function () { return; }, 'foo', {
+                    value: null,
+                    enumerable: true,
+                    writable: true,
+                    configurable: true
+                });
+                expect(Object.prototype.hasOwnProperty.call(obj, 'foo')).toBe(true);
+                expect(obj.foo).toBe(null);
+            });
+
+            it('with `value` of `{}`', function () {
+              var obj = Object.defineProperty(function () { return; }, 'foo', {
+                    value: {},
+                    enumerable: true,
+                    writable: true,
+                    configurable: true
+                });
+                expect(Object.prototype.hasOwnProperty.call(obj, 'foo')).toBe(true);
+                expect(obj.foo).toEqual({});
+            });
+
+            it('with `value` of `[]`', function () {
+                var obj = Object.defineProperty(function () { return; }, 'foo', {
+                    value: [],
+                    enumerable: true,
+                    writable: true,
+                    configurable: true
+                });
+                expect(Object.prototype.hasOwnProperty.call(obj, 'foo')).toBe(true);
+                expect(obj.foo).toEqual([]);
+            });
+
+            it('with `value` of ``', function () {
+                var obj = Object.defineProperty(function () { return; }, 'foo', {
+                    value: '',
+                    enumerable: true,
+                    writable: true,
+                    configurable: true
+                });
+                expect(Object.prototype.hasOwnProperty.call(obj, 'foo')).toBe(true);
+                expect(obj.foo).toBe('');
+            });
+
+            it('with `value` of `true`', function () {
+                var obj = Object.defineProperty(function () { return; }, 'foo', {
+                    value: true,
+                    enumerable: true,
+                    writable: true,
+                    configurable: true
+                });
+                expect(Object.prototype.hasOwnProperty.call(obj, 'foo')).toBe(true);
+                expect(obj.foo).toBe(true);
+            });
+
+            it('with `value` of `1`', function () {
+                var obj = Object.defineProperty(function () { return; }, 'foo', {
+                    value: 1,
+                    enumerable: true,
+                    writable: true,
+                    configurable: true
+                });
+                expect(Object.prototype.hasOwnProperty.call(obj, 'foo')).toBe(true);
+                expect(obj.foo).toBe(1);
+            });
+
+            it('with `value` of `function`', function () {
+                var noop = function () {};
+                var obj = Object.defineProperty(function () { return; }, 'foo', {
+                    value: noop,
+                    enumerable: true,
+                    writable: true,
+                    configurable: true
+                });
+                expect(Object.prototype.hasOwnProperty.call(obj, 'foo')).toBe(true);
+                expect(obj.foo).toBe(noop);
+            });
         });
     });
 

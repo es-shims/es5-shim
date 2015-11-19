@@ -56,6 +56,7 @@ var array_push = ArrayPrototype.push;
 var array_unshift = ArrayPrototype.unshift;
 var array_concat = ArrayPrototype.concat;
 var call = FunctionPrototype.call;
+var apply = FunctionPrototype.apply;
 var max = Math.max;
 var min = Math.min;
 
@@ -323,6 +324,7 @@ defineProperties(FunctionPrototype, {
 var owns = call.bind(ObjectPrototype.hasOwnProperty);
 var toStr = call.bind(ObjectPrototype.toString);
 var arraySlice = call.bind(array_slice);
+var arraySliceApply = apply.bind(array_slice);
 var strSlice = call.bind(StringPrototype.slice);
 var strSplit = call.bind(StringPrototype.split);
 var strIndexOf = call.bind(StringPrototype.indexOf);
@@ -881,6 +883,16 @@ var pushUndefinedIsWeird = (function () {
     return result !== 1 || arr.length !== 1 || typeof arr[0] !== 'undefined' || !owns(arr, 0);
 }());
 defineProperties(ArrayPrototype, { push: pushShim }, pushUndefinedIsWeird);
+
+// ES5 15.2.3.14
+// http://es5.github.io/#x15.4.4.10
+// Fix boxed string bug
+defineProperties(ArrayPrototype, {
+    slice: function (start, end) {
+        var arr = isString(this) ? strSplit(this, '') : this;
+        return arraySliceApply(arr, arguments);
+    }
+}, splitString);
 
 //
 // Object

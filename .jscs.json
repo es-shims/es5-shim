@@ -135,6 +135,18 @@
 
 	"requireSpacesInGenerator": {
 		"afterStar": true
-	}
+	},
+
+	"disallowSpacesInGenerator": {
+		"beforeStar": true
+	},
+
+	"disallowVar": false,
+
+	"requireArrayDestructuring": false,
+
+	"requireEnhancedObjectLiterals": false,
+
+	"requireObjectDestructuring": false
 }
 

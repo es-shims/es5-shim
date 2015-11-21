@@ -1496,7 +1496,7 @@ if (
         var maxSafe32BitInt = Math.pow(2, 32) - 1;
 
         StringPrototype.split = function (separator, limit) {
-            var string = this;
+            var string = String(this);
             if (typeof separator === 'undefined' && limit === 0) {
                 return [];
             }
@@ -1515,7 +1515,6 @@ if (
                 // Make `global` and avoid `lastIndex` issues by working with a copy
                 separator2, match, lastIndex, lastLength;
             var separatorCopy = new RegExp(separator.source, flags + 'g');
-            string += ''; // Type-convert
             if (!compliantExecNpcg) {
                 // Doesn't need flags gy, but they don't hurt
                 separator2 = new RegExp('^' + separatorCopy.source + '$(?!\\s)', flags);

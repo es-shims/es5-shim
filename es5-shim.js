@@ -1639,8 +1639,8 @@ var ws = '\x09\x0A\x0B\x0C\x0D\x20\xA0\u1680\u180E\u2000\u2001\u2002\u2003' +
     '\u2029\uFEFF';
 var zeroWidth = '\u200b';
 var wsRegexChars = '[' + ws + ']';
-var trimBeginRegexp = new RegExp('^' + wsRegexChars + wsRegexChars + '*');
-var trimEndRegexp = new RegExp(wsRegexChars + wsRegexChars + '*$');
+var trimBeginRegexp = new RegExp('^' + wsRegexChars + '*');
+var trimEndRegexp = new RegExp(wsRegexChars + '*$');
 var hasTrimWhitespaceBug = StringPrototype.trim && (ws.trim() || !zeroWidth.trim());
 defineProperties(StringPrototype, {
     // http://blog.stevenlevithan.com/archives/faster-trim-javascript

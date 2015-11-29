@@ -1568,4 +1568,141 @@ describe('Array', function () {
             expect(result).toEqual(['2', '3']);
         });
     });
+    describe('#reverse()', function () {
+        it('works with array', function () {
+            var arrCmp = [
+                undefined,
+                null,
+                -1,
+                0,
+                1,
+                false,
+                true,
+                undefined,
+                '',
+                'abc',
+                null,
+                undefined
+            ],
+            expected = [
+                undefined,
+                null,
+                'abc',
+                '',
+                undefined,
+                true,
+                false,
+                1,
+                0,
+                -1,
+                null,
+                undefined
+            ];
+            arrCmp.reverse();
+            expect(arrCmp).toEqual(expected);
+        });
+        it('works with arguments', function () {
+            var arrCmp = (function () {
+                return arguments;
+            }(
+                undefined,
+                null,
+                -1,
+                0,
+                1,
+                false,
+                true,
+                undefined,
+                '',
+                'abc',
+                null,
+                undefined
+            ));
+            var expected = (function () {
+                return arguments;
+            }(
+                undefined,
+                null,
+                'abc',
+                '',
+                undefined,
+                true,
+                false,
+                1,
+                0,
+                -1,
+                null,
+                undefined
+            ));
+            Array.prototype.reverse.call(arrCmp);
+            expect(Object.prototype.toString.call(arrCmp)).toBe('[object Arguments]');
+            expect(arrCmp).toEqual(expected);
+        });
+        it('is generic', function () {
+            var arrCmp = {
+                0: undefined,
+                1: null,
+                2: -1,
+                3: 0,
+                4: 1,
+                5: false,
+                6: true,
+                7: undefined,
+                8: '',
+                9: 'abc',
+                10: null,
+                11: undefined,
+                length: 12
+            },
+            expected = [
+                undefined,
+                null,
+                'abc',
+                '',
+                undefined,
+                true,
+                false,
+                1,
+                0,
+                -1,
+                null,
+                undefined
+            ];
+            Array.prototype.reverse.call(arrCmp);
+            expect(Object.prototype.toString.call(arrCmp)).toBe('[object Object]');
+            expect(arrCmp).toEqual(expected);
+        });
+        it('should not alter object without length', function () {
+            var arrCmp = {
+                0: undefined,
+                1: null,
+                2: -1,
+                3: 0,
+                4: 1,
+                5: false,
+                6: true,
+                7: undefined,
+                8: '',
+                9: 'abc',
+                10: null,
+                11: undefined
+            },
+            expected = {
+                0: undefined,
+                1: null,
+                2: -1,
+                3: 0,
+                4: 1,
+                5: false,
+                6: true,
+                7: undefined,
+                8: '',
+                9: 'abc',
+                10: null,
+                11: undefined
+            };
+            Array.prototype.reverse.call(arrCmp);
+            expect(arrCmp).toEqual(expected);
+        });
+    });
 });

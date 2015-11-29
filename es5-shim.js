@@ -826,13 +826,26 @@ defineProperties(ArrayPrototype, {
     }
 }, !spliceWorksWithLargeSparseArrays || !spliceWorksWithSmallSparseArrays);
 
-var hasJoinUndefinedBug = [1, 2].join(undefined) !== '1,2';
 var originalJoin = ArrayPrototype.join;
-defineProperties(ArrayPrototype, {
-    join: function join(separator) {
-        return originalJoin.call(this, typeof separator === 'undefined' ? ',' : separator);
-    }
-}, hasJoinUndefinedBug);
+var hasStringJoinBug = Array.prototype.join.call('123', ',') !== '1,2,3';
+if (hasStringJoinBug) {
+    defineProperties(ArrayPrototype, {
+        join: function join(separator) {
+            var sep = typeof separator === 'undefined' ? ',' : separator;
+            return originalJoin.call(isString(this) ? strSplit(this, '') : this, sep);
+        }
+    }, hasStringJoinBug);
+}
+
+var hasJoinUndefinedBug = [1, 2].join(undefined) !== '1,2';
+if (hasJoinUndefinedBug) {
+    defineProperties(ArrayPrototype, {
+        join: function join(separator) {
+            var sep = typeof separator === 'undefined' ? ',' : separator;
+            return originalJoin.call(this, sep);
+        }
+    }, hasJoinUndefinedBug);
+}
 
 var pushShim = function push(item) {
     var O = ES.ToObject(this);

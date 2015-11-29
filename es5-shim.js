@@ -68,19 +68,18 @@ var isRegex; /* inlined from https://npmjs.com/is-regex */ var regexExec = RegEx
 var isString; /* inlined from https://npmjs.com/is-string */ var strValue = String.prototype.valueOf, tryStringObject = function tryStringObject(value) { try { strValue.call(value); return true; } catch (e) { return false; } }, stringClass = '[object String]'; isString = function isString(value) { if (typeof value === 'string') { return true; } if (typeof value !== 'object') { return false; } return hasToStringTag ? tryStringObject(value) : to_string.call(value) === stringClass; };
 
 /* inlined from http://npmjs.com/define-properties */
+var supportsDescriptors = $Object.defineProperty && (function () {
+    try {
+        var obj = {};
+        $Object.defineProperty(obj, 'x', { enumerable: false, value: obj });
+        for (var _ in obj) { return false; }
+        return obj.x === obj;
+    } catch (e) { /* this is ES3 */
+        return false;
+    }
+}());
 var defineProperties = (function (has) {
-  var supportsDescriptors = $Object.defineProperty && (function () {
-      try {
-          var obj = {};
-          $Object.defineProperty(obj, 'x', { enumerable: false, value: obj });
-          for (var _ in obj) { return false; }
-          return obj.x === obj;
-      } catch (e) { /* this is ES3 */
-          return false;
-      }
-  }());
-
-  // Define configurable, writable and non-enumerable props
+  // Define configurable, writable, and non-enumerable props
   // if they don't exist.
   var defineProperty;
   if (supportsDescriptors) {
@@ -327,6 +326,7 @@ var strSlice = call.bind(StringPrototype.slice);
 var strSplit = call.bind(StringPrototype.split);
 var strIndexOf = call.bind(StringPrototype.indexOf);
 var push = call.bind(array_push);
+var isEnum = call.bind(ObjectPrototype.propertyIsEnumerable);
 
 //
 // Array
@@ -1726,6 +1726,18 @@ if (String(new RangeError('test')) !== 'RangeError: test') {
     };
     // can't use defineProperties here because of toString enumeration issue in IE <= 8
     Error.prototype.toString = errorToStringShim;
+}
+
+if (supportsDescriptors) {
+    var ensureNonEnumerable = function (obj, prop) {
+        if (isEnum(obj, prop)) {
+            var desc = Object.getOwnPropertyDescriptor(obj, prop);
+            desc.enumerable = false;
+            Object.defineProperty(obj, prop, desc);
+        }
+    };
+    ensureNonEnumerable(Error.prototype, 'message');
+    ensureNonEnumerable(Error.prototype, 'name');
 }
 
 }));

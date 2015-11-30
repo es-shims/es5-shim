@@ -1,5 +1,15 @@
 /* global describe, it, xit, expect, beforeEach, jasmine, window */
 
+var supportsDescriptors = Object.defineProperty && (function () {
+    try {
+        var obj = {};
+        Object.defineProperty(obj, 'x', { enumerable: false, value: obj });
+        for (var _ in obj) { return false; }
+        return obj.x === obj;
+    } catch (e) { /* this is ES3 */
+        return false;
+    }
+}());
 var ifWindowIt = typeof window === 'undefined' ? xit : it;
 var extensionsPreventible = typeof Object.preventExtensions === 'function' && (function () {
     var obj = {};
@@ -131,7 +141,7 @@ describe('Object', function () {
           var has = Object.prototype.hasOwnProperty;
           var windowItemKeys, exception;
           var blacklistedKeys = ['window', 'console', 'parent', 'self', 'frame', 'frames', 'frameElement'];
-          if (Object.defineProperty) {
+          if (supportsDescriptors) {
               Object.defineProperty(window, 'thrower', { configurable: true, get: function () { throw new RangeError('thrower!'); } });
           }
           for (var k in window) {
@@ -146,7 +156,9 @@ describe('Object', function () {
                      expect(exception).toBeUndefined();
               }
           }
-          delete window.thrower;
+          if (supportsDescriptors) {
+             delete window.thrower;
+          }
         });
     });
 

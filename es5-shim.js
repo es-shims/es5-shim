@@ -881,6 +881,19 @@ var pushUndefinedIsWeird = (function () {
 }());
 defineProperties(ArrayPrototype, { push: pushShim }, pushUndefinedIsWeird);
 
+// ES5 15.2.3.14
+// http://es5.github.io/#x15.4.4.10
+// Fix boxed string bug
+defineProperties(ArrayPrototype, {
+    slice: function (start, end) {
+        var arr = this;
+        if (isString(arr)) {
+            arr = strSplit(arr, '');
+        }
+        return array_slice.apply(arr, arguments);
+    }
+}, splitString);
+
 //
 // Object
 // ======

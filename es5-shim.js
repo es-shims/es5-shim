@@ -322,6 +322,7 @@ defineProperties(FunctionPrototype, {
 // us it in defining shortcuts.
 var owns = call.bind(ObjectPrototype.hasOwnProperty);
 var toStr = call.bind(ObjectPrototype.toString);
+var arraySlice = call.bind(array_slice);
 var strSlice = call.bind(StringPrototype.slice);
 var strSplit = call.bind(StringPrototype.split);
 var strIndexOf = call.bind(StringPrototype.indexOf);
@@ -733,7 +734,7 @@ defineProperties(ArrayPrototype, {
         var args = arguments;
         this.length = max(ES.ToInteger(this.length), 0);
         if (arguments.length > 0 && typeof deleteCount !== 'number') {
-            args = array_slice.call(arguments);
+            args = arraySlice(arguments);
             if (args.length < 2) {
                 push(args, this.length - start);
             } else {
@@ -782,7 +783,7 @@ defineProperties(ArrayPrototype, {
             k += 1;
         }
 
-        var items = array_slice.call(arguments, 2);
+        var items = arraySlice(arguments, 2);
         var itemCount = items.length;
         var to;
         if (itemCount < actualDeleteCount) {
@@ -1008,7 +1009,7 @@ var originalKeys = $Object.keys;
 defineProperties($Object, {
     keys: function keys(object) {
         if (isArguments(object)) {
-            return originalKeys(array_slice.call(object));
+            return originalKeys(arraySlice(object));
         } else {
             return originalKeys(object);
         }
@@ -1064,8 +1065,8 @@ defineProperties(Date.prototype, {
         }
         // pad milliseconds to have three digits.
         return (
-            year + '-' + array_slice.call(result, 0, 2).join('-') +
-            'T' + array_slice.call(result, 2).join(':') + '.' +
+            year + '-' + arraySlice(result, 0, 2).join('-') +
+            'T' + arraySlice(result, 2).join(':') + '.' +
             strSlice('000' + this.getUTCMilliseconds(), -3) + 'Z'
         );
     }
@@ -1560,7 +1561,7 @@ if (
                         /* eslint-enable no-loop-func */
                     }
                     if (match.length > 1 && match.index < string.length) {
-                        array_push.apply(output, array_slice.call(match, 1));
+                        array_push.apply(output, arraySlice(match, 1));
                     }
                     lastLength = match[0].length;
                     lastLastIndex = lastIndex;

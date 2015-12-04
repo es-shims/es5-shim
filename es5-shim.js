@@ -1761,6 +1761,9 @@ if (supportsDescriptors) {
         }
     };
     ensureNonEnumerable(Error.prototype, 'message');
+    if (Error.prototype.message !== '') {
+      Error.prototype.message = '';
+    }
     ensureNonEnumerable(Error.prototype, 'name');
 }
 

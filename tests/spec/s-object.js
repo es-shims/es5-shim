@@ -140,7 +140,7 @@ describe('Object', function () {
         ifWindowIt('can serialize all objects on the `window`', function () {
           var has = Object.prototype.hasOwnProperty;
           var windowItemKeys, exception;
-          var blacklistedKeys = ['window', 'console', 'parent', 'self', 'frame', 'frames', 'frameElement'];
+          var blacklistedKeys = ['window', 'console', 'parent', 'self', 'frame', 'frames', 'frameElement', 'external'];
           if (supportsDescriptors) {
               Object.defineProperty(window, 'thrower', { configurable: true, get: function () { throw new RangeError('thrower!'); } });
           }

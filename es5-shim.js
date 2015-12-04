@@ -919,7 +919,8 @@ var blacklistedKeys = {
     $frames: true,
     $frameElement: true,
     $webkitIndexedDB: true,
-    $webkitStorageInfo: true
+    $webkitStorageInfo: true,
+    $external: true
 };
 var hasAutomationEqualityBug = (function () {
     /* globals window */

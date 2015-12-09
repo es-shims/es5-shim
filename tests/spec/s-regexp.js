@@ -6,20 +6,21 @@ describe('RegExp', function () {
     describe('#toString()', function () {
         describe('literals', function () {
           it('should return correct flags and in correct order', function () {
-              expect(/pattern/.toString()).toBe('/pattern/');
-              expect(/pattern/i.toString()).toBe('/pattern/i');
-              expect(/pattern/mi.toString()).toBe('/pattern/im');
-              expect(/pattern/im.toString()).toBe('/pattern/im');
-              expect(/pattern/mgi.toString()).toBe('/pattern/gim');
+              expect(String(/pattern/)).toBe('/pattern/');
+              expect(String(/pattern/i)).toBe('/pattern/i');
+              expect(String(/pattern/mi)).toBe('/pattern/im');
+              expect(String(/pattern/im)).toBe('/pattern/im');
+              expect(String(/pattern/mgi)).toBe('/pattern/gim');
           });
         });
+
         describe('objects', function () {
           it('should return correct flags and in correct order', function () {
-              expect(new RegExp('pattern').toString()).toBe('/pattern/');
-              expect(new RegExp('pattern', 'i').toString()).toBe('/pattern/i');
-              expect(new RegExp('pattern', 'mi').toString()).toBe('/pattern/im');
-              expect(new RegExp('pattern', 'im').toString()).toBe('/pattern/im');
-              expect(new RegExp('pattern', 'mgi').toString()).toBe('/pattern/gim');
+              expect(String(new RegExp('pattern'))).toBe('/pattern/');
+              expect(String(new RegExp('pattern', 'i'))).toBe('/pattern/i');
+              expect(String(new RegExp('pattern', 'mi'))).toBe('/pattern/im');
+              expect(String(new RegExp('pattern', 'im'))).toBe('/pattern/im');
+              expect(String(new RegExp('pattern', 'mgi'))).toBe('/pattern/gim');
           });
         });
     });

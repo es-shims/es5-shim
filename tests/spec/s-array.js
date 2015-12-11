@@ -1600,21 +1600,21 @@ describe('Array', function () {
     describe('#sort()', function () {
         describe('usage', function () {
             it('requires a function or undefined as first argument', function () {
-                var actual = [];
+                var actual = [1, 2];
                 expect(actual.sort()).toBe(actual);
                 expect(actual.sort(undefined)).toBe(actual);
                 expect(actual.sort(function () { return 0; })).toBe(actual);
             });
 
             it('requires a non-function or non-undefined to throw a `TypeError`', function () {
-                expect(function () { [].sort(null); }).toThrow();
-                expect(function () { [].sort(1); }).toThrow();
-                expect(function () { [].sort(''); }).toThrow();
-                expect(function () { [].sort(true); }).toThrow();
-                expect(function () { [].sort({}); }).toThrow();
-                expect(function () { [].sort([]); }).toThrow();
-                expect(function () { [].sort(new Date()); }).toThrow();
-                expect(function () { [].sort(/pattern/); }).toThrow();
+                expect(function () { [1, 2].sort(null); }).toThrow();
+                expect(function () { [1, 2].sort(1); }).toThrow();
+                expect(function () { [1, 2].sort(''); }).toThrow();
+                expect(function () { [1, 2].sort(true); }).toThrow();
+                expect(function () { [1, 2].sort({}); }).toThrow();
+                expect(function () { [1, 2].sort([]); }).toThrow();
+                expect(function () { [1, 2].sort(new Date()); }).toThrow();
+                expect(function () { [1, 2].sort(/pattern/); }).toThrow();
             });
         });
 

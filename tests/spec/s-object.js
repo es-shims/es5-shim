@@ -152,7 +152,7 @@ describe('Object', function () {
                      } catch (e) {
                          exception = e;
                      }
-                     expect(Array.isArray(windowItemKeys)).toEqual(true);
+                     expect(Array.isArray(windowItemKeys)).toBe(true);
                      expect(exception).toBeUndefined();
               }
           }
@@ -342,7 +342,7 @@ describe('Object', function () {
                 }
             };
             Object.defineProperties(target, newProperties);
-            expect(target.constructor).toEqual('new constructor');
+            expect(target.constructor).toBe('new constructor');
         });
     });
 

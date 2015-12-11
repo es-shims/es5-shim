@@ -7,7 +7,7 @@ describe('String', function () {
         var test = '\x09\x0A\x0B\x0C\x0D\x20\xA0\u1680\u180E\u2000\u2001\u2002\u2003\u2004\u2005\u2006\u2007\u2008\u2009\u200A\u202F\u205F\u3000\u2028\u2029\uFEFFHello, World!\x09\x0A\x0B\x0C\x0D\x20\xA0\u1680\u180E\u2000\u2001\u2002\u2003\u2004\u2005\u2006\u2007\u2008\u2009\u200A\u202F\u205F\u3000\u2028\u2029\uFEFF';
 
         it('trims all ES5 whitespace', function () {
-            expect(test.trim()).toEqual('Hello, World!');
+            expect(test.trim()).toBe('Hello, World!');
             expect(test.trim().length).toBe(13);
         });
 
@@ -232,34 +232,34 @@ describe('String', function () {
 
     describe('#indexOf()', function () {
       it('has basic support', function () {
-          expect('abcab'.indexOf('a')).toEqual(0);
-          expect('abcab'.indexOf('a', 1)).toEqual(3);
-          expect('abcab'.indexOf('a', 4)).toEqual(-1);
+          expect('abcab'.indexOf('a')).toBe(0);
+          expect('abcab'.indexOf('a', 1)).toBe(3);
+          expect('abcab'.indexOf('a', 4)).toBe(-1);
       });
 
       it('works with unicode', function () {
-          expect('あいabcあいabc'.indexOf('あい')).toEqual(0);
-          expect('あいabcあいabc'.indexOf('あい', 0)).toEqual(0);
-          expect('あいabcあいabc'.indexOf('あい', 1)).toEqual(5);
-          expect('あいabcあいabc'.indexOf('あい', 6)).toEqual(-1);
+          expect('あいabcあいabc'.indexOf('あい')).toBe(0);
+          expect('あいabcあいabc'.indexOf('あい', 0)).toBe(0);
+          expect('あいabcあいabc'.indexOf('あい', 1)).toBe(5);
+          expect('あいabcあいabc'.indexOf('あい', 6)).toBe(-1);
       });
     });
 
     describe('#lastIndexOf()', function () {
       it('has the right length', function () {
-          expect(String.prototype.lastIndexOf.length).toEqual(1);
+          expect(String.prototype.lastIndexOf.length).toBe(1);
       });
 
       it('has basic support', function () {
-          expect('abcd'.lastIndexOf('d')).toEqual(3);
-          expect('abcd'.lastIndexOf('d', 3)).toEqual(3);
-          expect('abcd'.lastIndexOf('d', 2)).toEqual(-1);
+          expect('abcd'.lastIndexOf('d')).toBe(3);
+          expect('abcd'.lastIndexOf('d', 3)).toBe(3);
+          expect('abcd'.lastIndexOf('d', 2)).toBe(-1);
       });
 
       it('works with unicode', function () {
-          expect('abcあい'.lastIndexOf('あい')).toEqual(3);
-          expect('abcあい'.lastIndexOf('あい', 3)).toEqual(3);
-          expect('abcあい'.lastIndexOf('あい', 2)).toEqual(-1);
+          expect('abcあい'.lastIndexOf('あい')).toBe(3);
+          expect('abcあい'.lastIndexOf('あい', 3)).toBe(3);
+          expect('abcあい'.lastIndexOf('あい', 2)).toBe(-1);
       });
     });
 });

@@ -935,7 +935,7 @@ describe('Array', function () {
             it('should return the expected result', function () {
                 expect(testSubject.reduce(function (a, b) {
                     return String(a || '') + String(b || '');
-                })).toEqual(testSubject.join(''));
+                })).toBe(testSubject.join(''));
             });
 
             it('should not directly affect the passed array', function () {
@@ -1018,7 +1018,7 @@ describe('Array', function () {
             it('should return the expected result', function () {
                 expect(testSubject.reduce(function (a, b) {
                     return String(a || '') + String(b || '');
-                })).toEqual('123');
+                })).toBe('123');
             });
 
             it('should not directly affect the passed array', function () {
@@ -1197,7 +1197,7 @@ describe('Array', function () {
             it('should return the expected result', function () {
                 expect(testSubject.reduceRight(function (a, b) {
                     return String(a || '') + String(b || '');
-                })).toEqual('321');
+                })).toBe('321');
             });
 
             it('should not directly affect the passed array', function () {

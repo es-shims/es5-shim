@@ -168,7 +168,7 @@ describe('Date', function () {
             var actual = Number(new Date(1970, 0));
             var expected = parseInt(actual, 10);
             expect(actual).toBeDefined();
-            expect(actual).toEqual(expected);
+            expect(actual).toBe(expected);
             expect(isNaN(actual)).toBeFalsy();
         });
 

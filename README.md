@@ -35,7 +35,9 @@ simply `npm install` and `npm test`.
 * Array.prototype.indexOf
 * Array.prototype.lastIndexOf
 * Array.prototype.map
+* Array.prototype.slice
 * Array.prototype.some
+* Array.prototype.sort
 * Array.prototype.reduce
 * Array.prototype.reduceRight
 * Array.prototype.push
@@ -61,6 +63,9 @@ simply `npm install` and `npm test`.
 * Date.prototype.toISOString
 * parseInt
 * Error.prototype.toString
+* Error.prototype.name
+* Error.prototype.message
+* RegExp.prototype.toString
 
 ## Shams
 
@@ -169,4 +174,3 @@ simply `npm install` and `npm test`.
 [dev-deps-svg]: https://david-dm.org/es-shims/es5-shim/dev-status.svg
 [dev-deps-url]: https://david-dm.org/es-shims/es5-shim#info=devDependencies
 [npm-badge-png]: https://nodei.co/npm/es5-shim.png?downloads=true&stars=true
-

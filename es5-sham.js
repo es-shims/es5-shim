@@ -29,10 +29,10 @@
   }
 }(this, function () {
 
-var call = Function.prototype.call;
+var call = Function.call;
 var prototypeOfObject = Object.prototype;
 var owns = call.bind(prototypeOfObject.hasOwnProperty);
-var propertyIsEnumerable = call.bind(prototypeOfObject.propertyIsEnumerable);
+var isEnumerable = call.bind(prototypeOfObject.propertyIsEnumerable);
 var toStr = call.bind(prototypeOfObject.toString);
 
 // If JS engine supports accessors creating shortcuts.
@@ -131,7 +131,7 @@ if (!Object.getOwnPropertyDescriptor || getOwnPropertyDescriptorFallback) {
         // If object has a property then it's for sure `configurable`, and
         // probably `enumerable`. Detect enumerability though.
         descriptor = {
-            enumerable: propertyIsEnumerable(object, property),
+            enumerable: isEnumerable(object, property),
             configurable: true
         };
 

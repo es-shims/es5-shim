@@ -40,23 +40,11 @@ describe('Error', function () {
 
     describe('enumerability of prototype properties', function () {
         ifSupportsDescriptorsIt('#message', function () {
-            var desc = Object.getOwnPropertyDescriptor(Error.prototype, 'message');
-            expect(desc).toEqual({
-              enumerable: false,
-              writable: true,
-              configurable: true,
-              value: ''
-            });
+            expect(Object.prototype.propertyIsEnumerable.call(Error.prototype, 'message')).toBe(false);
         });
 
         ifSupportsDescriptorsIt('#name', function () {
-            var desc = Object.getOwnPropertyDescriptor(Error.prototype, 'name');
-            expect(desc).toEqual({
-              enumerable: false,
-              writable: true,
-              configurable: true,
-              value: 'Error'
-            });
+            expect(Object.prototype.propertyIsEnumerable.call(Error.prototype, 'name')).toBe(false);
         });
     });
 });

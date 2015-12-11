@@ -332,7 +332,7 @@ describe('Object', function () {
         it('should return null on Object.create(null)', function () {
             var obj = Object.create(null);
 
-            expect(Object.getPrototypeOf(obj)).toBe(null);
+            expect(Object.getPrototypeOf(obj) === null).toBe(true);
         });
     });
 

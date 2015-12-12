@@ -1711,21 +1711,17 @@ describe('Array', function () {
         });
 
         describe('descending', function () {
-            var descending;
-
-            beforeEach(function () {
-                descending = function (left, right) {
-                    var leftS = String(left);
-                    var rightS = String(right);
-                    if (leftS === rightS) {
-                        return +0;
-                    }
-                    if (leftS < rightS) {
-                        return 1;
-                    }
-                    return -1;
-                };
-            });
+            var descending = function (left, right) {
+                var leftS = String(left);
+                var rightS = String(right);
+                if (leftS === rightS) {
+                    return +0;
+                }
+                if (leftS < rightS) {
+                    return 1;
+                }
+                return -1;
+            };
 
             it('[5,2,4,6,1,3] should result in [6,5,4,3,2,1]', function () {
                 var actual = [5, 2, 4, 6, 1, 3];
@@ -1826,26 +1822,21 @@ describe('Array', function () {
         });
 
         describe('when used generically', function () {
-            var descending;
-            var args;
+            var descending = function (left, right) {
+                var leftS = String(left);
+                var rightS = String(right);
+                if (leftS === rightS) {
+                    return +0;
+                }
+                if (leftS < rightS) {
+                    return 1;
+                }
+                return -1;
+            };
 
-            beforeEach(function () {
-                descending = function (left, right) {
-                    var leftS = String(left);
-                    var rightS = String(right);
-                    if (leftS === rightS) {
-                        return +0;
-                    }
-                    if (leftS < rightS) {
-                        return 1;
-                    }
-                    return -1;
-                };
-
-                args = function () {
-                    return arguments;
-                };
-            });
+            var args = function () {
+                return arguments;
+            };
 
             it('should not sort objects without length', function () {
                 var actual = {

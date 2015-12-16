@@ -1,3 +1,7 @@
+4.4.1
+  - [Fix] ensure that IE 11 in compatibility mode doesn't throw (#370)
+  - [Docs] add missing shimmed things
+
 4.4.0
   - [New] Detect and patch `RegExp#toString` in IE 8, which returns flags in the wrong order (#364)
   - [Fix] Patch `Array#sort` on {Chrome, Safari, IE < 9, FF 4} that throws improperly, per ES5 (#354)

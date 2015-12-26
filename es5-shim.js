@@ -1091,42 +1091,30 @@ if (timeZoneOffset < -720) {
     hasToStringFormatBug = !(/^Wed Dec 09 2015 \d\d:\d\d:\d\d GMT[-\+]\d\d\d\d(?: |$)/).test(aPositiveTestDate.toString());
 }
 
-var originalGetFullYear;
-var originalGetMonth;
-var originalGetDate;
-var originalGetUTCFullYear;
-var originalGetUTCMonth;
-var originalGetUTCDate;
-var originalToUTCString;
-var originalToDateString;
-var originalToString;
-var dayName;
-var monthName;
-var daysInMonth;
-if (hasNegativeMonthYearBug || hasToDateStringFormatBug || hasToUTCStringFormatBug || hasToStringFormatBug) {
-    originalGetFullYear = Date.prototype.getFullYear;
-    originalGetMonth = Date.prototype.getMonth;
-    originalGetDate = Date.prototype.getDate;
-    originalGetUTCFullYear = Date.prototype.getUTCFullYear;
-    originalGetUTCMonth = Date.prototype.getUTCMonth;
-    originalGetUTCDate = Date.prototype.getUTCDate;
-    originalToUTCString = Date.prototype.toUTCString;
-    originalToDateString = Date.prototype.toDateString;
-    originalToString = Date.prototype.toString;
-    dayName = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri'];
-    monthName = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-    daysInMonth = function dim(month, year) {
-       return originalGetDate.call(new Date(year, month, 0));
-    };
-}
+var originalGetFullYear = call.bind(Date.prototype.getFullYear);
+var originalGetMonth = call.bind(Date.prototype.getMonth);
+var originalGetDate = call.bind(Date.prototype.getDate);
+var originalGetUTCFullYear = call.bind(Date.prototype.getUTCFullYear);
+var originalGetUTCMonth = call.bind(Date.prototype.getUTCMonth);
+var originalGetUTCDate = call.bind(Date.prototype.getUTCDate);
+var originalGetUTCDay = call.bind(Date.prototype.getUTCDay);
+var originalGetUTCHours = call.bind(Date.prototype.getUTCHours);
+var originalGetUTCMinutes = call.bind(Date.prototype.getUTCMinutes);
+var originalGetUTCSeconds = call.bind(Date.prototype.getUTCSeconds);
+var originalGetUTCMilliseconds = call.bind(Date.prototype.getUTCMilliseconds);
+var dayName = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri'];
+var monthName = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+var daysInMonth = function daysInMonth(month, year) {
+    return originalGetDate(new Date(year, month, 0));
+};
 
 defineProperties(Date.prototype, {
     getFullYear: function getFullYear() {
         if (!this || !(this instanceof Date)) {
             throw new TypeError('this is not a Date object.');
         }
-        var year = originalGetFullYear.call(this);
-        if (year < 0 && originalGetMonth.call(this) > 11) {
+        var year = originalGetFullYear(this);
+        if (year < 0 && originalGetMonth(this) > 11) {
             return year + 1;
         }
         return year;
@@ -1135,8 +1123,8 @@ defineProperties(Date.prototype, {
         if (!this || !(this instanceof Date)) {
             throw new TypeError('this is not a Date object.');
         }
-        var year = originalGetFullYear.call(this);
-        var month = originalGetMonth.call(this);
+        var year = originalGetFullYear(this);
+        var month = originalGetMonth(this);
         if (year < 0 && month > 11) {
             return 0;
         }
@@ -1146,9 +1134,9 @@ defineProperties(Date.prototype, {
         if (!this || !(this instanceof Date)) {
             throw new TypeError('this is not a Date object.');
         }
-        var year = originalGetFullYear.call(this);
-        var month = originalGetMonth.call(this);
-        var date = originalGetDate.call(this);
+        var year = originalGetFullYear(this);
+        var month = originalGetMonth(this);
+        var date = originalGetDate(this);
         if (year < 0 && month > 11) {
             if (month === 12) {
                 return date;
@@ -1162,8 +1150,8 @@ defineProperties(Date.prototype, {
         if (!this || !(this instanceof Date)) {
             throw new TypeError('this is not a Date object.');
         }
-        var year = originalGetUTCFullYear.call(this);
-        if (year < 0 && originalGetUTCMonth.call(this) > 11) {
+        var year = originalGetUTCFullYear(this);
+        if (year < 0 && originalGetUTCMonth(this) > 11) {
             return year + 1;
         }
         return year;
@@ -1172,8 +1160,8 @@ defineProperties(Date.prototype, {
         if (!this || !(this instanceof Date)) {
             throw new TypeError('this is not a Date object.');
         }
-        var year = originalGetUTCFullYear.call(this);
-        var month = originalGetUTCMonth.call(this);
+        var year = originalGetUTCFullYear(this);
+        var month = originalGetUTCMonth(this);
         if (year < 0 && month > 11) {
             return 0;
         }
@@ -1183,9 +1171,9 @@ defineProperties(Date.prototype, {
         if (!this || !(this instanceof Date)) {
             throw new TypeError('this is not a Date object.');
         }
-        var year = originalGetUTCFullYear.call(this);
-        var month = originalGetUTCMonth.call(this);
-        var date = originalGetUTCDate.call(this);
+        var year = originalGetUTCFullYear(this);
+        var month = originalGetUTCMonth(this);
+        var date = originalGetUTCDate(this);
         if (year < 0 && month > 11) {
             if (month === 12) {
                 return date;
@@ -1202,13 +1190,13 @@ defineProperties(Date.prototype, {
         if (!this || !(this instanceof Date)) {
             throw new TypeError('this is not a Date object.');
         }
-        var day = this.getUTCDay();
-        var date = this.getUTCDate();
-        var month = this.getUTCMonth();
-        var year = this.getUTCFullYear();
-        var hour = this.getUTCHours();
-        var minute = this.getUTCMinutes();
-        var second = this.getUTCSeconds();
+        var day = originalGetUTCDay(this);
+        var date = originalGetUTCDate(this);
+        var month = originalGetUTCMonth(this);
+        var year = originalGetUTCFullYear(this);
+        var hour = originalGetUTCHours(this);
+        var minute = originalGetUTCMinutes(this);
+        var second = originalGetUTCSeconds(this);
         return dayName[day] + ', ' +
             (date < 10 ? '0' + date : date) + ' ' +
             monthName[month] + ' ' +
@@ -1286,39 +1274,33 @@ var hasSafari51DateBug = Date.prototype.toISOString && new Date(-1).toISOString(
 
 defineProperties(Date.prototype, {
     toISOString: function toISOString() {
-        var result, length, value, year, month;
         if (!isFinite(this)) {
             throw new RangeError('Date.prototype.toISOString called on non-finite value.');
         }
 
-        year = this.getUTCFullYear();
+        var year = originalGetUTCFullYear(this);
 
-        month = this.getUTCMonth();
+        var month = originalGetUTCMonth(this);
         // see https://github.com/es-shims/es5-shim/issues/111
         year += Math.floor(month / 12);
         month = (month % 12 + 12) % 12;
 
         // the date time string format is specified in 15.9.1.15.
-        result = [month + 1, this.getUTCDate(), this.getUTCHours(), this.getUTCMinutes(), this.getUTCSeconds()];
+        var result = [month + 1, originalGetUTCDate(this), originalGetUTCHours(this), originalGetUTCMinutes(this), originalGetUTCSeconds(this)];
         year = (
             (year < 0 ? '-' : (year > 9999 ? '+' : '')) +
             strSlice('00000' + Math.abs(year), (0 <= year && year <= 9999) ? -4 : -6)
         );
 
-        length = result.length;
-        while (length--) {
-            value = result[length];
-            // pad months, days, hours, minutes, and seconds to have two
-            // digits.
-            if (value < 10) {
-                result[length] = '0' + value;
-            }
+        for (var i = 0; i < result.length; ++i) {
+          // pad months, days, hours, minutes, and seconds to have two digits.
+          result[i] = strSlice('00' + result[i], -2);
         }
         // pad milliseconds to have three digits.
         return (
             year + '-' + arraySlice(result, 0, 2).join('-') +
             'T' + arraySlice(result, 2).join(':') + '.' +
-            strSlice('000' + this.getUTCMilliseconds(), -3) + 'Z'
+            strSlice('000' + originalGetUTCMilliseconds(this), -3) + 'Z'
         );
     }
 }, hasNegativeDateBug || hasSafari51DateBug);

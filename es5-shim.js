@@ -1948,7 +1948,7 @@ if (parseInt(ws + '08') !== 8 || parseInt(ws + '0x16') !== 22) {
 if (1 / parseFloat(-0) !== -Infinity) {
     /* global parseFloat: true */
     parseFloat = (function (origParseFloat) {
-        var negativeZeroRegex = /^\-0+\D*$/;
+        var negativeZeroRegex = /^\s*\-0+\D*$/;
         return function parseFloat(string) {
             var inputString = $String(string);
             if (negativeZeroRegex.test(inputString)) {

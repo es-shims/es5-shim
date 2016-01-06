@@ -73,8 +73,11 @@ describe('global methods', function () {
     describe('parseFloat()', function () {
         it('works with zeroes', function () {
             expect(is(parseFloat('0'), 0) ? '+0' : '-0').toBe('+0');
+            expect(is(parseFloat(' 0'), 0) ? '+0' : '-0').toBe('+0');
             expect(is(parseFloat('+0'), 0) ? '+0' : '-0').toBe('+0');
+            expect(is(parseFloat(' +0'), 0) ? '+0' : '-0').toBe('+0');
             expect(is(parseFloat('-0'), -0) ? '-0' : '+0').toBe('-0');
+            expect(is(parseFloat(' -0'), -0) ? '-0' : '+0').toBe('-0');
         });
     });
 });

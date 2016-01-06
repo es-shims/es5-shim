@@ -1949,13 +1949,10 @@ if (parseInt(ws + '08') !== 8 || parseInt(ws + '0x16') !== 22) {
 if (1 / parseFloat(-0) !== -Infinity) {
     /* global parseFloat: true */
     parseFloat = (function (origParseFloat) {
-        var negativeZeroRegex = /^\s*\-0+\D*$/;
         return function parseFloat(string) {
-            var inputString = $String(string);
-            if (negativeZeroRegex.test(inputString)) {
-                return -0;
-            }
-            return origParseFloat(inputString);
+            var inputString = trim(string);
+            var result = origParseFloat(inputString);
+            return result === 0 && strSlice(inputString, 0, 1) === '-' ? -0 : result;
         };
     }(parseFloat));
 }

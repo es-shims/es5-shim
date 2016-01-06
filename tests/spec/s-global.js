@@ -7,6 +7,13 @@ describe('global methods', function () {
     var functionsHaveNames = foo.name === 'foo';
     var ifFunctionsHaveNamesIt = functionsHaveNames ? it : xit;
 
+    var is = function (x, y) {
+        if (x === 0 && y === 0) {
+            return 1 / x === 1 / y;
+        }
+        return x === y;
+    };
+
     describe('parseInt', function () {
         /* eslint-disable radix */
 
@@ -61,5 +68,13 @@ describe('global methods', function () {
             expect(parseInt('+0xF', 16)).toBe(15);
         });
         /* eslint-enable radix */
+    });
+
+    describe('parseFloat()', function () {
+        it('works with zeroes', function () {
+            expect(is(parseFloat('0'), 0) ? '+0' : '-0').toBe('+0');
+            expect(is(parseFloat('+0'), 0) ? '+0' : '-0').toBe('+0');
+            expect(is(parseFloat('-0'), -0) ? '-0' : '+0').toBe('-0');
+        });
     });
 });

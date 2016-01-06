@@ -1944,6 +1944,21 @@ if (parseInt(ws + '08') !== 8 || parseInt(ws + '0x16') !== 22) {
     }(parseInt));
 }
 
+// https://es5.github.io/#x15.1.2.3
+if (1 / parseFloat(-0) !== -Infinity) {
+    /* global parseFloat: true */
+    parseFloat = (function (origParseFloat) {
+        var negativeZeroRegex = /^\-0+\D*$/;
+        return function parseFloat(string) {
+            var inputString = $String(string);
+            if (negativeZeroRegex.test(inputString)) {
+                return -0;
+            }
+            return origParseFloat(inputString);
+        };
+    }(parseFloat));
+}
+
 if (String(new RangeError('test')) !== 'RangeError: test') {
     var errorToStringShim = function toString() {
         if (typeof this === 'undefined' || this === null) {

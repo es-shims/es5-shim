@@ -62,6 +62,7 @@ simply `npm install` and `npm test`.
 * Date.parse (for ISO parsing)
 * Date.prototype.toISOString
 * parseInt
+* parseFloat
 * Error.prototype.toString
 * Error.prototype.name
 * Error.prototype.message

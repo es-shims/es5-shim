@@ -1897,6 +1897,7 @@ defineProperties(StringPrototype, {
         return $String(this).replace(trimBeginRegexp, '').replace(trimEndRegexp, '');
     }
 }, hasTrimWhitespaceBug);
+var trim = call.bind(String.prototype.trim);
 
 var hasLastIndexBug = StringPrototype.lastIndexOf && 'abcあい'.lastIndexOf('あい', 2) !== -1;
 defineProperties(StringPrototype, {
@@ -1937,7 +1938,7 @@ if (parseInt(ws + '08') !== 8 || parseInt(ws + '0x16') !== 22) {
     parseInt = (function (origParseInt) {
         var hexRegex = /^[\-+]?0[xX]/;
         return function parseInt(str, radix) {
-            var string = $String(str).trim();
+            var string = trim(str);
             var defaultedRadix = $Number(radix) || (hexRegex.test(string) ? 16 : 10);
             return origParseInt(string, defaultedRadix);
         };

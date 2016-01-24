@@ -1946,7 +1946,7 @@ if (parseInt(ws + '08') !== 8 || parseInt(ws + '0x16') !== 22) {
 }
 
 // https://es5.github.io/#x15.1.2.3
-if (1 / parseFloat(-0) !== -Infinity) {
+if (1 / parseFloat('-0') !== -Infinity) {
     /* global parseFloat: true */
     parseFloat = (function (origParseFloat) {
         return function parseFloat(string) {

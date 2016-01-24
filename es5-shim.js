@@ -328,7 +328,7 @@ var arraySliceApply = apply.bind(array_slice);
 var strSlice = call.bind(StringPrototype.slice);
 var strSplit = call.bind(StringPrototype.split);
 var strIndexOf = call.bind(StringPrototype.indexOf);
-var push = call.bind(array_push);
+var pushCall = call.bind(array_push);
 var isEnum = call.bind(ObjectPrototype.propertyIsEnumerable);
 var arraySort = call.bind(ArrayPrototype.sort);
 
@@ -484,7 +484,7 @@ defineProperties(ArrayPrototype, {
             if (i in self) {
                 value = self[i];
                 if (typeof T === 'undefined' ? callbackfn(value, i, object) : callbackfn.call(T, value, i, object)) {
-                    push(result, value);
+                    pushCall(result, value);
                 }
             }
         }
@@ -739,7 +739,7 @@ defineProperties(ArrayPrototype, {
         if (arguments.length > 0 && typeof deleteCount !== 'number') {
             args = arraySlice(arguments);
             if (args.length < 2) {
-                push(args, this.length - start);
+                pushCall(args, this.length - start);
             } else {
                 args[1] = ES.ToInteger(deleteCount);
             }
@@ -1027,14 +1027,14 @@ defineProperties($Object, {
         var skipProto = hasProtoEnumBug && isFn;
         if ((isStr && hasStringEnumBug) || isArgs) {
             for (var i = 0; i < object.length; ++i) {
-                push(theKeys, $String(i));
+                pushCall(theKeys, $String(i));
             }
         }
 
         if (!isArgs) {
             for (var name in object) {
                 if (!(skipProto && name === 'prototype') && owns(object, name)) {
-                    push(theKeys, $String(name));
+                    pushCall(theKeys, $String(name));
                 }
             }
         }
@@ -1044,7 +1044,7 @@ defineProperties($Object, {
             for (var j = 0; j < dontEnumsLength; j++) {
                 var dontEnum = dontEnums[j];
                 if (!(skipConstructor && dontEnum === 'constructor') && owns(object, dontEnum)) {
-                    push(theKeys, dontEnum);
+                    pushCall(theKeys, dontEnum);
                 }
             }
         }
@@ -1778,7 +1778,7 @@ if (
                 // `separatorCopy.lastIndex` is not reliable cross-browser
                 lastIndex = match.index + match[0].length;
                 if (lastIndex > lastLastIndex) {
-                    push(output, strSlice(string, lastLastIndex, match.index));
+                    pushCall(output, strSlice(string, lastLastIndex, match.index));
                     // Fix browsers whose `exec` methods don't consistently return `undefined` for
                     // nonparticipating capturing groups
                     if (!compliantExecNpcg && match.length > 1) {
@@ -1808,10 +1808,10 @@ if (
             }
             if (lastLastIndex === string.length) {
                 if (lastLength || !separatorCopy.test('')) {
-                    push(output, '');
+                    pushCall(output, '');
                 }
             } else {
-                push(output, strSlice(string, lastLastIndex));
+                pushCall(output, strSlice(string, lastLastIndex));
             }
             return output.length > splitLimit ? strSlice(output, 0, splitLimit) : output;
         };
@@ -1834,7 +1834,7 @@ var str_replace = StringPrototype.replace;
 var replaceReportsGroupsCorrectly = (function () {
     var groups = [];
     'x'.replace(/x(.)?/g, function (match, group) {
-        push(groups, group);
+        pushCall(groups, group);
     });
     return groups.length === 1 && typeof groups[0] === 'undefined';
 }());
@@ -1852,7 +1852,7 @@ if (!replaceReportsGroupsCorrectly) {
                 searchValue.lastIndex = 0;
                 var args = searchValue.exec(match) || [];
                 searchValue.lastIndex = originalLastIndex;
-                push(args, arguments[length - 2], arguments[length - 1]);
+                pushCall(args, arguments[length - 2], arguments[length - 1]);
                 return replaceValue.apply(this, args);
             };
             return str_replace.call(this, searchValue, wrappedReplaceValue);

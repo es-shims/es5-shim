@@ -384,18 +384,23 @@ var properlyBoxesContext = function properlyBoxed(method) {
     // Check node 0.6.21 bug where third parameter is not boxed
     var properlyBoxesNonStrict = true;
     var properlyBoxesStrict = true;
+    var threwException = false;
     if (method) {
-        method.call('foo', function (_, __, context) {
-            if (typeof context !== 'object') { properlyBoxesNonStrict = false; }
-        });
+        try {
+            method.call('foo', function (_, __, context) {
+                if (typeof context !== 'object') { properlyBoxesNonStrict = false; }
+            });
 
-        method.call([1], function () {
-            'use strict';
+            method.call([1], function () {
+                'use strict';
 
-            properlyBoxesStrict = typeof this === 'string';
-        }, 'x');
+                properlyBoxesStrict = typeof this === 'string';
+            }, 'x');
+        } catch (e) {
+            threwException = true;
+        }
     }
-    return !!method && properlyBoxesNonStrict && properlyBoxesStrict;
+    return !!method && !threwException && properlyBoxesNonStrict && properlyBoxesStrict;
 };
 
 defineProperties(ArrayPrototype, {

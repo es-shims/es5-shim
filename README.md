@@ -9,6 +9,8 @@
 `es5-shim.js` and `es5-shim.min.js` monkey-patch a JavaScript context to
 contain all EcmaScript 5 methods that can be faithfully emulated with a
 legacy JavaScript engine.
+**Note:** As `es5-shim.js` is designed to patch the native Javascript
+engine, it should be the library that is loaded first.
 
 `es5-sham.js` and `es5-sham.min.js` monkey-patch other ES5 methods as
 closely as possible.  For these methods, as closely as possible to ES5
@@ -166,6 +168,17 @@ simply `npm install` and `npm test`.
     provisions of this method, which you cannot possibly
     obtain in legacy engines.
 
+### Example of applying ES compatability shims in a browser project
+
+```html
+<script src="https://cdnjs.cloudflare.com/ajax/libs/es5-shim/4.5.2/es5-shim.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/es5-shim/4.5.2/es5-sham.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/json3/3.3.2/json3.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/es6-shim/0.34.2/es6-shim.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/es6-shim/0.34.2/es6-sham.min.js"></script>
+<script src="https://wzrd.in/standalone/es7-shim@latest"></script>
+<script src="other-libs.js"></script>
+```
 [npm-url]: https://npmjs.org/package/es5-shim
 [npm-version-svg]: http://versionbadg.es/es-shims/es5-shim.svg
 [travis-svg]: https://travis-ci.org/es-shims/es5-shim.svg

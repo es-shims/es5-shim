@@ -1569,7 +1569,7 @@ if (
             } else {
                 push(output, strSlice(string, lastLastIndex));
             }
-            return output.length > splitLimit ? strSlice(output, 0, splitLimit) : output;
+            return output.length > splitLimit ? arraySlice(output, 0, splitLimit) : output;
         };
     }());
 

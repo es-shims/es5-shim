@@ -228,6 +228,10 @@ describe('String', function () {
                 expect('a b c d'.split(/ /, Infinity)).toEqual([]);
             });
         });
+
+        it('works with the second argument', function () {
+            expect('a b'.split(/ /, 1)).toEqual(['a']);
+        });
     });
 
     describe('#indexOf()', function () {

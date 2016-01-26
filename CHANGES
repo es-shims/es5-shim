@@ -1,3 +1,6 @@
+4.4.2
+  - [shim: fix] use `Array#slice`, not `String#slice`, on `String#split` output (#380)
+
 4.4.1
   - [Fix] ensure that IE 11 in compatibility mode doesn't throw (#370)
   - [Docs] add missing shimmed things
@@ -16,6 +19,9 @@
   - [Tests] Add `Array#slice` tests (#346)
   - [Dev Deps] update `uglify-js`, `eslint`, `jscs`, `uglify-js`, `semver`
   - [Docs] Fix broken UMD links (#344)
+
+4.3.2
+  - [shim: fix] use `Array#slice`, not `String#slice`, on `String#split` output (#380)
 
 4.3.1
   - [Fix] `String#split`: revert part of dcce96ae21185a69d2d40e67416e7496b73e8e47 which broke in older browsers (#342)
@@ -44,9 +50,15 @@
   - [Tests] on `node` `v5.0`
   - [Tests] fix npm upgrades for older nodes
 
+4.2.1
+  - [shim: fix] use `Array#slice`, not `String#slice`, on `String#split` output (#380)
+
 4.2.0
   - [shim: new] Overwrite `String#lastIndexOf` in IE 9, 10, 11, and Edge, so it has proper unicode support.
   - [Dev Deps] update `eslint`, `jscs`
+
+4.1.16
+  - [shim: fix] use `Array#slice`, not `String#slice`, on `String#split` output (#380)
 
 4.1.15
   - [shim: fix] new Date + Date.parse: Fix a Safari 8 & 9 bug where the `ms` arg is treated as a signed instead of unsigned int (#329)

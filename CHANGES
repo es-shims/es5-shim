@@ -1,6 +1,12 @@
+4.2.1
+  - [shim: fix] use `Array#slice`, not `String#slice`, on `String#split` output (#380)
+
 4.2.0
   - [shim: new] Overwrite `String#lastIndexOf` in IE 9, 10, 11, and Edge, so it has proper unicode support.
   - [Dev Deps] update `eslint`, `jscs`
+
+4.1.16
+  - [shim: fix] use `Array#slice`, not `String#slice`, on `String#split` output (#380)
 
 4.1.15
   - [shim: fix] new Date + Date.parse: Fix a Safari 8 & 9 bug where the `ms` arg is treated as a signed instead of unsigned int (#329)

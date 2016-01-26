@@ -29,57 +29,68 @@ describe('Date', function () {
                 getUTCDay: 4,
                 getDay: 4,
                 dim: 31
-            }, {
+            },
+            {
                 getTime: -3509824651200292,
                 getUTCDay: 0,
                 getDay: 0,
                 dim: 29
-            }, {
+            },
+            {
                 getTime: -3509822145600292,
                 getUTCDay: 1,
                 getDay: 1,
                 dim: 31
-            }, {
+            },
+            {
                 getTime: -3509819467200292,
                 getUTCDay: 4,
                 getDay: 4,
                 dim: 30
-            }, {
+            },
+            {
                 getTime: -3509816875200292,
                 getUTCDay: 6,
                 getDay: 6,
                 dim: 31
-            }, {
+            },
+            {
                 getTime: -3509814196800292,
                 getUTCDay: 2,
                 getDay: 2,
                 dim: 30
-            }, {
+            },
+            {
                 getTime: -3509811604800292,
                 getUTCDay: 4,
                 getDay: 4,
                 dim: 31
-            }, {
+            },
+            {
                 getTime: -3509808926400292,
                 getUTCDay: 0,
                 getDay: 0,
                 dim: 31
-            }, {
+            },
+            {
                 getTime: -3509806248000292,
                 getUTCDay: 3,
                 getDay: 3,
                 dim: 30
-            }, {
+            },
+            {
                 getTime: -3509803656000292,
                 getUTCDay: 5,
                 getDay: 5,
                 dim: 31
-            }, {
+            },
+            {
                 getTime: -3509800977600292,
                 getUTCDay: 1,
                 getDay: 1,
                 dim: 30
-            }, {
+            },
+            {
                 getTime: -3509798385600292,
                 getUTCDay: 3,
                 getDay: 3,

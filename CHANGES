@@ -1,3 +1,7 @@
+4.5.1
+  - [Fix] Make sure preexisting + broken `Array#` methods that throw don’t break the runtime (#377)
+  - [Dev Deps] update `jscs`
+
 4.5.0
   - [New] `parseFloat('-0')` should return -0 in Opera 12 (#371)
   - [New] Provide and replace Date UTC methods (#360)

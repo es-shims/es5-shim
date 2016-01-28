@@ -1441,6 +1441,21 @@ describe('Array', function () {
             expect(test).toEqual(test2);
         });
 
+        it('should work without optional arguments 1', function () {
+            var array = [0, 1, 2];
+            expect(array.splice(0)).toEqual([]);
+        });
+
+        it('should work without optional arguments 2', function () {
+            var array = [0, 1, 2];
+            expect(array.splice(1)).toEqual([0]);
+        });
+
+        it('should work without optional arguments 3', function () {
+            var array = [0, 1, 2];
+            expect(array.splice(2)).toEqual([0, 1]);
+        });
+
         it('should work with objects - adding 1', function () {
             var obj = {};
             Array.prototype.splice.call(obj, 0, 0, 1, 2, 3);

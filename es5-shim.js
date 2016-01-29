@@ -1111,7 +1111,7 @@ var originalGetUTCHours = call.bind(Date.prototype.getUTCHours);
 var originalGetUTCMinutes = call.bind(Date.prototype.getUTCMinutes);
 var originalGetUTCSeconds = call.bind(Date.prototype.getUTCSeconds);
 var originalGetUTCMilliseconds = call.bind(Date.prototype.getUTCMilliseconds);
-var dayName = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri'];
+var dayName = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 var monthName = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 var daysInMonth = function daysInMonth(month, year) {
     return originalGetDate(new Date(year, month, 0));

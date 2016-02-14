@@ -4,7 +4,8 @@ var has = Object.prototype.hasOwnProperty;
 var getKeys = function (o) {
     'use strict';
 
-    var key, a = [];
+    var key;
+    var a = [];
     for (key in o) {
         if (has.call(o, key)) {
             a.push(key);

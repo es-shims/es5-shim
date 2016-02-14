@@ -163,12 +163,14 @@ describe('Array', function () {
         });
 
         it('should set the right context when given none', function () {
+            /* eslint-disable array-callback-return */
             var context;
             [1].some(function () { context = this; });
             expect(context).toBe(function () { return this; }.call());
         });
 
         it('should return false if it runs to the end', function () {
+            /* eslint-disable array-callback-return */
             actual = testSubject.some(function () {});
             expect(actual).toBeFalsy();
         });
@@ -261,6 +263,7 @@ describe('Array', function () {
         });
 
         it('should set the right context when given none', function () {
+            /* eslint-disable array-callback-return */
             var context;
             [1].every(function () { context = this; });
             expect(context).toBe(function () { return this; }.call());
@@ -645,6 +648,7 @@ describe('Array', function () {
             });
 
             it('should set the right context when given none', function () {
+                /* eslint-disable array-callback-return */
                 var context;
                 [1].filter(function () { context = this; });
                 expect(context).toBe(function () { return this; }.call());

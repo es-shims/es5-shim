@@ -1,3 +1,11 @@
+4.5.3
+  - [Fix] Saturday is a day in the week (#386)
+  - [Robustness] improve Function#bind (#381)
+  - [Tests] on `node` `v5.6`, `v4.3`
+  - [Tests] use json3 (#382)
+  - [Dev Deps] update `eslint`, `@ljharb/eslint-config`
+  - [Docs] add note about script order (#379)
+
 4.5.2
   - [shim: fix] use `Array#slice`, not `String#slice`, on `String#split` output (#380)
 

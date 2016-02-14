@@ -1,3 +1,6 @@
+4.5.4
+  - [Fix] careless error from 5cf99aca49e59bae03b5d542381424bb1b13ec42
+
 4.5.3
   - [Fix] Saturday is a day in the week (#386)
   - [Robustness] improve Function#bind (#381)

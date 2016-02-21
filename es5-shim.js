@@ -1287,9 +1287,12 @@ var negativeYearString = '-000001';
 var hasNegativeDateBug = Date.prototype.toISOString && new Date(negativeDate).toISOString().indexOf(negativeYearString) === -1;
 var hasSafari51DateBug = Date.prototype.toISOString && new Date(-1).toISOString() !== '1969-12-31T23:59:59.999Z';
 
+var getTime = call.bind(Date.prototype.getTime);
+
 defineProperties(Date.prototype, {
     toISOString: function toISOString() {
-        if (!isFinite(this)) {
+        if (!isFinite(this) || !isFinite(getTime(this))) {
+            // Adope Photoshop requires the second check.
             throw new RangeError('Date.prototype.toISOString called on non-finite value.');
         }
 

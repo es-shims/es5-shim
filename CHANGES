@@ -1,3 +1,9 @@
+4.5.5
+  - [Fix] Adobe Photoshop’s JS engine bizarrely can have `+date !== date.getTime()` (#365)
+  - [Dev Deps] update `eslint`
+  - [Refactor] Update `is-callable` implementation to match latest
+  - [Dev Deps] update `eslint`, `@ljharb/eslint-config`, `jscs`
+
 4.5.4
   - [Fix] careless error from 5cf99aca49e59bae03b5d542381424bb1b13ec42
 

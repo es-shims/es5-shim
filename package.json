@@ -37,7 +37,7 @@
     "@ljharb/eslint-config": "^2.1.1",
     "jasmine-node": "^1.14.5",
     "jscs": "^2.10.1",
-    "uglify-js": "^2.6.1",
+    "uglify-js": "^2.6.2",
     "replace": "^0.3.0",
     "semver": "^5.1.0",
     "parallelshell": "^2.0.0"

@@ -1418,7 +1418,7 @@ if (doesNotParseY2KNewYear || acceptsInvalidDates || !supportsExtendedYears) {
                     length >= 4 ? new NativeDate(Y, M, D, h) :
                     length >= 3 ? new NativeDate(Y, M, D) :
                     length >= 2 ? new NativeDate(Y, M) :
-                    length >= 1 ? new NativeDate(Y) :
+                    length >= 1 ? new NativeDate(Y instanceof NativeDate ? +Y : Y) :
                                   new NativeDate();
             } else {
                 date = NativeDate.apply(this, arguments);

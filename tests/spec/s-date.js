@@ -167,6 +167,15 @@ describe('Date', function () {
             var expectedVeryBrokenTS = veryBrokenTS + (largeDate.getTimezoneOffset() * 60e3);
             expect(veryBrokenDate.getTime()).toBe(expectedVeryBrokenTS); // NaN in Safari 8/9
         });
+
+        it('works with a Date object', function () {
+            var date = new Date(1456297712984);
+            var copiedDate = new Date(date);
+            expect(date).not.toBe(copiedDate);
+            expect(copiedDate.getTime()).toBe(date.getTime());
+            expect(+copiedDate).toBe(+date);
+            expect(String(copiedDate)).toBe(String(date));
+        });
     });
 
     describe('.parse()', function () {

@@ -1,3 +1,8 @@
+4.5.6
+  - [Fix] `new Date(new Date())` should work in IE 8 (#389)
+  - [Tests] on `node` `v5.7`
+  - [Dev Deps] update `uglify-js`
+
 4.5.5
   - [Fix] Adobe Photoshop’s JS engine bizarrely can have `+date !== date.getTime()` (#365)
   - [Dev Deps] update `eslint`

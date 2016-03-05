@@ -157,6 +157,13 @@
 
 	"requireImportAlphabetized": false,
 
-	"disallowSpacesInsideTemplateStringPlaceholders": true
+    "requireSpaceBeforeObjectValues": true,
+    "requireSpaceBeforeDestructuredValues": true,
+
+	"disallowSpacesInsideTemplateStringPlaceholders": true,
+
+    "disallowArrayDestructuringReturn": false,
+
+    "requireNewlineBeforeSingleStatementsInIf": false
 }
 

@@ -22,14 +22,14 @@
     "url": "http://github.com/es-shims/es5-shim.git"
   },
   "scripts": {
-    "minify": "parallelshell 'npm run minify-shim' 'npm run minify-sham'",
+    "minify": "concurrently --raw 'npm run --silent minify-shim' 'npm run --silent minify-sham'",
     "minify-shim": "uglifyjs es5-shim.js --keep-fnames --comments --source-map=es5-shim.map -m -b ascii_only=true,beautify=false > es5-shim.min.js",
     "minify-sham": "uglifyjs es5-sham.js --keep-fnames --comments --source-map=es5-sham.map -m -b ascii_only=true,beautify=false > es5-sham.min.js",
-    "pretest": "npm run lint",
-    "test": "npm run tests-only",
+    "pretest": "npm run --silent lint",
+    "test": "npm run --silent tests-only",
     "tests-only": "jasmine-node --matchall ./ tests/spec/",
     "test-native": "jasmine-node --matchall tests/spec/",
-    "lint": "parallelshell 'npm run jscs' 'npm run eslint'",
+    "lint": "concurrently --raw 'npm run --silent jscs' 'npm run --silent eslint'",
     "eslint": "eslint tests/helpers/*.js tests/spec/*.js es5-shim.js es5-sham.js",
     "jscs": "jscs tests/helpers/*.js tests/spec/*.js es5-shim.js es5-sham.js"
   },
@@ -41,7 +41,7 @@
     "uglify-js": "^2.6.2",
     "replace": "^0.3.0",
     "semver": "^5.1.0",
-    "parallelshell": "^2.0.0"
+    "concurrently": "^2.0.0"
   },
   "engines": {
     "node": ">=0.4.0"

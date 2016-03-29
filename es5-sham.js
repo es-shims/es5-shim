@@ -228,7 +228,8 @@ if (!Object.create) {
 
         xDoc = new ActiveXObject('htmlfile');
 
-        xDoc.write('<script><\/script>');
+		var script = 'script';
+        xDoc.write('<' + script + '></' + script + '>');
         xDoc.close();
 
         empty = xDoc.parentWindow.Object.prototype;

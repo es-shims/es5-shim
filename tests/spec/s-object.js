@@ -142,7 +142,10 @@ describe('Object', function () {
           var windowItemKeys, exception;
           var blacklistedKeys = ['window', 'console', 'parent', 'self', 'frame', 'frames', 'frameElement', 'external'];
           if (supportsDescriptors) {
-              Object.defineProperty(window, 'thrower', { configurable: true, get: function () { throw new RangeError('thrower!'); } });
+              Object.defineProperty(window, 'thrower', {
+                  configurable: true,
+                  get: function () { throw new RangeError('thrower!'); }
+              });
           }
           for (var k in window) {
               windowItemKeys = exception = void 0;

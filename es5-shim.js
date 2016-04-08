@@ -2017,8 +2017,10 @@ if (supportsDescriptors) {
     var ensureNonEnumerable = function (obj, prop) {
         if (isEnum(obj, prop)) {
             var desc = Object.getOwnPropertyDescriptor(obj, prop);
-            desc.enumerable = false;
-            Object.defineProperty(obj, prop, desc);
+            if (desc.configurable) {
+              desc.enumerable = false;
+              Object.defineProperty(obj, prop, desc);
+            }
         }
     };
     ensureNonEnumerable(Error.prototype, 'message');

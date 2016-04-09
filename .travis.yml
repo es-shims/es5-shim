@@ -1,5 +1,6 @@
 language: node_js
 node_js:
+  - "5.10"
   - "5.9"
   - "5.8"
   - "5.7"
@@ -50,6 +51,7 @@ sudo: false
 matrix:
   fast_finish: true
   allow_failures:
+    - node_js: "5.9"
     - node_js: "5.8"
     - node_js: "5.7"
     - node_js: "5.6"

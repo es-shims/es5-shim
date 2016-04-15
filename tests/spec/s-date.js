@@ -10,7 +10,7 @@ describe('Date', function () {
                 enumerable: false,
                 value: obj
             });
-            for (var _ in obj) {
+            for (var _ in obj) { // jscs:ignore disallowUnusedVariables
                 return false;
             }
             return obj.x === obj;

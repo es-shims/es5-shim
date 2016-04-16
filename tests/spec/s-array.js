@@ -5,9 +5,9 @@ var canDistinguishSparseFromUndefined = 0 in [undefined]; // IE 6 - 8 have a bug
 var ifHasDenseUndefinedsIt = canDistinguishSparseFromUndefined ? it : xit;
 var undefinedIfNoSparseBug = canDistinguishSparseFromUndefined ? undefined : { valueOf: function () { return 0; } };
 var hasStrictMode = (function () {
-  'use strict';
+    'use strict';
 
-   return !this;
+    return !this;
 }());
 var ifHasStrictIt = hasStrictMode ? it : xit;
 
@@ -1487,10 +1487,10 @@ describe('Array', function () {
             tooBig[8] = 'x';
 
             justFine.splice(1, 1);
-			expect(8 in justFine).toBe(false);
+            expect(8 in justFine).toBe(false);
             expect(justFine.indexOf('x')).toBe(9);
             tooBig.splice(1, 1);
-			expect(6 in tooBig).toBe(false);
+            expect(6 in tooBig).toBe(false);
             expect(tooBig.indexOf('x')).toBe(7);
         });
     });
@@ -1588,7 +1588,7 @@ describe('Array', function () {
 
         it('works with `arguments`', function () {
             var obj = (function () {
-              return arguments;
+                return arguments;
             }(1, 2, 3, 4));
             var result = Array.prototype.slice.call(obj, 1, 3);
             expect(result).toEqual([2, 3]);
@@ -1866,49 +1866,49 @@ describe('Array', function () {
             });
 
             it('should sort objects ascending with length', function () {
-                    var actual = {
-                        0: 5,
-                        1: 2,
-                        2: 4,
-                        3: 6,
-                        4: 1,
-                        5: 3,
-                        length: 6
-                    };
-                    var expected = {
-                        0: 1,
-                        1: 2,
-                        2: 3,
-                        3: 4,
-                        4: 5,
-                        5: 6,
-                        length: 6
-                    };
-                    Array.prototype.sort.call(actual);
-                    expect(actual).toEqual(expected);
+                var actual = {
+                    0: 5,
+                    1: 2,
+                    2: 4,
+                    3: 6,
+                    4: 1,
+                    5: 3,
+                    length: 6
+                };
+                var expected = {
+                    0: 1,
+                    1: 2,
+                    2: 3,
+                    3: 4,
+                    4: 5,
+                    5: 6,
+                    length: 6
+                };
+                Array.prototype.sort.call(actual);
+                expect(actual).toEqual(expected);
             });
 
             it('should sort objects descending with length', function () {
-                    var actual = {
-                        0: 5,
-                        1: 2,
-                        2: 4,
-                        3: 6,
-                        4: 1,
-                        5: 3,
-                        length: 6
-                    };
-                    var expected = {
-                        0: 6,
-                        1: 5,
-                        2: 4,
-                        3: 3,
-                        4: 2,
-                        5: 1,
-                        length: 6
-                    };
-                    Array.prototype.sort.call(actual, descending);
-                    expect(actual).toEqual(expected);
+                var actual = {
+                    0: 5,
+                    1: 2,
+                    2: 4,
+                    3: 6,
+                    4: 1,
+                    5: 3,
+                    length: 6
+                };
+                var expected = {
+                    0: 6,
+                    1: 5,
+                    2: 4,
+                    3: 3,
+                    4: 2,
+                    5: 1,
+                    length: 6
+                };
+                Array.prototype.sort.call(actual, descending);
+                expect(actual).toEqual(expected);
             });
 
             it('should sort objects descending with mixed content types and with length', function () {

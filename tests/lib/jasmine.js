@@ -1326,11 +1326,11 @@ jasmine.Matchers.prototype.toBeNull = function() {
  * Matcher that compares the actual to NaN.
  */
 jasmine.Matchers.prototype.toBeNaN = function() {
-	this.message = function() {
-		return [ "Expected " + jasmine.pp(this.actual) + " to be NaN." ];
-	};
+    this.message = function() {
+        return [ "Expected " + jasmine.pp(this.actual) + " to be NaN." ];
+    };
 
-	return (this.actual !== this.actual);
+    return (this.actual !== this.actual);
 };
 
 /**

@@ -22,9 +22,9 @@ describe('Number', function () {
         });
 
         it('works as expected', function () {
-			expect((0.00008).toPrecision(3)).toBe('0.0000800');
-			expect((1.255).toPrecision(2)).toBe('1.3');
-			expect((1843654265.0774949).toPrecision(13)).toBe('1843654265.077');
+            expect((0.00008).toPrecision(3)).toBe('0.0000800');
+            expect((1.255).toPrecision(2)).toBe('1.3');
+            expect((1843654265.0774949).toPrecision(13)).toBe('1843654265.077');
             expect(NaN.toPrecision(1)).toBe('NaN');
         });
 

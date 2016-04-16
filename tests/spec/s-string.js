@@ -235,35 +235,35 @@ describe('String', function () {
     });
 
     describe('#indexOf()', function () {
-      it('has basic support', function () {
-          expect('abcab'.indexOf('a')).toBe(0);
-          expect('abcab'.indexOf('a', 1)).toBe(3);
-          expect('abcab'.indexOf('a', 4)).toBe(-1);
-      });
+        it('has basic support', function () {
+            expect('abcab'.indexOf('a')).toBe(0);
+            expect('abcab'.indexOf('a', 1)).toBe(3);
+            expect('abcab'.indexOf('a', 4)).toBe(-1);
+        });
 
-      it('works with unicode', function () {
-          expect('あいabcあいabc'.indexOf('あい')).toBe(0);
-          expect('あいabcあいabc'.indexOf('あい', 0)).toBe(0);
-          expect('あいabcあいabc'.indexOf('あい', 1)).toBe(5);
-          expect('あいabcあいabc'.indexOf('あい', 6)).toBe(-1);
-      });
+        it('works with unicode', function () {
+            expect('あいabcあいabc'.indexOf('あい')).toBe(0);
+            expect('あいabcあいabc'.indexOf('あい', 0)).toBe(0);
+            expect('あいabcあいabc'.indexOf('あい', 1)).toBe(5);
+            expect('あいabcあいabc'.indexOf('あい', 6)).toBe(-1);
+        });
     });
 
     describe('#lastIndexOf()', function () {
-      it('has the right length', function () {
-          expect(String.prototype.lastIndexOf.length).toBe(1);
-      });
+        it('has the right length', function () {
+            expect(String.prototype.lastIndexOf.length).toBe(1);
+        });
 
-      it('has basic support', function () {
-          expect('abcd'.lastIndexOf('d')).toBe(3);
-          expect('abcd'.lastIndexOf('d', 3)).toBe(3);
-          expect('abcd'.lastIndexOf('d', 2)).toBe(-1);
-      });
+        it('has basic support', function () {
+            expect('abcd'.lastIndexOf('d')).toBe(3);
+            expect('abcd'.lastIndexOf('d', 3)).toBe(3);
+            expect('abcd'.lastIndexOf('d', 2)).toBe(-1);
+        });
 
-      it('works with unicode', function () {
-          expect('abcあい'.lastIndexOf('あい')).toBe(3);
-          expect('abcあい'.lastIndexOf('あい', 3)).toBe(3);
-          expect('abcあい'.lastIndexOf('あい', 2)).toBe(-1);
-      });
+        it('works with unicode', function () {
+            expect('abcあい'.lastIndexOf('あい')).toBe(3);
+            expect('abcあい'.lastIndexOf('あい', 3)).toBe(3);
+            expect('abcあい'.lastIndexOf('あい', 2)).toBe(-1);
+        });
     });
 });

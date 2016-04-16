@@ -18,7 +18,7 @@ describe('global methods', function () {
         /* eslint-disable radix */
 
         ifFunctionsHaveNamesIt('has the right name', function () {
-          expect(parseInt.name).toBe('parseInt');
+            expect(parseInt.name).toBe('parseInt');
         });
 
         it('accepts a radix', function () {
@@ -28,14 +28,14 @@ describe('global methods', function () {
         });
 
         it('defaults the radix to 10 when the number does not start with 0x or 0X', function () {
-           [
-               '01',
-               '08',
-               '10',
-               '42'
-           ].forEach(function (str) {
-               expect(parseInt(str)).toBe(parseInt(str, 10));
-           });
+            [
+                '01',
+                '08',
+                '10',
+                '42'
+            ].forEach(function (str) {
+                expect(parseInt(str)).toBe(parseInt(str, 10));
+            });
         });
 
         it('defaults the radix to 16 when the number starts with 0x or 0X', function () {

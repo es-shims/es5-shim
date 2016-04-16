@@ -109,18 +109,18 @@ describe('Object', function () {
         });
 
         describe('enumerating over non-enumerable properties', function () {
-             it('has no enumerable keys on a Function', function () {
-                 var Foo = function () {};
-                 expect(Object.keys(Foo.prototype)).toEqual([]);
-             });
+            it('has no enumerable keys on a Function', function () {
+                var Foo = function () {};
+                expect(Object.keys(Foo.prototype)).toEqual([]);
+            });
 
-             it('has no enumerable keys on a boolean', function () {
-                 expect(Object.keys(Boolean.prototype)).toEqual([]);
-             });
+            it('has no enumerable keys on a boolean', function () {
+                expect(Object.keys(Boolean.prototype)).toEqual([]);
+            });
 
-             it('has no enumerable keys on an object', function () {
-                 expect(Object.keys(Object.prototype)).toEqual([]);
-             });
+            it('has no enumerable keys on an object', function () {
+                expect(Object.keys(Object.prototype)).toEqual([]);
+            });
         });
 
         it('works with boxed primitives', function () {
@@ -138,30 +138,30 @@ describe('Object', function () {
         });
 
         ifWindowIt('can serialize all objects on the `window`', function () {
-          var has = Object.prototype.hasOwnProperty;
-          var windowItemKeys, exception;
-          var blacklistedKeys = ['window', 'console', 'parent', 'self', 'frame', 'frames', 'frameElement', 'external'];
-          if (supportsDescriptors) {
-              Object.defineProperty(window, 'thrower', {
-                  configurable: true,
-                  get: function () { throw new RangeError('thrower!'); }
-              });
-          }
-          for (var k in window) {
-              windowItemKeys = exception = void 0;
-              if (blacklistedKeys.indexOf(k) === -1 && has.call(window, k) && window[k] !== null && typeof window[k] === 'object') {
-                     try {
-                         windowItemKeys = Object.keys(window[k]);
-                     } catch (e) {
-                         exception = e;
-                     }
-                     expect(Array.isArray(windowItemKeys)).toBe(true);
-                     expect(exception).toBeUndefined();
-              }
-          }
-          if (supportsDescriptors) {
-             delete window.thrower;
-          }
+            var has = Object.prototype.hasOwnProperty;
+            var windowItemKeys, exception;
+            var blacklistedKeys = ['window', 'console', 'parent', 'self', 'frame', 'frames', 'frameElement', 'external'];
+            if (supportsDescriptors) {
+                Object.defineProperty(window, 'thrower', {
+                    configurable: true,
+                    get: function () { throw new RangeError('thrower!'); }
+                });
+            }
+            for (var k in window) {
+                windowItemKeys = exception = void 0;
+                if (blacklistedKeys.indexOf(k) === -1 && has.call(window, k) && window[k] !== null && typeof window[k] === 'object') {
+                    try {
+                        windowItemKeys = Object.keys(window[k]);
+                    } catch (e) {
+                        exception = e;
+                    }
+                    expect(Array.isArray(windowItemKeys)).toBe(true);
+                    expect(exception).toBeUndefined();
+                }
+            }
+            if (supportsDescriptors) {
+                delete window.thrower;
+            }
         });
     });
 
@@ -198,14 +198,14 @@ describe('Object', function () {
         var obj;
 
         beforeEach(function () {
-           obj = {};
+            obj = {};
 
-           Object.defineProperty(obj, 'name', {
-               value: 'Testing',
-               configurable: true,
-               enumerable: true,
-               writable: true
-           });
+            Object.defineProperty(obj, 'name', {
+                value: 'Testing',
+                configurable: true,
+                enumerable: true,
+                writable: true
+            });
         });
 
         it('should return the initial value', function () {
@@ -341,7 +341,7 @@ describe('Object', function () {
             var target = {};
             var newProperties = {
                 constructor: {
-                  value: 'new constructor'
+                    value: 'new constructor'
                 }
             };
             Object.defineProperties(target, newProperties);

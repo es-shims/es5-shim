@@ -9,6 +9,7 @@
 		"dot-notation": [2, { "allowKeywords": false }],
 		"eqeqeq": [2, "allow-null"],
 		"id-length": [2, { "min": 1, "max": 40 }],
+		"indent": [2, 4],
 		"max-nested-callbacks": [2, 5],
 		"max-params": [2, 7],
 		"max-statements": [1, 30],

@@ -1,5 +1,6 @@
 /* global describe, it, xit, expect, beforeEach, jasmine, window */
 
+var has = Object.prototype.hasOwnProperty;
 var supportsDescriptors = Object.defineProperty && (function () {
     try {
         var obj = {};
@@ -86,7 +87,7 @@ describe('Object', function () {
 
         it('should return names which are own properties', function () {
             keys.forEach(function (name) {
-                expect(obj.hasOwnProperty(name)).toBe(true);
+                expect(has.call(obj, name)).toBe(true);
             });
         });
 
@@ -138,7 +139,6 @@ describe('Object', function () {
         });
 
         ifWindowIt('can serialize all objects on the `window`', function () {
-            var has = Object.prototype.hasOwnProperty;
             var windowItemKeys, exception;
             var blacklistedKeys = ['window', 'console', 'parent', 'self', 'frame', 'frames', 'frameElement', 'external'];
             if (supportsDescriptors) {
@@ -209,7 +209,7 @@ describe('Object', function () {
         });
 
         it('should return the initial value', function () {
-            expect(obj.hasOwnProperty('name')).toBeTruthy();
+            expect(has.call(obj, 'name')).toBeTruthy();
             expect(obj.name).toBe('Testing');
         });
 
@@ -222,7 +222,7 @@ describe('Object', function () {
             var child = Object.create(obj, {});
 
             expect(child.name).toBe('Testing');
-            expect(child.hasOwnProperty('name')).toBeFalsy();
+            expect(has.call(child, 'name')).toBeFalsy();
         });
 
         it('should not override the parent value', function () {

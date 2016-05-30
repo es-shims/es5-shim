@@ -110,7 +110,7 @@ describe('Function', function () {
         it('passes the correct arguments as a constructor', function () {
             var expected = { name: 'Correct' };
             testSubject.Func = function (arg) {
-                expect(this.hasOwnProperty('name')).toBe(false);
+                expect(Object.prototype.hasOwnProperty.call(this, 'name')).toBe(false);
                 return arg;
             }.bind({ name: 'Incorrect' });
             var ret = new testSubject.Func(expected);

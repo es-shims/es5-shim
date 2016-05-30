@@ -78,7 +78,9 @@
         try {
             var obj = {};
             $Object.defineProperty(obj, 'x', { enumerable: false, value: obj });
-            for (var _ in obj) { return false; } // jscs:ignore disallowUnusedVariables
+            for (var _ in obj) { // jscs:ignore disallowUnusedVariables
+                return false;
+            }
             return obj.x === obj;
         } catch (e) { /* this is ES3 */
             return false;
@@ -90,7 +92,9 @@
         var defineProperty;
         if (supportsDescriptors) {
             defineProperty = function (object, name, method, forceAssign) {
-                if (!forceAssign && (name in object)) { return; }
+                if (!forceAssign && (name in object)) {
+                    return;
+                }
                 $Object.defineProperty(object, name, {
                     configurable: true,
                     enumerable: false,
@@ -100,7 +104,9 @@
             };
         } else {
             defineProperty = function (object, name, method, forceAssign) {
-                if (!forceAssign && (name in object)) { return; }
+                if (!forceAssign && (name in object)) {
+                    return;
+                }
                 object[name] = method;
             };
         }
@@ -124,7 +130,9 @@
         return input === null || (type !== 'object' && type !== 'function');
     };
 
-    var isActualNaN = $Number.isNaN || function (x) { return x !== x; };
+    var isActualNaN = $Number.isNaN || function isActualNaN(x) {
+        return x !== x;
+    };
 
     var ES = {
         // ES5 9.4
@@ -751,7 +759,9 @@
     }());
     defineProperties(ArrayPrototype, {
         splice: function splice(start, deleteCount) {
-            if (arguments.length === 0) { return []; }
+            if (arguments.length === 0) {
+                return [];
+            }
             var args = arguments;
             this.length = max(ES.ToInteger(this.length), 0);
             if (arguments.length > 0 && typeof deleteCount !== 'number') {
@@ -965,8 +975,8 @@
     // http://es5.github.com/#x15.2.3.14
 
     // http://whattheheadsaid.com/2010/10/a-safer-object-keys-compatibility-implementation
-    var hasDontEnumBug = !({ 'toString': null }).propertyIsEnumerable('toString');
-    var hasProtoEnumBug = function () {}.propertyIsEnumerable('prototype');
+    var hasDontEnumBug = !isEnum({ 'toString': null }, 'toString');
+    var hasProtoEnumBug = isEnum(function () {}, 'prototype');
     var hasStringEnumBug = !owns('x', '0');
     var equalsConstructorPrototype = function (o) {
         var ctor = o.constructor;
@@ -986,7 +996,9 @@
     };
     var hasAutomationEqualityBug = (function () {
         /* globals window */
-        if (typeof window === 'undefined') { return false; }
+        if (typeof window === 'undefined') {
+            return false;
+        }
         for (var k in window) {
             try {
                 if (!blacklistedKeys['$' + k] && owns(window, k) && window[k] !== null && typeof window[k] === 'object') {
@@ -999,7 +1011,9 @@
         return false;
     }());
     var equalsConstructorPrototypeIfNotBuggy = function (object) {
-        if (typeof window === 'undefined' || !hasAutomationEqualityBug) { return equalsConstructorPrototype(object); }
+        if (typeof window === 'undefined' || !hasAutomationEqualityBug) {
+            return equalsConstructorPrototype(object);
+        }
         try {
             return equalsConstructorPrototype(object);
         } catch (e) {
@@ -1851,7 +1865,9 @@
     // "0".split(undefined, 0) -> []
     } else if ('0'.split(void 0, 0).length) {
         StringPrototype.split = function split(separator, limit) {
-            if (typeof separator === 'undefined' && limit === 0) { return []; }
+            if (typeof separator === 'undefined' && limit === 0) {
+                return [];
+            }
             return strSplit(this, separator, limit);
         };
     }

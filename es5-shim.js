@@ -1980,7 +1980,7 @@
         parseInt = (function (origParseInt) {
             var hexRegex = /^[\-+]?0[xX]/;
             return function parseInt(str, radix) {
-                var string = trim(str);
+                var string = trim(String(str));
                 var defaultedRadix = $Number(radix) || (hexRegex.test(string) ? 16 : 10);
                 return origParseInt(string, defaultedRadix);
             };
@@ -1992,7 +1992,7 @@
         /* global parseFloat: true */
         parseFloat = (function (origParseFloat) {
             return function parseFloat(string) {
-                var inputString = trim(string);
+                var inputString = trim(String(string));
                 var result = origParseFloat(inputString);
                 return result === 0 && strSlice(inputString, 0, 1) === '-' ? -0 : result;
             };

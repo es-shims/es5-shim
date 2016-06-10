@@ -67,6 +67,12 @@ describe('global methods', function () {
             expect(parseInt('+0xF')).toBe(15);
             expect(parseInt('+0xF', 16)).toBe(15);
         });
+
+        it('NaN parsing', function () {
+            expect(parseInt(undefined)).toBeNaN();
+            expect(parseInt(null)).toBeNaN();
+            expect(parseInt(NaN)).toBeNaN();
+        });
         /* eslint-enable radix */
     });
 
@@ -78,6 +84,12 @@ describe('global methods', function () {
             expect(is(parseFloat(' +0'), 0) ? '+0' : '-0').toBe('+0');
             expect(is(parseFloat('-0'), -0) ? '-0' : '+0').toBe('-0');
             expect(is(parseFloat(' -0'), -0) ? '-0' : '+0').toBe('-0');
+        });
+
+        it('NaN parsing', function () {
+            expect(parseFloat(undefined)).toBeNaN();
+            expect(parseFloat(null)).toBeNaN();
+            expect(parseFloat(NaN)).toBeNaN();
         });
     });
 });

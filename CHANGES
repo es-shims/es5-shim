@@ -1,3 +1,8 @@
+4.5.9
+  - [Fix] parseInt and parseFloat should both accept null/undefined (#402)
+  - [Tests] up to `node` `v6.2`
+  - [Dev Deps] update `eslint`, `@ljharb/eslint-config`, `jscs`, `concurrently`
+
 4.5.8
   - [Fix] Check if property descriptor is configurable before re-defining it (#394, #373)
   - [Dev Deps] update `eslint`, `jscs`, `@ljharb/eslint-config`

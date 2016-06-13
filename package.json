@@ -34,10 +34,10 @@
     "jscs": "jscs tests/helpers/*.js tests/spec/*.js es5-shim.js es5-sham.js"
   },
   "devDependencies": {
-    "eslint": "^2.11.0",
+    "eslint": "^2.12.0",
     "@ljharb/eslint-config": "^5.0.0",
     "jasmine-node": "^1.14.5",
-    "jscs": "^3.0.3",
+    "jscs": "^3.0.4",
     "uglify-js": "^2.6.2",
     "replace": "^0.3.0",
     "semver": "^5.1.0",

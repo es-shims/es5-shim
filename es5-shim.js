@@ -982,7 +982,7 @@
         var ctor = o.constructor;
         return ctor && ctor.prototype === o;
     };
-    var blacklistedKeys = {
+    var excludedKeys = {
         $window: true,
         $console: true,
         $parent: true,
@@ -1001,7 +1001,7 @@
         }
         for (var k in window) {
             try {
-                if (!blacklistedKeys['$' + k] && owns(window, k) && window[k] !== null && typeof window[k] === 'object') {
+                if (!excludedKeys['$' + k] && owns(window, k) && window[k] !== null && typeof window[k] === 'object') {
                     equalsConstructorPrototype(window[k]);
                 }
             } catch (e) {

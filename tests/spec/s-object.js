@@ -140,7 +140,7 @@ describe('Object', function () {
 
         ifWindowIt('can serialize all objects on the `window`', function () {
             var windowItemKeys, exception;
-            var blacklistedKeys = ['window', 'console', 'parent', 'self', 'frame', 'frames', 'frameElement', 'external'];
+            var excludedKeys = ['window', 'console', 'parent', 'self', 'frame', 'frames', 'frameElement', 'external'];
             if (supportsDescriptors) {
                 Object.defineProperty(window, 'thrower', {
                     configurable: true,
@@ -149,7 +149,7 @@ describe('Object', function () {
             }
             for (var k in window) {
                 windowItemKeys = exception = void 0;
-                if (blacklistedKeys.indexOf(k) === -1 && has.call(window, k) && window[k] !== null && typeof window[k] === 'object') {
+                if (excludedKeys.indexOf(k) === -1 && has.call(window, k) && window[k] !== null && typeof window[k] === 'object') {
                     try {
                         windowItemKeys = Object.keys(window[k]);
                     } catch (e) {

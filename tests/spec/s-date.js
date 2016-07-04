@@ -457,7 +457,7 @@ describe('Date', function () {
                 item.dates.forEach(function (date) {
                     var off = date.getTimezoneOffset();
                     var offHours = Math.floor(off / 60);
-                    var offMins = off - offHours * 60;
+                    var offMins = off - (offHours * 60);
                     expect(date.getMinutes() + offMins).toBe(59);
                 });
             });

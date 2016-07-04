@@ -1,5 +1,6 @@
 {
 	"rules": {
+		"max-lines": 0,
 		"max-statements-per-line": [2, { "max": 2 }]
 	}
 }

@@ -34,13 +34,13 @@
     "jscs": "jscs tests/helpers/*.js tests/spec/*.js es5-shim.js es5-sham.js"
   },
   "devDependencies": {
-    "eslint": "^2.13.1",
-    "@ljharb/eslint-config": "^5.0.0",
+    "eslint": "^3.0.0",
+    "@ljharb/eslint-config": "^6.0.0",
     "jasmine-node": "^1.14.5",
-    "jscs": "^3.0.5",
-    "uglify-js": "^2.6.4",
+    "jscs": "^3.0.6",
+    "uglify-js": "^2.7.0",
     "replace": "^0.3.0",
-    "semver": "^5.1.1",
+    "semver": "^5.2.0",
     "concurrently": "^2.1.0"
   },
   "engines": {

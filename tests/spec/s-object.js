@@ -228,9 +228,7 @@ describe('Object', function () {
         it('should not override the parent value', function () {
             var child = Object.create(obj, {});
 
-            Object.defineProperty(child, 'name', {
-                value: 'Other'
-            });
+            Object.defineProperty(child, 'name', { value: 'Other' });
 
             expect(obj.name).toBe('Testing');
             expect(child.name).toBe('Other');
@@ -339,11 +337,7 @@ describe('Object', function () {
     describe('.defineProperties()', function () {
         it('should define the constructor property', function () {
             var target = {};
-            var newProperties = {
-                constructor: {
-                    value: 'new constructor'
-                }
-            };
+            var newProperties = { constructor: { value: 'new constructor' } };
             Object.defineProperties(target, newProperties);
             expect(target.constructor).toBe('new constructor');
         });

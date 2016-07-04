@@ -1320,7 +1320,7 @@
             var month = originalGetUTCMonth(this);
             // see https://github.com/es-shims/es5-shim/issues/111
             year += Math.floor(month / 12);
-            month = (month % 12 + 12) % 12;
+            month = ((month % 12) + 12) % 12;
 
             // the date time string format is specified in 15.9.1.15.
             var result = [month + 1, originalGetUTCDate(this), originalGetUTCHours(this), originalGetUTCMinutes(this), originalGetUTCSeconds(this)];
@@ -1481,7 +1481,7 @@
                     Math.floor((year - 1969 + t) / 4) -
                     Math.floor((year - 1901 + t) / 100) +
                     Math.floor((year - 1601 + t) / 400) +
-                    365 * (year - 1970)
+                    (365 * (year - 1970))
                 );
             };
 
@@ -1511,9 +1511,7 @@
                 UTC: NativeDate.UTC
             }, true);
             DateShim.prototype = NativeDate.prototype;
-            defineProperties(DateShim.prototype, {
-                constructor: DateShim
-            }, true);
+            defineProperties(DateShim.prototype, { constructor: DateShim }, true);
 
             // Upgrade Date.parse to handle simplified ISO 8601 strings
             var parseShim = function parse(string) {
@@ -1547,14 +1545,14 @@
                         day < (dayFromMonth(year, month + 1) - dayFromMonth(year, month))
                     ) {
                         result = (
-                            (dayFromMonth(year, month) + day) * 24 +
+                            ((dayFromMonth(year, month) + day) * 24) +
                             hour +
-                            hourOffset * signOffset
+                            (hourOffset * signOffset)
                         ) * 60;
-                        result = (
-                            (result + minute + minuteOffset * signOffset) * 60 +
+                        result = ((
+                            ((result + minute + (minuteOffset * signOffset)) * 60) +
                             second
-                        ) * 1000 + millisecond;
+                        ) * 1000) + millisecond;
                         if (isLocalTime) {
                             result = toUTC(result);
                         }

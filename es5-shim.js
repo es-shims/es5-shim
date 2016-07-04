@@ -992,7 +992,9 @@
         $frameElement: true,
         $webkitIndexedDB: true,
         $webkitStorageInfo: true,
-        $external: true
+        $external: true,
+        $width: true,
+        $height: true
     };
     var hasAutomationEqualityBug = (function () {
         /* globals window */

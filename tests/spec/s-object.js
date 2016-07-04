@@ -140,7 +140,7 @@ describe('Object', function () {
 
         ifWindowIt('can serialize all objects on the `window`', function () {
             var windowItemKeys, exception;
-            var excludedKeys = ['window', 'console', 'parent', 'self', 'frame', 'frames', 'frameElement', 'external'];
+            var excludedKeys = ['window', 'console', 'parent', 'self', 'frame', 'frames', 'frameElement', 'external', 'height', 'width'];
             if (supportsDescriptors) {
                 Object.defineProperty(window, 'thrower', {
                     configurable: true,

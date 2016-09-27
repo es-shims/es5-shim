@@ -23,8 +23,8 @@
   },
   "scripts": {
     "minify": "concurrently --raw 'npm run --silent minify-shim' 'npm run --silent minify-sham'",
-    "minify-shim": "uglifyjs es5-shim.js --keep-fnames --comments --source-map=es5-shim.map -m -b ascii_only=true,beautify=false > es5-shim.min.js",
-    "minify-sham": "uglifyjs es5-sham.js --keep-fnames --comments --source-map=es5-sham.map -m -b ascii_only=true,beautify=false > es5-sham.min.js",
+    "minify-shim": "uglifyjs es5-shim.js --support-ie8 --keep-fnames --comments --source-map=es5-shim.map -m -b ascii_only=true,beautify=false > es5-shim.min.js",
+    "minify-sham": "uglifyjs es5-sham.js --support-ie8 --keep-fnames --comments --source-map=es5-sham.map -m -b ascii_only=true,beautify=false > es5-sham.min.js",
     "pretest": "npm run --silent lint",
     "test": "npm run --silent tests-only",
     "tests-only": "jasmine-node --matchall ./ tests/spec/",
@@ -38,7 +38,7 @@
     "@ljharb/eslint-config": "^8.0.0",
     "jasmine-node": "^1.14.5",
     "jscs": "^3.0.7",
-    "uglify-js": "^2.7.3",
+    "uglify-js": "~2.7.3",
     "replace": "^0.3.0",
     "semver": "^5.3.0",
     "concurrently": "^3.0.0"

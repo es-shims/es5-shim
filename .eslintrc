@@ -35,6 +35,7 @@
 		"no-unused-vars": [1, { "vars": "all", "args": "after-used" }],
 		"operator-linebreak": [2, "after"],
 		"quote-props": [1, "as-needed", { "keywords": true }],
+        "sort-keys": [0],
 		"spaced-comment": [0],
 		"strict": [0]
 	}

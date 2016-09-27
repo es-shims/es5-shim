@@ -1407,13 +1407,10 @@
         // XXX global assignment won't work in embeddings that use
         // an alternate object for the context.
         /* global Date: true */
-        /* eslint-disable no-undef */
         var maxSafeUnsigned32Bit = Math.pow(2, 31) - 1;
         var hasSafariSignedIntBug = isActualNaN(new Date(1970, 0, 1, 0, 0, 0, maxSafeUnsigned32Bit + 1).getTime());
-        /* eslint-disable no-implicit-globals */
+        // eslint-disable-next-line no-implicit-globals, no-global-assign
         Date = (function (NativeDate) {
-        /* eslint-enable no-implicit-globals */
-        /* eslint-enable no-undef */
             // Date.length === 7
             var DateShim = function Date(Y, M, D, h, m, s, ms) {
                 var length = arguments.length;
@@ -1973,9 +1970,8 @@
     }, StringPrototype.lastIndexOf.length !== 1);
 
     // ES-5 15.1.2.2
-    /* eslint-disable radix */
+    // eslint-disable-next-line radix
     if (parseInt(ws + '08') !== 8 || parseInt(ws + '0x16') !== 22) {
-    /* eslint-enable radix */
         /* global parseInt: true */
         parseInt = (function (origParseInt) {
             var hexRegex = /^[\-+]?0[xX]/;

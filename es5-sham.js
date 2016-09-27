@@ -65,9 +65,8 @@
         // ... this will nerever possibly return null
         // ... Opera Mini breaks here with infinite loops
         Object.getPrototypeOf = function getPrototypeOf(object) {
-            /* eslint-disable no-proto */
+            // eslint-disable-next-line no-proto
             var proto = object.__proto__;
-            /* eslint-enable no-proto */
             if (proto || proto === null) {
                 return proto;
             } else if (toStr(object.constructor) === '[object Function]') {
@@ -252,9 +251,8 @@
 
             iframe.style.display = 'none';
             parent.appendChild(iframe);
-            /* eslint-disable no-script-url */
+            // eslint-disable-next-line no-script-url
             iframe.src = 'javascript:';
-            /* eslint-enable no-script-url */
 
             empty = iframe.contentWindow.Object.prototype;
             parent.removeChild(iframe);
@@ -319,9 +317,8 @@
                 // neither `__proto__`, but this manually setting `__proto__` will
                 // guarantee that `Object.getPrototypeOf` will work as expected with
                 // objects created using `Object.create`
-                /* eslint-disable no-proto */
+                // eslint-disable-next-line no-proto
                 object.__proto__ = prototype;
-                /* eslint-enable no-proto */
             }
 
             if (properties !== void 0) {

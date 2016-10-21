@@ -1885,13 +1885,13 @@
             if (!isFn || !hasCapturingGroups) {
                 return str_replace.call(this, searchValue, replaceValue);
             } else {
-                var wrappedReplaceValue = function (match) {
-                    var length = arguments.length;
-                    var originalLastIndex = searchValue.lastIndex;
-                    searchValue.lastIndex = 0;
-                    var args = searchValue.exec(match) || [];
-                    searchValue.lastIndex = originalLastIndex;
-                    pushCall(args, arguments[length - 2], arguments[length - 1]);
+                var wrappedReplaceValue = function () {
+                    var args = [];
+
+                    for (var i = 0; i < arguments.length; i++) {
+                        args[i] = arguments[i] === '' ? undefined : arguments[i];
+                    }
+
                     return replaceValue.apply(this, args);
                 };
                 return str_replace.call(this, searchValue, wrappedReplaceValue);

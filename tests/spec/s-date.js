@@ -521,7 +521,7 @@ describe('Date', function () {
     describe('#toString()', function () {
         it('should return correct dates', function () {
             var actual = new Date(1449662400000).toString();
-            var re = /^Wed Dec 09 2015 \d\d:\d\d:\d\d GMT[-\+]\d\d\d\d(?: |$)/;
+            var re = /^Wed Dec 09 2015 \d\d:\d\d:\d\d GMT[-+]\d\d\d\d(?: |$)/;
             expect(re.test(actual)).toBe(true, actual);
         });
     });

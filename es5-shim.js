@@ -1121,10 +1121,10 @@
     var timeZoneOffset = aNegativeTestDate.getTimezoneOffset();
     if (timeZoneOffset < -720) {
         hasToDateStringFormatBug = aNegativeTestDate.toDateString() !== 'Tue Jan 02 -45875';
-        hasToStringFormatBug = !(/^Thu Dec 10 2015 \d\d:\d\d:\d\d GMT[-\+]\d\d\d\d(?: |$)/).test(aPositiveTestDate.toString());
+        hasToStringFormatBug = !(/^Thu Dec 10 2015 \d\d:\d\d:\d\d GMT[-+]\d\d\d\d(?: |$)/).test(aPositiveTestDate.toString());
     } else {
         hasToDateStringFormatBug = aNegativeTestDate.toDateString() !== 'Mon Jan 01 -45875';
-        hasToStringFormatBug = !(/^Wed Dec 09 2015 \d\d:\d\d:\d\d GMT[-\+]\d\d\d\d(?: |$)/).test(aPositiveTestDate.toString());
+        hasToStringFormatBug = !(/^Wed Dec 09 2015 \d\d:\d\d:\d\d GMT[-+]\d\d\d\d(?: |$)/).test(aPositiveTestDate.toString());
     }
 
     var originalGetFullYear = call.bind(Date.prototype.getFullYear);
@@ -1974,7 +1974,7 @@
     if (parseInt(ws + '08') !== 8 || parseInt(ws + '0x16') !== 22) {
         /* global parseInt: true */
         parseInt = (function (origParseInt) {
-            var hexRegex = /^[\-+]?0[xX]/;
+            var hexRegex = /^[-+]?0[xX]/;
             return function parseInt(str, radix) {
                 var string = trim(String(str));
                 var defaultedRadix = $Number(radix) || (hexRegex.test(string) ? 16 : 10);

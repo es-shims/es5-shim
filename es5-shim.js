@@ -1925,20 +1925,93 @@
     }());
 
     if (!replaceReportsGroupsCorrectly) {
+        /**
+         * @param regexp {RegExp}
+         * @returns {Object[]} groups
+         *  @return {number} groups[].number        - The number of group.
+         *  @return {boolean} groups[].mayBeMissing - The group with quantifiers preventing its exercise, the matched text
+         *                                            for a capturing group is now undefined instead of an empty string.
+         *                                            The group without quantifiers, may be empty string.
+         *  @return {boolean} groups[].isResulting  - The groups with ?:, ?=, ?! are non-capturing groups.
+         */
+        var getExtendedGroups = function getExtendedGroups(regexp) {
+            var source = regexp.source;
+            var result = [];
+            var groupNumberCounter = 0;
+
+            for (var charIndex in source) {
+                var char = source[+charIndex];
+                var prevFirst = source[+charIndex - 1] || null;
+                var nextFirst = source[+charIndex + 1] || null;
+                var nextSecond = source[+charIndex + 2] || null;
+
+                if (char === '(') {
+                    if (prevFirst && prevFirst === '\\') {
+                        continue;
+                    }
+
+                    if (
+                        nextFirst && nextFirst === '?' && nextSecond && nextSecond === ':'
+                        || nextFirst && nextFirst === '?' && nextSecond && nextSecond === '='
+                        || nextFirst && nextFirst === '?' && nextSecond && nextSecond === '!'
+                    ) {
+                        groupNumberCounter += 1;
+                        result.push({
+                            number: groupNumberCounter,
+                            mayBeMissing: true,
+                            isResulting: false
+                        });
+                        continue;
+                    }
+
+                    result.push({
+                        number: ++groupNumberCounter,
+                        mayBeMissing: false,
+                        isResulting: true
+                    });
+                }
+
+                if (char === ')') {
+                    var groupIndex = groupNumberCounter - 1;
+
+                    if (prevFirst && prevFirst === '\\') {
+                        continue;
+                    }
+
+                    if (result[groupIndex] && !result[groupIndex].isResulting) {
+                        array_splice.apply(result,[groupIndex, 1]);
+                        groupNumberCounter = --groupNumberCounter;
+                        continue;
+                    }
+
+                    if (nextFirst && (nextFirst === '?' || nextFirst === '*')) {
+                        result[groupIndex].mayBeMissing = true;
+                    }
+                }
+            }
+
+            return result;
+        };
+
         StringPrototype.replace = function replace(searchValue, replaceValue) {
             var isFn = isCallable(replaceValue);
             var hasCapturingGroups = isRegex(searchValue) && (/\)[*?]/).test(searchValue.source);
+            var extendedGroups = getExtendedGroups(searchValue);
+
             if (!isFn || !hasCapturingGroups) {
                 return str_replace.call(this, searchValue, replaceValue);
             } else {
                 var wrappedReplaceValue = function (match) {
-                    var length = arguments.length;
-                    var originalLastIndex = searchValue.lastIndex;
-                    searchValue.lastIndex = 0; // eslint-disable-line no-param-reassign
-                    var args = searchValue.exec(match) || [];
-                    searchValue.lastIndex = originalLastIndex; // eslint-disable-line no-param-reassign
-                    pushCall(args, arguments[length - 2], arguments[length - 1]);
-                    return replaceValue.apply(this, args);
+                    var groups = arraySlice(arguments, 1, -2);
+
+                    for (var i = 0; i < groups.length; i++) {
+                        var argumentIndex = i + 1;
+                        if (groups[i] === '' && extendedGroups[i].mayBeMissing) {
+                            arguments[argumentIndex] = undefined;
+                        }
+                    }
+
+                    return apply.call(replaceValue, this, arguments);
                 };
                 return str_replace.call(this, searchValue, wrappedReplaceValue);
             }

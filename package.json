@@ -41,7 +41,7 @@
     "uglify-js": "2.7.3",
     "replace": "^0.3.0",
     "semver": "^5.3.0",
-    "concurrently": "^3.1.0"
+    "concurrently": "^3.2.0"
   },
   "engines": {
     "node": ">=0.4.0"

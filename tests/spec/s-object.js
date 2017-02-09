@@ -148,7 +148,8 @@ describe('Object', function () {
                 });
             }
             for (var k in window) {
-                windowItemKeys = exception = void 0;
+                exception = void 0;
+                windowItemKeys = exception;
                 if (excludedKeys.indexOf(k) === -1 && has.call(window, k) && window[k] !== null && typeof window[k] === 'object') {
                     try {
                         windowItemKeys = Object.keys(window[k]);

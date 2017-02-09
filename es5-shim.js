@@ -1305,7 +1305,7 @@
     // this object is not a finite Number a RangeError exception is thrown.
     var negativeDate = -62198755200000;
     var negativeYearString = '-000001';
-    var hasNegativeDateBug = Date.prototype.toISOString && new Date(negativeDate).toISOString().indexOf(negativeYearString) === -1;
+    var hasNegativeDateBug = Date.prototype.toISOString && new Date(negativeDate).toISOString().indexOf(negativeYearString) === -1; // eslint-disable-line max-len
     var hasSafari51DateBug = Date.prototype.toISOString && new Date(-1).toISOString() !== '1969-12-31T23:59:59.999Z';
 
     var getTime = call.bind(Date.prototype.getTime);
@@ -1325,7 +1325,13 @@
             month = ((month % 12) + 12) % 12;
 
             // the date time string format is specified in 15.9.1.15.
-            var result = [month + 1, originalGetUTCDate(this), originalGetUTCHours(this), originalGetUTCMinutes(this), originalGetUTCSeconds(this)];
+            var result = [
+                month + 1,
+                originalGetUTCDate(this),
+                originalGetUTCHours(this),
+                originalGetUTCMinutes(this),
+                originalGetUTCSeconds(this)
+            ];
             year = (
                 (year < 0 ? '-' : (year > 9999 ? '+' : '')) +
                 strSlice('00000' + Math.abs(year), (0 <= year && year <= 9999) ? -4 : -6)

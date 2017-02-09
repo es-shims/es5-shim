@@ -42,12 +42,12 @@
     var lookupSetter;
     var supportsAccessors = owns(prototypeOfObject, '__defineGetter__');
     if (supportsAccessors) {
-        /* eslint-disable no-underscore-dangle */
+        /* eslint-disable no-underscore-dangle, no-restricted-properties */
         defineGetter = call.bind(prototypeOfObject.__defineGetter__);
         defineSetter = call.bind(prototypeOfObject.__defineSetter__);
         lookupGetter = call.bind(prototypeOfObject.__lookupGetter__);
         lookupSetter = call.bind(prototypeOfObject.__lookupSetter__);
-        /* eslint-enable no-underscore-dangle */
+        /* eslint-enable no-underscore-dangle, no-restricted-properties */
     }
 
     var isPrimitive = function isPrimitive(o) {

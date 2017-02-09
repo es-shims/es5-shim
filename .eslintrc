@@ -8,8 +8,16 @@
 		"complexity": [0, 10],
 		"dot-notation": [2, { "allowKeywords": false }],
 		"eqeqeq": [2, "allow-null"],
+		"func-name-matching": 0,
 		"id-length": [2, { "min": 1, "max": 40 }],
 		"indent": [2, 4],
+		"max-len": [2, 120, 4, {
+			"ignoreUrls": true,
+			"ignoreComments": true,
+			"ignoreRegExpLiterals": true,
+			"ignoreStrings": true,
+			"ignoreTemplateLiterals": true
+		}],
 		"max-lines": 0,
 		"max-nested-callbacks": [2, 5],
 		"max-params": [2, 7],

@@ -69,6 +69,13 @@
     "javascript",
     "ecmascript",
     "polyfill"
-  ]
+  ],
+  "spm": {
+    "main": "es5-shim.js",
+    "output": [
+      "es5-sham.js"
+    ],
+    "buildArgs": "--include standalone"
+  }
 }
 

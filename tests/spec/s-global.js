@@ -69,6 +69,7 @@ describe('global methods', function () {
         });
 
         it('NaN parsing', function () {
+            expect(parseInt()).toBeNaN();
             expect(parseInt(undefined)).toBeNaN();
             expect(parseInt(null)).toBeNaN();
             expect(parseInt(NaN)).toBeNaN();

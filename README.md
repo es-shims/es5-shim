@@ -1,4 +1,4 @@
-#es5-shim <sup>[![Version Badge][npm-version-svg]][npm-url]</sup>
+# es5-shim <sup>[![Version Badge][npm-version-svg]][npm-url]</sup>
 
 [![npm badge][npm-badge-png]][npm-url]
 

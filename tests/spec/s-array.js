@@ -752,6 +752,383 @@ describe('Array', function () {
             expect(toStr.call(actual)).toBe('[object String]');
         });
     });
+
+    describe('#find()', function () {
+        var callback = function callback(o) {
+            return o === 'hej';
+        };
+
+        beforeEach(function () {
+            testSubject = [2, 3, undefinedIfNoSparseBug, true, 'hej', 3, null, false, 0, {prop: 'b'}, {prop: 'c'}];
+            delete testSubject[1];
+        });
+        describe('Array object', function () {
+            it('should call the callback with the proper arguments', function () {
+                var predicate = jasmine.createSpy('predicate');
+                var arr = ['1'];
+                arr.find(predicate);
+                expect(predicate).toHaveBeenCalledWith('1', 0, arr);
+            });
+
+            it('should return the value for which the callback returns true', function () {
+                var result = testSubject.find(function (o) {
+                    return (o !== null && typeof o === 'object' && o.prop === 'b');
+                });
+                expect(result).toExactlyMatch({prop: 'b'});
+            });
+
+            it('should return undefined in no value was matched by the callback', function () {
+                var result = testSubject.find(function (o) {
+                    return o === 'YOU MUST CONSTRUCT ADDITIONAL PYLONS';
+                });
+                expect(result).toBeUndefined();
+            });
+
+            it('should not execute the callback on elements added to the array after it has begun', function () {
+                var arr = [1, 2, 3];
+                var i = 0;
+                arr.find(function (a) {
+                    i += 1;
+                    if (i <= 4) {
+                        arr.push(a + 3);
+                    }
+                    return false;
+                });
+                expect(arr).toEqual([1, 2, 3, 4, 5, 6]);
+                expect(i).toBe(3);
+            });
+
+            it('should not execute the callback on elements that occur after the first element matched by the callback', function () {
+                var arr = [10, 20, 30, 10, 20, 30];
+                var i = 0;
+                arr.find(function (a) {
+                    i += 1;
+                    return a === 20;
+                });
+                expect(i).toBe(2);
+            });
+
+            it('should skip unset values', function () {
+                var array = [1, 2, 3, 4];
+                var i = 0;
+                delete array[2];
+                array.find(function () {
+                    i += 1;
+                });
+                expect(i).toBe(3);
+            });
+
+            it('should pass the right context to the callback', function () {
+                var context = {};
+                testSubject.find(function (o, i) {
+                    this[i] = o;
+                }, context);
+                expect(context).toExactlyMatch(testSubject);
+            });
+
+            it('should set the right context when given none', function () {
+                /* eslint-disable array-callback-return */
+                var context;
+                [1].find(function () { context = this; });
+                expect(context).toBe(function () { return this; }.call());
+            });
+
+            it('should leave the original array untouched', function () {
+                var copy = testSubject.slice();
+                testSubject.find(callback);
+                expect(testSubject).toExactlyMatch(copy);
+            });
+
+            it('should not be affected by same-index mutation', function () {
+                var result = [1, 2, 3].find(function (value, index, array) {
+                    array[index] = 4;
+                    return value === 4;
+                });
+                expect(result).toBeUndefined();
+            });
+        });
+
+        describe('Array like', function () {
+            beforeEach(function () {
+                testSubject = createArrayLikeFromArray(testSubject);
+            });
+
+            it('should call the predicate with the proper arguments', function () {
+                var predicate = jasmine.createSpy('predicate');
+                var arr = createArrayLikeFromArray(['1']);
+                Array.prototype.find.call(arr, predicate);
+                expect(predicate).toHaveBeenCalledWith('1', 0, arr);
+            });
+
+            it('should return the value for which the callback returns true', function () {
+                var result = Array.prototype.find.call(testSubject, function (o) {
+                    return (o !== null && typeof o === 'object' && o.prop === 'b');
+                });
+                expect(result).toExactlyMatch({prop: 'b'});
+            });
+
+            it('should return undefined in no value was matched by the callback', function () {
+                var result = Array.prototype.find.call(testSubject, function (o) {
+                    return o === 'YOU MUST CONSTRUCT ADDITIONAL PYLONS';
+                });
+                expect(result).toBeUndefined();
+            });
+
+            it('should not execute the callback on elements added to the array after it has begun', function () {
+                var arr = createArrayLikeFromArray([1, 2, 3]);
+                var i = 0;
+                Array.prototype.find.call(arr, function (a) {
+                    i += 1;
+                    if (i <= 4) {
+                        arr[i + 2] = a + 3;
+                        arr.length += 1;
+                    }
+                    return false;
+                });
+                expect(Array.prototype.slice.call(arr)).toEqual([1, 2, 3, 4, 5, 6]);
+                expect(i).toBe(3);
+            });
+
+            it('should not execute the callback on elements that occur after the first element matched by the callback', function () {
+                var arr = createArrayLikeFromArray([10, 20, 30, 10, 20, 30]);
+                var i = 0;
+                Array.prototype.find.call(arr, function (a) {
+                    i += 1;
+                    return a === 20;
+                });
+                expect(i).toBe(2);
+            });
+
+            it('should skip non-set values', function () {
+                var array = createArrayLikeFromArray([1, 2, 3, 4]);
+                var i = 0;
+                delete array[2];
+                Array.prototype.find.call(array, function () {
+                    i += 1;
+                });
+                expect(i).toBe(3);
+            });
+
+            it('should pass the right context to the callback', function () {
+                var context = {};
+                Array.prototype.find.call(testSubject, function (o, i) {
+                    this[i] = o;
+                    this.length = i + 1;
+                }, context);
+                expect(context).toEqual(testSubject);
+            });
+
+            it('should set the right context when given none', function () {
+                var context;
+                Array.prototype.find.call(createArrayLikeFromArray([1]), function () { context = this; }, undefined);
+                expect(context).toBe(function () { return this; }.call());
+            });
+
+            it('should leave the original array untouched', function () {
+                var copy = createArrayLikeFromArray(testSubject);
+                Array.prototype.find.call(testSubject, callback);
+                expect(testSubject).toExactlyMatch(copy);
+            });
+        });
+
+        it('should have a boxed object as list argument of callback', function () {
+            var actual;
+            Array.prototype.find.call('foo', function (item, index, list) {
+                actual = list;
+            });
+            expect(typeof actual).toBe('object');
+            expect(toStr.call(actual)).toBe('[object String]');
+        });
+    });
+
+    describe('#findIndex()', function () {
+        var callback = function callback(o) {
+            return o === 'hej';
+        };
+
+        beforeEach(function () {
+            testSubject = [2, 3, undefinedIfNoSparseBug, true, 'hej', 3, null, false, 0, {prop: 'b'}, {prop: 'c'}];
+            delete testSubject[1];
+        });
+        describe('Array object', function () {
+            it('should call the callback with the proper arguments', function () {
+                var predicate = jasmine.createSpy('predicate');
+                var arr = ['1'];
+                arr.findIndex(predicate);
+                expect(predicate).toHaveBeenCalledWith('1', 0, arr);
+            });
+
+            it('should return the index for which the callback returns true', function () {
+                var result = testSubject.findIndex(function (o) {
+                    return (o !== null && typeof o === 'object' && o.prop === 'b');
+                });
+                expect(result).toBe(9);
+            });
+
+            it('should return undefined in no value was matched by the callback', function () {
+                var result = testSubject.findIndex(function (o) {
+                    return o === 'YOU MUST CONSTRUCT ADDITIONAL PYLONS';
+                });
+                expect(result).toBe(-1);
+            });
+
+            it('should not execute the callback on elements added to the array after it has begun', function () {
+                var arr = [1, 2, 3];
+                var i = 0;
+                arr.findIndex(function (a) {
+                    i += 1;
+                    if (i <= 4) {
+                        arr.push(a + 3);
+                    }
+                    return false;
+                });
+                expect(arr).toEqual([1, 2, 3, 4, 5, 6]);
+                expect(i).toBe(3);
+            });
+
+            it('should not execute the callback on elements that occur after the first element matched by the callback', function () {
+                var arr = [10, 20, 30, 10, 20, 30];
+                var i = 0;
+                arr.findIndex(function (a) {
+                    i += 1;
+                    return a === 20;
+                });
+                expect(i).toBe(2);
+            });
+
+            it('should skip unset values', function () {
+                var array = [1, 2, 3, 4];
+                var i = 0;
+                delete array[2];
+                array.findIndex(function () {
+                    i += 1;
+                });
+                expect(i).toBe(3);
+            });
+
+            it('should pass the right context to the callback', function () {
+                var context = {};
+                testSubject.findIndex(function (o, i) {
+                    this[i] = o;
+                }, context);
+                expect(context).toExactlyMatch(testSubject);
+            });
+
+            it('should set the right context when given none', function () {
+                /* eslint-disable array-callback-return */
+                var context;
+                [1].findIndex(function () { context = this; });
+                expect(context).toBe(function () { return this; }.call());
+            });
+
+            it('should leave the original array untouched', function () {
+                var copy = testSubject.slice();
+                testSubject.findIndex(callback);
+                expect(testSubject).toExactlyMatch(copy);
+            });
+
+            it('should not be affected by same-index mutation', function () {
+                var result = [1, 2, 3].findIndex(function (value, index, array) {
+                    array[index] = 4;
+                    return value === 4;
+                });
+                expect(result).toBe(-1);
+            });
+        });
+
+        describe('Array like', function () {
+            beforeEach(function () {
+                testSubject = createArrayLikeFromArray(testSubject);
+            });
+
+            it('should call the predicate with the proper arguments', function () {
+                var predicate = jasmine.createSpy('predicate');
+                var arr = createArrayLikeFromArray(['1']);
+                Array.prototype.findIndex.call(arr, predicate);
+                expect(predicate).toHaveBeenCalledWith('1', 0, arr);
+            });
+
+            it('should return the index for which the callback returns true', function () {
+                var result = Array.prototype.findIndex.call(testSubject, function (o) {
+                    return (o !== null && typeof o === 'object' && o.prop === 'b');
+                });
+                expect(result).toBe(9);
+            });
+
+            it('should return undefined in no value was matched by the callback', function () {
+                var result = Array.prototype.findIndex.call(testSubject, function (o) {
+                    return o === 'YOU MUST CONSTRUCT ADDITIONAL PYLONS';
+                });
+                expect(result).toBe(-1);
+            });
+
+            it('should not execute the callback on elements added to the array after it has begun', function () {
+                var arr = createArrayLikeFromArray([1, 2, 3]);
+                var i = 0;
+                Array.prototype.findIndex.call(arr, function (a) {
+                    i += 1;
+                    if (i <= 4) {
+                        arr[i + 2] = a + 3;
+                        arr.length += 1;
+                    }
+                    return false;
+                });
+                expect(Array.prototype.slice.call(arr)).toEqual([1, 2, 3, 4, 5, 6]);
+                expect(i).toBe(3);
+            });
+
+            it('should not execute the callback on elements that occur after the first element matched by the callback', function () {
+                var arr = createArrayLikeFromArray([10, 20, 30, 10, 20, 30]);
+                var i = 0;
+                Array.prototype.findIndex.call(arr, function (a) {
+                    i += 1;
+                    return a === 20;
+                });
+                expect(i).toBe(2);
+            });
+
+            it('should skip non-set values', function () {
+                var array = createArrayLikeFromArray([1, 2, 3, 4]);
+                var i = 0;
+                delete array[2];
+                Array.prototype.findIndex.call(array, function () {
+                    i += 1;
+                });
+                expect(i).toBe(3);
+            });
+
+            it('should pass the right context to the callback', function () {
+                var context = {};
+                Array.prototype.findIndex.call(testSubject, function (o, i) {
+                    this[i] = o;
+                    this.length = i + 1;
+                }, context);
+                expect(context).toEqual(testSubject);
+            });
+
+            it('should set the right context when given none', function () {
+                var context;
+                Array.prototype.findIndex.call(createArrayLikeFromArray([1]), function () { context = this; }, undefined);
+                expect(context).toBe(function () { return this; }.call());
+            });
+
+            it('should leave the original array untouched', function () {
+                var copy = createArrayLikeFromArray(testSubject);
+                Array.prototype.findIndex.call(testSubject, callback);
+                expect(testSubject).toExactlyMatch(copy);
+            });
+        });
+
+        it('should have a boxed object as list argument of callback', function () {
+            var actual;
+            Array.prototype.findIndex.call('foo', function (item, index, list) {
+                actual = list;
+            });
+            expect(typeof actual).toBe('object');
+            expect(toStr.call(actual)).toBe('[object String]');
+        });
+    });
+
     describe('#map()', function () {
         var callback;
         beforeEach(function () {

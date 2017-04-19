@@ -568,6 +568,61 @@
         }
     }, !properlyBoxesContext(ArrayPrototype.some));
 
+    // https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Array/find
+    defineProperties(ArrayPrototype, {
+        find: function filter(callbackfn/*, thisArg*/) {
+            var object = ES.ToObject(this);
+            var self = splitString && isString(this) ? strSplit(this, '') : object;
+            var length = ES.ToUint32(self.length);
+            var value;
+            var T;
+            if (arguments.length > 1) {
+                T = arguments[1];
+            }
+
+            // If no callback function or if callback is not a callable function
+            if (!isCallable(callbackfn)) {
+                throw new TypeError('Array.prototype.find callback must be a function');
+            }
+
+            for (var i = 0; i < length; i++) {
+                if (i in self) {
+                    value = self[i];
+                    if (typeof T === 'undefined' ? callbackfn(value, i, object) : callbackfn.call(T, value, i, object)) {
+                        return value;
+                    }
+                }
+            }
+            return undefined;
+        }
+    }, !properlyBoxesContext(ArrayPrototype.find));
+
+    // https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Array/findIndex
+    defineProperties(ArrayPrototype, {
+        findIndex: function filter(callbackfn/*, thisArg*/) {
+            var object = ES.ToObject(this);
+            var self = splitString && isString(this) ? strSplit(this, '') : object;
+            var length = ES.ToUint32(self.length);
+            var value;
+            var T;
+            if (arguments.length > 1) {
+                T = arguments[1];
+            }
+
+            // If no callback function or if callback is not a callable function
+            if (!isCallable(callbackfn)) {
+                throw new TypeError('Array.prototype.findIndex callback must be a function');
+            }
+
+            for (var i = 0; i < length; i++) {
+                if (i in self && (typeof T === 'undefined' ? callbackfn(self[i], i, object) : callbackfn.call(T, self[i], i, object))) {
+                    return i;
+                }
+            }
+            return -1;
+        }
+    }, !properlyBoxesContext(ArrayPrototype.findIndex));
+
     // ES5 15.4.4.21
     // http://es5.github.com/#x15.4.4.21
     // https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Objects/Array/reduce

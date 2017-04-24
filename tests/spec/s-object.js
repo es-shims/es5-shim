@@ -363,4 +363,191 @@ describe('Object', function () {
             expect(obj instanceof Object).toBe(false);
         });
     });
+
+    describe('.hasOwnProperty()', function () {
+        var noop = function () {};
+        var obj = {
+                'toString': noop,
+                'toLocaleString': noop,
+                'valueOf': noop,
+                'hasOwnProperty': noop,
+                'isPrototypeOf': noop,
+                'propertyIsEnumerable': noop,
+                'constructor': noop
+            };
+        var obj2 = {};
+        var hasOwn = Object.prototype.hasOwnProperty;
+
+        it('defined on object "toString"', function () {
+            expect(hasOwn.call(obj, 'toString')).toBe(true);
+        });
+
+        it('defined on object "toLocaleString"', function () {
+            expect(hasOwn.call(obj, 'toLocaleString')).toBe(true);
+        });
+
+        it('defined on object "valueOf"', function () {
+            expect(hasOwn.call(obj, 'valueOf')).toBe(true);
+        });
+
+        it('defined on object "hasOwnProperty"', function () {
+            expect(hasOwn.call(obj, 'hasOwnProperty')).toBe(true);
+        });
+
+        it('defined on object "isPrototypeOf"', function () {
+            expect(hasOwn.call(obj, 'isPrototypeOf')).toBe(true);
+        });
+
+        it('defined on object "propertyIsEnumerable"', function () {
+            expect(hasOwn.call(obj, 'propertyIsEnumerable')).toBe(true);
+        });
+
+        it('defined on object "constructor"', function () {
+            expect(hasOwn.call(obj, 'constructor')).toBe(true);
+        });
+
+        it('properties that are not defined', function () {
+            expect(hasOwn.call(obj, 'foo')).toBe(false);
+            expect(hasOwn.call(obj, 'bar')).toBe(false);
+            expect(hasOwn.call(obj, 'fuz')).toBe(false);
+        });
+
+        it('not defined on object "toString"', function () {
+            expect(hasOwn.call(obj2, 'toString')).toBe(false);
+        });
+
+        it('not defined on object "toLocaleString"', function () {
+            expect(hasOwn.call(obj2, 'toLocaleString')).toBe(false);
+        });
+
+        it('not defined on object "valueOf"', function () {
+            expect(hasOwn.call(obj2, 'valueOf')).toBe(false);
+        });
+
+        it('not defined on object "hasOwnProperty"', function () {
+            expect(hasOwn.call(obj2, 'hasOwnProperty')).toBe(false);
+        });
+
+        it('not defined on object "isPrototypeOf"', function () {
+            expect(hasOwn.call(obj2, 'isPrototypeOf')).toBe(false);
+        });
+
+        it('not defined on object "propertyIsEnumerable"', function () {
+            expect(hasOwn.call(obj2, 'propertyIsEnumerable')).toBe(false);
+        });
+
+        it('not defined on object "constructor"', function () {
+            expect(hasOwn.call(obj2, 'constructor')).toBe(false);
+        });
+
+        it('not defined on object should be not ok in each case', function () {
+            expect(hasOwn.call(obj2, 'foo')).toBe(false);
+            expect(hasOwn.call(obj2, 'bar')).toBe(false);
+            expect(hasOwn.call(obj2, 'fuz')).toBe(false);
+        });
+
+        it('defined on object with "undefined" value "toString"', function () {
+            expect(hasOwn.call({
+                toString: undefined
+            }, 'toString')).toBe(true);
+        });
+
+        it('defined on object with "undefined" value "toLocaleString"', function () {
+            expect(hasOwn.call({
+                toLocaleString: undefined
+            }, 'toLocaleString')).toBe(true);
+        });
+
+        it('defined on object with "undefined" value "valueOf"', function () {
+            expect(hasOwn.call({
+                valueOf: undefined
+            }, 'valueOf')).toBe(true);
+        });
+
+        it('defined on object with "undefined" value "hasOwnProperty"', function () {
+            expect(hasOwn.call({
+                hasOwnProperty: undefined
+            }, 'hasOwnProperty')).toBe(true);
+        });
+
+        it('defined on object with "undefined" value "isPrototypeOf"', function () {
+            expect(hasOwn.call({
+                isPrototypeOf: undefined
+            }, 'isPrototypeOf')).toBe(true);
+        });
+
+        it('defined on object with "undefined" value "propertyIsEnumerable"', function () {
+            expect(hasOwn.call({
+                propertyIsEnumerable: undefined
+            }, 'propertyIsEnumerable')).toBe(true);
+        });
+
+        it('defined on object with "undefined" value "constructor"', function () {
+            expect({
+                constructor: undefined
+            }.hasOwnProperty('constructor')).toBe(true);
+        });
+
+        it('string defined', function () {
+            var str = 'abc';
+            expect(str.hasOwnProperty('0')).toBe(true);
+            expect(str.hasOwnProperty('1')).toBe(true);
+            expect(str.hasOwnProperty('2')).toBe(true);
+        });
+
+        it('string not-defined', function () {
+            var str = 'abc';
+            expect(str.hasOwnProperty('3')).toBe(false);
+        });
+
+        it('string object defined', function () {
+            var strObj = Object('abc');
+            expect(strObj.hasOwnProperty('0')).toBe(true);
+            expect(strObj.hasOwnProperty('1')).toBe(true);
+            expect(strObj.hasOwnProperty('2')).toBe(true);
+        });
+
+        it('string object not-defined', function () {
+            var strObj = Object('abc');
+            expect(strObj.hasOwnProperty('3')).toBe(false);
+        });
+
+        it('arguments defined', function () {
+            var args = (function () {
+                return arguments;
+            }(false, undefined, null, '', 0));
+            expect(args.hasOwnProperty('0')).toBe(true);
+            expect(args.hasOwnProperty('1')).toBe(true);
+            expect(args.hasOwnProperty('2')).toBe(true);
+            expect(args.hasOwnProperty('3')).toBe(true);
+            expect(args.hasOwnProperty('4')).toBe(true);
+        });
+
+        it('arguments not-defined', function () {
+            var args = (function () {
+                return arguments;
+            }(false, undefined, null, '', 0));
+            expect(args.hasOwnProperty('5')).toBe(false);
+        });
+
+        it('should not list prototype or constructor', function () {
+            var Constructor = function () {
+                this.constructor = this.prototype = 1;
+            };
+            Constructor.prototype.constructor = 1;
+            expect(Constructor.hasOwnProperty('constructor')).toBe(false);
+        });
+
+        it('should list prototype and constructor', function () {
+            var Constructor = function () {
+                this.constructor = this.prototype = 1;
+            };
+            Constructor.prototype.constructor = 1;
+            expect(Constructor.hasOwnProperty('prototype')).toBe(true);
+            expect(Constructor.prototype.hasOwnProperty('constructor')).toBe(true);
+            var obj = new Constructor();
+            expect(hasOwn.call(obj, 'prototype')).toBe(true);
+            expect(hasOwn.call(obj, 'constructor')).toBe(true);
+        });
+    });
 });

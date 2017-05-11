@@ -1,6 +1,6 @@
 {
     "name": "es5-shim",
-    "main": "es5-shim.js",
+    "main": "./es5-shim.js",
     "repository": {
         "type": "git",
         "url": "git://github.com/es-shims/es5-shim"

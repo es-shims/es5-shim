@@ -994,7 +994,8 @@
         $webkitStorageInfo: true,
         $external: true,
         $width: true,
-        $height: true
+        $height: true,
+        $top: true
     };
     var hasAutomationEqualityBug = (function () {
         /* globals window */

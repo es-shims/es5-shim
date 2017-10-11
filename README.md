@@ -5,6 +5,7 @@
 [![Build Status][travis-svg]][travis-url]
 [![dependency status][deps-svg]][deps-url]
 [![dev dependency status][dev-deps-svg]][dev-deps-url]
+[![jsDelivr Hits][jsdelivr-badge]][jsdelivr-url]
 
 `es5-shim.js` and `es5-shim.min.js` monkey-patch a JavaScript context to
 contain all EcmaScript 5 methods that can be faithfully emulated with a
@@ -188,3 +189,5 @@ simply `npm install` and `npm test`.
 [dev-deps-svg]: https://david-dm.org/es-shims/es5-shim/dev-status.svg
 [dev-deps-url]: https://david-dm.org/es-shims/es5-shim#info=devDependencies
 [npm-badge-png]: https://nodei.co/npm/es5-shim.png?downloads=true&stars=true
+[jsdelivr-badge]: https://data.jsdelivr.com/v1/package/npm/es5-shim/badge?style=rounded
+[jsdelivr-url]: https://www.jsdelivr.com/package/npm/es5-shim

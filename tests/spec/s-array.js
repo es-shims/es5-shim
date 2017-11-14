@@ -1599,6 +1599,14 @@ describe('Array', function () {
             var result = Array.prototype.slice.call(obj, 1, 3);
             expect(result).toEqual(['2', '3']);
         });
+
+        /* globals document */
+        if (typeof document !== 'undefined') {
+            it('should be able to slice a NodeList', function () {
+                var nodes = document.getElementsByTagName('div');
+                expect(Array.isArray(Array.prototype.slice.call(nodes))).toBe(true);
+            });
+        }
     });
 
     describe('#sort()', function () {

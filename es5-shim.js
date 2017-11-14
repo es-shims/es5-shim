@@ -340,6 +340,23 @@
     var toStr = call.bind(ObjectPrototype.toString);
     var arraySlice = call.bind(array_slice);
     var arraySliceApply = apply.bind(array_slice);
+    if (typeof document === 'object' && document && document.documentElement) {
+        try {
+          arraySlice(document.documentElement.childNodes);
+        } catch (e) {
+          var origArraySlice = arraySlice;
+          var origArraySliceApply = arraySliceApply;
+          arraySlice = function arraySliceIE(arr) {
+              var r = [];
+              var i = arr.length;
+              while (i-- > 0) { r[i] = arr[i]; }
+              return origArraySliceApply(r, origArraySlice(arguments, 1));
+          };
+          arraySliceApply = function arraySliceApplyIE(arr, args) {
+              return origArraySliceApply(arraySlice(arr), args);
+          };
+        }
+    }
     var strSlice = call.bind(StringPrototype.slice);
     var strSplit = call.bind(StringPrototype.split);
     var strIndexOf = call.bind(StringPrototype.indexOf);
@@ -995,7 +1012,8 @@
         $external: true,
         $width: true,
         $height: true,
-        $top: true
+        $top: true,
+        $localStorage: true
     };
     var hasAutomationEqualityBug = (function () {
         /* globals window */

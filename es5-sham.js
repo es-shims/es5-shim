@@ -98,8 +98,8 @@
     // check whether getOwnPropertyDescriptor works if it's given. Otherwise, shim partially.
     if (Object.defineProperty) {
         var getOwnPropertyDescriptorWorksOnObject = doesGetOwnPropertyDescriptorWork({});
-        var getOwnPropertyDescriptorWorksOnDom = typeof document === 'undefined' ||
-        doesGetOwnPropertyDescriptorWork(document.createElement('div'));
+        var getOwnPropertyDescriptorWorksOnDom = typeof document === 'undefined'
+            || doesGetOwnPropertyDescriptorWork(document.createElement('div'));
         if (!getOwnPropertyDescriptorWorksOnDom || !getOwnPropertyDescriptorWorksOnObject) {
             var getOwnPropertyDescriptorFallback = Object.getOwnPropertyDescriptor;
         }
@@ -200,9 +200,9 @@
         // Contributed by Brandon Benvie, October, 2012
         var createEmpty;
         var supportsProto = !({ __proto__: null } instanceof Object);
-                            // the following produces false positives
-                            // in Opera Mini => not a reliable check
-                            // Object.prototype.__proto__ === null
+        // the following produces false positives
+        // in Opera Mini => not a reliable check
+        // Object.prototype.__proto__ === null
 
         // Check for document.domain and active x support
         // No need to use active x approach when document.domain is not set
@@ -354,8 +354,8 @@
     // shim partially.
     if (Object.defineProperty) {
         var definePropertyWorksOnObject = doesDefinePropertyWork({});
-        var definePropertyWorksOnDom = typeof document === 'undefined' ||
-            doesDefinePropertyWork(document.createElement('div'));
+        var definePropertyWorksOnDom = typeof document === 'undefined'
+            || doesDefinePropertyWork(document.createElement('div'));
         if (!definePropertyWorksOnObject || !definePropertyWorksOnDom) {
             var definePropertyFallback = Object.defineProperty,
                 definePropertiesFallback = Object.defineProperties;

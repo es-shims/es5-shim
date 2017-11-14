@@ -4,6 +4,9 @@
 	"extends": "@ljharb",
 
 	"rules": {
+		"array-bracket-newline": 0,
+		"array-element-newline": 0,
+		"object-curly-newline": 0,
 		"camelcase": [0],
 		"complexity": [0, 10],
 		"dot-notation": [2, { "allowKeywords": false }],
@@ -41,7 +44,7 @@
 		"no-restricted-syntax": [2, "ContinueStatement", "DebuggerStatement", "LabeledStatement", "WithStatement"],
 		"no-shadow": [1],
 		"no-unused-vars": [1, { "vars": "all", "args": "after-used" }],
-		"operator-linebreak": [2, "after"],
+		"operator-linebreak": [2, "before"],
 		"quote-props": [1, "as-needed", { "keywords": true }],
         "sort-keys": [0],
 		"spaced-comment": [0],

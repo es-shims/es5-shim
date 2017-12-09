@@ -2003,6 +2003,12 @@
         parseInt = (function (origParseInt) {
             var hexRegex = /^[-+]?0[xX]/;
             return function parseInt(str, radix) {
+                if (typeof str === 'symbol') {
+                    // handle Symbols in node 8.3/8.4
+                    // eslint-disable-next-line no-implicit-coercion, no-unused-expressions
+                    '' + str; // jscs:ignore disallowImplicitTypeConversion
+                }
+
                 var string = trim(String(str));
                 var defaultedRadix = $Number(radix) || (hexRegex.test(string) ? 16 : 10);
                 return origParseInt(string, defaultedRadix);

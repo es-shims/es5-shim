@@ -6,6 +6,8 @@ describe('global methods', function () {
     var foo = function foo() {};
     var functionsHaveNames = foo.name === 'foo';
     var ifFunctionsHaveNamesIt = functionsHaveNames ? it : xit;
+    var hasSymbols = typeof Symbol === 'function' && typeof Symbol.iterator === 'symbol';
+    var ifSymbolsIt = hasSymbols ? it : xit;
 
     var is = function (x, y) {
         if (x === 0 && y === 0) {
@@ -73,6 +75,11 @@ describe('global methods', function () {
             expect(parseInt(undefined)).toBeNaN();
             expect(parseInt(null)).toBeNaN();
             expect(parseInt(NaN)).toBeNaN();
+        });
+
+        ifSymbolsIt('throws on symbols', function () {
+            expect(function () { parseInt(Symbol('')); }).toThrow();
+            expect(function () { parseInt(Object(Symbol(''))); }).toThrow();
         });
         /* eslint-enable radix */
     });

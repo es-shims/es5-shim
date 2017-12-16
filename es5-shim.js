@@ -953,10 +953,14 @@
     var sortIgnoresNonFunctions = (function () {
         try {
             [1, 2].sort(null);
-            [1, 2].sort({});
-            return true;
-        } catch (e) {}
-        return false;
+        } catch (e) {
+            try {
+                [1, 2].sort({});
+            } catch (e) {
+                return false;
+            }
+        }
+        return true;
     }());
     var sortThrowsOnRegex = (function () {
         // this is a problem in Firefox 4, in which `typeof /a/ === 'function'`

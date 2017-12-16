@@ -1,3 +1,16 @@
+4.5.10
+  - [Fix] Safari 11 throws on `.sort({})`, but not on `.sort(null)`
+  - [Fix] ensure the shimmed parseInt throws with Symbols (#450)
+  - [Fix] skip over `localStorage`, which can’t be accessed on file://
+  - [Fix] Accessing window.top.{constructor|prototype} throws error in iOS (#445)
+  - [Fix] avoid `width` and `height` on `window`, to prevent reflow (https://github.com/ljharb/object-keys/issues/31)
+  - [Fix] ensure minified literal of `1000000000000000128` stays as that literal (#441)
+  - [Robustness] always prefer `String(x)` over `x.toString()`
+  - [Tests] up to `node` `v9.3`, `v8.9`, `v7.10`, `v6.12`, `v5.12`, `v4.8`; improve test matrix; use `nvm install-latest-npm`; comment out OS X builds; pin included builds to LTS
+  - [Tests] `parseInt`: add another test for NaN parsing (#433)
+  - [Dev Deps] `uglify-js`: add `--support-ie8` and peg to v2.7.x since it doesn’t follow semver
+  - [Dev Deps] update `eslint`, `@ljharb/eslint-config`, `jscs`, `uglify-js`, `semver`; remove `concurrently` (#421)
+
 4.5.9
   - [Fix] parseInt and parseFloat should both accept null/undefined (#402)
   - [Tests] up to `node` `v6.2`

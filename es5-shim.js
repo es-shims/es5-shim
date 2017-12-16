@@ -956,7 +956,7 @@
         } catch (e) {
             try {
                 [1, 2].sort({});
-            } catch (e) {
+            } catch (e2) {
                 return false;
             }
         }

@@ -22,6 +22,7 @@
 			"ignoreTemplateLiterals": true
 		}],
 		"max-lines": 0,
+        "max-lines-per-function": 0,
 		"max-nested-callbacks": [2, 5],
 		"max-params": [2, 7],
 		"max-statements": [1, 30],
@@ -48,6 +49,8 @@
 		"quote-props": [1, "as-needed", { "keywords": true }],
         "sort-keys": [0],
 		"spaced-comment": [0],
-		"strict": [0]
+		"strict": [0],
+
+        "multiline-comment-style": 1,
 	}
 }

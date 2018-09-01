@@ -1,6 +1,6 @@
 {
   "name": "es5-shim",
-  "version": "4.5.10",
+  "version": "4.5.11",
   "description": "ECMAScript 5 compatibility shims for legacy JavaScript engines",
   "homepage": "http://github.com/es-shims/es5-shim/",
   "contributors": [
@@ -22,6 +22,7 @@
     "url": "http://github.com/es-shims/es5-shim.git"
   },
   "scripts": {
+    "prepublish": "npm run minify",
     "minify": "npm run --silent minify-shim && npm run --silent minify-sham",
     "minify-shim": "uglifyjs es5-shim.js --support-ie8 --keep-fnames --comments --source-map=es5-shim.map -m -b ascii_only=true,beautify=false | sed 's/0xde0b6b3a7640080/1000000000000000128/' > es5-shim.min.js",
     "minify-sham": "uglifyjs es5-sham.js --support-ie8 --keep-fnames --comments --source-map=es5-sham.map -m -b ascii_only=true,beautify=false > es5-sham.min.js",

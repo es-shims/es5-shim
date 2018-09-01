@@ -1,3 +1,8 @@
+4.5.11
+  - [Fix] sync Object.keys excluded list from object-keys (#456)
+  - [Dev Deps] update `eslint`, `@ljharb/eslint-config`, `jasmine-node`, `replace`, `semver`
+  - [Tests] pin jasmine-node to ~1.13
+
 4.5.10
   - [Fix] Safari 11 throws on `.sort({})`, but not on `.sort(null)`
   - [Fix] ensure the shimmed parseInt throws with Symbols (#450)

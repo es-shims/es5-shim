@@ -35,8 +35,8 @@
   },
   "devDependencies": {
     "@ljharb/eslint-config": "^13.0.0",
-    "eslint": "^5.4.0",
-    "jasmine-node": "~1.13",
+    "eslint": "^5.5.0",
+    "jasmine-node": "^1.13.1",
     "jscs": "^3.0.7",
     "replace": "^1.0.0",
     "semver": "^5.5.1",

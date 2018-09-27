@@ -1,3 +1,6 @@
+4.5.12
+  - [meta] republish broken 4.5.11
+
 4.5.11
   - [Fix] sync Object.keys excluded list from object-keys (#456)
   - [Dev Deps] update `eslint`, `@ljharb/eslint-config`, `jasmine-node`, `replace`, `semver`

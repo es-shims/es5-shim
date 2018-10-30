@@ -69,6 +69,8 @@
             var proto = object.__proto__;
             if (proto || proto === null) {
                 return proto;
+            } else if (object === prototypeOfObject) {
+                return null;
             } else if (toStr(object.constructor) === '[object Function]') {
                 return object.constructor.prototype;
             } else if (object instanceof Object) {

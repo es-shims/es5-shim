@@ -1,3 +1,7 @@
+4.5.13
+  - [Fix] exclude deprecated Firefox keys (#460)
+  - [Dev Deps] update `eslint`, `@ljharb/eslint-config`, `jasmine-node`, `replace`, `semver`
+
 4.5.12
   - [meta] republish broken 4.5.11
 

@@ -1,4 +1,4 @@
-/* global describe, it, xit, expect, beforeEach, jasmine, window */
+/* global describe, xdescribe, it, xit, expect, beforeEach, jasmine, window, caller, ArrayBuffer, Uint8Array, DataView */
 
 var has = Object.prototype.hasOwnProperty;
 var supportsDescriptors = Object.defineProperty && (function () {
@@ -33,6 +33,28 @@ var canFreeze = typeof Object.freeze === 'function' && (function () {
     return obj.a !== 3;
 }());
 var ifCanFreezeIt = canFreeze ? it : xit;
+
+var supportsOwnPropertyNames = supportsDescriptors;
+var supportsFunctionName = (function test() {}).name === 'test';
+
+var xdescribeGOPN = supportsOwnPropertyNames ? describe : xdescribe;
+var itHasMap = typeof Map === 'function' ? it : xit;
+var itHasSet = typeof Set === 'function' ? it : xit;
+var itHasArrayBuffer = typeof ArrayBuffer === 'function' ? it : xit;
+var itHasUint8Array = typeof Uint8Array === 'function' ? it : xit;
+var itHasDataView = typeof DataView === 'function' ? it : xit;
+var depricatedProps;
+
+var depTest = function () {
+    'use strict';
+
+    depricatedProps = caller && false;
+};
+try {
+    depTest();
+} catch (ignore) {
+    depricatedProps = true;
+}
 
 describe('Object', function () {
     'use strict';
@@ -362,5 +384,135 @@ describe('Object', function () {
 
             expect(obj instanceof Object).toBe(false);
         });
+    });
+
+    xdescribeGOPN('.getOwnPropertyNames()', function () {
+        // ES6 Object.getOwnPropertyNames does not require these throws
+        xit('primitives should throw `TypeError`', function () {
+            expect(function () {
+                Object.getOwnPropertyNames();
+            }).toThrow();
+            expect(function () {
+                Object.getOwnPropertyNames(undefined);
+            }).toThrow();
+            expect(function () {
+                Object.getOwnPropertyNames(null);
+            }).toThrow();
+            expect(function () {
+                Object.getOwnPropertyNames(1);
+            }).toThrow();
+            expect(function () {
+                Object.getOwnPropertyNames(true);
+            }).toThrow();
+            expect(function () {
+                Object.getOwnPropertyNames('abc');
+            }).toThrow();
+        });
+
+        it('works on function/class constructor', function () {
+            var Empty = function () {};
+            Empty.prototype = {};
+            var names = ['length', 'prototype'];
+            if (supportsFunctionName) {
+                names.push('name');
+            }
+            if (!depricatedProps) {
+                names.push('caller');
+                names.push('arguments');
+            }
+            names.sort();
+            expect(Object.getOwnPropertyNames(Empty).sort()).toEqual(names);
+        });
+
+        it('works on instance', function () {
+            var Empty = function () {};
+            Empty.prototype = {
+                constructor: Empty
+            };
+            var subject = new Empty();
+            expect(Object.getOwnPropertyNames(subject)).toEqual([]);
+        });
+
+        it('works on empty object', function () {
+            var subject = Object.create(null);
+            expect(Object.getOwnPropertyNames(subject)).toEqual([]);
+        });
+
+        itHasMap('works on Map', function () {
+            var subject = new Map([[1, 2], [3, 4]]);
+            expect(Object.getOwnPropertyNames(subject)).toEqual([]);
+        });
+
+        itHasSet('works on Set', function () {
+            var subject = new Set([1, 2, 3, 4]);
+            expect(Object.getOwnPropertyNames(subject)).toEqual([]);
+        });
+
+        itHasArrayBuffer('works on ArrayBuffer', function () {
+            var subject = new ArrayBuffer(4);
+            expect(Object.getOwnPropertyNames(subject)).toEqual([]);
+        });
+
+        itHasUint8Array('works on Uint8Array', function () {
+            var subject = new Uint8Array(4);
+            expect(Object.getOwnPropertyNames(subject).sort()).toEqual(['0', '1', '2', '3']);
+        });
+
+        itHasDataView('works on DataView', function () {
+            var subject = new DataView(new ArrayBuffer(4));
+            expect(Object.getOwnPropertyNames(subject)).toEqual([]);
+        });
+    });
+});
+
+describe('Object - local scope strict', function () {
+    it('works on function/class constructor', function () {
+        'use strict';
+
+        var Empty = function () {};
+        Empty.prototype = {};
+        var names = ['length', 'prototype'];
+        if (supportsFunctionName) {
+            names.push('name');
+        }
+        if (!depricatedProps) {
+            names.push('caller');
+            names.push('arguments');
+        }
+        names.sort();
+        expect(Object.getOwnPropertyNames(Empty).sort()).toEqual(names);
+    });
+});
+
+describe('Object - function scope strict', function () {
+    it('works on function/class constructor', function () {
+        var Empty = function () {
+            'use strict';
+
+        };
+        Empty.prototype = {};
+        var names = ['length', 'prototype'];
+        if (supportsFunctionName) {
+            names.push('name');
+        }
+        if (!depricatedProps) {
+            names.push('caller');
+            names.push('arguments');
+        }
+        names.sort();
+        expect(Object.getOwnPropertyNames(Empty).sort()).toEqual(names);
+    });
+});
+
+describe('Object - non-strict', function () {
+    it('works on function/class constructor', function () {
+        var Empty = function () {};
+        Empty.prototype = {};
+        var names = ['length', 'caller', 'arguments', 'prototype'];
+        if (supportsFunctionName) {
+            names.push('name');
+        }
+        names.sort();
+        expect(Object.getOwnPropertyNames(Empty).sort()).toEqual(names);
     });
 });

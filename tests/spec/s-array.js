@@ -1368,6 +1368,12 @@ describe('Array', function () {
             expect(test.splice(0)).toEqual(test.splice(0, 0));
         });
 
+        // ES6 introduced a proper default value
+        it('defaults deleteCount to length - start if there is only 1 argument', function () {
+            expect([0, 1, 2].splice(0).length).toBe(3);
+            expect([0, 1, 2].splice(1).length).toBe(2);
+        });
+
         it('basic implementation test 1', function () {
             expect(test.splice(0, 0)).toEqual([]);
         });

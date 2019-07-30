@@ -821,7 +821,11 @@
             var len = ES.ToUint32(O.length);
             var relativeStart = ES.ToInteger(start);
             var actualStart = relativeStart < 0 ? max((len + relativeStart), 0) : min(relativeStart, len);
-            var actualDeleteCount = min(max(ES.ToInteger(deleteCount), 0), len - actualStart);
+            var actualDeleteCount = arguments.length === 0
+                ? 0
+                : arguments.length === 1
+                    ? len - actualStart
+                    : min(max(ES.ToInteger(deleteCount), 0), len - actualStart);
 
             var k = 0;
             var from;

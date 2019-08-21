@@ -1,5 +1,3 @@
-/* global describe, it, xit, expect, beforeEach, jasmine */
-
 describe('Date', function () {
     'use strict';
 

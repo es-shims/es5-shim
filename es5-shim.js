@@ -14,7 +14,7 @@
 (function (root, factory) {
     'use strict';
 
-    /* global define, exports, module */
+    /* global define */
     if (typeof define === 'function' && define.amd) {
         // AMD. Register as an anonymous module.
         define(factory);
@@ -64,7 +64,6 @@
     // Having a toString local variable name breaks in Opera so use to_string.
     var to_string = ObjectPrototype.toString;
 
-    /* global Symbol */
     /* eslint-disable one-var-declaration-per-line, no-redeclare, max-statements-per-line */
     var hasToStringTag = typeof Symbol === 'function' && typeof Symbol.toStringTag === 'symbol';
     var isCallable; /* inlined from https://npmjs.com/is-callable */ var fnToStr = Function.prototype.toString, constructorRegex = /^\s*class /, isES6ClassFn = function isES6ClassFn(value) { try { var fnStr = fnToStr.call(value); var singleStripped = fnStr.replace(/\/\/.*\n/g, ''); var multiStripped = singleStripped.replace(/\/\*[.\s\S]*\*\//g, ''); var spaceStripped = multiStripped.replace(/\n/mg, ' ').replace(/ {2}/g, ' '); return constructorRegex.test(spaceStripped); } catch (e) { return false; /* not a function */ } }, tryFunctionObject = function tryFunctionObject(value) { try { if (isES6ClassFn(value)) { return false; } fnToStr.call(value); return true; } catch (e) { return false; } }, fnClass = '[object Function]', genClass = '[object GeneratorFunction]', isCallable = function isCallable(value) { if (!value) { return false; } if (typeof value !== 'function' && typeof value !== 'object') { return false; } if (hasToStringTag) { return tryFunctionObject(value); } if (isES6ClassFn(value)) { return false; } var strClass = to_string.call(value); return strClass === fnClass || strClass === genClass; };
@@ -1452,7 +1451,6 @@
     if (doesNotParseY2KNewYear || acceptsInvalidDates || !supportsExtendedYears) {
         // XXX global assignment won't work in embeddings that use
         // an alternate object for the context.
-        /* global Date: true */
         var maxSafeUnsigned32Bit = Math.pow(2, 31) - 1;
         var hasSafariSignedIntBug = isActualNaN(new Date(1970, 0, 1, 0, 0, 0, maxSafeUnsigned32Bit + 1).getTime());
         // eslint-disable-next-line no-implicit-globals, no-global-assign
@@ -1612,7 +1610,6 @@
 
             return DateShim;
         }(Date));
-        /* global Date: false */
     }
 
     // ES5 15.9.4.4
@@ -2017,7 +2014,7 @@
     // ES-5 15.1.2.2
     // eslint-disable-next-line radix
     if (parseInt(ws + '08') !== 8 || parseInt(ws + '0x16') !== 22) {
-        /* global parseInt: true */
+        // eslint-disable-next-line no-global-assign, no-implicit-globals
         parseInt = (function (origParseInt) {
             var hexRegex = /^[-+]?0[xX]/;
             return function parseInt(str, radix) {
@@ -2036,7 +2033,7 @@
 
     // https://es5.github.io/#x15.1.2.3
     if (1 / parseFloat('-0') !== -Infinity) {
-        /* global parseFloat: true */
+        // eslint-disable-next-line no-global-assign, no-implicit-globals, no-native-reassign
         parseFloat = (function (origParseFloat) {
             return function parseFloat(string) {
                 var inputString = trim(String(string));

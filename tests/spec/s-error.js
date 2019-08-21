@@ -1,5 +1,3 @@
-/* global describe, it, xit, expect */
-
 describe('Error', function () {
     'use strict';
 

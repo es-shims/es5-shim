@@ -1,4 +1,4 @@
-/* global describe, it, xit, expect, beforeEach, jasmine, window */
+/* global window */
 
 var has = Object.prototype.hasOwnProperty;
 var supportsDescriptors = Object.defineProperty && (function () {

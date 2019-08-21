@@ -33,11 +33,11 @@
     "lint": "eslint tests/helpers/*.js tests/spec/*.js es5-shim.js es5-sham.js"
   },
   "devDependencies": {
-    "@ljharb/eslint-config": "^13.1.1",
-    "eslint": "^5.16.0",
+    "@ljharb/eslint-config": "^14.0.2",
+    "eslint": "^6.2.1",
     "jasmine-node": "^1.16.2",
-    "replace": "^1.1.0",
-    "semver": "^6.0.0",
+    "replace": "^1.1.1",
+    "semver": "^6.3.0",
     "uglify-js": "2.7.3"
   },
   "engines": {

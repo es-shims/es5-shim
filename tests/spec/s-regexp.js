@@ -1,5 +1,3 @@
-/* global describe, it, expect */
-
 describe('RegExp', function () {
     'use strict';
 

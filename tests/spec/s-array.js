@@ -1,4 +1,4 @@
-/* global describe, it, expect, beforeEach, jasmine, xit */
+/* globals document */
 
 var toStr = Object.prototype.toString;
 var canDistinguishSparseFromUndefined = 0 in [undefined]; // IE 6 - 8 have a bug where this returns false.
@@ -1277,7 +1277,6 @@ describe('Array', function () {
             });
         });
 
-        /* globals document */
         if (typeof document !== 'undefined') {
             it('should be false for an HTML element', function () {
                 var el = document.getElementsByTagName('div');
@@ -1600,7 +1599,6 @@ describe('Array', function () {
             expect(result).toEqual(['2', '3']);
         });
 
-        /* globals document */
         if (typeof document !== 'undefined') {
             it('should be able to slice a NodeList', function () {
                 var nodes = document.getElementsByTagName('div');

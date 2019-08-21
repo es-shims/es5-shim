@@ -30,15 +30,12 @@
     "test": "npm run --silent tests-only",
     "tests-only": "jasmine-node --matchall ./ tests/spec/",
     "test-native": "jasmine-node --matchall tests/spec/",
-    "lint": "npm run --silent jscs && npm run --silent eslint",
-    "eslint": "eslint tests/helpers/*.js tests/spec/*.js es5-shim.js es5-sham.js",
-    "jscs": "jscs tests/helpers/*.js tests/spec/*.js es5-shim.js es5-sham.js"
+    "lint": "eslint tests/helpers/*.js tests/spec/*.js es5-shim.js es5-sham.js"
   },
   "devDependencies": {
     "@ljharb/eslint-config": "^13.1.1",
     "eslint": "^5.16.0",
     "jasmine-node": "^1.16.2",
-    "jscs": "^3.0.7",
     "replace": "^1.1.0",
     "semver": "^6.0.0",
     "uglify-js": "2.7.3"

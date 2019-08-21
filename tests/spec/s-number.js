@@ -15,10 +15,14 @@ describe('Number', function () {
 
     describe('#toPrecision()', function () {
         // the spec allows for this test to fail.
-        it('throws a RangeError when < 1 or > 21', function () {
+        it('throws a RangeError when < 1 or > 21 (or > 100 in ES2018+)', function () {
             expect(function () { return (0.9).toPrecision(0); }).toThrow();
-            // Firefox allows values up to 100
-            expect(function () { return (0.9).toPrecision(101); }).toThrow();
+            expect(function () {
+                return [
+                    (0.9).toPrecision(22), // ES2018 increased the limit from 21 to 100
+                    (0.9).toPrecision(101)
+                ];
+            }).toThrow();
         });
 
         it('works as expected', function () {

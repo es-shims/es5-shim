@@ -667,7 +667,7 @@ describe('Array', function () {
 
             it('should not be affected by same-index mutation', function () {
                 var results = [1, 2, 3].filter(function (value, index, array) {
-                    array[index] = 'a';
+                    array[index] = 'a'; // eslint-disable-line no-param-reassign
                     return true;
                 });
                 expect(results).toEqual([1, 2, 3]);

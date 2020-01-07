@@ -25,7 +25,7 @@
         module.exports = factory();
     } else {
         // Browser globals (root is window)
-        root.returnExports = factory();
+        root.returnExports = factory(); // eslint-disable-line no-param-reassign
     }
 }(this, function () {
     /**
@@ -106,7 +106,7 @@
                 if (!forceAssign && (name in object)) {
                     return;
                 }
-                object[name] = method;
+                object[name] = method; // eslint-disable-line no-param-reassign
             };
         }
         return function defineProperties(object, map, forceAssign) {
@@ -1930,9 +1930,9 @@
                 var wrappedReplaceValue = function (match) {
                     var length = arguments.length;
                     var originalLastIndex = searchValue.lastIndex;
-                    searchValue.lastIndex = 0;
+                    searchValue.lastIndex = 0; // eslint-disable-line no-param-reassign
                     var args = searchValue.exec(match) || [];
-                    searchValue.lastIndex = originalLastIndex;
+                    searchValue.lastIndex = originalLastIndex; // eslint-disable-line no-param-reassign
                     pushCall(args, arguments[length - 2], arguments[length - 1]);
                     return replaceValue.apply(this, args);
                 };

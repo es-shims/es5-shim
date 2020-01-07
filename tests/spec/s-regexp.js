@@ -14,6 +14,7 @@ describe('RegExp', function () {
 
         describe('objects', function () {
             it('should return correct flags and in correct order', function () {
+                /* eslint prefer-regex-literals: 0 */
                 expect(String(new RegExp('pattern'))).toBe('/pattern/');
                 expect(String(new RegExp('pattern', 'i'))).toBe('/pattern/i');
                 expect(String(new RegExp('pattern', 'mi'))).toBe('/pattern/im');

@@ -301,15 +301,14 @@
 
             if (prototype === null) {
                 object = createEmpty();
+            } else if (isPrimitive(prototype)) {
+                // In the native implementation `parent` can be `null`
+                // OR *any* `instanceof Object`  (Object|Function|Array|RegExp|etc)
+                // Use `typeof` tho, b/c in old IE, DOM elements are not `instanceof Object`
+                // like they are in modern browsers. Using `Object.create` on DOM elements
+                // is...err...probably inappropriate, but the native version allows for it.
+                throw new TypeError('Object prototype may only be an Object or null'); // same msg as Chrome
             } else {
-                if (prototype !== null && isPrimitive(prototype)) {
-                    // In the native implementation `parent` can be `null`
-                    // OR *any* `instanceof Object`  (Object|Function|Array|RegExp|etc)
-                    // Use `typeof` tho, b/c in old IE, DOM elements are not `instanceof Object`
-                    // like they are in modern browsers. Using `Object.create` on DOM elements
-                    // is...err...probably inappropriate, but the native version allows for it.
-                    throw new TypeError('Object prototype may only be an Object or null'); // same msg as Chrome
-                }
                 Type.prototype = prototype;
                 object = new Type();
                 // IE has no built-in implementation of `Object.getPrototypeOf`

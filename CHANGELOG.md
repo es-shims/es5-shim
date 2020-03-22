@@ -1,3 +1,16 @@
+4.5.14
+  - [Fix] handle no `deleteCount` to `splice()` in Opera (#465)
+  - [Refactor] remove unnecessary comparison
+  - [meta] remove unused Makefile and associated utilities
+  - [meta] add `funding` field
+  - [meta] Rename CHANGES to CHANGELOG.md
+  - [Dev Deps] update `eslint`, `@ljharb/eslint-config`, `replace`, `semver`; add `safe-publish-latest`
+  - [Tests] fix negative Date tests to handle TZData
+  - [Tests] use shared travis-ci configs
+  - [Tests] remove `jscs`
+  - [Tests] clarify toPrecision's range increased in ES2018
+  - [actions] add automatic rebasing / merge commit blocking
+
 4.5.13
   - [Fix] exclude deprecated Firefox keys (#460)
   - [Dev Deps] update `eslint`, `@ljharb/eslint-config`, `jasmine-node`, `replace`, `semver`

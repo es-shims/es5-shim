@@ -20,7 +20,6 @@ In many cases, this means that these shams cause many ES5 methods to
 silently fail.  Decide carefully whether this is what you want.
 **Note:** `es5-sham.js` requires `es5-shim.js` to be able to work properly.
 
-
 ## Tests
 
 The tests are written with the Jasmine BDD test framework.
@@ -168,15 +167,14 @@ simply `npm install` and `npm test`.
     provisions of this method, which you cannot possibly
     obtain in legacy engines.
 
-### Example of applying ES compatability shims in a browser project
+### Example of applying ES compatibility shims in a browser project
 
 ```html
-<script src="https://cdnjs.cloudflare.com/ajax/libs/es5-shim/4.5.7/es5-shim.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/es5-shim/4.5.7/es5-sham.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/es5-shim/4.5.14/es5-shim.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/es5-shim/4.5.14/es5-sham.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/json3/3.3.2/json3.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/es6-shim/0.34.2/es6-shim.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/es6-shim/0.34.2/es6-sham.min.js"></script>
-<script src="https://wzrd.in/standalone/es7-shim@latest"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/es6-shim/0.35.5/es6-shim.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/es6-shim/0.35.5/es6-sham.min.js"></script>
 <script src="other-libs.js"></script>
 ```
 [npm-url]: https://npmjs.org/package/es5-shim

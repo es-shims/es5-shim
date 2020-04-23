@@ -30,17 +30,17 @@ simply `npm install` and `npm test`.
 
 ### Complete tests ###
 
-* Array.prototype.every
+* Array.prototype.every ([standalone shim](https://www.npmjs.com/package/array.prototype.every))
 * Array.prototype.filter
 * Array.prototype.forEach
-* Array.prototype.indexOf
-* Array.prototype.lastIndexOf
-* Array.prototype.map
+* Array.prototype.indexOf ([standalone shim](https://www.npmjs.com/package/array.prototype.indexof))
+* Array.prototype.lastIndexOf ([standalone shim](https://www.npmjs.com/package/array.prototype.lastindexof))
+* Array.prototype.map ([standalone shim](https://www.npmjs.com/package/array.prototype.map))
 * Array.prototype.slice
-* Array.prototype.some
+* Array.prototype.some ([standalone shim](https://www.npmjs.com/package/array.prototype.some))
 * Array.prototype.sort
-* Array.prototype.reduce
-* Array.prototype.reduceRight
+* Array.prototype.reduce ([standalone shim](https://www.npmjs.com/package/array.prototype.reduce))
+* Array.prototype.reduceRight ([standalone shim](https://www.npmjs.com/package/array.prototype.reduceright))
 * Array.prototype.push
 * Array.prototype.join
 * Array.isArray
@@ -54,9 +54,9 @@ simply `npm install` and `npm test`.
       ``apply`` to avoid executing as a constructor.
 * Number.prototype.toFixed
 * Number.prototype.toPrecision
-* Object.keys
-* String.prototype.split
-* String.prototype.trim
+* Object.keys ([standalone shim](https://www.npmjs.com/package/object-keys))
+* String.prototype.split ([standalone shim](https://www.npmjs.com/package/string.prototype.split))
+* String.prototype.trim ([standalone shim](https://www.npmjs.com/package/string.prototype.trim))
 * String.prototype.lastIndexOf
 * String.prototype.replace
     * Firefox (through v29) natively handles capturing groups incorrectly.

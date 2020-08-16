@@ -1824,7 +1824,7 @@
             var compliantExecNpcg = typeof (/()??/).exec('')[1] === 'undefined'; // NPCG: nonparticipating capturing group
             var maxSafe32BitInt = Math.pow(2, 32) - 1;
 
-            StringPrototype.split = function (separator, limit) {
+            StringPrototype.split = function split(separator, limit) {
                 var string = String(this);
                 if (typeof separator === 'undefined' && limit === 0) {
                     return [];

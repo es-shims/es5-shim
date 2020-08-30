@@ -33,8 +33,8 @@
 		"lint": "eslint ."
 	},
 	"devDependencies": {
-		"@ljharb/eslint-config": "^16.0.0",
-		"eslint": "^6.8.0",
+		"@ljharb/eslint-config": "^17.2.0",
+		"eslint": "^7.7.0",
 		"jasmine-node": "^1.16.2",
 		"safe-publish-latest": "^1.1.4",
 		"uglify-js": "2.7.3"

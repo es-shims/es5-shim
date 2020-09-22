@@ -77,7 +77,7 @@
         try {
             var obj = {};
             $Object.defineProperty(obj, 'x', { enumerable: false, value: obj });
-            // eslint-disable-next-line no-unreachable-loop
+            // eslint-disable-next-line no-unreachable-loop, max-statements-per-line
             for (var _ in obj) { return false; } // jscs:ignore disallowUnusedVariables
             return obj.x === obj;
         } catch (e) { /* this is ES3 */

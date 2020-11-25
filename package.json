@@ -28,12 +28,14 @@
 		"minify-sham": "uglifyjs es5-sham.js --support-ie8 --keep-fnames --comments --source-map=es5-sham.map -m -b ascii_only=true,beautify=false > es5-sham.min.js",
 		"pretest": "npm run --silent lint",
 		"test": "npm run tests-only",
+		"posttest": "aud --production",
 		"tests-only": "nyc jasmine-node --matchall ./ tests/spec/",
 		"tests-native": "nyc jasmine-node --matchall tests/spec/",
 		"lint": "eslint ."
 	},
 	"devDependencies": {
 		"@ljharb/eslint-config": "^17.2.0",
+		"aud": "^1.1.3",
 		"eslint": "^7.9.0",
 		"jasmine-node": "^1.16.2",
 		"nyc": "^10.3.2",

@@ -27,15 +27,16 @@
 		"minify-shim": "uglifyjs es5-shim.js --support-ie8 --keep-fnames --comments --source-map=es5-shim.map -m -b ascii_only=true,beautify=false | sed 's/0xde0b6b3a7640080/1000000000000000128/' > es5-shim.min.js",
 		"minify-sham": "uglifyjs es5-sham.js --support-ie8 --keep-fnames --comments --source-map=es5-sham.map -m -b ascii_only=true,beautify=false > es5-sham.min.js",
 		"pretest": "npm run --silent lint",
-		"test": "npm run --silent tests-only",
-		"tests-only": "jasmine-node --matchall ./ tests/spec/",
-		"test-native": "jasmine-node --matchall tests/spec/",
+		"test": "npm run tests-only",
+		"tests-only": "nyc jasmine-node --matchall ./ tests/spec/",
+		"tests-native": "nyc jasmine-node --matchall tests/spec/",
 		"lint": "eslint ."
 	},
 	"devDependencies": {
 		"@ljharb/eslint-config": "^17.2.0",
 		"eslint": "^7.9.0",
 		"jasmine-node": "^1.16.2",
+		"nyc": "^10.3.2",
 		"safe-publish-latest": "^1.1.4",
 		"uglify-js": "2.7.3"
 	},

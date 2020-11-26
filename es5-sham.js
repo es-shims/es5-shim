@@ -67,7 +67,7 @@
         Object.getPrototypeOf = function getPrototypeOf(object) {
             // eslint-disable-next-line no-proto
             var proto = object.__proto__;
-            if (proto || proto === null) {
+            if (proto || proto == null) { // `undefined` is for pre-proto browsers
                 return proto;
             } else if (toStr(object.constructor) === '[object Function]') {
                 return object.constructor.prototype;

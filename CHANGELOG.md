@@ -1,3 +1,16 @@
+4.5.15
+  - [Fix] `es5-sham`: `getPrototypeOf`: avoid infinite loop in pre-`__proto__` browsers
+  - [Fix] `split`: add a function name to the "broken capturing groups" shim
+  - [Robustness] cache Math methods
+  - [readme] add standalone shims
+  - [meta] add `in-publish` to avoid running the minifier on install
+  - [meta] run `aud` in `posttest`
+  - [Tests] migrate tests to Github Actions (#474)
+  - [Tests] run `nyc` on all tests
+  - [actions] add "Allow Edits" workflow
+  - [actions] switch Automatic Rebase workflow to `pull_request_target` event
+  - [Dev Deps] update `eslint`, `@ljharb/eslint-config`
+
 4.5.14
   - [Fix] handle no `deleteCount` to `splice()` in Opera (#465)
   - [Refactor] remove unnecessary comparison

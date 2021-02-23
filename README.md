@@ -2,7 +2,6 @@
 
 [![npm badge][npm-badge-png]][npm-url]
 
-[![Build Status][travis-svg]][travis-url]
 [![dependency status][deps-svg]][deps-url]
 [![dev dependency status][dev-deps-svg]][dev-deps-url]
 
@@ -178,9 +177,7 @@ simply `npm install` and `npm test`.
 <script src="other-libs.js"></script>
 ```
 [npm-url]: https://npmjs.org/package/es5-shim
-[npm-version-svg]: http://versionbadg.es/es-shims/es5-shim.svg
-[travis-svg]: https://travis-ci.org/es-shims/es5-shim.svg
-[travis-url]: https://travis-ci.org/es-shims/es5-shim
+[npm-version-svg]: https://versionbadg.es/es-shims/es5-shim.svg
 [deps-svg]: https://david-dm.org/es-shims/es5-shim.svg
 [deps-url]: https://david-dm.org/es-shims/es5-shim
 [dev-deps-svg]: https://david-dm.org/es-shims/es5-shim/dev-status.svg

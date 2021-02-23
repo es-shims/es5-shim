@@ -25,6 +25,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - uses: ljharb/actions/node/run@main
+        name: 'npm install && npm run tests-only'
         with:
           node-version: ${{ matrix.node-version }}
           command: 'tests-only'
@@ -44,6 +45,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - uses: ljharb/actions/node/run@main
+        name: 'npm install && npm run tests-only'
         with:
           node-version: ${{ matrix.node-version }}
           command: 'tests-only'

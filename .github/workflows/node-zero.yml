@@ -24,13 +24,14 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-      - uses: ljharb/actions/node/run@main
-        name: 'npm install && npm run tests-only'
+      - uses: ljharb/actions/node/install@main
+        name: 'nvm install ${{ matrix.node-version }} && npm install'
         with:
           node-version: ${{ matrix.node-version }}
-          command: 'tests-only'
           cache-node-modules-key: node_modules-${{ github.workflow }}-${{ github.action }}-${{ github.run_id }}
           skip-ls-check: true
+      - run: npm run tests-only
+      - uses: codecov/codecov-action@v1
 
   unstable:
     needs: [matrix, stable]
@@ -44,13 +45,14 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-      - uses: ljharb/actions/node/run@main
-        name: 'npm install && npm run tests-only'
+      - uses: ljharb/actions/node/install@main
+        name: 'nvm install ${{ matrix.node-version }} && npm install'
         with:
           node-version: ${{ matrix.node-version }}
-          command: 'tests-only'
           cache-node-modules-key: node_modules-${{ github.workflow }}-${{ github.action }}-${{ github.run_id }}
           skip-ls-check: true
+      - run: npm run tests-only
+      - uses: codecov/codecov-action@v1
 
   node:
     name: 'node 0.x'

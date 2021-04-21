@@ -33,6 +33,35 @@ describe('String', function () {
                 );
             }).not.toThrow();
         });
+
+        it('should be 10 arguments in Firefox prior 34 version', function () {
+            var size = null;
+
+            '* alef\n* beth \n* gimel~0\n'.replace(
+                /(\n)?(^[ \t]*)([*+-]|\d+[.])[ \t]+([^\r]+?(\n{1,2}))(?=\n*(~0|\2([*+-]|\d+[.])[ \t]+))/gm,
+                function (match, m1, m2, m3, m4) {
+                    size = arguments.length;
+                }
+            );
+
+            expect(size).toBe(10);
+        });
+
+        it('first group have to be undefined and second have to be empty string', function () {
+            var firstGroup,
+                secondGroup;
+
+            'x'.replace(
+                /x(.)?(.*)/gm,
+                function (match, m1, m2) {
+                    firstGroup = m1;
+                    secondGroup = m2;
+                }
+            );
+
+            expect(firstGroup).toBe(undefined);
+            expect(secondGroup).toBe('');
+        });
     });
 
     describe('#split()', function () {

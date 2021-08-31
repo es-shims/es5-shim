@@ -49,7 +49,7 @@
 		"spaced-comment": [0],
 		"strict": [0],
 
-        "multiline-comment-style": 1,
+        "multiline-comment-style": 0,
 	},
 
 	"overrides": [

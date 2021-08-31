@@ -7,7 +7,7 @@
 // vim: ts=4 sts=4 sw=4 expandtab
 
 // Add semicolon to prevent IIFE from being passed as argument to concatenated code.
-;
+; // eslint-disable-line no-extra-semi
 
 // UMD (Universal Module Definition)
 // see https://github.com/umdjs/umd/blob/master/templates/returnExports.js
@@ -1004,6 +1004,7 @@
     // http://es5.github.com/#x15.2.3.14
 
     // http://whattheheadsaid.com/2010/10/a-safer-object-keys-compatibility-implementation
+    // eslint-disable-next-line quote-props
     var hasDontEnumBug = !isEnum({ 'toString': null }, 'toString'); // jscs:ignore disallowQuotedKeysInObjects
     var hasProtoEnumBug = isEnum(function () {}, 'prototype');
     var hasStringEnumBug = !owns('x', '0');

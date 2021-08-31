@@ -1,3 +1,13 @@
+4.6.0
+  - [New] detect and patch `Number#toExponential` in Edge 15-18, which rounds incorrectly
+  - [Fix] `parseInt`: fails to throw on boxed Symbols in Edge 15-18
+  - [eslint] ensure autofix makes no further changes
+  - [readme] remove travis badge
+  - [meta] use `prepublishOnly`, for npm 7+
+  - [Dev Deps] update `eslint`, `@ljharb/eslint-config`, `aud`
+  - [tests] use `ljharb/actions/node/install` instead of `ljharb/actions/node/run`; use codecov action
+  - [actions] update workflows
+
 4.5.15
   - [Fix] `es5-sham`: `getPrototypeOf`: avoid infinite loop in pre-`__proto__` browsers
   - [Fix] `split`: add a function name to the "broken capturing groups" shim

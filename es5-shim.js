@@ -2017,19 +2017,56 @@
         }
     }, StringPrototype.lastIndexOf.length !== 1);
 
+    var hexRegex = /^[-+]?0[xX]/;
+
     // ES-5 15.1.2.2
     // eslint-disable-next-line radix
     if (parseInt(ws + '08') !== 8 || parseInt(ws + '0x16') !== 22) {
         // eslint-disable-next-line no-global-assign, no-implicit-globals
         parseInt = (function (origParseInt) {
-            var hexRegex = /^[-+]?0[xX]/;
             return function parseInt(str, radix) {
-                if (typeof str === 'symbol') {
+                var string = trim(String(str));
+                var defaultedRadix = $Number(radix) || (hexRegex.test(string) ? 16 : 10);
+                return origParseInt(string, defaultedRadix);
+            };
+        }(parseInt));
+    }
+    // Edge 15-18
+    var parseIntFailsToThrowOnBoxedSymbols = (function () {
+        if (typeof Symbol !== 'function') {
+            return false;
+        }
+        try {
+            // eslint-disable-next-line radix
+            parseInt(Object(Symbol.iterator));
+            return true;
+        } catch (e) { /**/ }
+
+        try {
+            // eslint-disable-next-line radix
+            parseInt(Symbol.iterator);
+            return true;
+        } catch (e) { /**/ }
+
+        return false;
+    }());
+    if (parseIntFailsToThrowOnBoxedSymbols) {
+        var symbolValueOf = Symbol.prototype.valueOf;
+        // eslint-disable-next-line no-global-assign, no-implicit-globals
+        parseInt = (function (origParseInt) {
+            return function parseInt(str, radix) {
+                var isSym = typeof str === 'symbol';
+                if (!isSym && str && typeof str === 'object') {
+                    try {
+                        symbolValueOf.call(str);
+                        isSym = true;
+                    } catch (e) { /**/ }
+                }
+                if (isSym) {
                     // handle Symbols in node 8.3/8.4
                     // eslint-disable-next-line no-implicit-coercion, no-unused-expressions
                     '' + str; // jscs:ignore disallowImplicitTypeConversion
                 }
-
                 var string = trim(String(str));
                 var defaultedRadix = $Number(radix) || (hexRegex.test(string) ? 16 : 10);
                 return origParseInt(string, defaultedRadix);

@@ -250,33 +250,31 @@
                     }
                     return this;
 
-                } else {
-                    // 15.3.4.5.1 [[Call]]
-                    // When the [[Call]] internal method of a function object, F,
-                    // which was created using the bind function is called with a
-                    // this value and a list of arguments ExtraArgs, the following
-                    // steps are taken:
-                    // 1. Let boundArgs be the value of F's [[BoundArgs]] internal
-                    //   property.
-                    // 2. Let boundThis be the value of F's [[BoundThis]] internal
-                    //   property.
-                    // 3. Let target be the value of F's [[TargetFunction]] internal
-                    //   property.
-                    // 4. Let args be a new list containing the same values as the
-                    //   list boundArgs in the same order followed by the same
-                    //   values as the list ExtraArgs in the same order.
-                    // 5. Return the result of calling the [[Call]] internal method
-                    //   of target providing boundThis as the this value and
-                    //   providing args as the arguments.
-
-                    // equiv: target.call(this, ...boundArgs, ...args)
-                    return apply.call(
-                        target,
-                        that,
-                        array_concat.call(args, array_slice.call(arguments))
-                    );
-
                 }
+                // 15.3.4.5.1 [[Call]]
+                // When the [[Call]] internal method of a function object, F,
+                // which was created using the bind function is called with a
+                // this value and a list of arguments ExtraArgs, the following
+                // steps are taken:
+                // 1. Let boundArgs be the value of F's [[BoundArgs]] internal
+                //   property.
+                // 2. Let boundThis be the value of F's [[BoundThis]] internal
+                //   property.
+                // 3. Let target be the value of F's [[TargetFunction]] internal
+                //   property.
+                // 4. Let args be a new list containing the same values as the
+                //   list boundArgs in the same order followed by the same
+                //   values as the list ExtraArgs in the same order.
+                // 5. Return the result of calling the [[Call]] internal method
+                //   of target providing boundThis as the this value and
+                //   providing args as the arguments.
+
+                // equiv: target.call(this, ...boundArgs, ...args)
+                return apply.call(
+                    target,
+                    that,
+                    array_concat.call(args, array_slice.call(arguments))
+                );
 
             };
 
@@ -767,9 +765,9 @@
         splice: function splice(start, deleteCount) {
             if (arguments.length === 0) {
                 return [];
-            } else {
-                return array_splice.apply(this, arguments);
             }
+            return array_splice.apply(this, arguments);
+
         }
     }, !spliceNoopReturnsEmptyArray);
 
@@ -1147,9 +1145,9 @@
         keys: function keys(object) {
             if (isArguments(object)) {
                 return originalKeys(arraySlice(object));
-            } else {
-                return originalKeys(object);
             }
+            return originalKeys(object);
+
         }
     }, !keysWorksWithArguments || keysHasArgumentsLengthBug);
 
@@ -2052,18 +2050,18 @@
             var hasCapturingGroups = isRegex(searchValue) && (/\)[*?]/).test(searchValue.source);
             if (!isFn || !hasCapturingGroups) {
                 return str_replace.call(this, searchValue, replaceValue);
-            } else {
-                var wrappedReplaceValue = function (match) {
-                    var length = arguments.length;
-                    var originalLastIndex = searchValue.lastIndex;
-                    searchValue.lastIndex = 0; // eslint-disable-line no-param-reassign
-                    var args = searchValue.exec(match) || [];
-                    searchValue.lastIndex = originalLastIndex; // eslint-disable-line no-param-reassign
-                    pushCall(args, arguments[length - 2], arguments[length - 1]);
-                    return replaceValue.apply(this, args);
-                };
-                return str_replace.call(this, searchValue, wrappedReplaceValue);
             }
+            var wrappedReplaceValue = function (match) {
+                var length = arguments.length;
+                var originalLastIndex = searchValue.lastIndex;
+                searchValue.lastIndex = 0; // eslint-disable-line no-param-reassign
+                var args = searchValue.exec(match) || [];
+                searchValue.lastIndex = originalLastIndex; // eslint-disable-line no-param-reassign
+                pushCall(args, arguments[length - 2], arguments[length - 1]);
+                return replaceValue.apply(this, args);
+            };
+            return str_replace.call(this, searchValue, wrappedReplaceValue);
+
         };
     }
 

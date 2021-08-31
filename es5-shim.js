@@ -1780,6 +1780,125 @@
     };
     defineProperties(NumberPrototype, { toFixed: toFixedShim }, hasToFixedBugs);
 
+    var hasToExponentialRoundingBug = (function () {
+        try {
+            return (-6.9e-11).toExponential(4) !== '-6.9000e-11';
+        } catch (e) {
+            return false;
+        }
+    }());
+    var originalToExponential = NumberPrototype.toExponential;
+    defineProperties(NumberPrototype, {
+        toExponential: function toExponential(fractionDigits) {
+            // 1: Let x be this Number value.
+            var x = $Number(this);
+
+            if (!isFinite(x)) {
+                return originalToExponential.call(this, fractionDigits);
+            }
+            if (typeof fractionDigits === 'undefined') {
+                return originalToExponential.call(this);
+            }
+            var f = ES.ToInteger(fractionDigits);
+
+            if (f < 0 || f > 20) {
+                // this will probably have thrown already
+                return originalToExponential.call(this, f);
+            }
+
+            // only cases left are a finite receiver + in-range fractionDigits
+
+            // implementation adapted from https://gist.github.com/SheetJSDev/1100ad56b9f856c95299ed0e068eea08
+
+            // 4: Let s be the empty string
+            var s = '';
+
+            // 5: If x < 0
+            if (x < 0) {
+                s = '-';
+                x = -x;
+            }
+
+            // 6: If x = +Infinity
+            // if (!isFinite(x)) {
+            //     return s + 'Infinity';
+            // }
+
+            // 7: If fractionDigits is not undefined and (f < 0 or f > 20), throw a RangeError exception.
+            // if (typeof fractionDigits !== 'undefined' && (f < 0 || f > 20)) {
+            //     throw new RangeError('Fraction Digits ' + fractionDigits + ' out of range');
+            // }
+
+            var m = '';
+            var e = 0;
+            var c = '';
+            var d = '';
+
+            // 8: If x = 0 then
+            if (x === 0) {
+                e = 0;
+                f = 0;
+                m = '0';
+            } else { // 9: Else, x != 0
+                var L = Math.log10(x);
+                e = Math.floor(L); // 10 ** e <= x and x < 10 ** (e+1)
+                var n = 0;
+                if (typeof fractionDigits !== 'undefined') { // eslint-disable-line no-negated-condition
+                    var w = Math.pow(10, e - f); // x / 10 ** (f+1) < w and w <= x / 10 ** f
+                    n = Math.round(x / w); // 10 ** f <= n and n < 10 ** (f+1)
+                    if (2 * x >= (((2 * n) + 1) * w)) {
+                        n += 1; // pick larger value
+                    }
+                    if (n >= Math.pow(10, f + 1)) { // 10e-1 = 1e0
+                        n /= 10;
+                        e += 1;
+                    }
+                } else {
+                    f = 22; // start from 22 and loop down
+                    var guess_n = Math.round(Math.pow(10, L - e + f));
+                    var target_f = f;
+                    while (f-- > 0) {
+                        guess_n = Math.round(Math.pow(10, L - e + f));
+                        if (
+                            Math.abs((guess_n * Math.pow(10, e - f)) - x)
+                            <= Math.abs((n * Math.pow(10, e - target_f)) - x)
+                        ) {
+                            target_f = f;
+                            n = guess_n;
+                        }
+                    }
+                }
+                m = n.toString(10);
+                if (typeof fractionDigits === 'undefined') {
+                    while (m.slice(-1) === '0') {
+                        m = m.slice(0, -1);
+                        d += 1;
+                    }
+                }
+            }
+
+            // 10: If f != 0, then
+            if (f !== 0) {
+                m = m.slice(0, 1) + '.' + m.slice(1);
+            }
+
+            // 11: If e = 0, then
+            if (e === 0) {
+                c = '+';
+                d = '0';
+            } else { // 12: Else
+                c = e > 0 ? '+' : '-';
+                d = Math.abs(e).toString(10);
+            }
+
+            // 13: Let m be the concatenation of the four Strings m, "e", c, and d.
+            m += 'e' + c + d;
+
+            // 14: Return the concatenation of the Strings s and m.
+            return s + m;
+        }
+    }, hasToExponentialRoundingBug);
+
     var hasToPrecisionUndefinedBug = (function () {
         try {
             return 1.0.toPrecision(undefined) === '1';

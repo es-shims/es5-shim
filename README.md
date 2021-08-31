@@ -51,6 +51,7 @@ simply `npm install` and `npm test`.
       from manipulating their ``arguments`` and ``caller`` properties.
     * :warning: Caveat: bound functions don't have checks in ``call`` and
       ``apply`` to avoid executing as a constructor.
+* Number.prototype.toExponential
 * Number.prototype.toFixed
 * Number.prototype.toPrecision
 * Object.keys ([standalone shim](https://www.npmjs.com/package/object-keys))

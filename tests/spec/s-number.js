@@ -1,6 +1,48 @@
 describe('Number', function () {
     'use strict';
 
+    describe('#toExponential()', function () {
+        // the spec allows for this test to fail.
+        it('throws a RangeError when < 0 or > 20 (or > 100 in ES2018+)', function () {
+            expect(function () { return 1.0.toExponential(-1); }).toThrow();
+            expect(function () { return 1.0.toExponential(-Infinity); }).toThrow();
+            expect(function () { return 1.0.toExponential(Infinity); }).toThrow();
+            expect(function () {
+                return [
+                    (0.9).toExponential(21), // ES2018 increased the limit from 21 to 100
+                    (0.9).toExponential(101)
+                ];
+            }).toThrow();
+        });
+
+        it('works for NaN receiver', function () {
+            expect(NaN.toExponential(NaN)).toBe('NaN');
+            expect(NaN.toExponential('abc')).toBe('NaN');
+        });
+
+        it('works for non-finite receivers', function () {
+            expect(Infinity.toExponential()).toBe('Infinity');
+            expect((-Infinity).toExponential()).toBe('-Infinity');
+        });
+
+        it('should round properly', function () {
+            expect(1.0.toExponential()).toBe('1e+0');
+            expect(1.0.toExponential(0)).toBe('1e+0');
+            expect(1.0.toExponential(1)).toBe('1.0e+0');
+            expect(1.0.toExponential(2)).toBe('1.00e+0');
+
+            expect(1.2345.toExponential()).toBe('1.2345e+0');
+            expect(1.2345.toExponential(0)).toBe('1e+0');
+            expect(1.2345.toExponential(1)).toBe('1.2e+0');
+            expect(1.2345.toExponential(2)).toBe('1.23e+0');
+            expect(1.2345.toExponential(3)).toMatch(/^1.23[45]e\+0$/);
+            expect(1.2345.toExponential(4)).toBe('1.2345e+0');
+            expect(1.2345.toExponential(5)).toBe('1.23450e+0');
+
+            expect((-6.9e-11).toExponential(4)).toBe('-6.9000e-11');
+        });
+    });
+
     describe('#toFixed()', function () {
         it('should convert numbers correctly', function () {
             expect((0.00008).toFixed(3)).toBe('0.000');

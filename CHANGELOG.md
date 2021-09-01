@@ -1,3 +1,9 @@
+4.6.1
+  - [Fix] `Math.log10` does not exist in older engines, oops
+  - [Fix] `toExponential`: start from 16 instead of 22
+  - [Fix] `toExponential`: ensure ToNumber is only called once on the receiver
+  - [Robustness] `toExponential`, `toPrecision`: ensure things do not break with later builtin modification
+
 4.6.0
   - [New] detect and patch `Number#toExponential` in Edge 15-18, which rounds incorrectly
   - [Fix] `parseInt`: fails to throw on boxed Symbols in Edge 15-18

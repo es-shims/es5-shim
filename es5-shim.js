@@ -1793,16 +1793,16 @@
             var x = $Number(this);
 
             if (!isFinite(x)) {
-                return originalToExponential.call(this, fractionDigits);
+                return originalToExponential.call(x, fractionDigits);
             }
             if (typeof fractionDigits === 'undefined') {
-                return originalToExponential.call(this);
+                return originalToExponential.call(x);
             }
             var f = ES.ToInteger(fractionDigits);
 
             if (f < 0 || f > 20) {
                 // this will probably have thrown already
-                return originalToExponential.call(this, f);
+                return originalToExponential.call(x, f);
             }
 
             // only cases left are a finite receiver + in-range fractionDigits

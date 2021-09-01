@@ -1856,7 +1856,7 @@
                         e += 1;
                     }
                 } else {
-                    f = 22; // start from 22 and loop down
+                    f = 16; // start from Math.ceil(Math.log10(Number.MAX_SAFE_INTEGER)) and loop down
                     var guess_n = round(pow(10, L - e + f));
                     var target_f = f;
                     while (f-- > 0) {

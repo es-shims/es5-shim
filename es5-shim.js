@@ -63,6 +63,8 @@
     var floor = Math.floor;
     var abs = Math.abs;
     var pow = Math.pow;
+    var round = Math.round;
+    var log10 = Math.log10;
 
     // Having a toString local variable name breaks in Opera so use to_string.
     var to_string = ObjectPrototype.toString;
@@ -1786,23 +1788,24 @@
             return false;
         }
     }());
-    var originalToExponential = NumberPrototype.toExponential;
+    var originalToExponential = call.bind(NumberPrototype.toExponential);
+    var numberToString = call.bind(NumberPrototype.toString);
     defineProperties(NumberPrototype, {
         toExponential: function toExponential(fractionDigits) {
             // 1: Let x be this Number value.
             var x = $Number(this);
 
             if (!isFinite(x)) {
-                return originalToExponential.call(x, fractionDigits);
+                return originalToExponential(x, fractionDigits);
             }
             if (typeof fractionDigits === 'undefined') {
-                return originalToExponential.call(x);
+                return originalToExponential(x);
             }
             var f = ES.ToInteger(fractionDigits);
 
             if (f < 0 || f > 20) {
                 // this will probably have thrown already
-                return originalToExponential.call(x, f);
+                return originalToExponential(x, f);
             }
 
             // only cases left are a finite receiver + in-range fractionDigits
@@ -1839,38 +1842,38 @@
                 f = 0;
                 m = '0';
             } else { // 9: Else, x != 0
-                var L = Math.log10(x);
-                e = Math.floor(L); // 10 ** e <= x and x < 10 ** (e+1)
+                var L = log10(x);
+                e = floor(L); // 10 ** e <= x and x < 10 ** (e+1)
                 var n = 0;
                 if (typeof fractionDigits !== 'undefined') { // eslint-disable-line no-negated-condition
-                    var w = Math.pow(10, e - f); // x / 10 ** (f+1) < w and w <= x / 10 ** f
-                    n = Math.round(x / w); // 10 ** f <= n and n < 10 ** (f+1)
+                    var w = pow(10, e - f); // x / 10 ** (f+1) < w and w <= x / 10 ** f
+                    n = round(x / w); // 10 ** f <= n and n < 10 ** (f+1)
                     if (2 * x >= (((2 * n) + 1) * w)) {
                         n += 1; // pick larger value
                     }
-                    if (n >= Math.pow(10, f + 1)) { // 10e-1 = 1e0
+                    if (n >= pow(10, f + 1)) { // 10e-1 = 1e0
                         n /= 10;
                         e += 1;
                     }
                 } else {
                     f = 22; // start from 22 and loop down
-                    var guess_n = Math.round(Math.pow(10, L - e + f));
+                    var guess_n = round(pow(10, L - e + f));
                     var target_f = f;
                     while (f-- > 0) {
-                        guess_n = Math.round(Math.pow(10, L - e + f));
+                        guess_n = round(pow(10, L - e + f));
                         if (
-                            Math.abs((guess_n * Math.pow(10, e - f)) - x)
-                            <= Math.abs((n * Math.pow(10, e - target_f)) - x)
+                            abs((guess_n * pow(10, e - f)) - x)
+                            <= abs((n * pow(10, e - target_f)) - x)
                         ) {
                             target_f = f;
                             n = guess_n;
                         }
                     }
                 }
-                m = n.toString(10);
+                m = numberToString(n, 10);
                 if (typeof fractionDigits === 'undefined') {
-                    while (m.slice(-1) === '0') {
-                        m = m.slice(0, -1);
+                    while (strSlice(m, -1) === '0') {
+                        m = strSlice(m, 0, -1);
                         d += 1;
                     }
                 }
@@ -1878,7 +1881,7 @@
 
             // 10: If f != 0, then
             if (f !== 0) {
-                m = m.slice(0, 1) + '.' + m.slice(1);
+                m = strSlice(m, 0, 1) + '.' + strSlice(m, 1);
             }
 
             // 11: If e = 0, then
@@ -1887,7 +1890,7 @@
                 d = '0';
             } else { // 12: Else
                 c = e > 0 ? '+' : '-';
-                d = Math.abs(e).toString(10);
+                d = numberToString(abs(e), 10);
             }
 
             // 13: Let m be the concatenation of the four Strings m, "e", c, and d.
@@ -1905,10 +1908,10 @@
             return true;
         }
     }());
-    var originalToPrecision = NumberPrototype.toPrecision;
+    var originalToPrecision = call.bind(NumberPrototype.toPrecision);
     defineProperties(NumberPrototype, {
         toPrecision: function toPrecision(precision) {
-            return typeof precision === 'undefined' ? originalToPrecision.call(this) : originalToPrecision.call(this, precision);
+            return typeof precision === 'undefined' ? originalToPrecision(this) : originalToPrecision(this, precision);
         }
     }, hasToPrecisionUndefinedBug);
 

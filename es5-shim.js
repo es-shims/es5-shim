@@ -64,7 +64,11 @@
     var abs = Math.abs;
     var pow = Math.pow;
     var round = Math.round;
-    var log10 = Math.log10;
+    var log = Math.log;
+    var LOG10E = Math.LOG10E;
+    var log10 = Math.log10 || function log10(value) {
+        return log(value) * LOG10E;
+    };
 
     // Having a toString local variable name breaks in Opera so use to_string.
     var to_string = ObjectPrototype.toString;

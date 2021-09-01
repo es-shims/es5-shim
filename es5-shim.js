@@ -1792,6 +1792,15 @@
             return false;
         }
     }());
+    var toExponentialAllowsInfiniteDigits = (function () {
+        try {
+            (1).toExponential(Infinity);
+            (1).toExponential(-Infinity);
+            return true;
+        } catch (e) {
+            return false;
+        }
+    }());
     var originalToExponential = call.bind(NumberPrototype.toExponential);
     var numberToString = call.bind(NumberPrototype.toString);
     defineProperties(NumberPrototype, {
@@ -1799,13 +1808,13 @@
             // 1: Let x be this Number value.
             var x = $Number(this);
 
-            if (!isFinite(x)) {
-                return originalToExponential(x, fractionDigits);
-            }
             if (typeof fractionDigits === 'undefined') {
                 return originalToExponential(x);
             }
             var f = ES.ToInteger(fractionDigits);
+            if (isActualNaN(x)) {
+                return 'NaN';
+            }
 
             if (f < 0 || f > 20) {
                 // this will probably have thrown already
@@ -1826,14 +1835,14 @@
             }
 
             // 6: If x = +Infinity
-            // if (!isFinite(x)) {
-            //     return s + 'Infinity';
-            // }
+            if (x === Infinity) {
+                return s + 'Infinity';
+            }
 
             // 7: If fractionDigits is not undefined and (f < 0 or f > 20), throw a RangeError exception.
-            // if (typeof fractionDigits !== 'undefined' && (f < 0 || f > 20)) {
-            //     throw new RangeError('Fraction Digits ' + fractionDigits + ' out of range');
-            // }
+            if (typeof fractionDigits !== 'undefined' && (f < 0 || f > 20)) {
+                throw new RangeError('Fraction digits ' + fractionDigits + ' out of range');
+            }
 
             var m = '';
             var e = 0;
@@ -1903,7 +1912,7 @@
             // 14: Return the concatenation of the Strings s and m.
             return s + m;
         }
-    }, hasToExponentialRoundingBug);
+    }, hasToExponentialRoundingBug || toExponentialAllowsInfiniteDigits);
 
     var hasToPrecisionUndefinedBug = (function () {
         try {

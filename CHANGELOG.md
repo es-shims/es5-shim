@@ -1,3 +1,6 @@
+4.6.2
+  - [Fix] IE 6-8 fails to throw on infinite fractional digits
+
 4.6.1
   - [Fix] `Math.log10` does not exist in older engines, oops
   - [Fix] `toExponential`: start from 16 instead of 22

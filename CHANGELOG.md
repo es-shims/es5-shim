@@ -106,7 +106,7 @@
 4.5.0
   - [New] `parseFloat('-0')` should return -0 in Opera 12 (#371)
   - [New] Provide and replace Date UTC methods (#360)
-  - [Robustness] cache `Date` getUTC* methods so that `Date#toISOString` doesn’t observably look them up on the receiver
+  - [Robustness] cache `Date` getUTC methods so that `Date#toISOString` doesn’t observably look them up on the receiver
   - [Robustness] use a cached and shimmed `String#trim`
   - [Tests] up to `node` `v5.5`
   - [Tests] add `parallelshell` and use it in a few tasks

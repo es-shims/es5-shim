@@ -1803,10 +1803,11 @@
     }());
     var originalToExponential = call.bind(NumberPrototype.toExponential);
     var numberToString = call.bind(NumberPrototype.toString);
+    var numberValueOf = call.bind(NumberPrototype.valueOf);
     defineProperties(NumberPrototype, {
         toExponential: function toExponential(fractionDigits) {
             // 1: Let x be this Number value.
-            var x = $Number(this);
+            var x = numberValueOf(this);
 
             if (typeof fractionDigits === 'undefined') {
                 return originalToExponential(x);

@@ -31,7 +31,7 @@ simply `npm install` and `npm test`.
 
 * Array.prototype.every ([standalone shim](https://www.npmjs.com/package/array.prototype.every))
 * Array.prototype.filter
-* Array.prototype.forEach
+* Array.prototype.forEach ([standalone shim](https://www.npmjs.com/package/array.prototype.foreach))
 * Array.prototype.indexOf ([standalone shim](https://www.npmjs.com/package/array.prototype.indexof))
 * Array.prototype.lastIndexOf ([standalone shim](https://www.npmjs.com/package/array.prototype.lastindexof))
 * Array.prototype.map ([standalone shim](https://www.npmjs.com/package/array.prototype.map))
@@ -51,13 +51,13 @@ simply `npm install` and `npm test`.
       from manipulating their ``arguments`` and ``caller`` properties.
     * :warning: Caveat: bound functions don't have checks in ``call`` and
       ``apply`` to avoid executing as a constructor.
-* Number.prototype.toExponential
+* Number.prototype.toExponential ([standalone shim](https://www.npmjs.com/package/number.prototype.toexponential))
 * Number.prototype.toFixed
 * Number.prototype.toPrecision
 * Object.keys ([standalone shim](https://www.npmjs.com/package/object-keys))
 * String.prototype.split ([standalone shim](https://www.npmjs.com/package/string.prototype.split))
 * String.prototype.trim ([standalone shim](https://www.npmjs.com/package/string.prototype.trim))
-* String.prototype.lastIndexOf
+* String.prototype.lastIndexOf ([standalone shim](https://string.prototype.lastindexof))
 * String.prototype.replace
     * Firefox (through v29) natively handles capturing groups incorrectly.
 * Date.parse (for ISO parsing)

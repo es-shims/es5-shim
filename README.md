@@ -1,9 +1,13 @@
-# es5-shim <sup>[![Version Badge][npm-version-svg]][npm-url]</sup>
+# es5-shim <sup>[![Version Badge][npm-version-svg]][package-url]</sup>
 
-[![npm badge][npm-badge-png]][npm-url]
-
+[![github actions][actions-image]][actions-url]
+[![coverage][codecov-image]][codecov-url]
 [![dependency status][deps-svg]][deps-url]
 [![dev dependency status][dev-deps-svg]][dev-deps-url]
+[![License][license-image]][license-url]
+[![Downloads][downloads-image]][downloads-url]
+
+[![npm badge][npm-badge-png]][package-url]
 
 `es5-shim.js` and `es5-shim.min.js` monkey-patch a JavaScript context to
 contain all EcmaScript 5 methods that can be faithfully emulated with a
@@ -177,10 +181,19 @@ simply `npm install` and `npm test`.
 <script src="https://cdnjs.cloudflare.com/ajax/libs/es6-shim/0.35.5/es6-sham.min.js"></script>
 <script src="other-libs.js"></script>
 ```
-[npm-url]: https://npmjs.org/package/es5-shim
+
+[package-url]: https://npmjs.org/package/es5-shim
 [npm-version-svg]: https://versionbadg.es/es-shims/es5-shim.svg
 [deps-svg]: https://david-dm.org/es-shims/es5-shim.svg
 [deps-url]: https://david-dm.org/es-shims/es5-shim
 [dev-deps-svg]: https://david-dm.org/es-shims/es5-shim/dev-status.svg
 [dev-deps-url]: https://david-dm.org/es-shims/es5-shim#info=devDependencies
 [npm-badge-png]: https://nodei.co/npm/es5-shim.png?downloads=true&stars=true
+[license-image]: https://img.shields.io/npm/l/es5-shim.svg
+[license-url]: LICENSE
+[downloads-image]: https://img.shields.io/npm/dm/es5-shim.svg
+[downloads-url]: https://npm-stat.com/charts.html?package=es5-shim
+[codecov-image]: https://codecov.io/gh/es-shims/es5-shim/branch/main/graphs/badge.svg
+[codecov-url]: https://app.codecov.io/gh/es-shims/es5-shim/
+[actions-image]: https://img.shields.io/endpoint?url=https://github-actions-badge-u3jn4tfpocch.runkit.sh/es-shims/es5-shim
+[actions-url]: https://github.com/es-shims/es5-shim/actions

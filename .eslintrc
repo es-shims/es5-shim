@@ -12,13 +12,6 @@
 		"func-name-matching": 0,
 		"id-length": [2, { "min": 1, "max": 40 }],
 		"indent": [2, 4],
-		"max-len": [2, 120, 4, {
-			"ignoreUrls": true,
-			"ignoreComments": true,
-			"ignoreRegExpLiterals": true,
-			"ignoreStrings": true,
-			"ignoreTemplateLiterals": true
-		}],
 		"max-lines": 0,
         "max-lines-per-function": 0,
 		"max-nested-callbacks": [2, 5],
@@ -33,7 +26,9 @@
 		"no-implicit-coercion": [2, {
 			"boolean": false,
 			"number": false,
-			"string": true
+			"string": true,
+			"disallowTemplateShorthand": false,
+			"allow": []
 		 }],
 		"no-invalid-this": [0],
 		"no-magic-numbers": [0],
@@ -44,7 +39,6 @@
 		"no-shadow": [1],
 		"no-unused-vars": [1, { "vars": "all", "args": "after-used" }],
 		"operator-linebreak": [2, "before"],
-		"quote-props": [1, "as-needed", { "keywords": true }],
         "sort-keys": [0],
 		"spaced-comment": [0],
 		"strict": [0],

@@ -1531,10 +1531,10 @@
                 var t = month > 1 ? 1 : 0;
                 return (
                     months[month]
-                    + floor((year - 1969 + t) / 4)
-                    - floor((year - 1901 + t) / 100)
-                    + floor((year - 1601 + t) / 400)
-                    + (365 * (year - 1970))
+                        + floor((year - 1969 + t) / 4)
+                        - floor((year - 1901 + t) / 100)
+                        + floor((year - 1601 + t) / 400)
+                        + (365 * (year - 1970))
                 );
             };
 

@@ -1,3 +1,13 @@
+4.6.3
+ - [Fix] `Object.defineProperty`: Chrome <= 36 has a broken dP when setting "prototype" while changing writability
+ - [Fix] `toExponential`: use `thisNumberValue` instead of `Number()`
+ - [readme] fix badges
+ - [readme] add standalone shims
+ - [actions] reuse common workflows
+ - [actions] update codecov uploader
+ - [Dev Deps] update `eslint`, `@ljharb/eslint-config`, `safe-publish-latest`
+ - [Tests] avoid loading coverage data when running tests
+
 4.6.2
   - [Fix] IE 6-8 fails to throw on infinite fractional digits
 

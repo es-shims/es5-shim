@@ -126,6 +126,27 @@
         };
     }(ObjectPrototype.hasOwnProperty));
 
+    // this is needed in Chrome 15 (probably earlier) - 36
+    // https://bugs.chromium.org/p/v8/issues/detail?id=3334
+    if ($Object.defineProperty) {
+        var F = function () {};
+        var toStringSentinel = {};
+        var sentinel = { toString: toStringSentinel };
+        $Object.defineProperty(F, 'prototype', { value: sentinel, writable: false });
+        if ((new F()).toString !== toStringSentinel) {
+            var $dP = $Object.defineProperty;
+            defineProperties($Object, {
+                defineProperty: function defineProperty(o, k, d) {
+                    var key = $String(k);
+                    if (key === 'prototype' && 'writable' in d && 'value' in d) {
+                        o[key] = d.value; // eslint-disable-line no-param-reassign
+                    }
+                    return $dP(o, key, d);
+                }
+            }, true);
+        }
+    }
+
     //
     // Util
     // ======

@@ -30,8 +30,8 @@
 		"pretest": "npm run --silent lint",
 		"test": "npm run tests-only",
 		"posttest": "aud --production",
-		"tests-only": "nyc jasmine-node --matchall ./ tests/spec/",
-		"tests-native": "jasmine-node --matchall tests/spec/",
+		"tests-only": "nyc jasmine-node --matchall *.js tests/helpers/ tests/spec/",
+		"tests-native": "jasmine-node --matchall tests/helpers/ tests/spec/",
 		"lint": "eslint ."
 	},
 	"devDependencies": {

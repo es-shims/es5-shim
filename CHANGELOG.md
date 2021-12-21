@@ -1,3 +1,7 @@
+4.6.4
+ - [Fix] `Object.defineProperty`: when shimmed in Chrome <= 36, properly handle writability
+ - [Tests] add some additional tests
+
 4.6.3
  - [Fix] `Object.defineProperty`: Chrome <= 36 has a broken dP when setting "prototype" while changing writability
  - [Fix] `toExponential`: use `thisNumberValue` instead of `Number()`

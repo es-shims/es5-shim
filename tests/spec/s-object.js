@@ -250,15 +250,18 @@ describe('Object', function () {
 
         (supportsDescriptors ? it : xit)('allows setting a nonwritable prototype', function () {
             var F = function () {};
+            expect(F.prototype).toEqual(Object.getOwnPropertyDescriptor(F, 'prototype').value);
             expect((new F()).toString).toEqual(Object.prototype.toString);
 
             F.prototype = Number.prototype;
+            expect(F.prototype).toEqual(Object.getOwnPropertyDescriptor(F, 'prototype').value);
             expect((new F()).toString).toEqual(Number.prototype.toString);
 
             var toStringSentinel = {};
             var sentinel = { toString: toStringSentinel };
             Object.defineProperty(F, 'prototype', { value: sentinel, writable: false });
 
+            expect(F.prototype).toEqual(Object.getOwnPropertyDescriptor(F, 'prototype').value);
             expect((new F()).toString).toEqual(toStringSentinel);
         });
     });

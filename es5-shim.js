@@ -135,11 +135,22 @@
         $Object.defineProperty(F, 'prototype', { value: sentinel, writable: false });
         if ((new F()).toString !== toStringSentinel) {
             var $dP = $Object.defineProperty;
+            var $gOPD = $Object.getOwnPropertyDescriptor;
             defineProperties($Object, {
                 defineProperty: function defineProperty(o, k, d) {
                     var key = $String(k);
-                    if (key === 'prototype' && 'writable' in d && 'value' in d) {
-                        o[key] = d.value; // eslint-disable-line no-param-reassign
+                    if (typeof o === 'function' && key === 'prototype') {
+                        var desc = $gOPD(o, key);
+                        if (desc.writable && !d.writable && 'value' in d) {
+                            try {
+                                o[key] = d.value; // eslint-disable-line no-param-reassign
+                            } catch (e) { /**/ }
+                        }
+                        return $dP(o, key, {
+                            configurable: 'configurable' in d ? d.configurable : desc.configurable,
+                            enumerable: 'enumerable' in d ? d.enumerable : desc.enumerable,
+                            writable: d.writable
+                        });
                     }
                     return $dP(o, key, d);
                 }

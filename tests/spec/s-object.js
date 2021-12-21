@@ -12,6 +12,7 @@ var supportsDescriptors = Object.defineProperty && (function () {
         return false;
     }
 }());
+var ifSupportsDescriptorsIt = supportsDescriptors ? it : xit;
 var ifWindowIt = typeof window === 'undefined' ? xit : it;
 var extensionsPreventible = typeof Object.preventExtensions === 'function' && (function () {
     var obj = {};
@@ -248,7 +249,7 @@ describe('Object', function () {
             }).not.toThrow();
         });
 
-        (supportsDescriptors ? it : xit)('allows setting a nonwritable prototype', function () {
+        ifSupportsDescriptorsIt('allows setting a nonwritable prototype', function () {
             var F = function () {};
             expect(F.prototype).toEqual(Object.getOwnPropertyDescriptor(F, 'prototype').value);
             expect((new F()).toString).toEqual(Object.prototype.toString);
@@ -263,6 +264,24 @@ describe('Object', function () {
 
             expect(F.prototype).toEqual(Object.getOwnPropertyDescriptor(F, 'prototype').value);
             expect((new F()).toString).toEqual(toStringSentinel);
+        });
+
+        ifSupportsDescriptorsIt('properly makes a prototype non-writable', function () {
+            var O = { prototype: 1 };
+            expect(O.prototype).toEqual(Object.getOwnPropertyDescriptor(O, 'prototype').value);
+            expect(O.prototype).toEqual(1);
+
+            expect(function () {
+                Object.defineProperty(O, 'prototype', { writable: false, configurable: true });
+            }).not.toThrow();
+
+            var sentinel = {};
+            expect(function () {
+                Object.defineProperty(O, 'prototype', { value: sentinel });
+            }).not.toThrow();
+
+            expect(O.prototype).toEqual(Object.getOwnPropertyDescriptor(O, 'prototype').value);
+            expect(O.prototype).toEqual(sentinel);
         });
     });
 

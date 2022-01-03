@@ -2,24 +2,24 @@
 	"name": "es5-shim",
 	"version": "4.6.4",
 	"description": "ECMAScript 5 compatibility shims for legacy JavaScript engines",
-	"homepage": "http://github.com/es-shims/es5-shim/",
+	"homepage": "https://github.com/es-shims/es5-shim/",
 	"contributors": [
-		"Kris Kowal <kris@cixar.com> (http://github.com/kriskowal/)",
-		"Sami Samhuri <sami.samhuri@gmail.com> (http://samhuri.net/)",
-		"Florian Schäfer <florian.schaefer@gmail.com> (http://github.com/fschaefer)",
-		"Irakli Gozalishvili <rfobic@gmail.com> (http://jeditoolkit.com)",
-		"Kit Cambridge <kitcambridge@gmail.com> (http://kitcambridge.github.com)",
+		"Kris Kowal <kris@cixar.com> (https://github.com/kriskowal/)",
+		"Sami Samhuri <sami.samhuri@gmail.com> (https://samhuri.net/)",
+		"Florian Schäfer <florian.schaefer@gmail.com> (https://github.com/fschaefer)",
+		"Irakli Gozalishvili <rfobic@gmail.com> (https://gozala.io)",
+		"Kit Cambridge <kitcambridge@gmail.com> (https://github.com/kitcambridge)",
 		"Jordan Harband <ljharb@gmail.com> (https://github.com/ljharb/)"
 	],
 	"bugs": {
 		"mail": "ljharb@gmail.com",
-		"url": "http://github.com/es-shims/es5-shim/issues"
+		"url": "https://github.com/es-shims/es5-shim/issues"
 	},
 	"license": "MIT",
 	"main": "es5-shim.js",
 	"repository": {
 		"type": "git",
-		"url": "http://github.com/es-shims/es5-shim.git"
+		"url": "https://github.com/es-shims/es5-shim.git"
 	},
 	"scripts": {
 		"prepublish": "not-in-publish || npm run prepublishOnly",

@@ -468,7 +468,7 @@
 
 0.0.4
  - Revised Object.getPrototypeOf to work in more cases
-   in response to http://ejohn.org/blog/objectgetprototypeof/
+   in response to https://johnresig.com/blog/objectgetprototypeof/
    [issue #2] (fschaefer)
 
 0.0.3

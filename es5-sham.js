@@ -55,10 +55,10 @@
     };
 
     // ES5 15.2.3.2
-    // http://es5.github.com/#x15.2.3.2
+    // https://es5.github.io/#x15.2.3.2
     if (!Object.getPrototypeOf) {
         // https://github.com/es-shims/es5-shim/issues#issue/2
-        // http://ejohn.org/blog/objectgetprototypeof/
+        // https://johnresig.com/blog/objectgetprototypeof/
         // recommended by fschaefer on github
         //
         // sure, and webreflection says ^_^
@@ -84,7 +84,7 @@
     }
 
     // ES5 15.2.3.3
-    // http://es5.github.com/#x15.2.3.3
+    // https://es5.github.io/#x15.2.3.3
 
     // check whether getOwnPropertyDescriptor works if it's given. Otherwise, shim partially.
     if (Object.defineProperty) {
@@ -185,7 +185,7 @@
     }
 
     // ES5 15.2.3.4
-    // http://es5.github.com/#x15.2.3.4
+    // https://es5.github.io/#x15.2.3.4
     if (!Object.getOwnPropertyNames) {
         Object.getOwnPropertyNames = function getOwnPropertyNames(object) {
             return Object.keys(object);
@@ -193,7 +193,7 @@
     }
 
     // ES5 15.2.3.5
-    // http://es5.github.com/#x15.2.3.5
+    // https://es5.github.io/#x15.2.3.5
     if (!Object.create) {
 
         // Contributed by Brandon Benvie, October, 2012
@@ -328,14 +328,14 @@
     }
 
     // ES5 15.2.3.6
-    // http://es5.github.com/#x15.2.3.6
+    // https://es5.github.io/#x15.2.3.6
 
     // Patch for WebKit and IE8 standard mode
     // Designed by hax <hax.github.com>
     // related issue: https://github.com/es-shims/es5-shim/issues#issue/5
     // IE8 Reference:
-    //     http://msdn.microsoft.com/en-us/library/dd282900.aspx
-    //     http://msdn.microsoft.com/en-us/library/dd229916.aspx
+    //     https://msdn.microsoft.com/en-us/library/dd282900.aspx
+    //     https://msdn.microsoft.com/en-us/library/dd229916.aspx
     // WebKit Bugs:
     //     https://bugs.webkit.org/show_bug.cgi?id=36423
 
@@ -435,7 +435,7 @@
     }
 
     // ES5 15.2.3.7
-    // http://es5.github.com/#x15.2.3.7
+    // https://es5.github.io/#x15.2.3.7
     if (!Object.defineProperties || definePropertiesFallback) {
         Object.defineProperties = function defineProperties(object, properties) {
             // make a valiant attempt to use the real defineProperties
@@ -457,7 +457,7 @@
     }
 
     // ES5 15.2.3.8
-    // http://es5.github.com/#x15.2.3.8
+    // https://es5.github.io/#x15.2.3.8
     if (!Object.seal) {
         Object.seal = function seal(object) {
             if (Object(object) !== object) {
@@ -471,7 +471,7 @@
     }
 
     // ES5 15.2.3.9
-    // http://es5.github.com/#x15.2.3.9
+    // https://es5.github.io/#x15.2.3.9
     if (!Object.freeze) {
         Object.freeze = function freeze(object) {
             if (Object(object) !== object) {
@@ -500,7 +500,7 @@
     }
 
     // ES5 15.2.3.10
-    // http://es5.github.com/#x15.2.3.10
+    // https://es5.github.io/#x15.2.3.10
     if (!Object.preventExtensions) {
         Object.preventExtensions = function preventExtensions(object) {
             if (Object(object) !== object) {
@@ -514,7 +514,7 @@
     }
 
     // ES5 15.2.3.11
-    // http://es5.github.com/#x15.2.3.11
+    // https://es5.github.io/#x15.2.3.11
     if (!Object.isSealed) {
         Object.isSealed = function isSealed(object) {
             if (Object(object) !== object) {
@@ -525,7 +525,7 @@
     }
 
     // ES5 15.2.3.12
-    // http://es5.github.com/#x15.2.3.12
+    // https://es5.github.io/#x15.2.3.12
     if (!Object.isFrozen) {
         Object.isFrozen = function isFrozen(object) {
             if (Object(object) !== object) {
@@ -536,7 +536,7 @@
     }
 
     // ES5 15.2.3.13
-    // http://es5.github.com/#x15.2.3.13
+    // https://es5.github.io/#x15.2.3.13
     if (!Object.isExtensible) {
         Object.isExtensible = function isExtensible(object) {
             // 1. If Type(O) is not Object throw a TypeError exception.

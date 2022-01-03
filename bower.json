@@ -7,11 +7,11 @@
     },
     "homepage": "https://github.com/es-shims/es5-shim",
     "authors": [
-        "Kris Kowal <kris@cixar.com> (http://github.com/kriskowal/)",
-        "Sami Samhuri <sami.samhuri@gmail.com> (http://samhuri.net/)",
-        "Florian Schäfer <florian.schaefer@gmail.com> (http://github.com/fschaefer)",
-        "Irakli Gozalishvili <rfobic@gmail.com> (http://jeditoolkit.com)",
-        "Kit Cambridge <kitcambridge@gmail.com> (http://kitcambridge.github.com)",
+        "Kris Kowal <kris@cixar.com> (https://github.com/kriskowal/)",
+        "Sami Samhuri <sami.samhuri@gmail.com> (https://samhuri.net/)",
+        "Florian Schäfer <florian.schaefer@gmail.com> (https://github.com/fschaefer)",
+        "Irakli Gozalishvili <rfobic@gmail.com> (https://gozala.io)",
+        "Kit Cambridge <kitcambridge@gmail.com> (https://github.com/kitcambridge)",
         "Jordan Harband <ljharb@gmail.com> (https://github.com/ljharb/)"
     ],
     "description": "ECMAScript 5 compatibility shims for legacy JavaScript engines",

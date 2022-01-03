@@ -37,7 +37,7 @@
 	"devDependencies": {
 		"@ljharb/eslint-config": "^20.1.0",
 		"aud": "^1.1.5",
-		"eslint": "^8.5.0",
+		"eslint": "^8.6.0",
 		"in-publish": "^2.0.1",
 		"jasmine-node": "^1.16.2",
 		"nyc": "^10.3.2",

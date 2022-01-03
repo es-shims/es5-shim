@@ -3,6 +3,11 @@
 
 	"extends": "@ljharb",
 
+	"ignorePatterns": [
+		"*.min.js",
+		"tests/lib/*",
+	],
+
 	"rules": {
 		"array-bracket-newline": 0,
 		"object-curly-newline": 0,
@@ -51,7 +56,6 @@
 			"files": "tests/**",
 			"rules": {
 				"max-len": 0,
-				"max-lines": 0,
 				"max-statements-per-line": [2, { "max": 2 }],
 			},
     		"env": {

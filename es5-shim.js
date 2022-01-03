@@ -1039,7 +1039,7 @@
     // ES5 15.2.3.14
     // http://es5.github.com/#x15.2.3.14
 
-    // http://whattheheadsaid.com/2010/10/a-safer-object-keys-compatibility-implementation
+    // https://web.archive.org/web/20140727042234/http://whattheheadsaid.com/2010/10/a-safer-object-keys-compatibility-implementation
     // eslint-disable-next-line quote-props
     var hasDontEnumBug = !isEnum({ 'toString': null }, 'toString'); // jscs:ignore disallowQuotedKeysInObjects
     var hasProtoEnumBug = isEnum(function () {}, 'prototype');

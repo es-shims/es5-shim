@@ -1,6 +1,6 @@
 {
 	"name": "es5-shim",
-	"version": "4.6.4",
+	"version": "4.6.5",
 	"description": "ECMAScript 5 compatibility shims for legacy JavaScript engines",
 	"homepage": "https://github.com/es-shims/es5-shim/",
 	"contributors": [

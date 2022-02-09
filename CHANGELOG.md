@@ -1,3 +1,9 @@
+4.6.5
+ - [Fix] IE 8 has a broken `Object.defineProperty`
+ - [patch] replace dead link in comment with archive.org link
+ - [Docs] update all possible http: links to https:
+ - [Dev Deps] update `eslint`, `@ljharb/eslint-config`, `aud`
+
 4.6.4
  - [Fix] `Object.defineProperty`: when shimmed in Chrome <= 36, properly handle writability
  - [Tests] add some additional tests

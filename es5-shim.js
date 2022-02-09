@@ -128,7 +128,7 @@
 
     // this is needed in Chrome 15 (probably earlier) - 36
     // https://bugs.chromium.org/p/v8/issues/detail?id=3334
-    if ($Object.defineProperty) {
+    if ($Object.defineProperty && supportsDescriptors) {
         var F = function () {};
         var toStringSentinel = {};
         var sentinel = { toString: toStringSentinel };

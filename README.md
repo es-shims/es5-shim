@@ -46,6 +46,7 @@ simply `npm install` and `npm test`.
 * Array.prototype.reduceRight ([standalone shim](https://www.npmjs.com/package/array.prototype.reduceright))
 * Array.prototype.push
 * Array.prototype.join
+* Array.prototype.splice ([standalone shim](https://www.npmjs.com/package/array.prototype.splice))
 * Array.isArray
 * Date.now
 * Date.prototype.toJSON

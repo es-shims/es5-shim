@@ -34,7 +34,7 @@ simply `npm install` and `npm test`.
 ### Complete tests ###
 
 * Array.prototype.every ([standalone shim](https://www.npmjs.com/package/array.prototype.every))
-* Array.prototype.filter
+* Array.prototype.filter ([standalone shim](https://www.npmjs.com/package/array.prototype.filter))
 * Array.prototype.forEach ([standalone shim](https://www.npmjs.com/package/array.prototype.foreach))
 * Array.prototype.indexOf ([standalone shim](https://www.npmjs.com/package/array.prototype.indexof))
 * Array.prototype.lastIndexOf ([standalone shim](https://www.npmjs.com/package/array.prototype.lastindexof))
@@ -44,7 +44,7 @@ simply `npm install` and `npm test`.
 * Array.prototype.sort
 * Array.prototype.reduce ([standalone shim](https://www.npmjs.com/package/array.prototype.reduce))
 * Array.prototype.reduceRight ([standalone shim](https://www.npmjs.com/package/array.prototype.reduceright))
-* Array.prototype.push
+* Array.prototype.push ([standalone shim](https://www.npmjs.com/package/array.prototype.push))
 * Array.prototype.join
 * Array.prototype.splice ([standalone shim](https://www.npmjs.com/package/array.prototype.splice))
 * Array.isArray

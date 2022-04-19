@@ -2145,6 +2145,7 @@
         // https://blog.stevenlevithan.com/archives/faster-trim-javascript
         // http://perfectionkills.com/whitespace-deviations/
         trim: function trim() {
+            'use strict';
             if (typeof this === 'undefined' || this === null) {
                 throw new TypeError("can't convert " + this + ' to object');
             }

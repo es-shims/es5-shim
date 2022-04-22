@@ -1512,9 +1512,11 @@
                         seconds += sToShift;
                         millis -= sToShift * 1e3;
                     }
-                    date = length === 1 && $String(Y) === Y // isString(Y)
+                    var parsed = DateShim.parse(Y);
+                    var hasNegTimestampParseBug = isNaN(parsed);
+                    date = length === 1 && $String(Y) === Y && !hasNegTimestampParseBug // isString(Y)
                         // We explicitly pass it through parse:
-                        ? new NativeDate(DateShim.parse(Y))
+                        ? new NativeDate(parsed)
                         // We have to manually make calls depending on argument
                         // length here
                         : length >= 7 ? new NativeDate(Y, M, D, h, m, seconds, millis)
@@ -2146,6 +2148,7 @@
         // http://perfectionkills.com/whitespace-deviations/
         trim: function trim() {
             'use strict';
+
             if (typeof this === 'undefined' || this === null) {
                 throw new TypeError("can't convert " + this + ' to object');
             }

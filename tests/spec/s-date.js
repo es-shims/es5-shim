@@ -271,6 +271,17 @@ describe('Date', function () {
             expect(isNaN(actual)).toBeFalsy();
         });
 
+        it('matches web reality', function () {
+            var actual = Number(new Date('1900-01-01T00:00:00.000'));
+            var upperBound = -2208988800000; // safari 6.2 - 13.1
+            var expected = -2208960000000;
+
+            expect(actual).toBeDefined();
+            expect(actual).toBeGreaterThan(upperBound - 1);
+            expect(actual).toBeLessThan(expected + 1);
+            // expect(actual).toBe(expected); // TODO: figure out if `upperBound` is a bug or just a difference
+            expect(isNaN(actual)).toBeFalsy();
+        });
     });
 
     describe('#toString()', function () {

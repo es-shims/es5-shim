@@ -814,6 +814,7 @@
         ArrayPrototype.splice.call(obj, 0, 0, 1);
         return obj.length === 1;
     }());
+    var hasES6Defaults = [0, 1, 2].splice(0).length === 3;
     defineProperties(ArrayPrototype, {
         splice: function splice(start, deleteCount) {
             if (arguments.length === 0) {
@@ -831,7 +832,7 @@
             }
             return array_splice.apply(this, args);
         }
-    }, !spliceWorksWithEmptyObject);
+    }, !spliceWorksWithEmptyObject || !hasES6Defaults);
     var spliceWorksWithLargeSparseArrays = (function () {
         // Per https://github.com/es-shims/es5-shim/issues/295
         // Safari 7/8 breaks with sparse arrays of size 1e5 or greater

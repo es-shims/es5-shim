@@ -466,7 +466,9 @@ describe('Date', function () {
                     var off = date.getTimezoneOffset();
                     var offHours = Math.floor(off / 60);
                     var offMins = off - (offHours * 60);
-                    expect(date.getMinutes() + offMins).toBe(59);
+                    var result = date.getMinutes() + offMins;
+                    // ceil/floor is for Firefox
+                    expect(result < 0 ? Math.ceil(result) : Math.floor(result)).toBe(59);
                 });
             });
         });

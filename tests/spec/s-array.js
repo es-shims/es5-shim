@@ -661,7 +661,10 @@ describe('Array', function () {
 
             it('should leave the original array untouched', function () {
                 var copy = testSubject.slice();
+                expect(copy).toNotBe(testSubject);
+
                 testSubject.filter(callback);
+
                 expect(testSubject).toExactlyMatch(copy);
             });
 

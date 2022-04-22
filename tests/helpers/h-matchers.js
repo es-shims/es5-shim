@@ -9,6 +9,7 @@ var getKeys = function (o) {
             a.push(key);
         }
     }
+    a.sort();
     return a;
 };
 

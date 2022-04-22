@@ -1852,6 +1852,10 @@
             }
 
             if (f < 0 || f > 20) {
+                if (!isFinite(f)) {
+                    // IE 6 doesn't throw in the native one
+                    throw new RangeError('toExponential() argument must be between 0 and 20');
+                }
                 // this will probably have thrown already
                 return originalToExponential(x, f);
             }

@@ -1,3 +1,14 @@
+4.6.6
+ - [Fix] `splice`: IE 8: upgrade ES5 impls to ES6 default argument behavior
+ - [Fix] `toExponential`: IE 6 native toExponential does not throw with infinite fractionDigits
+ - [Fix] `Date`: fix a bug in modern Safari (#481)
+ - [Fix] ensure `parseInt` replacements are not constructible
+ - [readme] add standalone shims
+ - [readme] add `Array.prototype.splice` and standalone shim
+ - [Tests] fix a test failure with a custom matcher in IE 6
+ - [Tests] pave over Firefox’s increased getMinutes precision
+ - [Dev Deps] update `eslint`, `@ljharb/eslint-config`
+
 4.6.5
  - [Fix] IE 8 has a broken `Object.defineProperty`
  - [patch] replace dead link in comment with archive.org link

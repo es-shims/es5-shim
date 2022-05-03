@@ -2126,15 +2126,15 @@
     // non-normative section suggesting uniform semantics and it should be
     // normalized across all browsers
     // [bugfix, IE lt 9] IE < 9 substr() with negative value not working in IE
-    var string_substr = StringPrototype.substr;
     var hasNegativeSubstrBug = ''.substr && '0b'.substr(-1) !== 'b';
+    var string_substr = hasNegativeSubstrBug && call.bind(StringPrototype.substr);
     defineProperties(StringPrototype, {
         substr: function substr(start, length) {
             var normalizedStart = start;
             if (start < 0) {
                 normalizedStart = max(this.length + start, 0);
             }
-            return string_substr.call(this, normalizedStart, length);
+            return string_substr(this, normalizedStart, length);
         }
     }, hasNegativeSubstrBug);
 

@@ -1,3 +1,8 @@
+4.6.7
+ - [Fix] `parseInt`, `String#trim`: properly consider Mongolian Vowel Separator
+ - [Robustness] `substr`: call-bind original substr method
+ - [Tests] ensure only the actual shims are included in tests
+
 4.6.6
  - [Fix] `splice`: IE 8: upgrade ES5 impls to ES6 default argument behavior
  - [Fix] `toExponential`: IE 6 native toExponential does not throw with infinite fractionDigits

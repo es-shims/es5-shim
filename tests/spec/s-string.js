@@ -2,7 +2,9 @@ describe('String', function () {
     'use strict';
 
     describe('#trim()', function () {
-        var test = '\x09\x0A\x0B\x0C\x0D\x20\xA0\u1680\u180E\u2000\u2001\u2002\u2003\u2004\u2005\u2006\u2007\u2008\u2009\u200A\u202F\u205F\u3000\u2028\u2029\uFEFFHello, World!\x09\x0A\x0B\x0C\x0D\x20\xA0\u1680\u180E\u2000\u2001\u2002\u2003\u2004\u2005\u2006\u2007\u2008\u2009\u200A\u202F\u205F\u3000\u2028\u2029\uFEFF';
+        var mvs = '\u180E';
+        var mvsIsWS = (/\s/).test(mvs);
+        var test = '\x09\x0A\x0B\x0C\x0D\x20\xA0\u1680' + (mvsIsWS ? mvs : '') + '\u2000\u2001\u2002\u2003\u2004\u2005\u2006\u2007\u2008\u2009\u200A\u202F\u205F\u3000\u2028\u2029\uFEFFHello, World!\x09\x0A\x0B\x0C\x0D\x20\xA0\u1680' + (mvsIsWS ? mvs : '') + '\u2000\u2001\u2002\u2003\u2004\u2005\u2006\u2007\u2008\u2009\u200A\u202F\u205F\u3000\u2028\u2029\uFEFF';
 
         it('trims all ES5 whitespace', function () {
             expect(test.trim()).toBe('Hello, World!');
@@ -10,8 +12,16 @@ describe('String', function () {
         });
 
         it('does not trim the zero-width space', function () {
-            expect('\u200b'.trim()).toBe('\u200b');
-            expect('\u200b'.trim().length).toBe(1);
+            var zws = '\u200b';
+            expect(zws.trim()).toBe(zws);
+        });
+
+        it('properly handles the mongolian vowel separator', function () {
+            if (mvsIsWS) {
+                expect(mvs.trim()).toBe('');
+            } else {
+                expect(mvs.trim()).toBe(mvs);
+            }
         });
     });
 

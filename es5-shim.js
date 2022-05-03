@@ -2140,14 +2140,19 @@
 
     // ES5 15.5.4.20
     // whitespace from: https://es5.github.io/#x15.5.4.20
-    var ws = '\x09\x0A\x0B\x0C\x0D\x20\xA0\u1680\u180E\u2000\u2001\u2002\u2003'
-        + '\u2004\u2005\u2006\u2007\u2008\u2009\u200A\u202F\u205F\u3000\u2028'
-        + '\u2029\uFEFF';
+    var mvs = '\u180E';
+    var mvsIsWS = (/\s/).test(mvs);
+    var ws = '\x09\x0A\x0B\x0C\x0D\x20\xA0\u1680\u180E\u2000\u2001\u2002\u2003\u2004\u2005\u2006\u2007\u2008\u2009\u200A\u202F\u205F\u3000\u2028\u2029\uFEFF'
+        .replace(/\S/g, ''); // remove the mongolian vowel separator (\u180E) in modern engines
     var zeroWidth = '\u200b';
     var wsRegexChars = '[' + ws + ']';
     var trimBeginRegexp = new RegExp('^' + wsRegexChars + wsRegexChars + '*');
     var trimEndRegexp = new RegExp(wsRegexChars + wsRegexChars + '*$');
-    var hasTrimWhitespaceBug = StringPrototype.trim && (ws.trim() || !zeroWidth.trim());
+    var hasTrimWhitespaceBug = StringPrototype.trim && (
+        ws.trim() !== '' // if ws is not considered whitespace
+        || zeroWidth.trim() === '' // if zero-width IS considered whitespace
+        || mvs.trim() !== (mvsIsWS ? '' : mvs) // if MVS is either wrongly considered whitespace, or, wrongly considered NOT whitespace
+    );
     defineProperties(StringPrototype, {
         // https://blog.stevenlevithan.com/archives/faster-trim-javascript
         // http://perfectionkills.com/whitespace-deviations/
@@ -2196,8 +2201,11 @@
     var hexRegex = /^[-+]?0[xX]/;
 
     // ES-5 15.1.2.2
-    // eslint-disable-next-line radix
-    if (parseInt(ws + '08') !== 8 || parseInt(ws + '0x16') !== 22) {
+    if (
+        parseInt(ws + '08') !== 8 // eslint-disable-line radix
+        || parseInt(ws + '0x16') !== 22 // eslint-disable-line radix
+        || (mvsIsWS ? parseInt(mvs + 1) !== 1 : !isNaN(parseInt(mvs + 1))) // eslint-disable-line radix
+    ) {
         // eslint-disable-next-line no-global-assign, no-implicit-globals
         parseInt = (function (origParseInt) {
             return function parseInt(str, radix) {

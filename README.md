@@ -62,12 +62,12 @@ simply `npm install` and `npm test`.
 * Object.keys ([standalone shim](https://www.npmjs.com/package/object-keys))
 * String.prototype.split ([standalone shim](https://www.npmjs.com/package/string.prototype.split))
 * String.prototype.trim ([standalone shim](https://www.npmjs.com/package/string.prototype.trim))
-* String.prototype.lastIndexOf ([standalone shim](https://string.prototype.lastindexof))
+* String.prototype.lastIndexOf ([standalone shim](https://www.npmjs.com/package/string.prototype.lastindexof))
 * String.prototype.replace
     * Firefox (through v29) natively handles capturing groups incorrectly.
 * Date.parse (for ISO parsing)
 * Date.prototype.toISOString
-* parseInt
+* parseInt ([standalone shim](https://www.npmjs.com/package/parseint))
 * parseFloat
 * Error.prototype.toString
 * Error.prototype.name

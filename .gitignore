@@ -10,3 +10,5 @@ yarn.lock
 # coverage data
 coverage/
 .nyc_output/
+
+.npmignore

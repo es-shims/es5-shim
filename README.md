@@ -48,8 +48,8 @@ simply `npm install` and `npm test`.
 * Array.prototype.join
 * Array.prototype.splice ([standalone shim](https://www.npmjs.com/package/array.prototype.splice))
 * Array.isArray
-* Date.now
-* Date.prototype.toJSON
+* Date.now ([standalone shim](https://www.npmjs.com/package/date))
+* Date.prototype.toJSON ([standalone shim](https://www.npmjs.com/package/date))
 * Function.prototype.bind
     * :warning: Caveat: the bound function has a prototype property.
     * :warning: Caveat: bound functions do not try too hard to keep you
@@ -65,8 +65,8 @@ simply `npm install` and `npm test`.
 * String.prototype.lastIndexOf ([standalone shim](https://www.npmjs.com/package/string.prototype.lastindexof))
 * String.prototype.replace
     * Firefox (through v29) natively handles capturing groups incorrectly.
-* Date.parse (for ISO parsing)
-* Date.prototype.toISOString
+* Date.parse (for ISO parsing) ([standalone shim](https://www.npmjs.com/package/date))
+* Date.prototype.toISOString ([standalone shim](https://www.npmjs.com/package/date))
 * parseInt ([standalone shim](https://www.npmjs.com/package/parseint))
 * parseFloat
 * Error.prototype.toString
